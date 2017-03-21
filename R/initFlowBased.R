@@ -9,11 +9,11 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' pathProject <- "D:/Users/titorobe/Desktop/exemple_test"
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
 #' weigth <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/Coefficients_Antares.csv"
 #' secondMember <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/fichier b final.csv"
 #' dayType <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/id_FB.txt"
-#' initFlowBased(pathProject = pathProject,
+#' initFlowBased(opts = opts,
 #'               weigth = weigth,
 #'               secondMember = secondMember,
 #'               dayType = dayType)
@@ -21,23 +21,15 @@
 #' @import pipeR, data.table, antaresRead
 #' 
 #' @export
-initFlowBased <- function(pathProject,
+initFlowBased <- function(opts,
                           weigth,
                           secondMember,
                           dayType = NULL,
                           determinants = NULL){
   
   
-  
-  if(!file.exists(pathProject)){
-    stop("Invalid project path")
-  }
-  
-  
-  
-  opts <- antaresRead::setSimulationPath(pathProject,0)
-  
-  
+  pathProject <- opts$studyPath
+  print(pathProject)
   #Create folders
   dir.create(paste0(pathProject, "/user"))
   
@@ -75,6 +67,5 @@ initFlowBased <- function(pathProject,
   
   #Init constraint
   updateBindingConstraintsIni(paste0(newDir, "/weigth.txt"), opts = opts)
-  
   
 }
