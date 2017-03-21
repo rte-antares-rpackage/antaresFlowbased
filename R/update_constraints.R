@@ -102,7 +102,7 @@ writeBindingConstraintsIni <- function(listData, opts = antaresRead::simOptions(
       } else if(class(val) %in% c("logical")){
         tolower(as.character(val))
       } else {
-      val
+        val
       }
     })
     # write
