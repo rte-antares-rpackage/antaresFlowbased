@@ -1,7 +1,7 @@
 #' @title Generate environnement for a flow-based study
 #' @description  Generate environnement for a flow-based study
 #' 
-#' @param pathProject \code{character}, path of antares project
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param weigth \code{character}, path of weigth file
 #' @param secondMember \code{character}, path of secondMember file
 #' @param dayType \code{character}, path of dayType file
@@ -29,7 +29,6 @@ initFlowBased <- function(opts,
   
   
   pathProject <- opts$studyPath
-  print(pathProject)
   #Create folders
   dir.create(paste0(pathProject, "/user"))
   
