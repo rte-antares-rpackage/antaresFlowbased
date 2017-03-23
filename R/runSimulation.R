@@ -10,7 +10,7 @@
 #'
 #' \dontrun{
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
-#' mysim <- runSimulation(opts, "Mystudy")
+#' mysim <- runSimulation(opts, "MystudyTest2")
 #' }
 #'
 #' @rdname prepareSimulatioFiles
@@ -21,7 +21,7 @@ runSimulation <- function(opts, simName, mc_all = TRUE, mc_ind = TRUE, indic = "
   aleatNameSime <- sample(letters, 10, replace = TRUE)%>>%
     paste0(collapse = "")
   simNameAlea <- paste0(simName, aleatNameSime)
-  
+  simNameAlea <- tolower(simNameAlea)
   #Generate path for generaldata.ini
   generaldataIniPatch <- paste0(opts$studyPath, "/settings/generaldata.ini")
   generaldataIniOld <- paste0(opts$studyPath, "/settings/generaldata_old.ini")
