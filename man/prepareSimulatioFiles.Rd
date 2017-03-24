@@ -33,7 +33,7 @@ runSimulation(opts, simName, mc_all = TRUE, mc_ind = TRUE, indic = "all")
 \description{
 Preparation of sigle simulation files, write playlist and FB
 
-Preparation of sigle simulation files, write playlist and FB
+Run all simulations
 }
 \examples{
 
@@ -49,7 +49,7 @@ opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",
 
 \dontrun{
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
-runSimulation(opts, "Mystudy")
+mysim <- runSimulation(opts, "MystudyTest2")
 }
 
 }

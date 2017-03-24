@@ -43,7 +43,7 @@ runSimulation <- function(opts, simName, mc_all = TRUE, mc_ind = TRUE, indic = "
   cmd <- sprintf(cmd, AntaresPatch, opts$studyPath,simNameAlea)
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
-  allScenario <- allScenario
+  allScenario <- allScenario[1:5]
   sapply(allScenario, function(X, opts, ts, second_membre, scenario, cmd){
     #Preparation of files before simulaiton
     prepareSimulatioFiles(opts = opts,
@@ -59,10 +59,20 @@ runSimulation <- function(opts, simName, mc_all = TRUE, mc_ind = TRUE, indic = "
   scenario = scenario,
   cmd = cmd)
   
+  file.remove(generaldataIniPatch)
   #Return old param setting
-  file.copy(generaldataIniOld, generaldataIniPatch)
-  file.remove(generaldataIniOld)
+  file.rename(generaldataIniOld, generaldataIniPatch)
   
-  simNameAlea
+  
+  #Move files
+  filesMoves <- moveFilesAfterStudy(opts, simNameAlea)
+ 
+  #Mc-all creation
+  aggregateResult(opts = opts, outDataMc = filesMoves)
+  
+  #
+  
 }
+
+
 
