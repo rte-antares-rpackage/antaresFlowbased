@@ -24,7 +24,7 @@
   type <- type[1]
   
   
-  names3row <- read.csv(allFileToLoad[1], nrows = 5, blank.lines.skip = FALSE)
+  names3row <- read.csv(allFileToLoad[1], nrows = 6, blank.lines.skip = FALSE)
   write.table(names3row, endPatch, row.names = FALSE, eol = "\n",
               quote = FALSE)
   dtaTp <- sapply(allFileToLoad, function(X){
