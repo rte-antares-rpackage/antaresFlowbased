@@ -2,17 +2,17 @@
 % Please edit documentation in R/aggregateResult.R
 \name{aggregateResult}
 \alias{aggregateResult}
-\title{Creation of Mc-all}
+\title{Creation of Mc_all}
 \usage{
 aggregateResult(opts, outDataMc)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
-\item{outDataMc}{\code{character} link to mc-inf folder return by \link{moveFilesAfterStudy}}
+\item{outDataMc}{\code{character} link to mc_ind folder return by \link{moveFilesAfterStudy}}
 }
 \description{
-Creation of Mc-all
+Creation of Mc_all
 }
 \examples{
 

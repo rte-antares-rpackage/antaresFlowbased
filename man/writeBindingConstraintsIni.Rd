@@ -16,5 +16,4 @@ Write bindingconstraints.ini file
 }
 \examples{
 
-
 }

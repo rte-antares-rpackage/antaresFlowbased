@@ -23,13 +23,18 @@ Generate environnement for a flow-based study
 }
 \examples{
 \dontrun{
-opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
-weigth <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/Coefficients_Antares.csv"
-secondMember <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/fichier b final.csv"
-dayType <- "D:/Users/titorobe/Desktop/run_antares_FB/Write chroniques/id_FB.txt"
+
+path <- "D:/Users/titorobe/Desktop/exemple_test"
+opts <- antaresRead::setSimulationPath(path, 0)
+
+weigth <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
+secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
+dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
+
 initFlowBased(opts = opts,
               weigth = weigth,
               secondMember = secondMember,
               dayType = dayType)
 }
+
 }

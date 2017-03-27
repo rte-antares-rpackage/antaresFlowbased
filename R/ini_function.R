@@ -1,4 +1,32 @@
-#Change R format to ini format
+#' Write ini file from list obtain by antaresRead:::readIniFile and modify by user
+#'
+#' @param listData\code{list}, list otain by antaresRead:::readIniFile
+#' @param pathIni \code{Character}, Path to ini file
+#'
+#' @examples
+#'
+#' \dontrun{
+#' pathIni <- "D:/Users/titorobe/Desktop/exemple_test/settings/generaldata.ini"
+#' generalSetting <- antaresRead:::readIniFile(pathIni)
+#' generalSetting$output$synthesis <- FALSE
+#' writeIni(generalSetting, pathIni)
+#' }
+#'
+#' @import pipeR
+#' @export
+writeIni <- function(listData, pathIni){
+  file.remove(pathIni)
+  con <- file(pathIni, "wb")
+  lapply(1:length(listData),
+         .formatedIniList,
+         dtaToTransform = listData,
+         namesdtaToTransform = names(listData),
+         con = con) %>>%
+    invisible()
+  close(con)
+}
+
+# Change R format to ini format
 .formatedIni <- function(val)
 {
   if(class(val) %in% c("numeric", "integer")){
@@ -15,7 +43,7 @@
   }
 }
 
-#write ini (raw by raw)
+# write ini (raw by raw)
 .formatedIniList <- function(x, dtaToTransform, namesdtaToTransform, con = con){
   if(!is.null(namesdtaToTransform))
   {
@@ -30,33 +58,3 @@
   writeChar(paste(paste0(names(tmp_data), " = ", values), collapse = "\n"), con, eos = NULL)
   writeChar("\n\n", con, eos = NULL)
 }
-
-#' Write ini file from list obtain by antaresRead:::readIniFile and modify by user
-#' @param listData\code{list}, list otain by antaresRead:::readIniFile
-#' @param pathIni \code{Character}, Path to ini file
-#'
-#' @examples
-#'
-#' \dontrun{
-#' pathIni <- "D:/Users/titorobe/Desktop/exemple_test/settings/generaldata.ini"
-#' generalSetting <- antaresRead:::readIniFile(pathIni)
-#' generalSetting$output$synthesis <- FALSE
-#' writeIni(generalSetting, pathIni)
-#'
-#' }
-#' @import pipeR
-#' @rdname solver-antares
-#' @export
-writeIni <- function(listData, pathIni){
-  file.remove(pathIni)
-  con <- file(pathIni, "wb")
-  lapply(1:length(listData),
-         .formatedIniList,
-         dtaToTransform = listData,
-         namesdtaToTransform = names(listData),
-         con = con)%>>%
-    invisible()
-  close(con)
-}
-
-

@@ -4,19 +4,16 @@
 \alias{moveFilesAfterStudy}
 \title{Move file after simulations}
 \usage{
-moveFilesAfterStudy(opts, simName)
+moveFilesAfterStudy(opts, simulationName)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
-\item{simName}{\code{character} name of simulation return by \link{runSimulation}}
+\item{simulationName}{\code{character} name of simulation return by \link{runSimulation}}
 }
 \description{
 Move file after simulations
 }
 \examples{
-
-\dontrun{
-}
 
 }
