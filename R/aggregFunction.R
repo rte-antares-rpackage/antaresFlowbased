@@ -7,6 +7,20 @@
 }
 
 
+.editOutputInfo <- function(outData, simName, dateTim2)
+{
+  #Edit infos output simulation
+  iniPath <- paste0(outData, "/info.antares-output")
+  infosIni <- antaresRead:::readIniFile(iniPath)
+  infosIni$general$name <- substr(simName, 1, nchar(simName)-10)
+  dateTim2 <- gsub("-" , ".", dateTim2)
+  dateTim2 <- gsub(" " , " - ", dateTim2)
+  infosIni$general$date <- dateTim2
+  infosIni$general$title <- dateTim2
+  writeIni(infosIni, iniPath)
+}
+
+
 
 .transformToMaAll <- function(filesToAggreg, opts, allMc)
 {

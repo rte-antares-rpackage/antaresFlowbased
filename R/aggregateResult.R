@@ -64,16 +64,10 @@ moveFilesAfterStudy <- function(opts, simName)
   unlink(outputs_start,recursive = TRUE )
   
   
-  #Edit infos output simulation
-  iniPath <- paste0(outData, "/info.antares-output")
-  infosIni <- antaresRead:::readIniFile(iniPath)
-  infosIni$general$name <- substr(simName, 1, nchar(simName)-10)
-  dateTim2 <- gsub("-" , ".", dateTim2)
-  dateTim2 <- gsub(" " , " - ", dateTim2)
-  infosIni$general$date <- dateTim2
-  infosIni$general$title <- dateTim2
-  writeIni(infosIni, iniPath)
-  
+  .editOutputInfo(outData = outData, 
+                  simName = simName, 
+                  dateTim2 = dateTim2)
+
   outDataMc
 }
 
@@ -105,10 +99,6 @@ aggregateResult <- function(opts, outDataMc){
   dtaMc <- paste0(opts$simDataPath, "/mc-ind")
   allMc <- paste0(dtaMc, "/", list.files(dtaMc))
   allDataToTransform <- list.files(allMc[1], recursive = TRUE)
-  
-  
-  
-  
   
   sapply(allDataToTransform, .transformToMaAll, opts = opts, allMc = allMc)
   
