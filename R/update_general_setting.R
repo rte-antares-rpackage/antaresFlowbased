@@ -16,18 +16,18 @@
 #' @export
 updateGeneralSettingIni <- function(opts, playList = NULL){
 
-  #Generate path for generaldata.ini
+  # Generate path for generaldata.ini
   generaldataIniPatch <- paste0(opts$studyPath, "/settings/generaldata.ini")
 
 
   if(is.null(playList))
   {
-  #Modify general setting
+  # Modify general setting
   generalSetting <- modifyGeneralSetting(generaldataIniPatch)
   }else{
     generalSetting <- modifyGeneralSettingPlayList(generaldataIniPatch, playList)
   }
-  #Write file
+  # Write file
   writeGeneralSettingIni(generaldataIniPatch, generalSetting)
 }
 
@@ -38,38 +38,37 @@ updateGeneralSettingIni <- function(opts, playList = NULL){
 #' @import antaresRead
 #' @export
 modifyGeneralSetting <- function(generaldataIniPatch){
+  # read current .ini
   generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
 
-  #deactivation of mc_all
+  # desactivation of mc_all
   generalSetting$output$synthesis <- FALSE
 
-  #activation of mc_ind
+  # activation of mc_ind
   generalSetting$general$`year-by-year` <- TRUE
 
-  #activation of playlist
+  # activation of playlist
   generalSetting$general$`user-playlist` <- TRUE
 
   generalSetting
 }
 
 
-
-
-
-#' @rdname udpate-generaldata_playList
 #' @title Modify play list
 #' @import antaresRead
 #' @export
 modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
+  # read current .ini
   generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
 
-
+  # format playlist
   playList <- sapply(playList, function(X){
     as.character(X)
   }, simplify = FALSE)
   names(playList) <- rep("playlist_year +",5)
   playList <- c(playlist_reset = FALSE, playList)
 
+  # change
   generalSetting$playlist <- playList
 
   generalSetting
@@ -80,13 +79,13 @@ modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
 
 #' Write generaldata.ini file
 #'
-#' @param listData \code{list}, generaldata.ini as list R
-#' @param generaldataIniPatch \code{character} patch of generaldata.ini file
+#' @param generaldataIniPatch\code{list}
+#' @param generalSetting \code{Character}, Path to ini file
 #'
 #' @export
 writeGeneralSettingIni <- function(generaldataIniPatch, generalSetting)
 {
-  # open ew file
-  write_data <- writeIni(generalSetting, generaldataIniPatch)
+  # open new file
+  writeIni(generalSetting, generaldataIniPatch)
 
 }
