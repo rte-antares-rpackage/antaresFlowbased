@@ -21,7 +21,6 @@
 }
 
 
-
 .transformToMaAll <- function(filesToAggreg, opts, allMc)
 {
   print(filesToAggreg)
@@ -37,51 +36,39 @@
   type <-strsplit(type, "[.]")%>>%unlist
   type <- type[1]
 
-
-  names3row <- read.csv(allFileToLoad[1], nrows = 6, blank.lines.skip = FALSE)
-  write.table(names3row, endPatch, row.names = FALSE, eol = "\n",
+  headers <- read.csv(allFileToLoad[1], nrows = 6, blank.lines.skip = FALSE)
+  write.table(headers, endPatch, row.names = FALSE, eol = "\n",
               quote = FALSE)
-  dtaTp <- sapply(allFileToLoad, function(X){
-    fread(X, skip = 7, integer64 = "double")
-  }, simplify = FALSE, USE.NAMES = FALSE)%>>%rbindlist
 
-
-  #Change column if type is annual/mouthly/...
-  if(type == "weekly")
+  SDcolsStart <- switch(type,
+                        daily = 5,
+                        hourly = 6,
+                        monthly = 4,
+                        annual = 3,
+                        weekly = 3)
+  dtaTp <- NULL
+  for(i in 1:length(allFileToLoad))
   {
-    dtaTpMean <- dtaTp[, lapply(.SD, mean), by = c("V2")]
-
+    if(is.null(dtaTp))
+    {
+      dtaTp <- fread(allFileToLoad[i], skip = 7, integer64 = "double")
+      toOverWrite <- names(dtaTp[,.SD, .SDcols = SDcolsStart:ncol(dtaTp)])
+    }else{
+      dtaTp[,
+            (toOverWrite):=dtaTp[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)] +
+              fread(allFileToLoad[i], skip = 7, integer64 = "double")[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)]
+            ]
+    }
   }
 
-  if(type == "daily")
-  {
-    dtaTpMean <- dtaTp[, lapply(.SD, mean), by = c("V2", "V3", "V4")]
-  }
+  dtaTp[,(toOverWrite):=dtaTp[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)]/length(allFileToLoad)]
 
-  if(type == "hourly")
-  {
-    dtaTpMean <- dtaTp[, lapply(.SD, mean), by = c("V2", "V3", "V4", "V5")]
-  }
-
-  if(type == "monthly")
-  {
-    dtaTpMean <- dtaTp[, lapply(.SD, mean), by = c("V2", "V3")]
-  }
-
-  if(type == "annual")
-  {
-    dtaTpMean <- dtaTp
-  }
-
-  setcolorder(dtaTpMean, c("V1", names(dtaTpMean)[names(dtaTpMean)!="V1"]))
-
-
-  write.table(dtaTpMean, endPatch,
+  write.table(dtaTp, endPatch,
               append = TRUE,
               row.names = FALSE,
               col.names =FALSE,
               quote = FALSE,sep = "\t",
               na = "")
-
-
+  
+  
 }

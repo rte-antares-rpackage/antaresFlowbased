@@ -1,0 +1,50 @@
+Variable;Unit;Stats;CalcBuYear
+OV. COST;Euro;EXP;sum
+OP. COST;Euro;EXP;sum
+MRG. PRICE;Euro;EXP;mean
+CO2 EMIS.;Tons;EXP;sum
+BALANCE;MWh;EXP;sum
+ROW BAL.;MWh;values;mean
+PSP;MWh;EXP;sum
+MISC. NDG;MWh;EXP;sum
+LOAD;MWh;EXP;sum
+H. ROR;MWh;EXP;sum
+WIND;MWh;EXP;sum
+SOLAR;MWh;EXP;sum
+NUCLEAR;MWh;EXP;sum
+LIGNITE;MWh;EXP;sum
+COAL;MWh;EXP;sum
+GAS;MWh;EXP;sum
+OIL;MWh;EXP;sum
+MIX. FUEL;MWh;EXP;sum
+MISC. DTG;MWh;EXP;sum
+H. STOR;MWh;EXP;sum
+UNSP. ENRG;MWh;EXP;sum
+SPIL. ENRG;MWh;EXP;sum
+LOLD;Hours;EXP;sum
+LOLP;%;values;sum
+AVL DTG;MWh;EXP;sum
+DTG MRG;MWh;EXP;sum
+MAX MRG;MWh;EXP;sum
+NP COST;Euro;EXP;sum
+nl_gas_ccgt_new;NP Cost - Euro;EXP;sum
+nl_gas_ccgt_old_1;NP Cost - Euro;EXP;sum
+nl_gas_ccgt_old_2;NP Cost - Euro;EXP;sum
+nl_gas_conventional_old_1;NP Cost - Euro;EXP;sum
+nl_gas_conventional_old_2;NP Cost - Euro;EXP;sum
+nl_gas_ocgt_new;NP Cost - Euro;EXP;sum
+nl_gas_ocgt_old;NP Cost - Euro;EXP;sum
+nl_gas_small;NP Cost - Euro;EXP;sum
+nl_hard_coal_new;NP Cost - Euro;EXP;sum
+nl_nuclear;NP Cost - Euro;EXP;sum
+NODU; ;EXP;sum
+nl_gas_ccgt_new;NODU;EXP;sum
+nl_gas_ccgt_old_1;NODU;EXP;sum
+nl_gas_ccgt_old_2;NODU;EXP;sum
+nl_gas_conventional_old_1;NODU;EXP;sum
+nl_gas_conventional_old_2;NODU;EXP;sum
+nl_gas_ocgt_new;NODU;EXP;sum
+nl_gas_ocgt_old;NODU;EXP;sum
+nl_gas_small;NODU;EXP;sum
+nl_hard_coal_new;NODU;EXP;sum
+nl_nuclear;NODU;EXP;sum

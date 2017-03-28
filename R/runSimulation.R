@@ -20,7 +20,7 @@
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation(opts, "MystudyTest2")
+#' mysim <- runSimulation(opts, "MystudyTest14")
 #' }
 #'
 #' @export
@@ -76,16 +76,49 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   file.remove(generaldataIniPatch)
   #Return old param setting
   file.rename(generaldataIniOld, generaldataIniPatch)
-
-
-  #Move files
+  
+  # #Move files
   filesMoves <- moveFilesAfterStudy(opts, simNameAlea)
-
-  #Mc-all creation
-  aggregateResult(opts = opts, outDataMc = filesMoves)
-
-  #
-
+  # 
+  print(filesMoves)
+  # #Mc-all creation
+  aggregateResult(opts = opts, newname = filesMoves)
+  
+  #Wite digest
+  opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
+  diges <- fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
+  
+  areas <- readAntares(timeStep = "hourly")
+  areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
+  allNam <- names(areas)[-c(1:3)]
+  areas[, c("timeId", "time"):= NULL]
+  for (col in allNam) set(areas, j = col, value = as.numeric(areas[[col]]))
+  allStats <- diges$CalcBuYear
+  for(i in 1:length(allNam))
+  {
+    var <- allNam[i]
+    fct <- allStats[i]
+    areas[, c(var) := .(do.call(fct, args = list(get(var)))), by = area]
+  }
+  areas <- unique(areas)
+  
+  for (col in allNam) set(areas, j = col, value = round(areas[[col]], 0))
+  for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
+  
+ 
+  coltoKeep <- match(names(areas)[-1], diges$Variable)
+  unitKeep <- diges$Unit[coltoKeep]
+  StatsKeep <- diges$Stats[coltoKeep]
+  rentam <- names(areas)
+  areas <- rbindlist(list(data.table(t(c("", unitKeep))),
+                          data.table(t(c("", StatsKeep))),
+                          areas), fill = FALSE)
+  names(areas) <- rentam
+  
+  digets <- paste0(opts$simDataPath, "/mc-all/grid")
+  dir.create(digets)
+  write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
+  cat("Finish")
 }
 
 
