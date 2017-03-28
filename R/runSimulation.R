@@ -49,10 +49,17 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   scenario <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt"))
 
   ##Prepare CMD to run antares
-  setSolverAntares()
   AntaresPatch <- getSolverAntares()
+  if(is.null(AntaresPatch)){
+    stop("Antares solver path is not set. Use getSolverAntares()")
+  }
+  if(!file.exists(AntaresPatch)){
+    stop("Antares solver does no exist. Use getSolverAntares()")
+  }
+
   cmd <- '"%s" "%s" -n "%s"'
-  cmd <- sprintf(cmd, AntaresPatch, opts$studyPath,simNameAlea)
+  cmd <- sprintf(cmd, AntaresPatch, opts$studyPath, simNameAlea)
+
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
@@ -61,10 +68,10 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd){
     #Preparation of files before simulaiton
     prepareSimulationFiles(opts = opts,
-                          ts = ts,
-                          secondMember = second_member,
-                          scenarios = scenario,
-                          simNumber = X)
+                           ts = ts,
+                           secondMember = second_member,
+                           scenarios = scenario,
+                           simNumber = X)
     cmd <- paste0(cmd, "Sim",X)
     .runAntares(cmd)
   }, opts = opts,
@@ -73,11 +80,10 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   scenario = scenario,
   cmd = cmd)
 
-  file.remove(generaldataIniPatch)
   #Return old param setting
+  file.remove(generaldataIniPatch)
   file.rename(generaldataIniOld, generaldataIniPatch)
-  
-  # #Move files
+
   filesMoves <- moveFilesAfterStudy(opts, simNameAlea)
   # 
   print(filesMoves)
