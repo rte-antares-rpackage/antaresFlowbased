@@ -6,7 +6,8 @@
 #' @param mcInd \code{boolean} keep mc_ind.
 #' @param indicators \code{character} not use in this version
 #' @param .test \code{boolean} if TRUE, just run 3 scenarios.
-#'
+#' @param MCyearsExcludes \code{numeric} to exclude MCyearsExcludes, default NULL,
+#' all MCyearsExcludes are included.
 #' @examples
 #'
 #' \dontrun{
@@ -20,12 +21,13 @@
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation(opts, "MystudyTest14")
+#' mysim <- runSimulation(opts, "R_from")
 #' }
 #'
 #' @export
 runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
-                          indicators = c("mean", "min", "max", "sd"), .test = TRUE){
+                          indicators = c("mean", "min", "max", "sd"), .test = TRUE,
+                          MCyearsExcludes = NULL){
 
   #random name to identify simulation
   aleatNameSime <- sample(letters, 10, replace = TRUE)%>>%
@@ -47,7 +49,12 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   second_member <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt"))
   ts <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt"))
   scenario <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt"))
-
+  
+  #Exclude scenarios
+  if(!is.null(MCyearsExcludes)){
+    scenario <- scenario[-MCyearsExcludes]
+  }
+  
   ##Prepare CMD to run antares
   AntaresPatch <- getSolverAntares()
   if(is.null(AntaresPatch)){
@@ -63,7 +70,7 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[1:3]
+    allScenario <- allScenario[2]
   }
   sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd){
     #Preparation of files before simulaiton

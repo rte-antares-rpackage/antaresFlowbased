@@ -85,20 +85,19 @@ aggregateResult <- function(opts, newname){
   opts <- antaresRead::setSimulationPath(opts$studyPath, newname)
   
   #Version avec readAntares
-  linkTable <- fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv"))
+  linkTable <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv"))
   linkTable$progNam <- linkTable$Stats
   linkTable$progNam[which(linkTable$progNam == "values")] <- "EXP"
   dtaMc <- paste0(opts$simDataPath, "/mc-ind")
   
   numMc <- as.numeric(list.files(dtaMc))
-  opts <- antaresRead::setSimulationPath(opts$studyPath, newname)
   allTyped <- c("annual", "daily", "hourly", "monthly", "weekly")
   sapply(allTyped, function(type)
   {
     
     print(type)
-    dta <- readAntares(area = "all", links = "all", clusters = "all", 
-                       timeStep = type, simplify = FALSE, mcYears = numMc[1])
+    dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
+                                    timeStep = type, simplify = FALSE, mcYears = numMc[1])
     
     SDcolsStartareas <- switch(type,
                                daily = 6,
@@ -118,16 +117,18 @@ aggregateResult <- function(opts, newname){
     value <- .giveValue(dta, SDcolsStartareas, SDcolsStartClust)
     N <- length(numMc)
     value <- lapply(value, .creatStats)
-    for(i in 2:N){
-      dtaTP <- readAntares(area = "all", links = "all", clusters = "all", 
-                           timeStep = type, simplify = FALSE, mcYears = numMc[i])
-      valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
-      valueTP <- lapply(valueTP, .creatStats)
-      value$areas <- .updateStats(value$areas, valueTP$areas)
-      value$links <- .updateStats(value$links, valueTP$links)
-      value$clusters <- .updateStats(value$clusters, valueTP$clusters)
+    if(N>1)
+    {
+      for(i in 2:N){
+        dtaTP <- readAntares(area = "all", links = "all", clusters = "all", 
+                             timeStep = type, simplify = FALSE, mcYears = numMc[i])
+        valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
+        valueTP <- lapply(valueTP, .creatStats)
+        value$areas <- .updateStats(value$areas, valueTP$areas)
+        value$links <- .updateStats(value$links, valueTP$links)
+        value$clusters <- .updateStats(value$clusters, valueTP$clusters)
+      }
     }
-    
     value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N - 1))
     value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N - 1))
     value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N - 1))
@@ -162,10 +163,10 @@ aggregateResult <- function(opts, newname){
         kepNam <- names(struct$areas)[!names(struct$areas)%in%c("area","mcYear","time")]
         kepNam[which(kepNam == "timeId")] <- "index"
         .writeFileOutout(dta = areastowrite, timestep = type, fileType = fil,
-                        ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
-                        indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                        nomcair = areaSpecialFile$Name, unit = areaSpecialFile$Unit,
-                        nomStruct = kepNam,Stats = areaSpecialFile$Stats)
+                         ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
+                         indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                         nomcair = areaSpecialFile$Name, unit = areaSpecialFile$Unit,
+                         nomStruct = kepNam,Stats = areaSpecialFile$Stats)
         
         
       })
@@ -197,10 +198,10 @@ aggregateResult <- function(opts, newname){
         kepNam <- names(struct$link)[!names(struct$link)%in%c("link","mcYear","time")]
         kepNam[which(kepNam == "timeId")] <- "index"
         .writeFileOutout(dta = linkstowrite, timestep = type, fileType = fil,
-                        ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
-                        indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                        nomcair = linkSpecialFile$Name, unit = linkSpecialFile$Unit,
-                        nomStruct = kepNam,Stats = linkSpecialFile$Stats)
+                         ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
+                         indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                         nomcair = linkSpecialFile$Name, unit = linkSpecialFile$Unit,
+                         nomStruct = kepNam,Stats = linkSpecialFile$Stats)
       })
     })
     
@@ -234,9 +235,9 @@ aggregateResult <- function(opts, newname){
       indexMax <- max(endClustctry$timeId)
       ncolFix <- length(nomStruct)
       .writeFileOutout(dta = endClustctry, timestep = type, fileType = "details",
-                      ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
-                      indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                      nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
+                       ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
+                       indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                       nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
     })
   })
 }
