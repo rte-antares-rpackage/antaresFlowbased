@@ -1,5 +1,5 @@
 #Get weigth file
-.getWeigth <- function(weigth){
+.getWeight <- function(weigth){
   weigth <- data.table::fread(weigth, sep = ";", dec = ",")
   names(weigth) <- names(weigth)%>>%
     tolower()%>>%
@@ -8,9 +8,9 @@
 }
 
 #set weigth file
-.setWeigth <- function(path, weigthData){
+.setWeight <- function(path, weightData){
   tmpfile <- file(description=path, "w")
-  write.table(weigthData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
+  write.table(weightData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
   close(tmpfile) 
 }
 

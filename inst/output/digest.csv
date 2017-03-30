@@ -1,29 +1,29 @@
 Variable;Unit;Stats;CalcBuYear
-OV. COST;Euro;EXP;sum
-OP. COST;Euro;EXP;sum
+OV. COST;Euro;EXP;mean
+OP. COST;Euro;EXP;mean
 MRG. PRICE;Euro;EXP;mean
-CO2 EMIS.;Tons;EXP;sum
-BALANCE;MWh;EXP;sum
+CO2 EMIS.;Tons;EXP;mean
+BALANCE;MWh;EXP;mean
 ROW BAL.;MWh;values;mean
-PSP;MWh;EXP;sum
-MISC. NDG;MWh;EXP;sum
-LOAD;MWh;EXP;sum
-H. ROR;MWh;EXP;sum
-WIND;MWh;EXP;sum
-SOLAR;MWh;EXP;sum
-NUCLEAR;MWh;EXP;sum
-LIGNITE;MWh;EXP;sum
-COAL;MWh;EXP;sum
-GAS;MWh;EXP;sum
-OIL;MWh;EXP;sum
-MIX. FUEL;MWh;EXP;sum
-MISC. DTG;MWh;EXP;sum
-H. STOR;MWh;EXP;sum
-UNSP. ENRG;MWh;EXP;sum
-SPIL. ENRG;MWh;EXP;sum
-LOLD;Hours;EXP;sum
-LOLP;%;values;sum
-AVL DTG;MWh;EXP;sum
-DTG MRG;MWh;EXP;sum
-MAX MRG;MWh;EXP;sum
-NP COST;Euro;EXP;sum
+PSP;MWh;EXP;mean
+MISC. NDG;MWh;EXP;mean
+LOAD;MWh;EXP;mean
+H. ROR;MWh;EXP;mean
+WIND;MWh;EXP;mean
+SOLAR;MWh;EXP;mean
+NUCLEAR;MWh;EXP;mean
+LIGNITE;MWh;EXP;mean
+COAL;MWh;EXP;mean
+GAS;MWh;EXP;mean
+OIL;MWh;EXP;mean
+MIX. FUEL;MWh;EXP;mean
+MISC. DTG;MWh;EXP;mean
+H. STOR;MWh;EXP;mean
+UNSP. ENRG;MWh;EXP;mean
+SPIL. ENRG;MWh;EXP;mean
+LOLD;Hours;EXP;mean
+LOLP;%;values;mean
+AVL DTG;MWh;EXP;mean
+DTG MRG;MWh;EXP;mean
+MAX MRG;MWh;EXP;mean
+NP COST;Euro;EXP;mean
