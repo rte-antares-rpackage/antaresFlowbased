@@ -1,391 +1,243 @@
-Folder;Files;Mode;Name;Unit;Stats
-area;details;economy;be_gas_ccgt_new;MWh;EXP
-area;details;economy;be_gas_ccgt_old_1;MWh;EXP
-area;details;economy;be_gas_ccgt_old_2;MWh;EXP
-area;details;economy;be_gas_conventional_old_2;MWh;EXP
-area;details;economy;be_gas_ocgt_new;MWh;EXP
-area;details;economy;be_gas_ocgt_old;MWh;EXP
-area;details;economy;be_gas_small_cipu;MWh;EXP
-area;details;economy;be_gas_small_non_cipu;MWh;EXP
-area;details;economy;be_nuclear;MWh;EXP
-area;details;economy;be_gas_ccgt_new;NP Cost - Euro;EXP
-area;details;economy;be_gas_ccgt_old_1;NP Cost - Euro;EXP
-area;details;economy;be_gas_ccgt_old_2;NP Cost - Euro;EXP
-area;details;economy;be_gas_conventional_old_2;NP Cost - Euro;EXP
-area;details;economy;be_gas_ocgt_new;NP Cost - Euro;EXP
-area;details;economy;be_gas_ocgt_old;NP Cost - Euro;EXP
-area;details;economy;be_gas_small_cipu;NP Cost - Euro;EXP
-area;details;economy;be_gas_small_non_cipu;NP Cost - Euro;EXP
-area;details;economy;be_nuclear;NP Cost - Euro;EXP
-area;details;economy;be_gas_ccgt_new;NODU;EXP
-area;details;economy;be_gas_ccgt_old_1;NODU;EXP
-area;details;economy;be_gas_ccgt_old_2;NODU;EXP
-area;details;economy;be_gas_conventional_old_2;NODU;EXP
-area;details;economy;be_gas_ocgt_new;NODU;EXP
-area;details;economy;be_gas_ocgt_old;NODU;EXP
-area;details;economy;be_gas_small_cipu;NODU;EXP
-area;details;economy;be_gas_small_non_cipu;NODU;EXP
-area;details;economy;be_nuclear;NODU;EXP
-area;values;economy;OV. COST;Euro;EXP
-area;values;economy;OP. COST;Euro;EXP
-area;values;economy;OP. COST;Euro;std
-area;values;economy;OP. COST;Euro;min
-area;values;economy;OP. COST;Euro;max
-area;values;economy;MRG. PRICE;Euro;EXP
-area;values;economy;MRG. PRICE;Euro;std
-area;values;economy;MRG. PRICE;Euro;min
-area;values;economy;MRG. PRICE;Euro;max
-area;values;economy;CO2 EMIS.;Tons;EXP
-area;values;economy;BALANCE;MWh;EXP
-area;values;economy;BALANCE;MWh;std
-area;values;economy;BALANCE;MWh;min
-area;values;economy;BALANCE;MWh;max
-area;values;economy;ROW BAL.;MWh;values
-area;values;economy;PSP;MWh;EXP
-area;values;economy;MISC. NDG;MWh;EXP
-area;values;economy;LOAD;MWh;EXP
-area;values;economy;LOAD;MWh;std
-area;values;economy;LOAD;MWh;min
-area;values;economy;LOAD;MWh;max
-area;values;economy;H. ROR;MWh;EXP
-area;values;economy;H. ROR;MWh;std
-area;values;economy;H. ROR;MWh;min
-area;values;economy;H. ROR;MWh;max
-area;values;economy;WIND;MWh;EXP
-area;values;economy;WIND;MWh;std
-area;values;economy;WIND;MWh;min
-area;values;economy;WIND;MWh;max
-area;values;economy;SOLAR;MWh;EXP
-area;values;economy;SOLAR;MWh;std
-area;values;economy;SOLAR;MWh;min
-area;values;economy;SOLAR;MWh;max
-area;values;economy;NUCLEAR;MWh;EXP
-area;values;economy;NUCLEAR;MWh;std
-area;values;economy;NUCLEAR;MWh;min
-area;values;economy;NUCLEAR;MWh;max
-area;values;economy;LIGNITE;MWh;EXP
-area;values;economy;LIGNITE;MWh;std
-area;values;economy;LIGNITE;MWh;min
-area;values;economy;LIGNITE;MWh;max
-area;values;economy;COAL;MWh;EXP
-area;values;economy;COAL;MWh;std
-area;values;economy;COAL;MWh;min
-area;values;economy;COAL;MWh;max
-area;values;economy;GAS;MWh;EXP
-area;values;economy;GAS;MWh;std
-area;values;economy;GAS;MWh;min
-area;values;economy;GAS;MWh;max
-area;values;economy;OIL;MWh;EXP
-area;values;economy;OIL;MWh;std
-area;values;economy;OIL;MWh;min
-area;values;economy;OIL;MWh;max
-area;values;economy;MIX. FUEL;MWh;EXP
-area;values;economy;MIX. FUEL;MWh;std
-area;values;economy;MIX. FUEL;MWh;min
-area;values;economy;MIX. FUEL;MWh;max
-area;values;economy;MISC. DTG;MWh;EXP
-area;values;economy;MISC. DTG;MWh;std
-area;values;economy;MISC. DTG;MWh;min
-area;values;economy;MISC. DTG;MWh;max
-area;values;economy;H. STOR;MWh;EXP
-area;values;economy;H. STOR;MWh;std
-area;values;economy;H. STOR;MWh;min
-area;values;economy;H. STOR;MWh;max
-area;values;economy;UNSP. ENRG;MWh;EXP
-area;values;economy;UNSP. ENRG;MWh;std
-area;values;economy;UNSP. ENRG;MWh;min
-area;values;economy;UNSP. ENRG;MWh;max
-area;values;economy;SPIL. ENRG;MWh;EXP
-area;values;economy;SPIL. ENRG;MWh;std
-area;values;economy;SPIL. ENRG;MWh;min
-area;values;economy;SPIL. ENRG;MWh;max
-area;values;economy;LOLD;Hours;EXP
-area;values;economy;LOLD;Hours;std
-area;values;economy;LOLD;Hours;min
-area;values;economy;LOLD;Hours;max
-area;values;economy;LOLP;%;values
-area;values;economy;AVL DTG;MWh;EXP
-area;values;economy;AVL DTG;MWh;std
-area;values;economy;AVL DTG;MWh;min
-area;values;economy;AVL DTG;MWh;max
-area;values;economy;DTG MRG;MWh;EXP
-area;values;economy;DTG MRG;MWh;std
-area;values;economy;DTG MRG;MWh;min
-area;values;economy;DTG MRG;MWh;max
-area;values;economy;MAX MRG;MWh;EXP
-area;values;economy;MAX MRG;MWh;std
-area;values;economy;MAX MRG;MWh;min
-area;values;economy;MAX MRG;MWh;max
-area;values;economy;NP COST;Euro;EXP
-area;values;economy;NP COST;Euro;std
-area;values;economy;NP COST;Euro;min
-area;values;economy;NP COST;Euro;max
-area;values;economy;NODU; ;EXP
-area;values;economy;NODU; ;std
-area;values;economy;NODU; ;min
-area;values;economy;NODU; ;max
-area;id;economy;OP. COST;Euro;min
-area;id;economy;OP. COST;Euro;max
-area;id;economy;MRG. PRICE;Euro;min
-area;id;economy;MRG. PRICE;Euro;max
-area;id;economy;BALANCE;MWh;min
-area;id;economy;BALANCE;MWh;max
-area;id;economy;LOAD;MWh;min
-area;id;economy;LOAD;MWh;max
-area;id;economy;H. ROR;MWh;min
-area;id;economy;H. ROR;MWh;max
-area;id;economy;WIND;MWh;min
-area;id;economy;WIND;MWh;max
-area;id;economy;SOLAR;MWh;min
-area;id;economy;SOLAR;MWh;max
-area;id;economy;NUCLEAR;MWh;min
-area;id;economy;NUCLEAR;MWh;max
-area;id;economy;LIGNITE;MWh;min
-area;id;economy;LIGNITE;MWh;max
-area;id;economy;COAL;MWh;min
-area;id;economy;COAL;MWh;max
-area;id;economy;GAS;MWh;min
-area;id;economy;GAS;MWh;max
-area;id;economy;OIL;MWh;min
-area;id;economy;OIL;MWh;max
-area;id;economy;MIX. FUEL;MWh;min
-area;id;economy;MIX. FUEL;MWh;max
-area;id;economy;MISC. DTG;MWh;min
-area;id;economy;MISC. DTG;MWh;max
-area;id;economy;H. STOR;MWh;min
-area;id;economy;H. STOR;MWh;max
-area;id;economy;UNSP. ENRG;MWh;min
-area;id;economy;UNSP. ENRG;MWh;max
-area;id;economy;SPIL. ENRG;MWh;min
-area;id;economy;SPIL. ENRG;MWh;max
-area;id;economy;LOLD;Hours;min
-area;id;economy;LOLD;Hours;max
-area;id;economy;AVL DTG;MWh;min
-area;id;economy;AVL DTG;MWh;max
-area;id;economy;DTG MRG;MWh;min
-area;id;economy;DTG MRG;MWh;max
-area;id;economy;MAX MRG;MWh;min
-area;id;economy;MAX MRG;MWh;max
-area;id;economy;NP COST;Euro;min
-area;id;economy;NP COST;Euro;max
-area;id;economy;NODU; ;min
-area;id;economy;NODU; ;max
-area;details;adequacy;be_gas_ccgt_new;MWh;EXP
-area;details;adequacy;be_gas_ccgt_old_1;MWh;EXP
-area;details;adequacy;be_gas_ccgt_old_2;MWh;EXP
-area;details;adequacy;be_gas_conventional_old_2;MWh;EXP
-area;details;adequacy;be_gas_ocgt_new;MWh;EXP
-area;details;adequacy;be_gas_ocgt_old;MWh;EXP
-area;details;adequacy;be_gas_small_cipu;MWh;EXP
-area;details;adequacy;be_gas_small_non_cipu;MWh;EXP
-area;details;adequacy;be_nuclear;MWh;EXP
-area;values;adequacy;OV. COST;Euro;EXP
-area;values;adequacy;OP. COST;Euro;EXP
-area;values;adequacy;OP. COST;Euro;std
-area;values;adequacy;OP. COST;Euro;min
-area;values;adequacy;OP. COST;Euro;max
-area;values;adequacy;MRG. PRICE;Euro;EXP
-area;values;adequacy;MRG. PRICE;Euro;std
-area;values;adequacy;MRG. PRICE;Euro;min
-area;values;adequacy;MRG. PRICE;Euro;max
-area;values;adequacy;CO2 EMIS.;Tons;EXP
-area;values;adequacy;BALANCE;MWh;EXP
-area;values;adequacy;BALANCE;MWh;std
-area;values;adequacy;BALANCE;MWh;min
-area;values;adequacy;BALANCE;MWh;max
-area;values;adequacy;ROW BAL.;MWh;values
-area;values;adequacy;PSP;MWh;EXP
-area;values;adequacy;MISC. NDG;MWh;EXP
-area;values;adequacy;LOAD;MWh;EXP
-area;values;adequacy;LOAD;MWh;std
-area;values;adequacy;LOAD;MWh;min
-area;values;adequacy;LOAD;MWh;max
-area;values;adequacy;H. ROR;MWh;EXP
-area;values;adequacy;H. ROR;MWh;std
-area;values;adequacy;H. ROR;MWh;min
-area;values;adequacy;H. ROR;MWh;max
-area;values;adequacy;WIND;MWh;EXP
-area;values;adequacy;WIND;MWh;std
-area;values;adequacy;WIND;MWh;min
-area;values;adequacy;WIND;MWh;max
-area;values;adequacy;SOLAR;MWh;EXP
-area;values;adequacy;SOLAR;MWh;std
-area;values;adequacy;SOLAR;MWh;min
-area;values;adequacy;SOLAR;MWh;max
-area;values;adequacy;NUCLEAR;MWh;EXP
-area;values;adequacy;NUCLEAR;MWh;std
-area;values;adequacy;NUCLEAR;MWh;min
-area;values;adequacy;NUCLEAR;MWh;max
-area;values;adequacy;LIGNITE;MWh;EXP
-area;values;adequacy;LIGNITE;MWh;std
-area;values;adequacy;LIGNITE;MWh;min
-area;values;adequacy;LIGNITE;MWh;max
-area;values;adequacy;COAL;MWh;EXP
-area;values;adequacy;COAL;MWh;std
-area;values;adequacy;COAL;MWh;min
-area;values;adequacy;COAL;MWh;max
-area;values;adequacy;GAS;MWh;EXP
-area;values;adequacy;GAS;MWh;std
-area;values;adequacy;GAS;MWh;min
-area;values;adequacy;GAS;MWh;max
-area;values;adequacy;OIL;MWh;EXP
-area;values;adequacy;OIL;MWh;std
-area;values;adequacy;OIL;MWh;min
-area;values;adequacy;OIL;MWh;max
-area;values;adequacy;MIX. FUEL;MWh;EXP
-area;values;adequacy;MIX. FUEL;MWh;std
-area;values;adequacy;MIX. FUEL;MWh;min
-area;values;adequacy;MIX. FUEL;MWh;max
-area;values;adequacy;MISC. DTG;MWh;EXP
-area;values;adequacy;MISC. DTG;MWh;std
-area;values;adequacy;MISC. DTG;MWh;min
-area;values;adequacy;MISC. DTG;MWh;max
-area;values;adequacy;H. STOR;MWh;EXP
-area;values;adequacy;H. STOR;MWh;std
-area;values;adequacy;H. STOR;MWh;min
-area;values;adequacy;H. STOR;MWh;max
-area;values;adequacy;UNSP. ENRG;MWh;EXP
-area;values;adequacy;UNSP. ENRG;MWh;std
-area;values;adequacy;UNSP. ENRG;MWh;min
-area;values;adequacy;UNSP. ENRG;MWh;max
-area;values;adequacy;SPIL. ENRG;MWh;EXP
-area;values;adequacy;SPIL. ENRG;MWh;std
-area;values;adequacy;SPIL. ENRG;MWh;min
-area;values;adequacy;SPIL. ENRG;MWh;max
-area;values;adequacy;LOLD;Hours;EXP
-area;values;adequacy;LOLD;Hours;std
-area;values;adequacy;LOLD;Hours;min
-area;values;adequacy;LOLD;Hours;max
-area;values;adequacy;LOLP;%;values
-area;values;adequacy;AVL DTG;MWh;EXP
-area;values;adequacy;AVL DTG;MWh;std
-area;values;adequacy;AVL DTG;MWh;min
-area;values;adequacy;AVL DTG;MWh;max
-area;values;adequacy;DTG MRG;MWh;EXP
-area;values;adequacy;DTG MRG;MWh;std
-area;values;adequacy;DTG MRG;MWh;min
-area;values;adequacy;DTG MRG;MWh;max
-area;values;adequacy;MAX MRG;MWh;EXP
-area;values;adequacy;MAX MRG;MWh;std
-area;values;adequacy;MAX MRG;MWh;min
-area;values;adequacy;MAX MRG;MWh;max
-area;id;adequacy;OP. COST;Euro;min
-area;id;adequacy;OP. COST;Euro;max
-area;id;adequacy;MRG. PRICE;Euro;min
-area;id;adequacy;MRG. PRICE;Euro;max
-area;id;adequacy;BALANCE;MWh;min
-area;id;adequacy;BALANCE;MWh;max
-area;id;adequacy;LOAD;MWh;min
-area;id;adequacy;LOAD;MWh;max
-area;id;adequacy;H. ROR;MWh;min
-area;id;adequacy;H. ROR;MWh;max
-area;id;adequacy;WIND;MWh;min
-area;id;adequacy;WIND;MWh;max
-area;id;adequacy;SOLAR;MWh;min
-area;id;adequacy;SOLAR;MWh;max
-area;id;adequacy;NUCLEAR;MWh;min
-area;id;adequacy;NUCLEAR;MWh;max
-area;id;adequacy;LIGNITE;MWh;min
-area;id;adequacy;LIGNITE;MWh;max
-area;id;adequacy;COAL;MWh;min
-area;id;adequacy;COAL;MWh;max
-area;id;adequacy;GAS;MWh;min
-area;id;adequacy;GAS;MWh;max
-area;id;adequacy;OIL;MWh;min
-area;id;adequacy;OIL;MWh;max
-area;id;adequacy;MIX. FUEL;MWh;min
-area;id;adequacy;MIX. FUEL;MWh;max
-area;id;adequacy;MISC. DTG;MWh;min
-area;id;adequacy;MISC. DTG;MWh;max
-area;id;adequacy;H. STOR;MWh;min
-area;id;adequacy;H. STOR;MWh;max
-area;id;adequacy;UNSP. ENRG;MWh;min
-area;id;adequacy;UNSP. ENRG;MWh;max
-area;id;adequacy;SPIL. ENRG;MWh;min
-area;id;adequacy;SPIL. ENRG;MWh;max
-area;id;adequacy;LOLD;Hours;min
-area;id;adequacy;LOLD;Hours;max
-area;id;adequacy;AVL DTG;MWh;min
-area;id;adequacy;AVL DTG;MWh;max
-area;id;adequacy;DTG MRG;MWh;min
-area;id;adequacy;DTG MRG;MWh;max
-area;id;adequacy;MAX MRG;MWh;min
-area;id;adequacy;MAX MRG;MWh;max
-link;values;economy;FLOW LIN.;MWh;EXP
-link;values;economy;FLOW LIN.;MWh;std
-link;values;economy;FLOW LIN.;MWh;min
-link;values;economy;FLOW LIN.;MWh;max
-link;values;economy;UCAP LIN.;MWh;EXP
-link;values;economy;UCAP LIN.;MWh;std
-link;values;economy;UCAP LIN.;MWh;min
-link;values;economy;UCAP LIN.;MWh;max
-link;values;economy;FLOW QUAD.;MWh;values
-link;values;economy;CONG. FEE (ALG.);Euro;EXP
-link;values;economy;CONG. FEE (ALG.);Euro;std
-link;values;economy;CONG. FEE (ALG.);Euro;min
-link;values;economy;CONG. FEE (ALG.);Euro;max
-link;values;economy;CONG. FEE (ABS.);Euro;EXP
-link;values;economy;CONG. FEE (ABS.);Euro;std
-link;values;economy;CONG. FEE (ABS.);Euro;min
-link;values;economy;CONG. FEE (ABS.);Euro;max
-link;values;economy;MARG. COST;Euro/MW;EXP
-link;values;economy;MARG. COST;Euro/MW;std
-link;values;economy;MARG. COST;Euro/MW;min
-link;values;economy;MARG. COST;Euro/MW;max
-link;values;economy;CONG. PROB +;%;values
-link;values;economy;CONG. PROB -;%;values
-link;values;economy;HURDLE COST;Euro;EXP
-link;values;economy;HURDLE COST;Euro;std
-link;values;economy;HURDLE COST;Euro;min
-link;values;economy;HURDLE COST;Euro;max
-link;id;economy;FLOW LIN.;MWh;min
-link;id;economy;FLOW LIN.;MWh;max
-link;id;economy;UCAP LIN.;MWh;min
-link;id;economy;UCAP LIN.;MWh;max
-link;id;economy;CONG. FEE (ALG.);Euro;min
-link;id;economy;CONG. FEE (ALG.);Euro;max
-link;id;economy;CONG. FEE (ABS.);Euro;min
-link;id;economy;CONG. FEE (ABS.);Euro;max
-link;id;economy;MARG. COST;Euro/MW;min
-link;id;economy;MARG. COST;Euro/MW;max
-link;id;economy;HURDLE COST;Euro;min
-link;id;economy;HURDLE COST;Euro;max
-link;values;adequacy;FLOW LIN.;MWh;EXP
-link;values;adequacy;FLOW LIN.;MWh;std
-link;values;adequacy;FLOW LIN.;MWh;min
-link;values;adequacy;FLOW LIN.;MWh;max
-link;values;adequacy;UCAP LIN.;MWh;EXP
-link;values;adequacy;UCAP LIN.;MWh;std
-link;values;adequacy;UCAP LIN.;MWh;min
-link;values;adequacy;UCAP LIN.;MWh;max
-link;values;adequacy;FLOW QUAD.;MWh;values
-link;values;adequacy;CONG. FEE (ALG.);Euro;EXP
-link;values;adequacy;CONG. FEE (ALG.);Euro;std
-link;values;adequacy;CONG. FEE (ALG.);Euro;min
-link;values;adequacy;CONG. FEE (ALG.);Euro;max
-link;values;adequacy;CONG. FEE (ABS.);Euro;EXP
-link;values;adequacy;CONG. FEE (ABS.);Euro;std
-link;values;adequacy;CONG. FEE (ABS.);Euro;min
-link;values;adequacy;CONG. FEE (ABS.);Euro;max
-link;values;adequacy;MARG. COST;Euro/MW;EXP
-link;values;adequacy;MARG. COST;Euro/MW;std
-link;values;adequacy;MARG. COST;Euro/MW;min
-link;values;adequacy;MARG. COST;Euro/MW;max
-link;values;adequacy;CONG. PROB +;%;values
-link;values;adequacy;CONG. PROB -;%;values
-link;values;adequacy;HURDLE COST;Euro;EXP
-link;values;adequacy;HURDLE COST;Euro;std
-link;values;adequacy;HURDLE COST;Euro;min
-link;values;adequacy;HURDLE COST;Euro;max
-link;id;adequacy;FLOW LIN.;MWh;min
-link;id;adequacy;FLOW LIN.;MWh;max
-link;id;adequacy;UCAP LIN.;MWh;min
-link;id;adequacy;UCAP LIN.;MWh;max
-link;id;adequacy;CONG. FEE (ALG.);Euro;min
-link;id;adequacy;CONG. FEE (ALG.);Euro;max
-link;id;adequacy;CONG. FEE (ABS.);Euro;min
-link;id;adequacy;CONG. FEE (ABS.);Euro;max
-link;id;adequacy;MARG. COST;Euro/MW;min
-link;id;adequacy;MARG. COST;Euro/MW;max
-link;id;adequacy;HURDLE COST;Euro;min
-link;id;adequacy;HURDLE COST;Euro;max
+Folder;Files;Mode;Name;Unit;Stats;digits
+area;values;economy;OV. COST;Euro;EXP;0
+area;values;economy;OP. COST;Euro;EXP;0
+area;values;economy;OP. COST;Euro;std;0
+area;values;economy;OP. COST;Euro;min;0
+area;values;economy;OP. COST;Euro;max;0
+area;values;economy;MRG. PRICE;Euro;EXP;2
+area;values;economy;MRG. PRICE;Euro;std;2
+area;values;economy;MRG. PRICE;Euro;min;2
+area;values;economy;MRG. PRICE;Euro;max;2
+area;values;economy;CO2 EMIS.;Tons;EXP;0
+area;values;economy;BALANCE;MWh;EXP;0
+area;values;economy;BALANCE;MWh;std;0
+area;values;economy;BALANCE;MWh;min;0
+area;values;economy;BALANCE;MWh;max;0
+area;values;economy;ROW BAL.;MWh;values;0
+area;values;economy;PSP;MWh;EXP;0
+area;values;economy;MISC. NDG;MWh;EXP;0
+area;values;economy;LOAD;MWh;EXP;0
+area;values;economy;LOAD;MWh;std;0
+area;values;economy;LOAD;MWh;min;0
+area;values;economy;LOAD;MWh;max;0
+area;values;economy;H. ROR;MWh;EXP;0
+area;values;economy;H. ROR;MWh;std;0
+area;values;economy;H. ROR;MWh;min;0
+area;values;economy;H. ROR;MWh;max;0
+area;values;economy;WIND;MWh;EXP;0
+area;values;economy;WIND;MWh;std;0
+area;values;economy;WIND;MWh;min;0
+area;values;economy;WIND;MWh;max;0
+area;values;economy;SOLAR;MWh;EXP;0
+area;values;economy;SOLAR;MWh;std;0
+area;values;economy;SOLAR;MWh;min;0
+area;values;economy;SOLAR;MWh;max;0
+area;values;economy;NUCLEAR;MWh;EXP;0
+area;values;economy;NUCLEAR;MWh;std;0
+area;values;economy;NUCLEAR;MWh;min;0
+area;values;economy;NUCLEAR;MWh;max;0
+area;values;economy;LIGNITE;MWh;EXP;0
+area;values;economy;LIGNITE;MWh;std;0
+area;values;economy;LIGNITE;MWh;min;0
+area;values;economy;LIGNITE;MWh;max;0
+area;values;economy;COAL;MWh;EXP;0
+area;values;economy;COAL;MWh;std;0
+area;values;economy;COAL;MWh;min;0
+area;values;economy;COAL;MWh;max;0
+area;values;economy;GAS;MWh;EXP;0
+area;values;economy;GAS;MWh;std;0
+area;values;economy;GAS;MWh;min;0
+area;values;economy;GAS;MWh;max;0
+area;values;economy;OIL;MWh;EXP;0
+area;values;economy;OIL;MWh;std;0
+area;values;economy;OIL;MWh;min;0
+area;values;economy;OIL;MWh;max;0
+area;values;economy;MIX. FUEL;MWh;EXP;0
+area;values;economy;MIX. FUEL;MWh;std;0
+area;values;economy;MIX. FUEL;MWh;min;0
+area;values;economy;MIX. FUEL;MWh;max;0
+area;values;economy;MISC. DTG;MWh;EXP;0
+area;values;economy;MISC. DTG;MWh;std;0
+area;values;economy;MISC. DTG;MWh;min;0
+area;values;economy;MISC. DTG;MWh;max;0
+area;values;economy;H. STOR;MWh;EXP;0
+area;values;economy;H. STOR;MWh;std;0
+area;values;economy;H. STOR;MWh;min;0
+area;values;economy;H. STOR;MWh;max;0
+area;values;economy;UNSP. ENRG;MWh;EXP;0
+area;values;economy;UNSP. ENRG;MWh;std;0
+area;values;economy;UNSP. ENRG;MWh;min;0
+area;values;economy;UNSP. ENRG;MWh;max;0
+area;values;economy;SPIL. ENRG;MWh;EXP;0
+area;values;economy;SPIL. ENRG;MWh;std;0
+area;values;economy;SPIL. ENRG;MWh;min;0
+area;values;economy;SPIL. ENRG;MWh;max;0
+area;values;economy;LOLD;Hours;EXP;0
+area;values;economy;LOLD;Hours;std;0
+area;values;economy;LOLD;Hours;min;0
+area;values;economy;LOLD;Hours;max;0
+area;values;economy;LOLP;%;values;0
+area;values;economy;AVL DTG;MWh;EXP;0
+area;values;economy;AVL DTG;MWh;std;0
+area;values;economy;AVL DTG;MWh;min;0
+area;values;economy;AVL DTG;MWh;max;0
+area;values;economy;DTG MRG;MWh;EXP;0
+area;values;economy;DTG MRG;MWh;std;0
+area;values;economy;DTG MRG;MWh;min;0
+area;values;economy;DTG MRG;MWh;max;0
+area;values;economy;MAX MRG;MWh;EXP;0
+area;values;economy;MAX MRG;MWh;std;0
+area;values;economy;MAX MRG;MWh;min;0
+area;values;economy;MAX MRG;MWh;max;0
+area;values;economy;NP COST;Euro;EXP;0
+area;values;economy;NP COST;Euro;std;0
+area;values;economy;NP COST;Euro;min;0
+area;values;economy;NP COST;Euro;max;0
+area;values;economy;NODU; ;EXP;0
+area;values;economy;NODU; ;std;0
+area;values;economy;NODU; ;min;0
+area;values;economy;NODU; ;max;0
+area;values;adequacy;OV. COST;Euro;EXP;0
+area;values;adequacy;OP. COST;Euro;EXP;0
+area;values;adequacy;OP. COST;Euro;std;0
+area;values;adequacy;OP. COST;Euro;min;0
+area;values;adequacy;OP. COST;Euro;max;0
+area;values;adequacy;MRG. PRICE;Euro;EXP;2
+area;values;adequacy;MRG. PRICE;Euro;std;2
+area;values;adequacy;MRG. PRICE;Euro;min;2
+area;values;adequacy;MRG. PRICE;Euro;max;2
+area;values;adequacy;CO2 EMIS.;Tons;EXP;0
+area;values;adequacy;BALANCE;MWh;EXP;0
+area;values;adequacy;BALANCE;MWh;std;0
+area;values;adequacy;BALANCE;MWh;min;0
+area;values;adequacy;BALANCE;MWh;max;0
+area;values;adequacy;ROW BAL.;MWh;values;0
+area;values;adequacy;PSP;MWh;EXP;0
+area;values;adequacy;MISC. NDG;MWh;EXP;0
+area;values;adequacy;LOAD;MWh;EXP;0
+area;values;adequacy;LOAD;MWh;std;0
+area;values;adequacy;LOAD;MWh;min;0
+area;values;adequacy;LOAD;MWh;max;0
+area;values;adequacy;H. ROR;MWh;EXP;0
+area;values;adequacy;H. ROR;MWh;std;0
+area;values;adequacy;H. ROR;MWh;min;0
+area;values;adequacy;H. ROR;MWh;max;0
+area;values;adequacy;WIND;MWh;EXP;0
+area;values;adequacy;WIND;MWh;std;0
+area;values;adequacy;WIND;MWh;min;0
+area;values;adequacy;WIND;MWh;max;0
+area;values;adequacy;SOLAR;MWh;EXP;0
+area;values;adequacy;SOLAR;MWh;std;0
+area;values;adequacy;SOLAR;MWh;min;0
+area;values;adequacy;SOLAR;MWh;max;0
+area;values;adequacy;NUCLEAR;MWh;EXP;0
+area;values;adequacy;NUCLEAR;MWh;std;0
+area;values;adequacy;NUCLEAR;MWh;min;0
+area;values;adequacy;NUCLEAR;MWh;max;0
+area;values;adequacy;LIGNITE;MWh;EXP;0
+area;values;adequacy;LIGNITE;MWh;std;0
+area;values;adequacy;LIGNITE;MWh;min;0
+area;values;adequacy;LIGNITE;MWh;max;0
+area;values;adequacy;COAL;MWh;EXP;0
+area;values;adequacy;COAL;MWh;std;0
+area;values;adequacy;COAL;MWh;min;0
+area;values;adequacy;COAL;MWh;max;0
+area;values;adequacy;GAS;MWh;EXP;0
+area;values;adequacy;GAS;MWh;std;0
+area;values;adequacy;GAS;MWh;min;0
+area;values;adequacy;GAS;MWh;max;0
+area;values;adequacy;OIL;MWh;EXP;0
+area;values;adequacy;OIL;MWh;std;0
+area;values;adequacy;OIL;MWh;min;0
+area;values;adequacy;OIL;MWh;max;0
+area;values;adequacy;MIX. FUEL;MWh;EXP;0
+area;values;adequacy;MIX. FUEL;MWh;std;0
+area;values;adequacy;MIX. FUEL;MWh;min;0
+area;values;adequacy;MIX. FUEL;MWh;max;0
+area;values;adequacy;MISC. DTG;MWh;EXP;0
+area;values;adequacy;MISC. DTG;MWh;std;0
+area;values;adequacy;MISC. DTG;MWh;min;0
+area;values;adequacy;MISC. DTG;MWh;max;0
+area;values;adequacy;H. STOR;MWh;EXP;0
+area;values;adequacy;H. STOR;MWh;std;0
+area;values;adequacy;H. STOR;MWh;min;0
+area;values;adequacy;H. STOR;MWh;max;0
+area;values;adequacy;UNSP. ENRG;MWh;EXP;0
+area;values;adequacy;UNSP. ENRG;MWh;std;0
+area;values;adequacy;UNSP. ENRG;MWh;min;0
+area;values;adequacy;UNSP. ENRG;MWh;max;0
+area;values;adequacy;SPIL. ENRG;MWh;EXP;0
+area;values;adequacy;SPIL. ENRG;MWh;std;0
+area;values;adequacy;SPIL. ENRG;MWh;min;0
+area;values;adequacy;SPIL. ENRG;MWh;max;0
+area;values;adequacy;LOLD;Hours;EXP;0
+area;values;adequacy;LOLD;Hours;std;0
+area;values;adequacy;LOLD;Hours;min;0
+area;values;adequacy;LOLD;Hours;max;0
+area;values;adequacy;LOLP;%;values;0
+area;values;adequacy;AVL DTG;MWh;EXP;0
+area;values;adequacy;AVL DTG;MWh;std;0
+area;values;adequacy;AVL DTG;MWh;min;0
+area;values;adequacy;AVL DTG;MWh;max;0
+area;values;adequacy;DTG MRG;MWh;EXP;0
+area;values;adequacy;DTG MRG;MWh;std;0
+area;values;adequacy;DTG MRG;MWh;min;0
+area;values;adequacy;DTG MRG;MWh;max;0
+area;values;adequacy;MAX MRG;MWh;EXP;0
+area;values;adequacy;MAX MRG;MWh;std;0
+area;values;adequacy;MAX MRG;MWh;min;0
+area;values;adequacy;MAX MRG;MWh;max;0
+link;values;economy;FLOW LIN.;MWh;EXP;0
+link;values;economy;FLOW LIN.;MWh;std;0
+link;values;economy;FLOW LIN.;MWh;min;0
+link;values;economy;FLOW LIN.;MWh;max;0
+link;values;economy;UCAP LIN.;MWh;EXP;0
+link;values;economy;UCAP LIN.;MWh;std;0
+link;values;economy;UCAP LIN.;MWh;min;0
+link;values;economy;UCAP LIN.;MWh;max;0
+link;values;economy;FLOW QUAD.;MWh;values;0
+link;values;economy;CONG. FEE (ALG.);Euro;EXP;0
+link;values;economy;CONG. FEE (ALG.);Euro;std;0
+link;values;economy;CONG. FEE (ALG.);Euro;min;0
+link;values;economy;CONG. FEE (ALG.);Euro;max;0
+link;values;economy;CONG. FEE (ABS.);Euro;EXP;0
+link;values;economy;CONG. FEE (ABS.);Euro;std;0
+link;values;economy;CONG. FEE (ABS.);Euro;min;0
+link;values;economy;CONG. FEE (ABS.);Euro;max;0
+link;values;economy;MARG. COST;Euro/MW;EXP;0
+link;values;economy;MARG. COST;Euro/MW;std;0
+link;values;economy;MARG. COST;Euro/MW;min;0
+link;values;economy;MARG. COST;Euro/MW;max;0
+link;values;economy;CONG. PROB +;%;values;0
+link;values;economy;CONG. PROB -;%;values;0
+link;values;economy;HURDLE COST;Euro;EXP;0
+link;values;economy;HURDLE COST;Euro;std;0
+link;values;economy;HURDLE COST;Euro;min;0
+link;values;economy;HURDLE COST;Euro;max;0
+link;values;adequacy;FLOW LIN.;MWh;EXP;0
+link;values;adequacy;FLOW LIN.;MWh;std;0
+link;values;adequacy;FLOW LIN.;MWh;min;0
+link;values;adequacy;FLOW LIN.;MWh;max;0
+link;values;adequacy;UCAP LIN.;MWh;EXP;0
+link;values;adequacy;UCAP LIN.;MWh;std;0
+link;values;adequacy;UCAP LIN.;MWh;min;0
+link;values;adequacy;UCAP LIN.;MWh;max;0
+link;values;adequacy;FLOW QUAD.;MWh;values;0
+link;values;adequacy;CONG. FEE (ALG.);Euro;EXP;0
+link;values;adequacy;CONG. FEE (ALG.);Euro;std;0
+link;values;adequacy;CONG. FEE (ALG.);Euro;min;0
+link;values;adequacy;CONG. FEE (ALG.);Euro;max;0
+link;values;adequacy;CONG. FEE (ABS.);Euro;EXP;0
+link;values;adequacy;CONG. FEE (ABS.);Euro;std;0
+link;values;adequacy;CONG. FEE (ABS.);Euro;min;0
+link;values;adequacy;CONG. FEE (ABS.);Euro;max;0
+link;values;adequacy;MARG. COST;Euro/MW;EXP;0
+link;values;adequacy;MARG. COST;Euro/MW;std;0
+link;values;adequacy;MARG. COST;Euro/MW;min;0
+link;values;adequacy;MARG. COST;Euro/MW;max;0
+link;values;adequacy;CONG. PROB +;%;values;0
+link;values;adequacy;CONG. PROB -;%;values;0
+link;values;adequacy;HURDLE COST;Euro;EXP;0
+link;values;adequacy;HURDLE COST;Euro;std;0
+link;values;adequacy;HURDLE COST;Euro;min;0
+link;values;adequacy;HURDLE COST;Euro;max;0
