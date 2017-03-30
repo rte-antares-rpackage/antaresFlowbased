@@ -156,9 +156,26 @@ aggregateResult <- function(opts, newname){
       }
     }
     
+    oldw <- getOption("warn")
+    options(warn = -1)
+    
     value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N))
+    #nan due to round
+    for (i in names(value$areas$std))
+      value$areas$std[is.nan(get(i)), (i):=0]
     value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N))
+    #nan due to round
+    for (i in names(value$links$std))
+      value$links$std[is.nan(get(i)), (i):=0]
+    
     value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N))
+    #nan due to round
+    for (i in names(value$clusters$std))
+      value$clusters$std[is.nan(get(i)), (i):=0]
+    
+    options(warn = oldw)
+    
+    
     value$areas$sumC <- NULL
     value$links$sumC <- NULL
     value$clusters$sumC <- NULL
@@ -355,12 +372,28 @@ aggregateResult <- function(opts, newname){
     nomStruct <- ""
     dta$timeId <- "Annual"
   }
-  entete <- paste0(ctry, "\t",folderTypesansS,"\t",abrtype, "\t",timestep,"\n\tVARIABLES\tBEGIN\tEND\n\t",
-                   nbvar, "\t",indexMin, "\t",indexMax, "\n\n",
-                   ctry, "\t", timestep, paste0(rep("\t", ncolFix), collapse = ""),
-                   paste0(nomcair, collapse = "\t"),"\n",
-                   paste0(rep("\t", ncolFix+1), collapse = ""),paste0(unit, collapse = "\t"),"\n",
-                   "\t", paste0(nomStruct, collapse = "\t"), "\t", paste0(Stats, collapse = "\t"), "\n")
+  
+  if(folderType == "links"){
+    
+    ctryDecomp <- strsplit(as.character(ctry), " - ")%>>%unlist
+    entete <- paste0(ctryDecomp[1], "\t",folderTypesansS,"\t",abrtype,
+                     "\t",timestep,"\n",ctryDecomp[2] ,"\tVARIABLES\tBEGIN\tEND\n\t",
+                     nbvar, "\t",indexMin, "\t",indexMax, "\n\n",
+                     ctryDecomp[1], "\t", timestep, paste0(rep("\t", ncolFix), collapse = ""),
+                     paste0(nomcair, collapse = "\t"),"\n",
+                     paste0(rep("\t", ncolFix+1), collapse = ""),paste0(unit, collapse = "\t"),"\n",
+                     "\t", paste0(nomStruct, collapse = "\t"), "\t", paste0(Stats, collapse = "\t"), "\n")
+  }else{
+    entete <- paste0(ctry, "\t",folderTypesansS,"\t",abrtype, "\t",timestep,"\n\tVARIABLES\tBEGIN\tEND\n\t",
+                     nbvar, "\t",indexMin, "\t",indexMax, "\n\n",
+                     ctry, "\t", timestep, paste0(rep("\t", ncolFix), collapse = ""),
+                     paste0(nomcair, collapse = "\t"),"\n",
+                     paste0(rep("\t", ncolFix+1), collapse = ""),paste0(unit, collapse = "\t"),"\n",
+                     "\t", paste0(nomStruct, collapse = "\t"), "\t", paste0(Stats, collapse = "\t"), "\n")
+  }
+  
+  
+
   
   dir.create(paste0(opts$simDataPath, "/mc-all", "/",folderType,"/", ctry), recursive = TRUE,
              showWarnings = FALSE)

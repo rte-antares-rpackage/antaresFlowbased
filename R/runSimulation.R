@@ -105,9 +105,9 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   
   #Wite digest
   opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
-  diges <- fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
+  diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
   
-  areas <- readAntares(timeStep = "hourly")
+  areas <- antaresRead::readAntares(timeStep = "annual")
   areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
   allNam <- names(areas)[-c(1:3)]
   areas[, c("timeId", "time"):= NULL]
@@ -121,10 +121,8 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   }
   areas <- unique(areas)
   
-  for (col in allNam) set(areas, j = col, value = round(areas[[col]], 0))
-  for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
   
- 
+  for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
   coltoKeep <- match(names(areas)[-1], diges$Variable)
   unitKeep <- diges$Unit[coltoKeep]
   StatsKeep <- diges$Stats[coltoKeep]
