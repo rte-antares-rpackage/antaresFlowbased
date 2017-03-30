@@ -22,7 +22,7 @@
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
 #' mysim <- runSimulation(opts, "R_from")
-#' }
+#'}
 #'
 #' @export
 runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
@@ -96,6 +96,12 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   print(filesMoves)
   # #Mc-all creation
   aggregateResult(opts = opts, newname = filesMoves)
+  
+  dtaMc <- paste0(opts$simDataPath, "/mc-ind")
+  
+  if(!mcInd){
+    unlink(dtaMc, recursive = TRUE)
+  }
   
   #Wite digest
   opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)

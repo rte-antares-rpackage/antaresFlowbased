@@ -166,12 +166,14 @@ aggregateResult <- function(opts, newname){
     value$links$sum <- value$links$sum / N
     value$clusters$sum <- value$clusters$sum / N
     
-    lapply(value, function(X){
-      lapply(X, function(Y){
-        Y[,(names(Y)) := lapply(.SD, round)]
-      })
-    })%>>%invisible()
     
+    #round all to 0 digits
+    # lapply(value, function(X){
+    #   lapply(X, function(Y){
+    #     Y[,(names(Y)) := lapply(.SD, round)]
+    #   })
+    # })%>>%invisible()
+    # 
     
     
     ##Write area
@@ -189,6 +191,15 @@ aggregateResult <- function(opts, newname){
       ncolFix <- ncol(struct$areas)-3
       areas[, c("mcYear", "time") := NULL]
       allAreas <- unique(areas$area)
+      
+      for(i in 1:length(namekeepprog))
+      {
+        var <- namekeepprog[i]
+        dig <- areaSpecialFile[var == paste(Name,progNam )]$digits
+        areas[, c(var) := .(do.call(round, args = list(get(var), digits = dig)))]
+      }
+      
+      
       
       sapply(allAreas,  function(areasel){
         areastowrite <- areas[area == areasel]
@@ -211,7 +222,7 @@ aggregateResult <- function(opts, newname){
     
     
     ##Wite links
-    alfil <- c("values", "id")
+    alfil <- c("values")
     sapply(alfil, function(fil)
     {
       linkSpecialFile <- linkTable[Folder == "link" & Files == fil & Mode == "economy"]
@@ -225,6 +236,15 @@ aggregateResult <- function(opts, newname){
       ncolFix <- ncol(struct$links)-3
       links[, c("mcYear", "time") := NULL]
       allLink<- unique(links$link)
+      
+      for(i in 1:length(namekeepprog))
+      {
+        var <- namekeepprog[i]
+        dig <- linkSpecialFile[var == paste(Name,progNam )]$digits
+        links[, c(var) := .(do.call(round, args = list(get(var), digits = dig)))]
+      }
+      
+      
       
       sapply(allLink,  function(linksel){
         linkstowrite <- links[link == linksel]
@@ -256,6 +276,9 @@ aggregateResult <- function(opts, newname){
       nomStruct <- names(endClustctry)[!names(endClustctry)%in%c("cluster","production EXP", "NP Cost EXP", "NODU EXP")]
       fomula <- nomStruct
       fomula <- as.formula(paste0(paste0(fomula, collapse = "+"), "~cluster"))
+      endClustctry[, c("production EXP", "NP Cost EXP", "NODU EXP") := list(round(`production EXP`),
+                                                                            round(`NP Cost EXP`),
+                                                                            round(`NODU EXP`))]
       endClustctry <- data.table::dcast(endClustctry, fomula,
                                         value.var = c("production EXP", "NP Cost EXP", "NODU EXP"))
       
