@@ -109,10 +109,36 @@ aggregateResult <- function(opts, newname){
     )
     SDcolsStartClust <-  SDcolsStartareas + 1
     #load and calcul
-    setkeyv(dta$areas, c("area", "timeId"))
+    
     struct <- list(areas = dta$areas[,.SD, .SDcols = 1:SDcolsStartareas],
                    links = dta$links[,.SD, .SDcols = 1:SDcolsStartareas],
                    clusters = dta$clusters[,.SD, .SDcols = 1:SDcolsStartClust])
+    
+    if(type == "weekly"){
+      struct$areas$timeId <- as.numeric(substr(struct$areas$time, nchar(as.character(struct$areas$time[1]))-1,
+                                               nchar(as.character(struct$areas$time[1]))))
+      struct$link$timeId <- as.numeric(substr(struct$link$time, nchar(as.character(struct$link$time[1]))-1,
+                                              nchar(as.character(struct$link$time[1]))))
+      struct$clusters$timeId <- as.numeric(substr(struct$clusters$time, nchar(as.character(struct$clusters$time[1]))-1,
+                                                  nchar(as.character(struct$clusters$time[1]))))
+    }
+    
+    if(!is.null(struct$areas$day)){
+      struct$areas$day <- ifelse(nchar(struct$areas$day) == 1,
+                                 paste0("0", struct$areas$day),
+                                 as.character(struct$areas$day))
+    }
+    if(!is.null(struct$links$day)){
+      struct$links$day <- ifelse(nchar(struct$links$day) == 1,
+                                 paste0("0", struct$links$day),
+                                 as.character(struct$links$day))
+    }
+    if(!is.null(struct$links$day)){
+      struct$clusters$day <- ifelse(nchar(struct$clusters$day) == 1,
+                                    paste0("0", struct$clusters$day),
+                                    as.character(struct$clusters$day))
+    }
+    
     
     value <- .giveValue(dta, SDcolsStartareas, SDcolsStartClust)
     N <- length(numMc)
@@ -120,8 +146,8 @@ aggregateResult <- function(opts, newname){
     if(N>1)
     {
       for(i in 2:N){
-        dtaTP <- readAntares(area = "all", links = "all", clusters = "all", 
-                             timeStep = type, simplify = FALSE, mcYears = numMc[i])
+        dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
+                                          timeStep = type, simplify = FALSE, mcYears = numMc[i])
         valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
         valueTP <- lapply(valueTP, .creatStats)
         value$areas <- .updateStats(value$areas, valueTP$areas)
@@ -129,9 +155,10 @@ aggregateResult <- function(opts, newname){
         value$clusters <- .updateStats(value$clusters, valueTP$clusters)
       }
     }
-    value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N - 1))
-    value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N - 1))
-    value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N - 1))
+    
+    value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N))
+    value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N))
+    value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N))
     value$areas$sumC <- NULL
     value$links$sumC <- NULL
     value$clusters$sumC <- NULL
@@ -139,8 +166,16 @@ aggregateResult <- function(opts, newname){
     value$links$sum <- value$links$sum / N
     value$clusters$sum <- value$clusters$sum / N
     
+    lapply(value, function(X){
+      lapply(X, function(Y){
+        Y[,(names(Y)) := lapply(.SD, round)]
+      })
+    })%>>%invisible()
+    
+    
+    
     ##Write area
-    alfil <- c("values", "id")
+    alfil <- c("values")
     sapply(alfil, function(fil)
     {
       areaSpecialFile <- linkTable[Folder == "area" & Files == fil & Mode == "economy"]
@@ -161,7 +196,8 @@ aggregateResult <- function(opts, newname){
         indexMin <- min(areas$timeId)
         indexMax <- max(areas$timeId)
         kepNam <- names(struct$areas)[!names(struct$areas)%in%c("area","mcYear","time")]
-        kepNam[which(kepNam == "timeId")] <- "index"
+        nameIndex <- ifelse(type == "weekly", "week", "index")
+        kepNam[which(kepNam == "timeId")] <- nameIndex
         .writeFileOutout(dta = areastowrite, timestep = type, fileType = fil,
                          ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
                          indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
@@ -196,7 +232,9 @@ aggregateResult <- function(opts, newname){
         indexMin <- min(links$timeId)
         indexMax <- max(links$timeId)
         kepNam <- names(struct$link)[!names(struct$link)%in%c("link","mcYear","time")]
-        kepNam[which(kepNam == "timeId")] <- "index"
+        nameIndex <- ifelse(type == "weekly", "week", "index")
+        kepNam[which(kepNam == "timeId")] <- nameIndex
+        
         .writeFileOutout(dta = linkstowrite, timestep = type, fileType = fil,
                          ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
                          indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
@@ -209,16 +247,21 @@ aggregateResult <- function(opts, newname){
     
     details <- value$clusters$sum
     endClust <- cbind(struct$clusters, details)
-    endClust[, c("mcYear", "time") := NULL]
+    endClust[, c("mcYear") := NULL]
     
     sapply(unique(endClust$area),  function(ctry){
       endClustctry <- endClust[area == ctry]
+      orderBeg <- unique(endClustctry$time)
       endClustctry[,c("area") := NULL]
       nomStruct <- names(endClustctry)[!names(endClustctry)%in%c("cluster","production EXP", "NP Cost EXP", "NODU EXP")]
       fomula <- nomStruct
       fomula <- as.formula(paste0(paste0(fomula, collapse = "+"), "~cluster"))
       endClustctry <- data.table::dcast(endClustctry, fomula,
                                         value.var = c("production EXP", "NP Cost EXP", "NODU EXP"))
+      
+      endClustctry <- endClustctry[match(orderBeg, endClustctry$time)]
+      endClustctry[,c("time") := NULL]
+      nomStruct <- nomStruct[-which(nomStruct == "time")]
       nomcair <- names(endClustctry)
       nomcair <- nomcair[!nomcair%in%nomStruct]
       nbvar <- length(nomcair)
@@ -230,7 +273,11 @@ aggregateResult <- function(opts, newname){
       nomcair <- gsub("NP Cost EXP_","",nomcair)
       nomcair <- gsub("NODU EXP_","",nomcair)
       Stats <- rep("EXP", length(unit))
-      nomStruct[which(nomStruct == "timeId")] <- "index"
+      
+      nameIndex <- ifelse(type == "weekly", "week", "index")
+      nomStruct[which(nomStruct == "timeId")] <- nameIndex
+      
+      
       indexMin <- min(endClustctry$timeId)
       indexMax <- max(endClustctry$timeId)
       ncolFix <- length(nomStruct)
@@ -257,7 +304,7 @@ aggregateResult <- function(opts, newname){
   res <- list(sum = X,
               min = X,
               max = X,
-              sumC = data.table(sapply(X, function(Z) Z*Z)))
+              sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
   names(res$sum) <- paste(names(X), "EXP")
   names(res$min) <- paste(names(X), "min")
   names(res$max) <- paste(names(X), "max")
@@ -279,6 +326,12 @@ aggregateResult <- function(opts, newname){
 {
   folderTypesansS <- substr(folderType, 1, nchar(folderType)-1)
   abrtype <- substr(fileType, 1, 2)
+  
+  
+  if(timestep == "annual"){
+    nomStruct <- ""
+    dta$timeId <- "Annual"
+  }
   entete <- paste0(ctry, "\t",folderTypesansS,"\t",abrtype, "\t",timestep,"\n\tVARIABLES\tBEGIN\tEND\n\t",
                    nbvar, "\t",indexMin, "\t",indexMax, "\n\n",
                    ctry, "\t", timestep, paste0(rep("\t", ncolFix), collapse = ""),
