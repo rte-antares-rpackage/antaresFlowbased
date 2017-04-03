@@ -6,8 +6,8 @@
 #' @param mcInd \code{boolean} keep mc_ind.
 #' @param indicators \code{character} not use in this version
 #' @param .test \code{boolean} if TRUE, just run 3 scenarios.
-#' @param MCyearsExcludes \code{numeric} to exclude MCyearsExcludes, default NULL,
-#' all MCyearsExcludes are included.
+#' @param MCyears \code{numeric} include MCyears, default NULL,
+#' all MCyears are included.
 #' @param silent \code{boolean} show log in console.
 #' 
 #' @examples
@@ -29,7 +29,7 @@
 #' @export
 runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
                           indicators = c("mean", "min", "max", "sd"), .test = TRUE,
-                          MCyearsExcludes = NULL, silent = TRUE,
+                          MCyears = NULL, silent = TRUE,
                           opts = antaresRead::simOptions()){
   oldw <- getOption("warn")
   options(warn = -1)
@@ -69,8 +69,8 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   
   
   #Exclude scenarios to redefine
-  if(!is.null(MCyearsExcludes)){
-    scenario <- scenario[MCyearsExcludes] <- NA
+  if(!is.null(MCyears)){
+    scenario <- scenario[!MCyears] <- NA
   }
   
   ##Prepare CMD to run antares
