@@ -8,26 +8,33 @@
 #' @param .test \code{boolean} if TRUE, just run 3 scenarios.
 #' @param MCyearsExcludes \code{numeric} to exclude MCyearsExcludes, default NULL,
 #' all MCyearsExcludes are included.
+#' @param silent \code{boolean} show log in console.
+#' 
 #' @examples
 #'
 #' \dontrun{
-#' opts <- antaresRead::setSimulationPath("D:/exemple_test",0)
+#' antaresRead::setSimulationPath("D:/exemple_test",0)
 #'
 #' weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
 #' secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
 #' dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
 #'
-#' initFlowBased(opts = opts, weight = weight, secondMember = secondMember, dayType = dayType)
+#' initFlowBased(weight = weight, secondMember = secondMember, dayType = dayType)
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation(opts, "R_from", silent = FALSE)
+#' mysim <- runSimulation("R_from", silent = FALSE)
 #'}
 #'
 #' @export
-runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
+runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
                           indicators = c("mean", "min", "max", "sd"), .test = TRUE,
-                          MCyearsExcludes = NULL, silent = TRUE){
+                          MCyearsExcludes = NULL, silent = TRUE,
+                          opts = antaresRead::simOptions()){
+  oldw <- getOption("warn")
+  options(warn = -1)
+  opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
+  options(warn = oldw)
   
   #random name to identify simulation
   aleatNameSime <- sample(letters, 10, replace = TRUE)%>>%
@@ -61,7 +68,7 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   .errorTest(scenario, silent, "Load of scenario.txt : Ok")
   
   
-  #Exclude scenarios
+  #Exclude scenarios to redefine
   if(!is.null(MCyearsExcludes)){
     scenario <- scenario[MCyearsExcludes] <- NA
   }
@@ -81,7 +88,7 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[2:3]
+    allScenario <- allScenario[2:5]
   }
   .addMessage(silent, "---------- Antares part ---------- ")
   
@@ -135,8 +142,8 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
     unlink(dtaMc, recursive = TRUE)
   }
   
-  digetsWrite <- try({
   #Wite digest
+  digetsWrite <- try({
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)

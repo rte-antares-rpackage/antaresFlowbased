@@ -5,13 +5,14 @@
 #' @param secondMember \code{data.frame} os second members
 #' @param scenarios \code{data.frame} of scenarios
 #' @param simNumber \code{numeric} number of simulation must be in scenarios
-#'
+#' @param silent \code{boolean} show log in console.
+#' 
 #' @examples
 #'
 #' \dontrun{
 #'
 #'  path <- "D:/Users/titorobe/Desktop/exemple_test"
-#'  opts <- antaresRead::setSimulationPath(,0)
+#'  antaresRead::setSimulationPath(,0)
 #'
 #'  secondMember <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt"))
 #'  ts <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt"))
@@ -22,7 +23,8 @@
 #' }
 #'
 #' @export
-prepareSimulationFiles <- function(opts, ts, secondMember, scenarios, simNumber, silent = TRUE){
+prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber, silent = TRUE,
+                                   opts = antaresRead::simOptions()){
   #Creation of bindingconstraints chroniques
   clim <- data.table::data.table(Id_day = unlist(ts[,.SD, .SDcols = colnames(ts)==simNumber]))
   allFB <- merge(clim, secondMember, by = "Id_day", allow.cartesian = TRUE)

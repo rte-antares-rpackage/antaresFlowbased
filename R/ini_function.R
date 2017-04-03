@@ -1,6 +1,6 @@
 #' Write ini file from list obtain by antaresRead:::readIniFile and modify by user
 #'
-#' @param listData\code{list}, modified list otain by antaresRead:::readIniFile
+#' @param listData \code{list}, modified list otain by antaresRead:::readIniFile
 #' @param pathIni \code{Character}, Path to ini file
 #'
 #' @examples

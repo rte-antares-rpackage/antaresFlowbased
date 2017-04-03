@@ -2,8 +2,9 @@
 .getWeight <- function(weigth){
   weigth <- data.table::fread(weigth, sep = ";", dec = ",")
   names(weigth) <- names(weigth)%>>%
-    tolower()%>>%
-    gsub(x=.,pattern =  "[.]", replacement = "%")
+    tolower()
+  
+  names(weigth) <- gsub(x=names(weigth), pattern =  "[.]", replacement = "%")
   weigth
 }
 

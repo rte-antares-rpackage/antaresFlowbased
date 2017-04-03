@@ -11,26 +11,26 @@
 #' \dontrun{
 #'
 #' path <- "D:/exemple_test"
-#' opts <- antaresRead::setSimulationPath(path, 0)
+#' antaresRead::setSimulationPath(path, 0)
 #'
 #' weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
 #' secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
 #' dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
 #'
-#' initFlowBased(opts = opts,
-#'               weight = weight,
-#'               secondMember = secondMember,
-#'               dayType = dayType)
+#' initFlowBased(weight = weight,
+#'              secondMember = secondMember,
+#'              dayType = dayType,
+#'              opts = antaresRead::simOptions())
 #' }
 #'
 #' @import pipeR data.table antaresRead
 #'
 #' @export
-initFlowBased <- function(opts,
-                          weight,
+initFlowBased <- function(weight,
                           secondMember,
                           dayType = NULL,
-                          determinants = NULL){
+                          determinants = NULL,
+                          opts = antaresRead::simOptions()){
 
 
   pathProject <- opts$studyPath
