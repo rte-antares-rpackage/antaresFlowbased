@@ -1,7 +1,13 @@
 context("Function aggregateResult")
 
-testStudy <- system.file("test/data/exemple_test",package = "antaresFlowbased")
+testStudy <- system.file("test/data/exemple_test.tgz",package = "antaresFlowbased")
+untar(testStudy)
+
+testStudy <- paste0(getwd(), "/exemple_test")
 opts <- antaresRead::setSimulationPath(testStudy)
+
+
+
 aggregateResult(opts = opts, newname = "testStydu")
 resAA <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "annual")
 resAD <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "daily")
@@ -24,7 +30,7 @@ resRM <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = 
 resRW <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "weekly")
 
 unlink(paste0(testStudy, "/output/testStydu/economy/mc-all"), recursive = TRUE)
-
+unlink(testStudy, recursive = TRUE, force = TRUE)
 #Test Areas
 resAM$areas$time <- as.factor(resAM$areas$time )
 resRA$areas$time <- as.factor(resRA$areas$time )
