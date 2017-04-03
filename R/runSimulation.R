@@ -21,38 +21,49 @@
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation(opts, "R_from")
+#' mysim <- runSimulation(opts, "R_from", silent = FALSE)
 #'}
 #'
 #' @export
 runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
                           indicators = c("mean", "min", "max", "sd"), .test = TRUE,
-                          MCyearsExcludes = NULL){
-
+                          MCyearsExcludes = NULL, silent = TRUE){
+  
   #random name to identify simulation
   aleatNameSime <- sample(letters, 10, replace = TRUE)%>>%
     paste0(collapse = "")
   simNameAlea <- paste0(simulationName, aleatNameSime)
   simNameAlea <- tolower(simNameAlea)
-
+  
+  if(!silent){
+    cat(paste("Generationos random name :", simNameAlea))
+  }
+  
   #Generate path for generaldata.ini
   generaldataIniPatch <- paste0(opts$studyPath, "/settings/generaldata.ini")
   generaldataIniOld <- paste0(opts$studyPath, "/settings/generaldata_old.ini")
-
+  
   #copy old settings file
   file.copy(generaldataIniPatch, generaldataIniOld)
-
+  
   #Update general settings and copy old file
-  updateGeneralSettingIni(opts)
-
+  
+  
+  upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
+  .errorTest(upGenIni, silent, "Write of generaldata : Ok")
+  
   #load second member
-  second_member <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt"))
-  ts <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt"))
-  scenario <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt"))
+  second_member <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
+  .errorTest(second_member, silent, "Load of second_member.txt : Ok")
+  ts <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
+  .errorTest(ts, silent, "Load of ts.txt : Ok")
+  scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
+  .errorTest(scenario, silent, "Load of scenario.txt : Ok")
+  
   
   #Exclude scenarios
   if(!is.null(MCyearsExcludes)){
-    scenario <- scenario[-MCyearsExcludes]
+    scenario <- scenario[MCyearsExcludes] <- NA
   }
   
   ##Prepare CMD to run antares
@@ -63,39 +74,60 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
   if(!file.exists(AntaresPatch)){
     stop("Antares solver does no exist. Use getSolverAntares()")
   }
-
+  
   cmd <- '"%s" "%s" -n "%s"'
   cmd <- sprintf(cmd, AntaresPatch, opts$studyPath, simNameAlea)
-
+  
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[2]
+    allScenario <- allScenario[2:3]
   }
-  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd){
+  .addMessage(silent, "---------- Antares part ---------- ")
+  
+  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
     #Preparation of files before simulaiton
+    .addMessage(silent, paste0("-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
                            ts = ts,
                            secondMember = second_member,
                            scenarios = scenario,
-                           simNumber = X)
+                           simNumber = X,
+                           silent = silent)
+    
+    
     cmd <- paste0(cmd, "Sim",X)
+    .addMessage(silent, paste0("Antares launching for ",  paste0("scenario : ",X) ))
+    beg <- Sys.time()
     .runAntares(cmd)
+    .addMessage(silent, paste0("Antares end for scenario : ",X))
+    .addMessage(silent, paste0("Compute time for scenario ",X, " : ",
+                               as.numeric(round(Sys.time()-beg)), " secondes"))
+    
+    
   }, opts = opts,
   ts = ts,
   second_member = second_member,
   scenario = scenario,
-  cmd = cmd)
-
+  cmd = cmd,
+  silent = silent)
+  
+  .addMessage(silent, "---------- End of antares part ----------")
+  
   #Return old param setting
   file.remove(generaldataIniPatch)
   file.rename(generaldataIniOld, generaldataIniPatch)
-
-  filesMoves <- moveFilesAfterStudy(opts, simNameAlea)
+  
+  filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
+  .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format : Ok")
+  
+  
+  
   # 
-  print(filesMoves)
   # #Mc-all creation
-  aggregateResult(opts = opts, newname = filesMoves)
+  .addMessage(silent, "Mc-all compute")
+  
+  aggregateResult(opts = opts, newname = filesMoves, silent = silent)
   
   dtaMc <- paste0(opts$simDataPath, "/mc-ind")
   
@@ -103,11 +135,14 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
     unlink(dtaMc, recursive = TRUE)
   }
   
+  digetsWrite <- try({
   #Wite digest
+  oldw <- getOption("warn")
+  options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
   diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
-  
-  areas <- antaresRead::readAntares(timeStep = "annual")
+  options(warn = oldw)
+  areas <- antaresRead::readAntares(timeStep = "annual", showProgress = FALSE)
   areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
   allNam <- names(areas)[-c(1:3)]
   areas[, c("timeId", "time"):= NULL]
@@ -120,8 +155,6 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
     areas[, c(var) := .(do.call(fct, args = list(get(var)))), by = area]
   }
   areas <- unique(areas)
-  
-  
   for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
   coltoKeep <- match(names(areas)[-1], diges$Variable)
   unitKeep <- diges$Unit[coltoKeep]
@@ -131,11 +164,12 @@ runSimulation <- function(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
                           data.table(t(c("", StatsKeep))),
                           areas), fill = FALSE)
   names(areas) <- rentam
-  
   digets <- paste0(opts$simDataPath, "/mc-all/grid")
   dir.create(digets)
   write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
-  cat("Finish")
+  }, silent = TRUE)
+  .errorTest(digetsWrite, silent, "Digest write : Ok")
+  .addMessage(silent, "End of run")
 }
 
 

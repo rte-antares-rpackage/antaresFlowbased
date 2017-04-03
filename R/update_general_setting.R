@@ -65,10 +65,11 @@ modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   playList <- sapply(playList, function(X){
     as.character(X)
   }, simplify = FALSE)
-  names(playList) <- rep("playlist_year +",5)
+  names(playList) <- rep("playlist_year +", length(playList))
   playList <- c(playlist_reset = FALSE, playList)
 
   # change
+  generalSetting$playlist <- NULL
   generalSetting$playlist <- playList
 
   generalSetting

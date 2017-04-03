@@ -22,18 +22,23 @@
 #' }
 #'
 #' @export
-prepareSimulationFiles <- function(opts, ts, secondMember, scenarios, simNumber){
-  #Write of FB files
+prepareSimulationFiles <- function(opts, ts, secondMember, scenarios, simNumber, silent = TRUE){
+  #Creation of bindingconstraints chroniques
   clim <- data.table::data.table(Id_day = unlist(ts[,.SD, .SDcols = colnames(ts)==simNumber]))
   allFB <- merge(clim, secondMember, by = "Id_day", allow.cartesian = TRUE)
   data.table::setkeyv(allFB, c("Id_day", "Id_hour"))
-  sapply(unique(allFB$Name),
+  
+  #Write of bindingconstraints
+  upFb <- try(sapply(unique(allFB$Name),
          .writeFb,
          patch = paste0(opts$studyPath, "/input/bindingconstraints"),
          data = allFB)%>>%
-    invisible()
-
+    invisible(), silent = TRUE)
+  .errorTest(upFb, silent, "Update of bindingconstraints : Ok")
+  
   #Write of playList
   scenarioTP <- which(scenarios$simulation==simNumber)-1
-  updateGeneralSettingIni(opts, scenarioTP)
+  upPl <- try(updateGeneralSettingIni(opts, scenarioTP), silent = TRUE)
+  .errorTest(upPl, silent, "Update of playlist : Ok")
+  
 }

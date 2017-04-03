@@ -1,4 +1,4 @@
 # Run antares function
 .runAntares <- function(cmd){
-  system(cmd, show.output.on.console = TRUE)
+  system(cmd, show.output.on.console = FALSE)
 }

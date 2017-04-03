@@ -23,7 +23,6 @@
 
 .transformToMaAll <- function(filesToAggreg, opts, allMc)
 {
-  print(filesToAggreg)
   endPatch <- paste0(opts$simDataPath, "/mc-all/", filesToAggreg)
   allFileToLoad <- paste0(allMc,"/", filesToAggreg)
 
