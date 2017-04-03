@@ -7,9 +7,9 @@
 writeIni(listData, pathIni)
 }
 \arguments{
-\item{pathIni}{\code{Character}, Path to ini file}
+\item{listData}{\code{list}, modified list otain by antaresRead:::readIniFile}
 
-\item{listData\code{list}, }{list otain by antaresRead:::readIniFile}
+\item{pathIni}{\code{Character}, Path to ini file}
 }
 \description{
 Write ini file from list obtain by antaresRead:::readIniFile and modify by user

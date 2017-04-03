@@ -8,6 +8,8 @@ updateGeneralSettingIni(opts, playList = NULL)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
+
+\item{playList}{\code{numeric}, playList}
 }
 \examples{
 

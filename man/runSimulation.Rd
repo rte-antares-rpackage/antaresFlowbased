@@ -4,12 +4,11 @@
 \alias{runSimulation}
 \title{Run all simulations}
 \usage{
-runSimulation(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
-  indicators = c("mean", "min", "max", "sd"), .test = TRUE)
+runSimulation(simulationName, mcAll = TRUE, mcInd = TRUE,
+  indicators = c("mean", "min", "max", "sd"), .test = TRUE,
+  MCyearsExcludes = NULL, silent = TRUE, opts = simOptions())
 }
 \arguments{
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
-
 \item{simulationName}{\code{character} name of simulation}
 
 \item{mcAll}{\code{boolean} give mc_all compress results}
@@ -19,6 +18,13 @@ runSimulation(opts, simulationName, mcAll = TRUE, mcInd = TRUE,
 \item{indicators}{\code{character} not use in this version}
 
 \item{.test}{\code{boolean} if TRUE, just run 3 scenarios.}
+
+\item{MCyearsExcludes}{\code{numeric} to exclude MCyearsExcludes, default NULL,
+all MCyearsExcludes are included.}
+
+\item{silent}{\code{boolean} show log in console.}
+
+\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 }
 \description{
 Run all simulations
@@ -26,17 +32,17 @@ Run all simulations
 \examples{
 
 \dontrun{
-opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
+antaresRead::setSimulationPath("D:/exemple_test",0)
 
-weigth <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
+weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
 secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
 dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
 
-initFlowBased(opts = opts, weigth = weigth, secondMember = secondMember, dayType = dayType)
+initFlowBased(weight = weight, secondMember = secondMember, dayType = dayType)
 
 setSolverAntares(path = "C:\\\\Program Files\\\\RTE\\\\Antares\\\\5.0.9\\\\bin\\\\antares-5.0-solver.exe")
 
-mysim <- runSimulation(opts, "MystudyTest2")
+mysim <- runSimulation("R_from", silent = FALSE)
 }
 
 }

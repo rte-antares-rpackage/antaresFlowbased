@@ -2,15 +2,12 @@
 % Please edit documentation in R/update_general_setting.R
 \name{writeGeneralSettingIni}
 \alias{writeGeneralSettingIni}
-\title{Write generaldata.ini file}
+\title{Write generaldata.ini file=}
 \usage{
 writeGeneralSettingIni(generaldataIniPatch, generalSetting)
 }
 \arguments{
-\item{generaldataIniPatch}{\code{character} patch of generaldata.ini file}
+\item{generaldataIniPatch}{\code{list}}
 
-\item{listData}{\code{list}, generaldata.ini as list R}
-}
-\description{
-Write generaldata.ini file
+\item{generalSetting}{\code{Character}, Path to ini file}
 }
