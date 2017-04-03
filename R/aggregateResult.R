@@ -2,7 +2,8 @@
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param simulationName \code{character} name of simulation return by \link{runSimulation}
-#'
+#' @param silent \code{boolean} show log in console.
+#' 
 #' @examples
 #'
 #' @export
@@ -32,7 +33,9 @@ moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
   
   #Create output dir
   outData <- paste0(opts$studyPath, "/output")
-  dateTim <-  substr(as.character(round(Sys.time(), "mins")),1,16)
+  dtTime <- Sys.time()
+  dateTim <-  substr(as.character(round(dtTime, "mins")),1,16)
+  
   dateTim2 <- dateTim
   dateTim <- gsub("-", "", dateTim)
   dateTim <- gsub(":", "", dateTim)
@@ -67,7 +70,8 @@ moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
   
   .editOutputInfo(outData = outData,
                   simulationName = simulationName,
-                  dateTim2 = dateTim2)
+                  dateTim2 = dateTim2,
+                  dtTim = dtTime)
   
   realNamee
 }
@@ -76,7 +80,8 @@ moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
 #' Creation of Mc_all
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
-#' @param outDataMc \code{character} link to mc_ind folder return by \link{moveFilesAfterStudy}
+#' @param newname \code{character} name of simulation.
+#' @param silent \code{boolean} show log in console.
 #'
 #' @examples
 #'
@@ -213,7 +218,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     alfil <- c("values")
     areaWrite <- try(sapply(alfil, function(fil)
     {
-      areaSpecialFile <- linkTable[Folder == "area" & Files == fil & Mode == "economy"]
+      areaSpecialFile <- linkTable[Folder == "area" & Files == fil & Mode == tolower(opts$mode)]
       namekeep <- paste(areaSpecialFile$Name, areaSpecialFile$Stats)
       namekeepprog <- paste(areaSpecialFile$Name, areaSpecialFile$progNam)
       areas <- cbind(value$areas$sum,  value$areas$std, value$areas$min, value$areas$max)
@@ -259,7 +264,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     alfil <- c("values")
     linkWrite <- try(sapply(alfil, function(fil)
     {
-      linkSpecialFile <- linkTable[Folder == "link" & Files == fil & Mode == "economy"]
+      linkSpecialFile <- linkTable[Folder == "link" & Files == fil & Mode == tolower(opts$mode)]
       namekeep <- paste(linkSpecialFile$Name, linkSpecialFile$Stats)
       namekeepprog <- paste(linkSpecialFile$Name, linkSpecialFile$progNam)
       links <- cbind(value$links$sum,  value$links$std, value$links$min, value$links$max)
@@ -305,17 +310,32 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     endClust[, c("mcYear") := NULL]
     
     detailWrite <- try(sapply(unique(endClust$area),  function(ctry){
+      
       endClustctry <- endClust[area == ctry]
       orderBeg <- unique(endClustctry$time)
       endClustctry[,c("area") := NULL]
-      nomStruct <- names(endClustctry)[!names(endClustctry)%in%c("cluster","production EXP", "NP Cost EXP", "NODU EXP")]
+      
+      if(tolower(opts$mode) == "economy")
+      {
+        nameBy <- c("production EXP", "NP Cost EXP", "NODU EXP")
+      }else{
+        nameBy <- c("production EXP")
+      }
+      nomStruct <- names(endClustctry)[!names(endClustctry)%in%
+                                         c("cluster", nameBy)]
       fomula <- nomStruct
       fomula <- as.formula(paste0(paste0(fomula, collapse = "+"), "~cluster"))
-      endClustctry[, c("production EXP", "NP Cost EXP", "NODU EXP") := list(round(`production EXP`),
-                                                                            round(`NP Cost EXP`),
-                                                                            round(`NODU EXP`))]
+      
+      if(tolower(opts$mode) == "economy")
+      {
+      endClustctry[, c(nameBy) := list(round(`production EXP`),
+                                       round(`NP Cost EXP`),
+                                       round(`NODU EXP`))]
+      }else{
+        endClustctry[, c(nameBy) := list(round(`production EXP`))]
+      }
       endClustctry <- data.table::dcast(endClustctry, fomula,
-                                        value.var = c("production EXP", "NP Cost EXP", "NODU EXP"))
+                                        value.var = c(nameBy))
       
       endClustctry <- endClustctry[match(orderBeg, endClustctry$time)]
       endClustctry[,c("time") := NULL]

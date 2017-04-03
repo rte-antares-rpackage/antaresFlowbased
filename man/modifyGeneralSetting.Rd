@@ -6,3 +6,6 @@
 \usage{
 modifyGeneralSetting(generaldataIniPatch)
 }
+\arguments{
+\item{generaldataIniPatch}{\code{character}, path of generaldataIni}
+}

@@ -4,12 +4,14 @@
 \alias{moveFilesAfterStudy}
 \title{Move file after simulations}
 \usage{
-moveFilesAfterStudy(opts, simulationName)
+moveFilesAfterStudy(opts, simulationName, silent = TRUE)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
 \item{simulationName}{\code{character} name of simulation return by \link{runSimulation}}
+
+\item{silent}{\code{boolean} show log in console.}
 }
 \description{
 Move file after simulations

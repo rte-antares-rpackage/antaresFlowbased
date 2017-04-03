@@ -4,12 +4,14 @@
 \alias{aggregateResult}
 \title{Creation of Mc_all}
 \usage{
-aggregateResult(opts, outDataMc)
+aggregateResult(opts, newname, silent = TRUE)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
-\item{outDataMc}{\code{character} link to mc_ind folder return by \link{moveFilesAfterStudy}}
+\item{newname}{\code{character} name of simulation.}
+
+\item{silent}{\code{boolean} show log in console.}
 }
 \description{
 Creation of Mc_all

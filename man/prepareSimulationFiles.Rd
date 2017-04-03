@@ -4,7 +4,8 @@
 \alias{prepareSimulationFiles}
 \title{Preparation of sigle simulation files, write playlist and FB}
 \usage{
-prepareSimulationFiles(opts, ts, secondMember, scenarios, simNumber)
+prepareSimulationFiles(opts, ts, secondMember, scenarios, simNumber,
+  silent = TRUE)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
@@ -16,6 +17,8 @@ prepareSimulationFiles(opts, ts, secondMember, scenarios, simNumber)
 \item{scenarios}{\code{data.frame} of scenarios}
 
 \item{simNumber}{\code{numeric} number of simulation must be in scenarios}
+
+\item{silent}{\code{boolean} show log in console.}
 }
 \description{
 Preparation of sigle simulation files, write playlist and FB

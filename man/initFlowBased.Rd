@@ -4,13 +4,13 @@
 \alias{initFlowBased}
 \title{Generate environnement for a flow-based study}
 \usage{
-initFlowBased(opts, weigth, secondMember, dayType = NULL,
+initFlowBased(opts, weight, secondMember, dayType = NULL,
   determinants = NULL)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
-\item{weigth}{\code{character}, path of weigth file}
+\item{weight}{\code{character}, path of weight file}
 
 \item{secondMember}{\code{character}, path of secondMember file}
 
@@ -24,17 +24,17 @@ Generate environnement for a flow-based study
 \examples{
 \dontrun{
 
-path <- "D:/Users/titorobe/Desktop/exemple_test"
-opts <- antaresRead::setSimulationPath(path, 0)
+path <- "D:/exemple_test"
+antaresRead::setSimulationPath(path, 0)
 
-weigth <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
+weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
 secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
 dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
 
-initFlowBased(opts = opts,
-              weigth = weigth,
-              secondMember = secondMember,
-              dayType = dayType)
+initFlowBased(weight = weight,
+             secondMember = secondMember,
+             dayType = dayType,
+             opts = simOptions())
 }
 
 }

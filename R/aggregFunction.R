@@ -1,13 +1,6 @@
 
-.returnStats <- function(Y){
-  c(colMeans(Y),
-    Y[,lapply(.SD, var)]%>>%unlist,
-    Y[,lapply(.SD, min)]%>>%unlist,
-    Y[,lapply(.SD, max)]%>>%unlist)
-}
 
-
-.editOutputInfo <- function(outData, simulationName, dateTim2)
+.editOutputInfo <- function(outData, simulationName, dateTim2, dtTim)
 {
   #Edit infos output simulation
   iniPath <- paste0(outData, "/info.antares-output")
@@ -17,6 +10,8 @@
   dateTim2 <- gsub(" " , " - ", dateTim2)
   infosIni$general$date <- dateTim2
   infosIni$general$title <- dateTim2
+  infosIni$general$timestamp <- round(as.numeric(difftime(dtTim,
+                                                    as.POSIXct("1970-01-01 00:00:00"), units = "sec")), 0)
   writeIni(infosIni, iniPath)
 }
 
