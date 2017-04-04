@@ -43,7 +43,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   simNameAlea <- tolower(simNameAlea)
   
   if(!silent){
-    cat(paste("Generationos random name :", simNameAlea))
+    cat(paste("Generationos random name :", simNameAlea), "\n")
   }
   
   #Generate path for generaldata.ini
@@ -88,11 +88,11 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[2:5]
+    allScenario <- allScenario[2:3]
   }
   .addMessage(silent, "---------- Antares part ---------- ")
   
-  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
+  antaresLog <- sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
     #Preparation of files before simulaiton
     .addMessage(silent, paste0("-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
@@ -106,12 +106,12 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
     cmd <- paste0(cmd, "Sim",X)
     .addMessage(silent, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
-    .runAntares(cmd)
+    out <- .runAntares(cmd)
     .addMessage(silent, paste0("Antares end for scenario : ",X))
     .addMessage(silent, paste0("Compute time for scenario ",X, " : ",
                                as.numeric(round(Sys.time()-beg)), " secondes"))
     
-    
+    out
   }, opts = opts,
   ts = ts,
   second_member = second_member,
@@ -177,6 +177,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   }, silent = TRUE)
   .errorTest(digetsWrite, silent, "Digest write : Ok")
   .addMessage(silent, "End of run")
+  antaresLog
 }
 
 
