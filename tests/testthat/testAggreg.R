@@ -8,7 +8,7 @@ opts <- antaresRead::setSimulationPath(testStudy)
 
 
 #Use aggregateResult to aggregate mc-ind
-aggregateResult(opts = opts, newname = "testStydu")
+aggregateResult(opts = opts, newname = "testAggregate")
 
 #Load mc-all aggreate which aggregateResult
 resAA <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "annual")
@@ -17,12 +17,12 @@ resAH <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = 
 resAM <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "monthly")
 resAW <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "weekly")
 
-unlink(paste0(testStudy, "/output/testStydu/economy/mc-all"), recursive = TRUE)
+unlink(paste0(testStudy, "/output/testAggregate/economy/mc-all"), recursive = TRUE)
 
-dir.create( paste0(testStudy, "/output/testStydu/economy/mc-all/"))
-file.copy(paste0(paste0(testStudy, "/output/testStydu/economy/mc-all-antares/"), 
-                 list.files(paste0(testStudy, "/output/testStydu/economy/mc-all-antares/"))),
-            paste0(testStudy, "/output/testStydu/economy/mc-all/"), recursive = TRUE)
+dir.create( paste0(testStudy, "/output/testAggregate/economy/mc-all/"))
+file.copy(paste0(paste0(testStudy, "/output/testAggregate/economy/mc-all-antares/"), 
+                 list.files(paste0(testStudy, "/output/testAggregate/economy/mc-all-antares/"))),
+            paste0(testStudy, "/output/testAggregate/economy/mc-all/"), recursive = TRUE)
 
 #Load mc-all aggreate which antares
 resRA <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "annual")
@@ -31,7 +31,7 @@ resRH <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = 
 resRM <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "monthly")
 resRW <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = "weekly")
 
-unlink(paste0(testStudy, "/output/testStydu/economy/mc-all"), recursive = TRUE)
+unlink(paste0(testStudy, "/output/testAggregate/economy/mc-all"), recursive = TRUE)
 unlink(testStudy, recursive = TRUE, force = TRUE)
 #Test Areas
 resAM$areas$time <- as.factor(resAM$areas$time )
