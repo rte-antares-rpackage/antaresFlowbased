@@ -1,12 +1,12 @@
 #' @title Generate environnement for a flow-based study
 #' @description  Generate environnement for a flow-based study
 #'
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param weight \code{character}, path of weight file
 #' @param secondMember \code{character}, path of secondMember file
 #' @param dayType \code{character}, path of dayType file
-#' @param determinants \code{character}, vector of determinants, not use in this version
-#'
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' 
+#' 
 #' @examples
 #' \dontrun{
 #'
@@ -22,7 +22,6 @@
 initFlowBased <- function(weight = system.file("/data/coefficients_Antares.csv", package = "antaresFlowbased"),
                           secondMember = secondMember <- system.file("/data/fichier_b_final.csv", package = "antaresFlowbased"),
                           dayType =  system.file("/data/id_FB.txt", package = "antaresFlowbased"),
-                          determinants = NULL,
                           opts = antaresRead::simOptions()){
 
 

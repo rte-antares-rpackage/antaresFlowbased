@@ -4,9 +4,9 @@
 \alias{runSimulation}
 \title{Run all simulations}
 \usage{
-runSimulation(simulationName, mcAll = TRUE, mcInd = TRUE,
-  indicators = c("mean", "min", "max", "sd"), .test = TRUE,
-  MCyearsExcludes = NULL, silent = TRUE, opts = simOptions())
+runSimulation(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
+  mcYears = NULL, opts = antaresRead::simOptions(), silent = TRUE,
+  .test = TRUE)
 }
 \arguments{
 \item{simulationName}{\code{character} name of simulation}
@@ -15,16 +15,14 @@ runSimulation(simulationName, mcAll = TRUE, mcInd = TRUE,
 
 \item{mcInd}{\code{boolean} keep mc_ind.}
 
-\item{indicators}{\code{character} not use in this version}
+\item{mcYears}{\code{numeric} include mcYears, default NULL,
+all mcYears are included.}
 
-\item{.test}{\code{boolean} if TRUE, just run 3 scenarios.}
-
-\item{MCyearsExcludes}{\code{numeric} to exclude MCyearsExcludes, default NULL,
-all MCyearsExcludes are included.}
+\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{silent}{\code{boolean} show log in console.}
 
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
+\item{.test}{\code{boolean} if TRUE, just run 3 scenarios.}
 }
 \description{
 Run all simulations

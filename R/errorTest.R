@@ -1,16 +1,16 @@
-.errorTest <- function(tryReturn, silent, messageOk)
+.errorTest <- function(tryReturn, silent, msg)
 {
   if("try-error" %in% class(tryReturn)){
-    stop("Writing binding constraints : ", tryReturn[1])
+    stop(msg, " : ", tryReturn[1])
   }else{
     if(!silent){
-      cat(paste0(messageOk, "\n"))
+      cat(paste0(msg, " : Ok\n"))
     }
   }
 }
 
-.addMessage <- function(silent, message){
+.addMessage <- function(silent, msg){
   if(!silent){
-    cat(paste0(message, "\n"))
+    cat(paste0(msg, "\n"))
   }
 }

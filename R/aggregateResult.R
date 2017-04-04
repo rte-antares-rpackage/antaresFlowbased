@@ -97,7 +97,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   #Version avec readAntares
   linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv")),
                    silent = TRUE)
-  .errorTest(linkTable, silent, "Load of link table : Ok")
+  .errorTest(linkTable, silent, "Load of link table")
   
   
   linkTable$progNam <- linkTable$Stats
@@ -111,108 +111,107 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     
     .addMessage(silent, paste0("------- Mc-all : ", type, " -------"))
     
-    
     dtaLoadAndcalcul <- try({
-    a <- Sys.time()
-    dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
-                                    timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
-    aTot <- as.numeric(Sys.time() - a)
-    SDcolsStartareas <- switch(type,
-                               daily = 6,
-                               annual = 4,
-                               hourly = 7,
-                               monthly = 5,
-                               weekly = 4
-                               
-    )
-    SDcolsStartClust <-  SDcolsStartareas + 1
-    #load and calcul
-    struct <- list(areas = dta$areas[,.SD, .SDcols = 1:SDcolsStartareas],
-                   links = dta$links[,.SD, .SDcols = 1:SDcolsStartareas],
-                   clusters = dta$clusters[,.SD, .SDcols = 1:SDcolsStartClust])
-    
-    if(type == "weekly"){
-      struct$areas$timeId <- as.numeric(substr(struct$areas$time, nchar(as.character(struct$areas$time[1]))-1,
-                                               nchar(as.character(struct$areas$time[1]))))
-      struct$link$timeId <- as.numeric(substr(struct$link$time, nchar(as.character(struct$link$time[1]))-1,
-                                              nchar(as.character(struct$link$time[1]))))
-      struct$clusters$timeId <- as.numeric(substr(struct$clusters$time, nchar(as.character(struct$clusters$time[1]))-1,
-                                                  nchar(as.character(struct$clusters$time[1]))))
-    }
-    
-    if(!is.null(struct$areas$day)){
-      struct$areas$day <- ifelse(nchar(struct$areas$day) == 1,
-                                 paste0("0", struct$areas$day),
-                                 as.character(struct$areas$day))
-    }
-    if(!is.null(struct$links$day)){
-      struct$links$day <- ifelse(nchar(struct$links$day) == 1,
-                                 paste0("0", struct$links$day),
-                                 as.character(struct$links$day))
-    }
-    if(!is.null(struct$links$day)){
-      struct$clusters$day <- ifelse(nchar(struct$clusters$day) == 1,
-                                    paste0("0", struct$clusters$day),
-                                    as.character(struct$clusters$day))
-    }
-    
-    b <- Sys.time()
-    value <- .giveValue(dta, SDcolsStartareas, SDcolsStartClust)
-    N <- length(numMc)
-    value <- lapply(value, .creatStats)
-    btot <- as.numeric(Sys.time() - b)
-    if(N>1)
-    {
-      for(i in 2:N){
-        a <- Sys.time()
-        dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
-                                          timeStep = type, simplify = FALSE, mcYears = numMc[i],
-                                          showProgress = FALSE)
-        
-        aTot <- aTot + as.numeric(Sys.time() - a)
-        b <- Sys.time()
-        valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
-        valueTP <- lapply(valueTP, .creatStats)
-        value$areas <- .updateStats(value$areas, valueTP$areas)
-        value$links <- .updateStats(value$links, valueTP$links)
-        value$clusters <- .updateStats(value$clusters, valueTP$clusters)
-        btot <- btot + as.numeric(Sys.time() - b)
-        
+      a <- Sys.time()
+      dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
+                                      timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+      aTot <- as.numeric(Sys.time() - a)
+      SDcolsStartareas <- switch(type,
+                                 daily = 6,
+                                 annual = 4,
+                                 hourly = 7,
+                                 monthly = 5,
+                                 weekly = 4
+                                 
+      )
+      SDcolsStartClust <-  SDcolsStartareas + 1
+      #load and calcul
+      struct <- list(areas = dta$areas[,.SD, .SDcols = 1:SDcolsStartareas],
+                     links = dta$links[,.SD, .SDcols = 1:SDcolsStartareas],
+                     clusters = dta$clusters[,.SD, .SDcols = 1:SDcolsStartClust])
+      
+      if(type == "weekly"){
+        struct$areas$timeId <- as.numeric(substr(struct$areas$time, nchar(as.character(struct$areas$time[1]))-1,
+                                                 nchar(as.character(struct$areas$time[1]))))
+        struct$link$timeId <- as.numeric(substr(struct$link$time, nchar(as.character(struct$link$time[1]))-1,
+                                                nchar(as.character(struct$link$time[1]))))
+        struct$clusters$timeId <- as.numeric(substr(struct$clusters$time, nchar(as.character(struct$clusters$time[1]))-1,
+                                                    nchar(as.character(struct$clusters$time[1]))))
       }
-    }
-    
-    oldw <- getOption("warn")
-    options(warn = -1)
-    b <- Sys.time()
-    value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N))
-    #nan due to round
-    for (i in names(value$areas$std))
-      value$areas$std[is.nan(get(i)), (i):=0]
-    value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N))
-    #nan due to round
-    for (i in names(value$links$std))
-      value$links$std[is.nan(get(i)), (i):=0]
-    
-    value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N))
-    #nan due to round
-    for (i in names(value$clusters$std))
-      value$clusters$std[is.nan(get(i)), (i):=0]
-    
-    options(warn = oldw)
-    
-    value$areas$sumC <- NULL
-    value$links$sumC <- NULL
-    value$clusters$sumC <- NULL
-    value$areas$sum <- value$areas$sum / N
-    value$links$sum <- value$links$sum / N
-    value$clusters$sum <- value$clusters$sum / N
-    btot <- btot + as.numeric(Sys.time() - b)
-    .addMessage(silent, paste0("Time for reading data : ", round(aTot,1), " seondes"))
-    .addMessage(silent, paste0("Time for calculating : ", round(btot,1), " seondes"))
+      
+      if(!is.null(struct$areas$day)){
+        struct$areas$day <- ifelse(nchar(struct$areas$day) == 1,
+                                   paste0("0", struct$areas$day),
+                                   as.character(struct$areas$day))
+      }
+      if(!is.null(struct$links$day)){
+        struct$links$day <- ifelse(nchar(struct$links$day) == 1,
+                                   paste0("0", struct$links$day),
+                                   as.character(struct$links$day))
+      }
+      if(!is.null(struct$links$day)){
+        struct$clusters$day <- ifelse(nchar(struct$clusters$day) == 1,
+                                      paste0("0", struct$clusters$day),
+                                      as.character(struct$clusters$day))
+      }
+      
+      b <- Sys.time()
+      value <- .giveValue(dta, SDcolsStartareas, SDcolsStartClust)
+      N <- length(numMc)
+      value <- lapply(value, .creatStats)
+      btot <- as.numeric(Sys.time() - b)
+      if(N>1)
+      {
+        for(i in 2:N){
+          a <- Sys.time()
+          dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
+                                            timeStep = type, simplify = FALSE, mcYears = numMc[i],
+                                            showProgress = FALSE)
+          
+          aTot <- aTot + as.numeric(Sys.time() - a)
+          b <- Sys.time()
+          valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
+          valueTP <- lapply(valueTP, .creatStats)
+          value$areas <- .updateStats(value$areas, valueTP$areas)
+          value$links <- .updateStats(value$links, valueTP$links)
+          value$clusters <- .updateStats(value$clusters, valueTP$clusters)
+          btot <- btot + as.numeric(Sys.time() - b)
+          
+        }
+      }
+      
+      oldw <- getOption("warn")
+      options(warn = -1)
+      b <- Sys.time()
+      value$areas$std <- sqrt((value$areas$sumC - ((value$areas$sum * value$areas$sum)/N))/(N))
+      #nan due to round
+      for (i in names(value$areas$std))
+        value$areas$std[is.nan(get(i)), (i):=0]
+      
+      value$links$std <- sqrt((value$links$sumC - ((value$links$sum * value$links$sum)/N))/(N))
+      #nan due to round
+      for (i in names(value$links$std))
+        value$links$std[is.nan(get(i)), (i):=0]
+      
+      value$clusters$std <- sqrt((value$clusters$sumC - ((value$clusters$sum * value$clusters$sum)/N))/(N))
+      #nan due to round
+      for (i in names(value$clusters$std))
+        value$clusters$std[is.nan(get(i)), (i):=0]
+      
+      options(warn = oldw)
+      
+      value$areas$sumC <- NULL
+      value$links$sumC <- NULL
+      value$clusters$sumC <- NULL
+      value$areas$sum <- value$areas$sum / N
+      value$links$sum <- value$links$sum / N
+      value$clusters$sum <- value$clusters$sum / N
+      btot <- btot + as.numeric(Sys.time() - b)
+      .addMessage(silent, paste0("Time for reading data : ", round(aTot,1), " seondes"))
+      .addMessage(silent, paste0("Time for calculating : ", round(btot,1), " seondes"))
     }, silent = TRUE)
     
-    .errorTest(dtaLoadAndcalcul, silent, "Load of data and calcul : Ok")
-  
+    .errorTest(dtaLoadAndcalcul, silent, "Load of data and calcul")
     
     ##Write area
     alfil <- c("values")
@@ -237,8 +236,6 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         areas[, c(var) := .(do.call(round, args = list(get(var), digits = dig)))]
       }
       
-      
-      
       sapply(allAreas,  function(areasel){
         areastowrite <- areas[area == areasel]
         areastowrite[,c("area") := NULL] 
@@ -247,20 +244,19 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         kepNam <- names(struct$areas)[!names(struct$areas)%in%c("area","mcYear","time")]
         nameIndex <- ifelse(type == "weekly", "week", "index")
         kepNam[which(kepNam == "timeId")] <- nameIndex
-        .writeFileOutout(dta = areastowrite, timestep = type, fileType = fil,
-                         ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
-                         indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                         nomcair = areaSpecialFile$Name, unit = areaSpecialFile$Unit,
-                         nomStruct = kepNam,Stats = areaSpecialFile$Stats)
+        .writeFileOut(dta = areastowrite, timestep = type, fileType = fil,
+                      ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
+                      indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                      nomcair = areaSpecialFile$Name, unit = areaSpecialFile$Unit,
+                      nomStruct = kepNam,Stats = areaSpecialFile$Stats)
         
         
       })
     }), silent = TRUE)
     
-    .errorTest(areaWrite, silent, "Area write : Ok")
+    .errorTest(areaWrite, silent, "Area write")
     
-    
-    ##Wite links
+    ##Write links
     alfil <- c("values")
     linkWrite <- try(sapply(alfil, function(fil)
     {
@@ -282,9 +278,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         dig <- linkSpecialFile[var == paste(Name,progNam )]$digits
         links[, c(var) := .(do.call(round, args = list(get(var), digits = dig)))]
       }
-      
-      
-      
+    
       sapply(allLink,  function(linksel){
         linkstowrite <- links[link == linksel]
         linkstowrite[,c("link") := NULL] 
@@ -294,17 +288,17 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         nameIndex <- ifelse(type == "weekly", "week", "index")
         kepNam[which(kepNam == "timeId")] <- nameIndex
         
-        .writeFileOutout(dta = linkstowrite, timestep = type, fileType = fil,
-                         ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
-                         indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                         nomcair = linkSpecialFile$Name, unit = linkSpecialFile$Unit,
-                         nomStruct = kepNam,Stats = linkSpecialFile$Stats)
+        .writeFileOut(dta = linkstowrite, timestep = type, fileType = fil,
+                      ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
+                      indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                      nomcair = linkSpecialFile$Name, unit = linkSpecialFile$Unit,
+                      nomStruct = kepNam,Stats = linkSpecialFile$Stats)
       })
     }), silent = TRUE)
     
-    .errorTest(linkWrite, silent, "Link write : Ok")
-    ##Details
+    .errorTest(linkWrite, silent, "Link write")
     
+    ##Details
     details <- value$clusters$sum
     endClust <- cbind(struct$clusters, details)
     endClust[, c("mcYear") := NULL]
@@ -328,9 +322,9 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       
       if(tolower(opts$mode) == "economy")
       {
-      endClustctry[, c(nameBy) := list(round(`production EXP`),
-                                       round(`NP Cost EXP`),
-                                       round(`NODU EXP`))]
+        endClustctry[, c(nameBy) := list(round(`production EXP`),
+                                         round(`NP Cost EXP`),
+                                         round(`NODU EXP`))]
       }else{
         endClustctry[, c(nameBy) := list(round(`production EXP`))]
       }
@@ -359,12 +353,12 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       indexMin <- min(endClustctry$timeId)
       indexMax <- max(endClustctry$timeId)
       ncolFix <- length(nomStruct)
-      .writeFileOutout(dta = endClustctry, timestep = type, fileType = "details",
-                       ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
-                       indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                       nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
+      .writeFileOut(dta = endClustctry, timestep = type, fileType = "details",
+                    ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
+                    indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                    nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
     }), silent = TRUE)
-    .errorTest(detailWrite, silent, "Detail write : Ok")
+    .errorTest(detailWrite, silent, "Detail write")
     
     .addMessage(silent, paste0("------- End Mc-all : ", type, " -------"))
     
@@ -383,9 +377,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
 
 
 .creatStats <- function(X){
-  res <- list(sum = X,
-              min = X,
-              max = X,
+  res <- list(sum = X, min = X, max = X,
               sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
   names(res$sum) <- paste(names(X), "EXP")
   names(res$min) <- paste(names(X), "min")
@@ -402,10 +394,9 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   X
 }
 
-.writeFileOutout <- function(dta, timestep, fileType, ctry, opts, folderType, nbvar,
-                             indexMin, indexMax, ncolFix, nomcair, unit, nomStruct,
-                             Stats)
-{
+.writeFileOut <- function(dta, timestep, fileType, ctry, opts, folderType, nbvar,
+                          indexMin, indexMax, ncolFix, nomcair, unit, nomStruct, Stats){
+  
   folderTypesansS <- substr(folderType, 1, nchar(folderType)-1)
   abrtype <- substr(fileType, 1, 2)
   
@@ -416,7 +407,6 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   }
   
   if(folderType == "links"){
-    
     ctryDecomp <- strsplit(as.character(ctry), " - ")%>>%unlist
     entete <- paste0(ctryDecomp[1], "\t",folderTypesansS,"\t",abrtype,
                      "\t",timestep,"\n",ctryDecomp[2] ,"\tVARIABLES\tBEGIN\tEND\n\t",
@@ -434,19 +424,17 @@ aggregateResult <- function(opts, newname, silent = TRUE){
                      "\t", paste0(nomStruct, collapse = "\t"), "\t", paste0(Stats, collapse = "\t"), "\n")
   }
   
+  dir.create(paste0(opts$simDataPath, "/mc-all", "/",folderType,"/", ctry), 
+             recursive = TRUE, showWarnings = FALSE)
   
-
-  
-  dir.create(paste0(opts$simDataPath, "/mc-all", "/",folderType,"/", ctry), recursive = TRUE,
-             showWarnings = FALSE)
-  outputFile <- paste0(opts$simDataPath, "/mc-all", "/",folderType,"/", ctry, "/", fileType, "-",timestep,".txt")
+  outputFile <- paste0(opts$simDataPath, "/mc-all", "/",folderType,"/", ctry, "/", 
+                       fileType, "-",timestep,".txt")
   
   file <- file(outputFile, "wb")
   
+  write.table(entete,file , row.names = FALSE, eol = "", 
+              quote = FALSE, col.names = FALSE)
   
-  
-  write.table(entete,file , row.names = FALSE, eol = "", quote = FALSE,
-              col.names = FALSE)
   write.table(cbind(NA, dta), file,
               append = TRUE,
               row.names = FALSE,
@@ -456,8 +444,72 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   close(file)
 }
 
+.editOutputInfo <- function(outData, simulationName, dateTim2, dtTim)
+{
+  #Edit infos output simulation
+  iniPath <- paste0(outData, "/info.antares-output")
+  infosIni <- antaresRead:::readIniFile(iniPath)
+  infosIni$general$name <- substr(simulationName, 1, nchar(simulationName)-10)
+  dateTim2 <- gsub("-" , ".", dateTim2)
+  dateTim2 <- gsub(" " , " - ", dateTim2)
+  infosIni$general$date <- dateTim2
+  infosIni$general$title <- dateTim2
+  infosIni$general$timestamp <- round(as.numeric(difftime(dtTim,
+                                                          as.POSIXct("1970-01-01 00:00:00"), units = "sec")), 0)
+  writeIni(infosIni, iniPath)
+}
 
 
+# .transformToMaAll <- function(filesToAggreg, opts, allMc)
+# {
+#   endPatch <- paste0(opts$simDataPath, "/mc-all/", filesToAggreg)
+#   allFileToLoad <- paste0(allMc,"/", filesToAggreg)
+#   
+#   endDir <- strsplit(endPatch, "/")%>>%unlist
+#   endDir <- paste(endDir[1:(length(endDir)-1)],collapse = "/")
+#   dir.create(endDir, recursive = TRUE)
+#   #recup type of aggreg
+#   type <- strsplit(filesToAggreg, "-")%>>%unlist
+#   type <- type[length(type)]
+#   type <-strsplit(type, "[.]")%>>%unlist
+#   type <- type[1]
+#   
+#   headers <- read.csv(allFileToLoad[1], nrows = 6, blank.lines.skip = FALSE)
+#   write.table(headers, endPatch, row.names = FALSE, eol = "\n",
+#               quote = FALSE)
+#   
+#   SDcolsStart <- switch(type,
+#                         daily = 5,
+#                         hourly = 6,
+#                         monthly = 4,
+#                         annual = 3,
+#                         weekly = 3)
+#   dtaTp <- NULL
+#   for(i in 1:length(allFileToLoad))
+#   {
+#     if(is.null(dtaTp))
+#     {
+#       dtaTp <- fread(allFileToLoad[i], skip = 7, integer64 = "double")
+#       toOverWrite <- names(dtaTp[,.SD, .SDcols = SDcolsStart:ncol(dtaTp)])
+#     }else{
+#       dtaTp[,
+#             (toOverWrite):=dtaTp[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)] +
+#               fread(allFileToLoad[i], skip = 7, integer64 = "double")[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)]
+#             ]
+#     }
+#   }
+#   
+#   dtaTp[,(toOverWrite):=dtaTp[, .SD, .SDcols = SDcolsStart:ncol(dtaTp)]/length(allFileToLoad)]
+#   
+#   write.table(dtaTp, endPatch,
+#               append = TRUE,
+#               row.names = FALSE,
+#               col.names =FALSE,
+#               quote = FALSE,sep = "\t",
+#               na = "")
+#   
+#   
+# }
 
 # areas[, {
 #       fileInput <- paste0(dtaMc,"/", list.files(dtaMc)[1])
@@ -501,9 +553,3 @@ aggregateResult <- function(opts, newname, silent = TRUE){
 #                   na = "")
 #       NULL
 #       }, by = area]
-
-
-
-
-##Recuperation des en-têtes et ecriture des fichiers
-

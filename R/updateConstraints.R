@@ -1,7 +1,7 @@
 #' Change bindingconstraints.ini file
 #'
 #' @param pathWeight \code{Character}, Path to weight .txt file
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #'
 #' @examples
 #'
@@ -83,7 +83,7 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
 #' Write bindingconstraints.ini file
 #'
 #' @param listData \code{list}, bindingconstraints.ini as list R
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #'
 #' @examples
 #'

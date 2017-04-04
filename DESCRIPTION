@@ -1,11 +1,16 @@
 Package: antaresFlowbased
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Run FlowBased Simulations on Antares
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Date: 2017-04-04
+Authors@R: c(
+    person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
+    person("Baptiste", "SEGUINOT", , "baptiste.seguinot@rte-france.com", role = "ctb"),
+    person("Marion", "LI", , "marion.lie@rte-france.com", role = "ctb"),
+    person("RTE", role = "cph")
+    )
+Maintainer: Baptiste SEGUINOT <baptiste.seguinot@rte-france.com>
+Description: Run FlowBased Simulations on Antares
 URL: https://github.com/rte-antares-rpackage/antaresFlowbased
 License: GPL (>= 2) | file LICENSE 
 Imports:

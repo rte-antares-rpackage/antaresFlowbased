@@ -1,14 +1,14 @@
 #' Run all simulations
 #'
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param simulationName \code{character} name of simulation
 #' @param mcAll \code{boolean} give mc_all compress results
 #' @param mcInd \code{boolean} keep mc_ind.
-#' @param indicators \code{character} not use in this version
-#' @param .test \code{boolean} if TRUE, just run 3 scenarios.
 #' @param mcYears \code{numeric} include mcYears, default NULL,
 #' all mcYears are included.
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param silent \code{boolean} show log in console.
+#' @param .test \code{boolean} if TRUE, just run 3 scenarios.
+#' 
 #' 
 #' @examples
 #'
@@ -27,10 +27,9 @@
 #'}
 #'
 #' @export
-runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-                          indicators = c("mean", "min", "max", "sd"), .test = TRUE,
-                          mcYears = NULL, silent = TRUE,
-                          opts = antaresRead::simOptions()){
+runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE, 
+                          mcYears = NULL, opts = antaresRead::simOptions(),
+                          silent = TRUE, .test = TRUE){
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
@@ -57,15 +56,15 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   
   
   upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
-  .errorTest(upGenIni, silent, "Write of generaldata : Ok")
+  .errorTest(upGenIni, silent, "Write of generaldata")
   
   #load second member
   second_member <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
-  .errorTest(second_member, silent, "Load of second_member.txt : Ok")
+  .errorTest(second_member, silent, "Load of second_member.txt")
   ts <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
-  .errorTest(ts, silent, "Load of ts.txt : Ok")
+  .errorTest(ts, silent, "Load of ts.txt")
   scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
-  .errorTest(scenario, silent, "Load of scenario.txt : Ok")
+  .errorTest(scenario, silent, "Load of scenario.txt")
   
   
   #Exclude scenarios to redefine
@@ -126,7 +125,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   file.rename(generaldataIniOld, generaldataIniPatch)
   
   filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
-  .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format : Ok")
+  .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format")
   
   
   
@@ -175,7 +174,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   dir.create(digets)
   write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
   }, silent = TRUE)
-  .errorTest(digetsWrite, silent, "Digest write : Ok")
+  .errorTest(digetsWrite, silent, "Digest write")
   .addMessage(silent, "End of run")
   antaresLog
 }

@@ -1,6 +1,6 @@
 #' @title Change bindingconstraints.ini file
 #'
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param playList \code{numeric}, playList
 #' @examples
 #'
@@ -14,7 +14,7 @@
 #'
 #' @seealso \code{writeGeneralSettingIni}
 #' @export
-updateGeneralSettingIni <- function(opts, playList = NULL){
+updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList = NULL){
 
   # Generate path for generaldata.ini
   generaldataIniPatch <- paste0(opts$studyPath, "/settings/generaldata.ini")
@@ -35,8 +35,11 @@ updateGeneralSettingIni <- function(opts, playList = NULL){
 
 
 #' @title update general data
+#' 
 #' @param generaldataIniPatch \code{character}, path of generaldataIni
+#' 
 #' @import antaresRead
+#' 
 #' @export
 modifyGeneralSetting <- function(generaldataIniPatch){
   # read current .ini
@@ -56,9 +59,12 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 
 
 #' @title Modify play list
-#' @import antaresRead
+#' 
 #' @param generaldataIniPatch \code{character}, path of generaldataIni
 #' @param playList \code{numeric}, playList
+#' 
+#' @import antaresRead
+#' 
 #' @export
 modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   # read current .ini
