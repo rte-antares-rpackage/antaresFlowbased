@@ -36,6 +36,12 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
   options(warn = oldw)
   
+  if(!opts$parameters$general$mode %in%c("Economy" , "Adequacy")){
+    stop(paste0("Mode os study must be Economy or Adequacy, actually :", opts$parameters$general$mode))
+  }
+  
+  
+  
   #random name to identify simulation
   aleatNameSime <- sample(letters, 10, replace = TRUE)%>>%
     paste0(collapse = "")
@@ -88,11 +94,12 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[2:3]
+    allScenario <- allScenario[2:9]
   }
   .addMessage(silent, "---------- Antares part ---------- ")
-  
-  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
+  timBegin <- Sys.time()
+  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent, timBegin,
+                               allScenario){
     #Preparation of files before simulaiton
     .addMessage(silent, paste0("-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
@@ -117,12 +124,33 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
     .addMessage(silent, paste0("Compute time for scenario ",X, " : ",
                                as.numeric(round(Sys.time()-beg)), " secondes"))
     
+    pourcentDo <- which(allScenario==X)/length(allScenario)
+    
+    
+    timeRun <- as.numeric(difftime( Sys.time(), timBegin , units = "min"))
+    timeRunMin <- trunc(timeRun)
+    timMinSec <- timeRun %% 1
+    timMinSec <- round(timMinSec/100*60, 2) * 100
+    
+    timeToDo <- timeRun * (1-pourcentDo)/pourcentDo
+    timeToDoMin <- trunc(timeToDo)
+    timeToDoSec <- timeToDo %% 1
+    timeToDoSec <- round(timeToDoSec/100*60, 2) * 100
+    
+    cat(paste0("Antares simulation : ", which(allScenario==X), " / ", length(allScenario),
+        "\n Current runtime : ", timeRunMin , ":", timMinSec,
+        "Sec\n Approximate staying run time before aggregation : ",
+        timeToDoMin , ":", timeToDoSec, "Sec\n"))
+    
+    
   }, opts = opts,
   ts = ts,
   second_member = second_member,
   scenario = scenario,
   cmd = cmd,
-  silent = silent)
+  silent = silent,
+  timBegin = timBegin,
+  allScenario = allScenario)
   .addMessage(silent, "---------- End of antares part ----------")
   
   
