@@ -1,8 +1,8 @@
 context("Function aggregateResult")
 
+#Untar and read study
 testStudy <- system.file("test/data/exemple_test.tgz",package = "antaresFlowbased")
 untar(testStudy)
-
 testStudy <- paste0(getwd(), "/exemple_test")
 opts <- antaresRead::setSimulationPath(testStudy)
 

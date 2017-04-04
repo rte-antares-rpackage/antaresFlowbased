@@ -30,6 +30,11 @@
 runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE, 
                           mcYears = NULL, opts = antaresRead::simOptions(),
                           silent = TRUE, .test = TRUE){
+  if(mcAll == FALSE & mcInd == FALSE){
+    stop("mcAll and mcInd are equal to FALSE")
+  }
+  
+  
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
@@ -123,62 +128,67 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   cmd = cmd,
   silent = silent)
   .addMessage(silent, "---------- End of antares part ----------")
-  try({
-  #Return old param setting
-  file.remove(generaldataIniPatch)
-  file.rename(generaldataIniOld, generaldataIniPatch)})
   
-  filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
-  .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format")
-  
-  
-  
-  # 
-  # #Mc-all creation
-  .addMessage(silent, "Mc-all compute")
-
-  aggregateResult(opts = opts, newname = filesMoves, silent = silent)
-
   
   try({
-  dtaMc <- paste0(opts$simDataPath, "/mc-ind")
-  if(!mcInd){
-    unlink(dtaMc, recursive = TRUE)
-  }})
+    #Return old param setting
+    file.remove(generaldataIniPatch)
+    file.rename(generaldataIniOld, generaldataIniPatch)})
   
-  #Wite digest
-  digetsWrite <- try({
-  oldw <- getOption("warn")
-  options(warn = -1)
-  opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
-  diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
-  options(warn = oldw)
-  areas <- antaresRead::readAntares(timeStep = "annual", showProgress = FALSE)
-  areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
-  allNam <- names(areas)[-c(1:3)]
-  areas[, c("timeId", "time"):= NULL]
-  for (col in allNam) set(areas, j = col, value = as.numeric(areas[[col]]))
-  allStats <- diges$CalcBuYear
-  for(i in 1:length(allNam))
-  {
-    var <- allNam[i]
-    fct <- allStats[i]
-    areas[, c(var) := .(do.call(fct, args = list(get(var)))), by = area]
+  if(mcAll){
+    
+    filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
+    .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format")
+    
+    
+    
+    # 
+    # #Mc-all creation
+    .addMessage(silent, "Mc-all compute")
+    
+    aggregateResult(opts = opts, newname = filesMoves, silent = silent)
+    
+    
+    try({
+      dtaMc <- paste0(opts$simDataPath, "/mc-ind")
+      if(!mcInd){
+        unlink(dtaMc, recursive = TRUE)
+      }})
+    
+    #Wite digest
+    digetsWrite <- try({
+      oldw <- getOption("warn")
+      options(warn = -1)
+      opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
+      diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
+      options(warn = oldw)
+      areas <- antaresRead::readAntares(timeStep = "annual", showProgress = FALSE)
+      areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
+      allNam <- names(areas)[-c(1:3)]
+      areas[, c("timeId", "time"):= NULL]
+      for (col in allNam) set(areas, j = col, value = as.numeric(areas[[col]]))
+      allStats <- diges$CalcBuYear
+      for(i in 1:length(allNam))
+      {
+        var <- allNam[i]
+        fct <- allStats[i]
+        areas[, c(var) := .(do.call(fct, args = list(get(var)))), by = area]
+      }
+      areas <- unique(areas)
+      for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
+      coltoKeep <- match(names(areas)[-1], diges$Variable)
+      unitKeep <- diges$Unit[coltoKeep]
+      StatsKeep <- diges$Stats[coltoKeep]
+      rentam <- names(areas)
+      areas <- rbindlist(list(data.table(t(c("", unitKeep))),
+                              data.table(t(c("", StatsKeep))),
+                              areas), fill = FALSE)
+      names(areas) <- rentam
+      digets <- paste0(opts$simDataPath, "/mc-all/grid")
+      dir.create(digets)
+      write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
+    }, silent = TRUE)
   }
-  areas <- unique(areas)
-  for (col in allNam) set(areas, j = col, value = as.character(areas[[col]], 0))
-  coltoKeep <- match(names(areas)[-1], diges$Variable)
-  unitKeep <- diges$Unit[coltoKeep]
-  StatsKeep <- diges$Stats[coltoKeep]
-  rentam <- names(areas)
-  areas <- rbindlist(list(data.table(t(c("", unitKeep))),
-                          data.table(t(c("", StatsKeep))),
-                          areas), fill = FALSE)
-  names(areas) <- rentam
-  digets <- paste0(opts$simDataPath, "/mc-all/grid")
-  dir.create(digets)
-  write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
-  }, silent = TRUE)
   .errorTest(digetsWrite, silent, "Digest write")
   .addMessage(silent, "End of run")
 }
