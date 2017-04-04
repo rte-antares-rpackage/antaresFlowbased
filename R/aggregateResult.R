@@ -94,23 +94,25 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath, newname)
   options(warn = oldw)
-  #Version avec readAntares
+  #Version which readAntares
   linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv")),
                    silent = TRUE)
   .errorTest(linkTable, silent, "Load of link table")
   
-  
+  #load link table
   linkTable$progNam <- linkTable$Stats
   linkTable$progNam[which(linkTable$progNam == "values")] <- "EXP"
   dtaMc <- paste0(opts$simDataPath, "/mc-ind")
   
   numMc <- as.numeric(list.files(dtaMc))
+  #sapply on timeStep
   allTyped <- c("annual", "daily", "hourly", "monthly", "weekly")
   sapply(allTyped, function(type, silent)
   {
     
     .addMessage(silent, paste0("------- Mc-all : ", type, " -------"))
     
+    #load first MC-year
     dtaLoadAndcalcul <- try({
       a <- Sys.time()
       dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
@@ -125,7 +127,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
                                  
       )
       SDcolsStartClust <-  SDcolsStartareas + 1
-      #load and calcul
+      #make structure
       struct <- list(areas = dta$areas[,.SD, .SDcols = 1:SDcolsStartareas],
                      links = dta$links[,.SD, .SDcols = 1:SDcolsStartareas],
                      clusters = dta$clusters[,.SD, .SDcols = 1:SDcolsStartClust])
@@ -156,10 +158,12 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       }
       
       b <- Sys.time()
+      #value structure
       value <- .giveValue(dta, SDcolsStartareas, SDcolsStartClust)
       N <- length(numMc)
       value <- lapply(value, .creatStats)
       btot <- as.numeric(Sys.time() - b)
+      #sequancialy add value
       if(N>1)
       {
         for(i in 2:N){
@@ -180,6 +184,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         }
       }
       
+      #Calcul of sd
       oldw <- getOption("warn")
       options(warn = -1)
       b <- Sys.time()
@@ -199,7 +204,6 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         value$clusters$std[is.nan(get(i)), (i):=0]
       
       options(warn = oldw)
-      
       value$areas$sumC <- NULL
       value$links$sumC <- NULL
       value$clusters$sumC <- NULL
@@ -217,6 +221,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     alfil <- c("values")
     areaWrite <- try(sapply(alfil, function(fil)
     {
+      #prepare data for all contry
       areaSpecialFile <- linkTable[Folder == "area" & Files == fil & Mode == tolower(opts$mode)]
       namekeep <- paste(areaSpecialFile$Name, areaSpecialFile$Stats)
       namekeepprog <- paste(areaSpecialFile$Name, areaSpecialFile$progNam)
@@ -237,6 +242,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       }
       
       sapply(allAreas,  function(areasel){
+        #for eatch contry prepare file
         areastowrite <- areas[area == areasel]
         areastowrite[,c("area") := NULL] 
         indexMin <- min(areas$timeId)
@@ -244,6 +250,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         kepNam <- names(struct$areas)[!names(struct$areas)%in%c("area","mcYear","time")]
         nameIndex <- ifelse(type == "weekly", "week", "index")
         kepNam[which(kepNam == "timeId")] <- nameIndex
+        #write txt
         .writeFileOut(dta = areastowrite, timestep = type, fileType = fil,
                       ctry = areasel, opts = opts, folderType = "areas", nbvar = nbvar,
                       indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
@@ -256,10 +263,10 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     
     .errorTest(areaWrite, silent, "Area write")
     
-    ##Write links
     alfil <- c("values")
     linkWrite <- try(sapply(alfil, function(fil)
     {
+      #prepare data for all link
       linkSpecialFile <- linkTable[Folder == "link" & Files == fil & Mode == tolower(opts$mode)]
       namekeep <- paste(linkSpecialFile$Name, linkSpecialFile$Stats)
       namekeepprog <- paste(linkSpecialFile$Name, linkSpecialFile$progNam)
@@ -280,6 +287,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       }
     
       sapply(allLink,  function(linksel){
+        #for eatch link prepare file
         linkstowrite <- links[link == linksel]
         linkstowrite[,c("link") := NULL] 
         indexMin <- min(links$timeId)
@@ -287,7 +295,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         kepNam <- names(struct$link)[!names(struct$link)%in%c("link","mcYear","time")]
         nameIndex <- ifelse(type == "weekly", "week", "index")
         kepNam[which(kepNam == "timeId")] <- nameIndex
-        
+        #write txt
         .writeFileOut(dta = linkstowrite, timestep = type, fileType = fil,
                       ctry = linksel, opts = opts, folderType = "links", nbvar = nbvar,
                       indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
@@ -304,7 +312,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
     endClust[, c("mcYear") := NULL]
     
     detailWrite <- try(sapply(unique(endClust$area),  function(ctry){
-      
+      #for eatch contry prepare file
       endClustctry <- endClust[area == ctry]
       orderBeg <- unique(endClustctry$time)
       endClustctry[,c("area") := NULL]
@@ -345,14 +353,12 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       nomcair <- gsub("NP Cost EXP_","",nomcair)
       nomcair <- gsub("NODU EXP_","",nomcair)
       Stats <- rep("EXP", length(unit))
-      
       nameIndex <- ifelse(type == "weekly", "week", "index")
       nomStruct[which(nomStruct == "timeId")] <- nameIndex
-      
-      
       indexMin <- min(endClustctry$timeId)
       indexMax <- max(endClustctry$timeId)
       ncolFix <- length(nomStruct)
+      #write details txt
       .writeFileOut(dta = endClustctry, timestep = type, fileType = "details",
                     ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
                     indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,

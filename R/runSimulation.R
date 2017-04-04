@@ -15,9 +15,9 @@
 #' \dontrun{
 #' antaresRead::setSimulationPath("D:/exemple_test",0)
 #'
-#' weight <- system.file("/test/input/coefficients_Antares.csv", package = "antaresFlowbased")
-#' secondMember <- system.file("/test/input/fichier_b_final.csv", package = "antaresFlowbased")
-#' dayType <- system.file("/test/input/id_FB.txt", package = "antaresFlowbased")
+#' weight <- system.file("/input/coefficients_Antares.csv", package = "antaresFlowbased")
+#' secondMember <- system.file("/input/fichier_b_final.csv", package = "antaresFlowbased")
+#' dayType <- system.file("/input/id_FB.txt", package = "antaresFlowbased")
 #'
 #' initFlowBased(weight = weight, secondMember = secondMember, dayType = dayType)
 #'
