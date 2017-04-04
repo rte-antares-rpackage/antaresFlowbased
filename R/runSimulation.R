@@ -15,9 +15,9 @@
 #' \dontrun{
 #' antaresRead::setSimulationPath("D:/exemple_test",0)
 #'
-#' weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
-#' secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
-#' dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
+#' weight <- system.file("/test/input/coefficients_Antares.csv", package = "antaresFlowbased")
+#' secondMember <- system.file("/test/input/fichier_b_final.csv", package = "antaresFlowbased")
+#' dayType <- system.file("/test/input/id_FB.txt", package = "antaresFlowbased")
 #'
 #' initFlowBased(weight = weight, secondMember = secondMember, dayType = dayType)
 #'
@@ -91,7 +91,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   }
   .addMessage(silent, "---------- Antares part ---------- ")
   
-  antaresLog <- sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
+  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent){
     #Preparation of files before simulaiton
     .addMessage(silent, paste0("-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
@@ -106,23 +106,27 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
     .addMessage(silent, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
     out <- .runAntares(cmd)
+    out <- out[length(out)]
+    
+    if(grepl("error", out)){
+      stop(paste0("The antares simulation ", X," must stop see antares logs for more details"))
+    }
+    
     .addMessage(silent, paste0("Antares end for scenario : ",X))
     .addMessage(silent, paste0("Compute time for scenario ",X, " : ",
                                as.numeric(round(Sys.time()-beg)), " secondes"))
     
-    out
   }, opts = opts,
   ts = ts,
   second_member = second_member,
   scenario = scenario,
   cmd = cmd,
   silent = silent)
-  
   .addMessage(silent, "---------- End of antares part ----------")
-  
+  try({
   #Return old param setting
   file.remove(generaldataIniPatch)
-  file.rename(generaldataIniOld, generaldataIniPatch)
+  file.rename(generaldataIniOld, generaldataIniPatch)})
   
   filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
   .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format")
@@ -132,14 +136,15 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   # 
   # #Mc-all creation
   .addMessage(silent, "Mc-all compute")
-  
+
   aggregateResult(opts = opts, newname = filesMoves, silent = silent)
+
   
+  try({
   dtaMc <- paste0(opts$simDataPath, "/mc-ind")
-  
   if(!mcInd){
     unlink(dtaMc, recursive = TRUE)
-  }
+  }})
   
   #Wite digest
   digetsWrite <- try({
@@ -176,7 +181,6 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   }, silent = TRUE)
   .errorTest(digetsWrite, silent, "Digest write")
   .addMessage(silent, "End of run")
-  antaresLog
 }
 
 
