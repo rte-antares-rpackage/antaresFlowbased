@@ -6,7 +6,7 @@
 #' @param mcYears \code{numeric} include mcYears, default NULL,
 #' all mcYears are included.
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param silent \code{boolean} show log in console.
+#' @param verbose \code{numeric} show log in console.
 #' @param .test \code{boolean} if TRUE, just run 3 scenarios.
 #' 
 #' 
@@ -19,13 +19,13 @@
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation("R_from", silent = FALSE)
+#' mysim <- runSimulation("R_from", verbose = 1)
 #'}
 #'
 #' @export
 runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE, 
                           mcYears = NULL, opts = antaresRead::simOptions(),
-                          silent = TRUE, .test = TRUE){
+                          verbose = 1, .test = TRUE){
   if(mcAll == FALSE & mcInd == FALSE){
     stop("mcAll and mcInd are equal to FALSE")
   }
@@ -48,7 +48,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   simNameAlea <- paste0(simulationName, aleatNameSime)
   simNameAlea <- tolower(simNameAlea)
   
-  if(!silent){
+  if(verbose == 2){
     cat(paste("Generationos random name :", simNameAlea), "\n")
   }
   
@@ -63,15 +63,15 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   
   
   upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
-  .errorTest(upGenIni, silent, "Write of generaldata")
+  .errorTest(upGenIni, verbose, "Write of generaldata")
   
   #load second member
   second_member <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
-  .errorTest(second_member, silent, "Load of second_member.txt")
+  .errorTest(second_member, verbose, "Load of second_member.txt")
   ts <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
-  .errorTest(ts, silent, "Load of ts.txt")
+  .errorTest(ts, verbose, "Load of ts.txt")
   scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
-  .errorTest(scenario, silent, "Load of scenario.txt")
+  .errorTest(scenario, verbose, "Load of scenario.txt")
   
   
   #Exclude scenarios to redefine
@@ -94,24 +94,28 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   #Exemple pour l'année i = 1
   allScenario <- unique(scenario$simulation)
   if(.test){
-    allScenario <- allScenario[2:9]
+    allScenario <- allScenario[2:3]
   }
-  .addMessage(silent, "---------- Antares part ---------- ")
+  
+  .addMessage(verbose, "---------- Antares part ---------- ", valAf = 1)
   timBegin <- Sys.time()
-  sapply(allScenario, function(X, opts, ts, second_member, scenario, cmd, silent, timBegin,
+  
+  progress <- ifelse(verbose == 0, "none" , "text")
+  
+  plyr::l_ply(allScenario, function(X, opts, ts, second_member, scenario, cmd, verbose, timBegin,
                                allScenario){
     #Preparation of files before simulaiton
-    .addMessage(silent, paste0("-Scenario : ",X))
+    .addMessage(verbose, paste0("\n-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
                            ts = ts,
                            secondMember = second_member,
                            scenarios = scenario,
                            simNumber = X,
-                           silent = silent)
+                           verbose = verbose)
     
     
     cmd <- paste0(cmd, "Sim",X)
-    .addMessage(silent, paste0("Antares launching for ",  paste0("scenario : ",X) ))
+    .addMessage(verbose, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
     out <- .runAntares(cmd)
     out <- out[length(out)]
@@ -120,8 +124,8 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
       stop(paste0("The antares simulation ", X," must stop see antares logs for more details"))
     }
     
-    .addMessage(silent, paste0("Antares end for scenario : ",X))
-    .addMessage(silent, paste0("Compute time for scenario ",X, " : ",
+    .addMessage(verbose, paste0("Antares end for scenario : ",X))
+    .addMessage(verbose, paste0("Compute time for scenario ",X, " : ",
                                as.numeric(round(Sys.time()-beg)), " secondes"))
     
     pourcentDo <- which(allScenario==X)/length(allScenario)
@@ -137,21 +141,24 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
     timeToDoSec <- timeToDo %% 1
     timeToDoSec <- round(timeToDoSec/100*60, 2) * 100
     
-    cat(paste0("Antares simulation : ", which(allScenario==X), " / ", length(allScenario),
+    if(verbose>1)
+    {
+    cat(paste0("\nAntares simulation : ", which(allScenario==X), " / ", length(allScenario),
         "\n Current runtime : ", timeRunMin , ":", timMinSec,
-        "Sec\n Approximate staying run time before aggregation : ",
+        "Sec\n Approximate remaning run time before aggregation : ",
         timeToDoMin , ":", timeToDoSec, "Sec\n"))
-    
+    }
     
   }, opts = opts,
   ts = ts,
   second_member = second_member,
   scenario = scenario,
   cmd = cmd,
-  silent = silent,
+  verbose = verbose,
   timBegin = timBegin,
-  allScenario = allScenario)
-  .addMessage(silent, "---------- End of antares part ----------")
+  allScenario = allScenario,
+  .progress = progress)
+  .addMessage(verbose, "---------- End of antares part ----------", valAf = 1)
   
   
   try({
@@ -161,16 +168,16 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
   
   if(mcAll){
     
-    filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, silent = silent), silent = TRUE)
-    .errorTest(filesMoves, silent, "Creation of a sigle study which Antares format")
+    filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, verbose = verbose), silent = TRUE)
+    .errorTest(filesMoves, verbose, "Creation of a sigle study which Antares format")
     
     
     
     # 
     # #Mc-all creation
-    .addMessage(silent, "Mc-all compute")
+    .addMessage(verbose, "---------------- Mc-all compute ----------------", valAf = 1)
     
-    aggregateResult(opts = opts, newname = filesMoves, silent = silent)
+    aggregateResult(opts = opts, newname = filesMoves, verbose = verbose)
     
     
     try({
@@ -178,6 +185,7 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
       if(!mcInd){
         unlink(dtaMc, recursive = TRUE)
       }})
+    .addMessage(verbose, "---------------- End of Mc-all compute ----------------", valAf = 1)
     
     #Wite digest
     digetsWrite <- try({
@@ -213,8 +221,8 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
       write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
     }, silent = TRUE)
   }
-  .errorTest(digetsWrite, silent, "Digest write")
-  .addMessage(silent, "End of run")
+  .errorTest(digetsWrite, verbose, "Digest write")
+  .addMessage(verbose, "End of run")
 }
 
 

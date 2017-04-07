@@ -24,7 +24,7 @@
 #'
 #' @export
 prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber, 
-                                   opts = antaresRead::simOptions(), silent = TRUE){
+                                   opts = antaresRead::simOptions(), verbose = 2){
   
   #Creation of bindingconstraints chroniques
   clim <- data.table::data.table(Id_day = unlist(ts[,.SD, .SDcols = colnames(ts)==simNumber]))
@@ -38,12 +38,12 @@ prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber,
            patch = paste0(opts$studyPath, "/input/bindingconstraints"),
            data = allFB) %>>%
       invisible(), silent = TRUE)
-  .errorTest(upFb, silent, "Update of bindingconstraints")
+  .errorTest(upFb, verbose, "Update of bindingconstraints")
   
   #Write of playList
   scenarioTP <- which(scenarios$simulation == simNumber)-1
   upPl <- try(updateGeneralSettingIni(opts, scenarioTP), silent = TRUE)
-  .errorTest(upPl, silent, "Update of playlist")
+  .errorTest(upPl, verbose, "Update of playlist")
   
 }
 

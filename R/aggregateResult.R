@@ -2,12 +2,12 @@
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param simulationName \code{character} name of simulation return by \link{runSimulation}
-#' @param silent \code{boolean} show log in console.
+#' @param verbose \code{numeric} show log in console.
 #' 
 #' @examples
 #'
 #' @export
-moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
+moveFilesAfterStudy <- function(opts, simulationName, verbose = 0)
 {
   #Found courcern files
   outputs <- paste0(opts$studyPath, "/output")
@@ -81,7 +81,7 @@ moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param newname \code{character} name of simulation.
-#' @param silent \code{boolean} show log in console.
+#' @param verbose \code{numeric} show log in console.
 #'
 #' @examples
 #'
@@ -89,7 +89,12 @@ moveFilesAfterStudy <- function(opts, simulationName, silent = TRUE)
 #' }
 #'
 #' @export
-aggregateResult <- function(opts, newname, silent = TRUE){
+aggregateResult <- function(opts, newname, verbose = 2){
+  
+  pb <- txtProgressBar(style = 3) 
+  
+  
+  
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath, newname)
@@ -97,7 +102,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   #Version which readAntares
   linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv")),
                    silent = TRUE)
-  .errorTest(linkTable, silent, "Load of link table")
+  .errorTest(linkTable, verbose, "Load of link table")
   
   #load link table
   linkTable$progNam <- linkTable$Stats
@@ -107,10 +112,10 @@ aggregateResult <- function(opts, newname, silent = TRUE){
   numMc <- as.numeric(list.files(dtaMc))
   #sapply on timeStep
   allTyped <- c("annual", "daily", "hourly", "monthly", "weekly")
-  sapply(allTyped, function(type, silent)
+  sapply(allTyped, function(type, verbose)
   {
     
-    .addMessage(silent, paste0("------- Mc-all : ", type, " -------"))
+    .addMessage(verbose, paste0("------- Mc-all : ", type, " -------"))
     
     #load first MC-year
     dtaLoadAndcalcul <- try({
@@ -163,10 +168,15 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       N <- length(numMc)
       value <- lapply(value, .creatStats)
       btot <- as.numeric(Sys.time() - b)
+      if(verbose>0)
+      {
+        .progBar(pb, type, 1, N)
+      }
       #sequancialy add value
       if(N>1)
       {
         for(i in 2:N){
+
           a <- Sys.time()
           dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
                                             timeStep = type, simplify = FALSE, mcYears = numMc[i],
@@ -180,7 +190,10 @@ aggregateResult <- function(opts, newname, silent = TRUE){
           value$links <- .updateStats(value$links, valueTP$links)
           value$clusters <- .updateStats(value$clusters, valueTP$clusters)
           btot <- btot + as.numeric(Sys.time() - b)
-          
+          if(verbose>0)
+          {
+            .progBar(pb, type, i, N)
+          }
         }
       }
       
@@ -211,11 +224,11 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       value$links$sum <- value$links$sum / N
       value$clusters$sum <- value$clusters$sum / N
       btot <- btot + as.numeric(Sys.time() - b)
-      .addMessage(silent, paste0("Time for reading data : ", round(aTot,1), " seondes"))
-      .addMessage(silent, paste0("Time for calculating : ", round(btot,1), " seondes"))
+      .addMessage(verbose, paste0("Time for reading data : ", round(aTot,1), " seondes"))
+      .addMessage(verbose, paste0("Time for calculating : ", round(btot,1), " seondes"))
     }, silent = TRUE)
     
-    .errorTest(dtaLoadAndcalcul, silent, "Load of data and calcul")
+    .errorTest(dtaLoadAndcalcul, verbose, "Load of data and calcul")
     
     ##Write area
     alfil <- c("values")
@@ -261,7 +274,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       })
     }), silent = TRUE)
     
-    .errorTest(areaWrite, silent, "Area write")
+    .errorTest(areaWrite, verbose, "Area write")
     
     alfil <- c("values")
     linkWrite <- try(sapply(alfil, function(fil)
@@ -285,7 +298,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
         dig <- linkSpecialFile[var == paste(Name,progNam )]$digits
         links[, c(var) := .(do.call(round, args = list(get(var), digits = dig)))]
       }
-    
+      
       sapply(allLink,  function(linksel){
         #for eatch link prepare file
         linkstowrite <- links[link == linksel]
@@ -304,7 +317,7 @@ aggregateResult <- function(opts, newname, silent = TRUE){
       })
     }), silent = TRUE)
     
-    .errorTest(linkWrite, silent, "Link write")
+    .errorTest(linkWrite, verbose, "Link write")
     
     ##Details
     details <- value$clusters$sum
@@ -364,11 +377,17 @@ aggregateResult <- function(opts, newname, silent = TRUE){
                     indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
                     nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
     }), silent = TRUE)
-    .errorTest(detailWrite, silent, "Detail write")
+    .errorTest(detailWrite, verbose, "Detail write")
     
-    .addMessage(silent, paste0("------- End Mc-all : ", type, " -------"))
+    .addMessage(verbose, paste0("------- End Mc-all : ", type, " -------"))
     
-  }, silent = silent)
+  }, verbose = verbose)
+  
+  if(verbose>0)
+  {
+    close(pb)
+  }
+  
 }
 
 
@@ -464,6 +483,20 @@ aggregateResult <- function(opts, newname, silent = TRUE){
                                                           as.POSIXct("1970-01-01 00:00:00"), units = "sec")), 0)
   writeIni(infosIni, iniPath)
 }
+
+.progBar <- function(pb, timeStep, mcALLNum, nbmcallTOT)
+{
+  
+  usalTime <- data.frame(period = c("start","annual", "daily", "hourly", "monthly", "weekly"),
+                         value = c(0, 20, 200, 600, 800, 1000))
+  per <- which(usalTime$period == timeStep)
+  dif <- usalTime$value[per] - usalTime$value[per - 1]
+  approxEnd <- mcALLNum/nbmcallTOT
+  i = (dif * approxEnd + usalTime$value[per - 1]) / usalTime$value[length( usalTime$value)]
+  setTxtProgressBar(pb, i)
+  
+}
+
 
 
 # .transformToMaAll <- function(filesToAggreg, opts, allMc)

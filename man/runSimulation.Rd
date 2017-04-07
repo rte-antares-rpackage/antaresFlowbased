@@ -32,11 +32,7 @@ Run all simulations
 \dontrun{
 antaresRead::setSimulationPath("D:/exemple_test",0)
 
-weight <- system.file("/test/data/coefficients_Antares.csv", package = "antaresFlowbased")
-secondMember <- system.file("/test/data/fichier_b_final.csv", package = "antaresFlowbased")
-dayType <- system.file("/test/data/id_FB.txt", package = "antaresFlowbased")
-
-initFlowBased(weight = weight, secondMember = secondMember, dayType = dayType)
+initFlowBased()
 
 setSolverAntares(path = "C:\\\\Program Files\\\\RTE\\\\Antares\\\\5.0.9\\\\bin\\\\antares-5.0-solver.exe")
 
