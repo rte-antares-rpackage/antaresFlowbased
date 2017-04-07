@@ -1,7 +1,39 @@
 # load package
 library(clpAPI)
 require(data.table)
+library(Matrix)
+extreme_x <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/a.txt")
+extreme_x
 
+full_xyz <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/xyz_full36.txt")
+full_xyz#B
+
+system.time(res <- get_b36(extreme_x = extreme_x, full_xyz = full_xyz))
+res
+
+res <- matrix(res, ncol = 9, byrow = TRUE)
+head(res)
+res <- data.table(res)
+names(res) <- c("ei_plus", "ei_moins", "ej_plus", "ej_moins", "ek_plus", "ek_moins", "y1", "y2", "y3")
+res
+
+re1 <- which(res$ei_plus<1e-6 &
+               res$ei_moins<1e-6  &
+               res$ej_plus<1e-6 &
+               res$ej_moins<1e-6 &
+               res$ek_plus<1e-6 &
+               res$ek_moins<1e-6)
+
+
+
+
+triplet <- t(combn(all_full_id, 3))
+faisableTriplet <- triplet[re1,]
+faisableTriplet <- data.table(faisableTriplet)
+faisableTriplet$SUM <-rowSums(faisableTriplet)
+finalTrip <- faisableTriplet[!duplicated(faisableTriplet$SUM)]
+finalTrip[,SUM := NULL]
+finalTrip
 
 get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
 
@@ -9,7 +41,7 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   all_full_id <- full_xyz[, unique(V1)]
 
   # triplet
-  triplet <- t(combn(all_full_id, 3))
+ 
 
   # b
   b <- apply(as.matrix(extreme_x) %*% t(as.matrix(full_xyz[, list(V2, V3, V4)])), 2, max)
@@ -108,13 +140,13 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   return(res)
 }
 
-# # input
-# extreme_x <- fread("Test_Full_R/a.txt")
-# extreme_x
-#
-# full_xyz <- fread("Test_Full_R/xyz_full36.txt")
-# full_xyz
-#
-# res_3 <- get_b36(extreme_x, full_xyz, n_block = 3)
-#
-# system.time(res_all <- get_b36(extreme_x, full_xyz))
+# input
+extreme_x <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/a.txt")
+extreme_x
+
+full_xyz <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/xyz_full36.txt")
+full_xyz
+
+res_3 <- get_b36(extreme_x, full_xyz, n_block = 3)
+
+system.time(res_all <- get_b36(extreme_x, full_xyz))

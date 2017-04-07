@@ -16,10 +16,10 @@ area;values;economy;BALANCE;MWh;max;0
 area;values;economy;ROW BAL.;MWh;values;0
 area;values;economy;PSP;MWh;EXP;0
 area;values;economy;MISC. NDG;MWh;EXP;0
-area;values;economy;LOAD;MWh;EXP;0
-area;values;economy;LOAD;MWh;std;0
-area;values;economy;LOAD;MWh;min;0
-area;values;economy;LOAD;MWh;max;0
+area;values;economy;LOAD;MWh;EXP;2
+area;values;economy;LOAD;MWh;std;2
+area;values;economy;LOAD;MWh;min;2
+area;values;economy;LOAD;MWh;max;2
 area;values;economy;H. ROR;MWh;EXP;0
 area;values;economy;H. ROR;MWh;std;0
 area;values;economy;H. ROR;MWh;min;0
@@ -76,7 +76,7 @@ area;values;economy;LOLD;Hours;EXP;0
 area;values;economy;LOLD;Hours;std;0
 area;values;economy;LOLD;Hours;min;0
 area;values;economy;LOLD;Hours;max;0
-area;values;economy;LOLP;%;values;0
+area;values;economy;LOLP;%;values;2
 area;values;economy;AVL DTG;MWh;EXP;0
 area;values;economy;AVL DTG;MWh;std;0
 area;values;economy;AVL DTG;MWh;min;0
@@ -114,10 +114,10 @@ area;values;adequacy;BALANCE;MWh;max;0
 area;values;adequacy;ROW BAL.;MWh;values;0
 area;values;adequacy;PSP;MWh;EXP;0
 area;values;adequacy;MISC. NDG;MWh;EXP;0
-area;values;adequacy;LOAD;MWh;EXP;0
-area;values;adequacy;LOAD;MWh;std;0
-area;values;adequacy;LOAD;MWh;min;0
-area;values;adequacy;LOAD;MWh;max;0
+area;values;adequacy;LOAD;MWh;EXP;2
+area;values;adequacy;LOAD;MWh;std;2
+area;values;adequacy;LOAD;MWh;min;2
+area;values;adequacy;LOAD;MWh;max;2
 area;values;adequacy;H. ROR;MWh;EXP;0
 area;values;adequacy;H. ROR;MWh;std;0
 area;values;adequacy;H. ROR;MWh;min;0
@@ -174,7 +174,7 @@ area;values;adequacy;LOLD;Hours;EXP;0
 area;values;adequacy;LOLD;Hours;std;0
 area;values;adequacy;LOLD;Hours;min;0
 area;values;adequacy;LOLD;Hours;max;0
-area;values;adequacy;LOLP;%;values;0
+area;values;adequacy;LOLP;%;values;2
 area;values;adequacy;AVL DTG;MWh;EXP;0
 area;values;adequacy;AVL DTG;MWh;std;0
 area;values;adequacy;AVL DTG;MWh;min;0
