@@ -90,9 +90,12 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 0)
 #'
 #' @export
 aggregateResult <- function(opts, newname, verbose = 2){
-  
-  pb <- txtProgressBar(style = 3) 
-  
+  if(verbose>0)
+  {
+    try({
+      pb <- txtProgressBar(style = 3) 
+    })
+  }
   
   
   oldw <- getOption("warn")
@@ -170,13 +173,15 @@ aggregateResult <- function(opts, newname, verbose = 2){
       btot <- as.numeric(Sys.time() - b)
       if(verbose>0)
       {
-        .progBar(pb, type, 1, N)
+        try({
+          .progBar(pb, type, 1, N)
+        })
       }
       #sequancialy add value
       if(N>1)
       {
         for(i in 2:N){
-
+          
           a <- Sys.time()
           dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all", 
                                             timeStep = type, simplify = FALSE, mcYears = numMc[i],
@@ -192,7 +197,9 @@ aggregateResult <- function(opts, newname, verbose = 2){
           btot <- btot + as.numeric(Sys.time() - b)
           if(verbose>0)
           {
-            .progBar(pb, type, i, N)
+            try({
+              .progBar(pb, type, i, N)
+            })
           }
         }
       }
@@ -385,7 +392,9 @@ aggregateResult <- function(opts, newname, verbose = 2){
   
   if(verbose>0)
   {
-    close(pb)
+    try({
+      close(pb)
+    })
   }
   
 }
