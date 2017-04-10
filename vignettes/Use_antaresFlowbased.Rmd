@@ -1,0 +1,51 @@
+---
+title: "Use AntaresFlowbased package"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Le package antaresFlowbased est utilisé pour lancer des études flowbased, il fait appel à antares.
+
+## L'initialisation d'une étude :
+Pendant la phase de l'initialisation de l'étude nous créons les fichiers nécéssaire au fonctionnement d'une étude flowbased. 
+
+Dans un premier temps il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction :
+
+```{r, eval=FALSE}
+antaresRead::setSimulationPath("D:/exemple_test",0)
+```
+
+ La fonction permettant de créer les fichiers nécéssaire au fonctionnement d'une étude flowbased est la suivante :
+
+```{r, eval=FALSE}
+initFlowBased()
+```
+Cette fonction utilise des fichiers renseignés dans le packages (contraindes couplantes, jours types ...), a partir de ces fichiers elle crée dans l'étude antares précédément séléctionnée un dossier user/flowbased. Ce dossier contient 4 fichiers :
+
+* second_member.txt
+* weight.txt
+* scenario.txt
+* ts.txt
+
+## Le lancement d'une simulation
+Pour lancer une simulation il est nécéssaire d'indiquer l'emplacement du solver antares via la fonction :
+```{r, eval=FALSE}
+ setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+```
+La fonction permettant de lancer une simulation est la suivante :
+
+```{r, eval=FALSE}
+mysim <- runSimulation(simulationName = "My_study")
+```
+Cette fonction à plusieurs paramètres possibles :
+
+* simulationName : Nom de la simulation
+* mcAll : Calcul des mcAll (TRUE ou FALSE)
+* mcInd : Conservation des mcInd (TRUE ou FALSE)
+* mcYears : mcYears à conserver, par défaut tous
+* opts : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
+* verbose : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.

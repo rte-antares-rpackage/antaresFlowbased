@@ -19,7 +19,7 @@
 #'
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
-#' mysim <- runSimulation("R_from", verbose = 1)
+#' mysim <- runSimulation(simulationName = "R_from", verbose = 1)
 #'}
 #'
 #' @export
