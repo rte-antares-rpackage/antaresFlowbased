@@ -2,10 +2,10 @@
 % Please edit documentation in R/prepareSimulationFiles.R
 \name{prepareSimulationFiles}
 \alias{prepareSimulationFiles}
-\title{Preparation of single simulation files, write playlist and FB}
+\title{Prepare files needed for a single simulation run. Write playlist and FB}
 \usage{
 prepareSimulationFiles(ts, secondMember, scenarios, simNumber,
-  opts = antaresRead::simOptions(), silent = TRUE)
+  opts = antaresRead::simOptions(), verbose = 1)
 }
 \arguments{
 \item{ts}{\code{data.frame} of dayType and simulation}
@@ -18,16 +18,21 @@ prepareSimulationFiles(ts, secondMember, scenarios, simNumber,
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{silent}{\code{boolean} show log in console.}
+\item{verbose}{\code{numeric} show log in console. Defaut to 1
+\itemize{
+ \item{0}{ : No log}
+ \item{1}{ : Short log}
+ \item{2}{ : Long log}
+}}
 }
 \description{
-Preparation of single simulation files, write playlist and FB
+Prepare files needed for a single simulation run. Write playlist and FB
 }
 \examples{
 
 \dontrun{
 
- path <- "D:/Users/titorobe/Desktop/exemple_test"
+ path <- "D:/exemple_test"
  antaresRead::setSimulationPath(path, 0)
 
  secondMember <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt"))
@@ -35,7 +40,7 @@ Preparation of single simulation files, write playlist and FB
  scenarios <- data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt"))
 
  prepareSimulationFiles(opts = opts, ts = ts, secondMember = secondMember,
-   scenarios = scenarios, simNumber = 54 )
+   scenarios = scenarios, simNumber = 54)
 }
 
 }

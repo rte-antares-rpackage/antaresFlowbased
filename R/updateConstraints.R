@@ -14,7 +14,9 @@
 #' @rdname update-BindingConstraints
 #'
 #' @seealso \code{writeBindingConstraintsIni}
+#'
 #' @export
+#'
 updateBindingConstraintsIni <- function(pathWeight, opts = antaresRead::simOptions()){
   # udpate data
   new_binding_cstr <- try(changeBindingConstraints(pathWeight = pathWeight, opts = opts), silent = TRUE)
@@ -30,8 +32,11 @@ updateBindingConstraintsIni <- function(pathWeight, opts = antaresRead::simOptio
 }
 
 #' @rdname update-BindingConstraints
+#'
 #' @import antaresRead
+#'
 #' @export
+#'
 changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions()){
   # reading binding constraints
   pathIni <- paste0(opts$inputPath, "/bindingconstraints/bindingconstraints.ini")
@@ -88,8 +93,9 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
 #' @examples
 #'
 #' @export
+#'
 writeBindingConstraintsIni <- function(listData, opts = antaresRead::simOptions()){
-  # open ew file
+  # open new file
   pathIni <- paste0(opts$inputPath, "/bindingconstraints/bindingconstraints.ini")
 
   write_data <- writeIni(listData, pathIni)

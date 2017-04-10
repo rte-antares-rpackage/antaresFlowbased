@@ -2,7 +2,7 @@
 % Please edit documentation in R/updateGeneralSetting.R
 \name{writeGeneralSettingIni}
 \alias{writeGeneralSettingIni}
-\title{Write generaldata.ini file=}
+\title{Write generaldata.ini file}
 \usage{
 writeGeneralSettingIni(generaldataIniPatch, generalSetting)
 }

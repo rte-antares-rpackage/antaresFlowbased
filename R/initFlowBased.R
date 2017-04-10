@@ -1,15 +1,16 @@
-#' @title Generate environnement for a flow-based study
-#' @description  Generate environnement for a flow-based study
+#' @title Generate environment for a flow-based study
 #'
-#' @param weight \code{character}, path of weight file
-#' @param secondMember \code{character}, path of secondMember file
-#' @param dayType \code{character}, path of dayType file
+#' @description  Generate environment for a flow-based study
+#'
+#' @param weight \code{character}, path of weight file. Defaut use data in package.
+#' @param secondMember \code{character}, path of secondMember file. Defaut use data in package.
+#' @param dayType \code{character}, path of dayType file. Defaut use data in package.
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' 
-#' 
-#' @examples
-#' \dontrun{
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # target antares study
 #' path <- "D:/exemple_test"
 #' antaresRead::setSimulationPath(path, 0)
 #'
@@ -19,6 +20,7 @@
 #' @import pipeR data.table antaresRead
 #'
 #' @export
+#'
 initFlowBased <- function(weight = system.file("/input/coefficients_Antares.csv", package = "antaresFlowbased"),
                           secondMember = secondMember <- system.file("/input/fichier_b_final.csv", package = "antaresFlowbased"),
                           dayType =  system.file("/input/id_FB.txt", package = "antaresFlowbased"),
@@ -27,7 +29,7 @@ initFlowBased <- function(weight = system.file("/input/coefficients_Antares.csv"
 
   pathProject <- opts$studyPath
 
-  #Create flowbased
+  #Create flowbased directory
   newDir <- paste0(pathProject, "/user/flowbased")
   dir.create(newDir, showWarnings = FALSE, recursive = TRUE)
 
@@ -58,5 +60,8 @@ initFlowBased <- function(weight = system.file("/input/coefficients_Antares.csv"
 
   #Init constraint
   updateBindingConstraintsIni(paste0(newDir, "/weight.txt"), opts = opts)
+
+  #Return TRUE
+  invisible(TRUE)
 
 }

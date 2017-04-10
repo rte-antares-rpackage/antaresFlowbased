@@ -4,14 +4,19 @@
 \alias{aggregateResult}
 \title{Creation of Mc_all}
 \usage{
-aggregateResult(opts, newname, silent = TRUE)
+aggregateResult(opts, newname, verbose = 1)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
 \item{newname}{\code{character} name of simulation.}
 
-\item{silent}{\code{boolean} show log in console.}
+\item{verbose}{\code{numeric} show log in console. Defaut to 1
+\itemize{
+ \item{0}{ : No log}
+ \item{1}{ : Short log}
+ \item{2}{ : Long log}
+}}
 }
 \description{
 Creation of Mc_all
