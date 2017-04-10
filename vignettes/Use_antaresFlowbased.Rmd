@@ -1,5 +1,5 @@
 ---
-title: "Use AntaresFlowbased package"
+title: "Utilisation du package AntaresFlowbased "
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Le package antaresFlowbased est utilisé pour lancer des études flowbased, il fait appel à antares.
+Le package antaresFlowbased est utilisé pour lancer des études flowbased, en faisant des appels au logiciel antares.
 
 ## L'initialisation d'une étude :
 Pendant la phase de l'initialisation de l'étude nous créons les fichiers nécéssaire au fonctionnement d'une étude flowbased. 
