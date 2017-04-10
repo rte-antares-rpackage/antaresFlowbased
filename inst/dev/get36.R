@@ -11,29 +11,8 @@ full_xyz#B
 system.time(res <- get_b36(extreme_x = extreme_x, full_xyz = full_xyz))
 res
 
-res <- matrix(res, ncol = 9, byrow = TRUE)
-head(res)
-res <- data.table(res)
-names(res) <- c("ei_plus", "ei_moins", "ej_plus", "ej_moins", "ek_plus", "ek_moins", "y1", "y2", "y3")
-res
-
-re1 <- which(res$ei_plus<1e-6 &
-               res$ei_moins<1e-6  &
-               res$ej_plus<1e-6 &
-               res$ej_moins<1e-6 &
-               res$ek_plus<1e-6 &
-               res$ek_moins<1e-6)
 
 
-
-
-triplet <- t(combn(all_full_id, 3))
-faisableTriplet <- triplet[re1,]
-faisableTriplet <- data.table(faisableTriplet)
-faisableTriplet$SUM <-rowSums(faisableTriplet)
-finalTrip <- faisableTriplet[!duplicated(faisableTriplet$SUM)]
-finalTrip[,SUM := NULL]
-finalTrip
 
 get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
 
@@ -41,7 +20,7 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   all_full_id <- full_xyz[, unique(V1)]
 
   # triplet
- 
+  triplet <- t(combn(all_full_id, 3))
 
   # b
   b <- apply(as.matrix(extreme_x) %*% t(as.matrix(full_xyz[, list(V2, V3, V4)])), 2, max)
@@ -137,7 +116,29 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   # remove problem object
   delProbCLP(lp)
 
-  return(res)
+  
+  res <- matrix(res, ncol = 9, byrow = TRUE)
+  head(res)
+  res <- data.table(res)
+  names(res) <- c("ei_plus", "ei_moins", "ej_plus", "ej_moins", "ek_plus", "ek_moins", "y1", "y2", "y3")
+  res
+  
+  re1 <- which(res$ei_plus<1e-6 &
+                 res$ei_moins<1e-6  &
+                 res$ej_plus<1e-6 &
+                 res$ej_moins<1e-6 &
+                 res$ek_plus<1e-6 &
+                 res$ek_moins<1e-6)
+  
+  all_full_id <- full_xyz[, unique(V1)]
+  triplet <- t(combn(all_full_id, 3))
+  faisableTriplet <- triplet[re1,]
+  faisableTriplet <- data.table(faisableTriplet)
+  DD <- dist(res[re1,.SD, .SDcols = c("y1", "y2", "y3")])
+  DD <- as.matrix(DD)
+  diag(DD)<- diag(DD)+1
+  finalTriplet <- faisableTriplet[which(apply(DD, 1, min)>1e-6),]
+  finalTriplet
 }
 
 # input
