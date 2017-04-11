@@ -1,11 +1,10 @@
-# Le package R 'antaresFlowbased'
+# The 'antaresFlowbased' R package
 
-
-le package R `antaresFlowbased` permet de lancer une étude flowBased depuis R à partir d'une étude existante, pour finalement l'ouvir et l'analyser à partir du logiciel **antares**
+The `antaresFlowbased` package provides functions that for launch a flowBased study from an existed antares study, which can be finally open and analyse with the **antares** software.
 
 ## Installation
 
-Le package peut s'installer directement depuis **github**. Il dépend également du package **antaresRead**. Instruction d'installation ici : 
+You can install the package directly from **Github**. It depends on **antaresRead** R package :
 
 https://github.com/rte-antares-rpackage/antaresRead
 
@@ -15,9 +14,9 @@ install.packages(c("devtools", "data.table", "plyr", "pipeR", "digest"))
 install_github("rte-antares-rpackage/antaresFlowbased")
 ```
 
-## Utilisation
+## Use
 
-Le plus simple est d'aller voir la vignette après installation : 
+The simplest way is to look the vignette : 
 
 ```r
 require(antaresFlowbased)
