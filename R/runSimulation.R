@@ -11,7 +11,6 @@
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#' @param .test \code{boolean} if TRUE, just run 3 scenarios.
 #'
 #'
 #' @examples
@@ -38,7 +37,7 @@
 #'
 runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
                           mcYears = NULL, opts = antaresRead::simOptions(),
-                          verbose = 1, .test = TRUE){
+                          verbose = 1){
 
   # mcAll & mcInd control
   if(mcAll == FALSE & mcInd == FALSE){
@@ -108,9 +107,9 @@ runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TR
 
   # simulation
   allScenario <- unique(scenario$simulation)
-  if(.test){
-    allScenario <- allScenario[2:3]
-  }
+  # if(.test){
+  #   allScenario <- allScenario[2:3]
+  # }
 
   .addMessage(verbose, "---------- Antares part ---------- ", valAf = 1)
   timBegin <- Sys.time()
