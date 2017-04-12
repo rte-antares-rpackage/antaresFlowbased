@@ -17,7 +17,7 @@ Write ini file from list obtain by antaresRead:::readIniFile and modify by user
 \examples{
 
 \dontrun{
-pathIni <- "D:/Users/titorobe/Desktop/exemple_test/settings/generaldata.ini"
+pathIni <- "D:/exemple_test/settings/generaldata.ini"
 generalSetting <- antaresRead:::readIniFile(pathIni)
 generalSetting$output$synthesis <- FALSE
 writeIni(generalSetting, pathIni)

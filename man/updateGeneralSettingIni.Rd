@@ -15,11 +15,10 @@ updateGeneralSettingIni(opts = antaresRead::simOptions(), playList = NULL)
 
 \dontrun{
 
-opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
+opts <- antaresRead::setSimulationPath("D:/exemple_test", 0)
 updateGeneralSettingIni(opts)
 
 }
-
 
 }
 \seealso{

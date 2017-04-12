@@ -2,7 +2,7 @@
 % Please edit documentation in R/initFlowBased.R
 \name{initFlowBased}
 \alias{initFlowBased}
-\title{Generate environnement for a flow-based study}
+\title{Generate environment for a flow-based study}
 \usage{
 initFlowBased(weight = system.file("/input/coefficients_Antares.csv", package
   = "antaresFlowbased"), secondMember = secondMember <-
@@ -11,20 +11,21 @@ initFlowBased(weight = system.file("/input/coefficients_Antares.csv", package
   opts = antaresRead::simOptions())
 }
 \arguments{
-\item{weight}{\code{character}, path of weight file}
+\item{weight}{\code{character}, path of weight file. Defaut use data in package.}
 
-\item{secondMember}{\code{character}, path of secondMember file}
+\item{secondMember}{\code{character}, path of secondMember file. Defaut use data in package.}
 
-\item{dayType}{\code{character}, path of dayType file}
+\item{dayType}{\code{character}, path of dayType file. Defaut use data in package.}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 }
 \description{
-Generate environnement for a flow-based study
+Generate environment for a flow-based study
 }
 \examples{
-\dontrun{
 
+\dontrun{
+# target antares study
 path <- "D:/exemple_test"
 antaresRead::setSimulationPath(path, 0)
 

@@ -5,22 +5,26 @@
 \title{Run all simulations}
 \usage{
 runSimulation(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-  mcYears = NULL, opts = antaresRead::simOptions(), silent = TRUE,
+  mcYears = NULL, opts = antaresRead::simOptions(), verbose = 1,
   .test = TRUE)
 }
 \arguments{
-\item{simulationName}{\code{character} name of simulation}
+\item{simulationName}{\code{character} name of simulation. Defaut to 'FlowBased'.}
 
-\item{mcAll}{\code{boolean} give mc_all compress results}
+\item{mcAll}{\code{boolean} give mc_all compress results. Defaut to TRUE.}
 
-\item{mcInd}{\code{boolean} keep mc_ind.}
+\item{mcInd}{\code{boolean} keep mc_ind. Defaut to TRUE.}
 
-\item{mcYears}{\code{numeric} include mcYears, default NULL,
-all mcYears are included.}
+\item{mcYears}{\code{numeric} include mcYears. Default NULL (all mcYears are included)}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{silent}{\code{boolean} show log in console.}
+\item{verbose}{\code{numeric} show log in console. Defaut to 1
+\itemize{
+ \item{0}{ : No log}
+ \item{1}{ : Short log}
+ \item{2}{ : Long log}
+}}
 
 \item{.test}{\code{boolean} if TRUE, just run 3 scenarios.}
 }
@@ -30,13 +34,19 @@ Run all simulations
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/exemple_test",0)
 
-initFlowBased()
+# set study
+antaresRead::setSimulationPath("D:/exemple_test", 0)
 
+# set solver path
 setSolverAntares(path = "C:\\\\Program Files\\\\RTE\\\\Antares\\\\5.0.9\\\\bin\\\\antares-5.0-solver.exe")
 
-mysim <- runSimulation("R_from", silent = FALSE)
+# init directory for study
+initFlowBased()
+
+# run flowbased simulation
+runSimulation(simulationName = "R_from", verbose = 1)
+
 }
 
 }

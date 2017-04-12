@@ -2,18 +2,20 @@
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param playList \code{numeric}, playList
+#'
 #' @examples
 #'
 #' \dontrun{
 #'
-#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test",0)
+#' opts <- antaresRead::setSimulationPath("D:/exemple_test", 0)
 #' updateGeneralSettingIni(opts)
 #'
 #' }
 #'
-#'
 #' @seealso \code{writeGeneralSettingIni}
+#'
 #' @export
+#'
 updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList = NULL){
 
   # Generate path for generaldata.ini
@@ -35,12 +37,13 @@ updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList =
 
 
 #' @title update general data
-#' 
+#'
 #' @param generaldataIniPatch \code{character}, path of generaldataIni
-#' 
+#'
 #' @import antaresRead
-#' 
+#'
 #' @export
+#'
 modifyGeneralSetting <- function(generaldataIniPatch){
   # read current .ini
   generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
@@ -58,14 +61,15 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 }
 
 
-#' @title Modify play list
-#' 
+#' @title Modify playList
+#'
 #' @param generaldataIniPatch \code{character}, path of generaldataIni
 #' @param playList \code{numeric}, playList
-#' 
+#'
 #' @import antaresRead
-#' 
+#'
 #' @export
+#'
 modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   # read current .ini
   generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
@@ -84,14 +88,13 @@ modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   generalSetting
 }
 
-
-
-#' @title Write generaldata.ini file=
+#' @title Write generaldata.ini file
 #'
 #' @param generaldataIniPatch \code{list}
 #' @param generalSetting \code{Character}, Path to ini file
 #'
 #' @export
+#'
 writeGeneralSettingIni <- function(generaldataIniPatch, generalSetting)
 {
   # open new file

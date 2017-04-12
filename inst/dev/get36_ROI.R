@@ -1,18 +1,7 @@
-# load package
-library(clpAPI)
-require(data.table)
-library(Matrix)
+library(ROI)
+library(ROI.plugin.clp)
 
-extreme_x <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/a.txt")
-extreme_x
-
-full_xyz <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/xyz_full36.txt")
-full_xyz#B
-
-system.time(res <- get_b36(extreme_x = extreme_x, full_xyz = full_xyz))
-res
-
-get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
+get_b36_ROI <- function(extreme_x, full_xyz, n_block = NULL){
 
   # all_full_id : vecteur des id uniques
   all_full_id <- full_xyz[, unique(V1)]
@@ -23,11 +12,6 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   # b
   b <- apply(as.matrix(extreme_x) %*% t(as.matrix(full_xyz[, list(V2, V3, V4)])), 2, max)
 
-  # preparing the model
-  lp <- initProbCLP()
-
-  # minimize
-  setObjDirCLP(lp, 1)
 
   # dimension pour un bloc d'optim
   param_ncols <- 9
@@ -87,84 +71,30 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
 
   })
 
-  # constraint matrix as sparse row-oriented
-  coef_matrix <- sparseMatrix(i = i, j = j, x = x)
-  ia <- coef_matrix@i
-  ja <-  coef_matrix@p
-  ar <- coef_matrix@x
+  l_constraint <- L_constraint(L = slam::simple_triplet_matrix(i = i, j = j, v = x),
+               dir = ifelse(constraint_lb == "-Inf", "<=", "=="),
+               rhs = constraint_ub)
 
   # Lower bounds for the variables (columns).
   var_lb <- rep(c(rep(0, 6), rep(-Inf, 3)), n_block)
+  lp_bound <- V_bound(li=1:length(var_lb), lb=var_lb)
 
   # objective function
   obj <- rep(c(rep(1, 6), rep(0, 3)), n_block)
 
-  # load problem data
-  loadProblemCLP(lp, ncols = param_ncols*n_block, nrows = param_nrows*n_block, ia, ja, ar,
-                 lb = var_lb, ub = NULL, obj_coef = obj,
-                 rlb = constraint_lb, rub = constraint_ub)
+  LP <- OP(obj, l_constraint, maximum = FALSE,
+           bounds = lp_bound)
 
+  y <- ROI_solve(LP, solver = "clp")
 
-  # solve lp problem
-  solveInitialCLP(lp)
-
-  # retrieve the results
-  # getSolStatusCLP(lp)
-  # getObjValCLP(lp)
-  # getColPrimCLP(lp)
-
-  res <- getColPrimCLP(lp)
-  # remove problem object
-  delProbCLP(lp)
-
-
-  res <- matrix(res, ncol = 9, byrow = TRUE)
-  head(res)
-  res <- data.table(res)
-  names(res) <- c("ei_plus", "ei_moins", "ej_plus", "ej_moins", "ek_plus", "ek_moins", "y1", "y2", "y3")
-  res
-
-  re1 <- which(res$ei_plus<1e-6 &
-                 res$ei_moins<1e-6  &
-                 res$ej_plus<1e-6 &
-                 res$ej_moins<1e-6 &
-                 res$ek_plus<1e-6 &
-                 res$ek_moins<1e-6)
-
-  all_full_id <- full_xyz[, unique(V1)]
-  triplet <- t(combn(all_full_id, 3))
-  faisableTriplet <- triplet[re1,]
-  faisableTriplet <- data.table(faisableTriplet)
-  DD <- dist(res[re1,.SD, .SDcols = c("y1", "y2", "y3")])
-  DD <- as.matrix(DD)
-  DD <- dist(res[,4:6], method = "euclidean", p = 2, upper = FALSE)
-  DD <- as.matrix(DD)
-  DD[lower.tri(DD, diag = TRUE)] <- 1
-  finalTriplet <- faisableTriplet[which(apply(DD, 1, min)>1e-6),]
-  finalTriplet
+  y$solution
 }
 
-# input
-extreme_x <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/a.txt")
-extreme_x
-
-full_xyz <- fread("D:/Users/titorobe/Desktop/AMPL_MARION/FirstAmpl/xyz_full36.txt")
-full_xyz
-
-res_3 <- get_b36(extreme_x, full_xyz, n_block = 3)
-
-system.time(res_all <- get_b36(extreme_x, full_xyz))
-
-
-# load package
-library(clpAPI)
-require(data.table)
-library(Matrix)
 
 extreme_x <- fread("D:\\Users\\benothie\\Desktop\\codeAMPL\\codeAMPL-Benoit\\a.txt")
 extreme_x
 
 full_xyz <- fread("D:\\Users\\benothie\\Desktop\\codeAMPL\\codeAMPL-Benoit\\xyz_full36.txt")
 
-system.time(res <- get_b36(extreme_x = extreme_x, full_xyz = full_xyz))
+system.time(res <- get_b36_ROI(extreme_x = extreme_x, full_xyz = full_xyz))
 res

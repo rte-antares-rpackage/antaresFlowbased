@@ -2,7 +2,7 @@
 % Please edit documentation in R/updateGeneralSetting.R
 \name{modifyGeneralSettingPlayList}
 \alias{modifyGeneralSettingPlayList}
-\title{Modify play list}
+\title{Modify playList}
 \usage{
 modifyGeneralSettingPlayList(generaldataIniPatch, playList)
 }

@@ -6,14 +6,16 @@
 #' @examples
 #'
 #' \dontrun{
-#' pathIni <- "D:/Users/titorobe/Desktop/exemple_test/settings/generaldata.ini"
+#' pathIni <- "D:/exemple_test/settings/generaldata.ini"
 #' generalSetting <- antaresRead:::readIniFile(pathIni)
 #' generalSetting$output$synthesis <- FALSE
 #' writeIni(generalSetting, pathIni)
 #' }
 #'
 #' @import pipeR
+#'
 #' @export
+#'
 writeIni <- function(listData, pathIni){
   file.remove(pathIni)
   con <- file(pathIni, "wb")
