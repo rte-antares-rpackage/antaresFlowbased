@@ -42,10 +42,10 @@ setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solv
 getSolverAntares()
 ```
 
-Finalement, la fonction *runSimulation()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
+Finalement, la fonction *runSimulationFB()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
 
 ```{r, eval=FALSE}
-res_fb <- runSimulation(simulationName = "flowBased-Tuto")
+res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 ```
 
 Les paramètres possibles sont les suivants : 

@@ -3,7 +3,7 @@
 #' @description Move file after simulations
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
-#' @param simulationName \code{character} name of simulation return by \link{runSimulation}
+#' @param simulationName \code{character} name of simulation return by \link{runSimulationFB}
 #' @param verbose \code{numeric} show log in console. Defaut to 1
 #' \itemize{
 #'  \item{0}{ : No log}

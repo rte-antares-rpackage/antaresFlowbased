@@ -5,7 +5,7 @@
 #' of the binding constraints for each MC year so as to take into account several flow-based
 #' domains time series in the model.
 #' 
-#' \code{runSimulation} function works on an ANTARES study whose input have been detailled with 
+#' \code{runSimulationFB} function works on an ANTARES study whose input have been detailled with 
 #' four new files, located in user/flowbased/ directory :
 #' 
 #' \itemize
@@ -44,7 +44,7 @@
 #' initFlowBased()
 #'
 #' # run flowbased simulation
-#' runSimulation(simulationName = "R_from", verbose = 1)
+#' runSimulationFB(simulationName = "R_from", verbose = 1)
 #'
 #'}
 #'
@@ -52,7 +52,7 @@
 #'
 #' @import plyr
 #'
-runSimulation <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
+runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
                           mcYears = NULL, opts = antaresRead::simOptions(),
                           verbose = 1){
 

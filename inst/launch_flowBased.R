@@ -17,4 +17,4 @@ initFlowBased(opts = opts,
 
 setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 
-mysim <- runSimulation(opts, "MystudyTest2")
+mysim <- runSimulationFB(opts, "MystudyTest2")

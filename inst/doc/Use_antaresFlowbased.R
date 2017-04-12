@@ -1,7 +1,7 @@
 ## ---- eval=FALSE---------------------------------------------------------
 #  antaresRead::setSimulationPath("D:/exemple_test", 0)
 #  
-#  # initialisation de l'étude flowbased
+#  # initialisation de l'?tude flowbased
 #  initFlowBased()
 
 ## ---- eval=FALSE---------------------------------------------------------
@@ -12,5 +12,5 @@
 #  getSolverAntares()
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  res_fb <- runSimulation(simulationName = "flowBased-Tuto")
+#  res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 

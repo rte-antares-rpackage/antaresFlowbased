@@ -9,7 +9,7 @@ moveFilesAfterStudy(opts, simulationName, verbose = 1)
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}}
 
-\item{simulationName}{\code{character} name of simulation return by \link{runSimulation}}
+\item{simulationName}{\code{character} name of simulation return by \link{runSimulationFB}}
 
 \item{verbose}{\code{numeric} show log in console. Defaut to 1
 \itemize{
