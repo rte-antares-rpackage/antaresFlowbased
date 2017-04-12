@@ -136,7 +136,9 @@ get_b36 <- function(extreme_x, full_xyz, n_block = NULL){
   faisableTriplet <- data.table(faisableTriplet)
   DD <- dist(res[re1,.SD, .SDcols = c("y1", "y2", "y3")])
   DD <- as.matrix(DD)
-  diag(DD)<- diag(DD)+1
+  DD <- dist(res[,4:6], method = "euclidean", p = 2, upper = FALSE)
+  DD <- as.matrix(DD)
+  DD[lower.tri(DD, diag = TRUE)] <- 1
   finalTriplet <- faisableTriplet[which(apply(DD, 1, min)>1e-6),]
   finalTriplet
 }
