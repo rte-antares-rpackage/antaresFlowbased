@@ -1,4 +1,22 @@
-#' Run all simulations
+#' Run antares Simulation with several flow-based time series
+#' 
+#' @description
+#' This function runs the simulation of an ANTARES study and changes the second members
+#' of the binding constraints for each MC year so as to take into account several flow-based
+#' domains time series in the model.
+#' 
+#' \code{runSimulation} function works on an ANTARES study whose input have been detailled with 
+#' four new files, located in user/flowbased/ directory :
+#' 
+#' \itemize
+#' {
+#'  \item weight.txt : names and weights of the binding constraints which define the FB domains
+#'  \item second_member.txt : second members of the binding constraints for each typical day and hour 
+#'  \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
+#'  \item scenario.txt : equivalent to scenario builder, define which time series should be use for each simulated mc-year
+#' }
+#' 
+#' Those files can be automatically build with the function \link{initFlowBased}.
 #'
 #' @param simulationName \code{character} name of simulation. Defaut to 'FlowBased'.
 #' @param mcAll \code{boolean} give mc_all compress results. Defaut to TRUE.
@@ -11,7 +29,6 @@
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#'
 #'
 #' @examples
 #'

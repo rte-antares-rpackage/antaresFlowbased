@@ -18,7 +18,12 @@ L'initialisation de l'étude se fait via la fonction *initFlowBased()*. Cela se 
 * scenario.txt
 * ts.txt
 
-Cette fonction utilise par défaut des fichiers présents dans le packages.
+Cette fonction utilise par défaut des fichiers présents dans le package. Ces fichers contiennent 12 jours types issus d'un clustering sur des domaines historique avec :
+
+* une période historique s'étallant de Novembre 2015 à Janvier 2017
+* une pondération plus forte des domaines aux heures de pointes.
+
+
 
 Avant toute chose, il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction *setSimulationPath()* du package **antaresRead** :
 
@@ -51,10 +56,10 @@ res_fb <- runSimulation(simulationName = "flowBased-Tuto")
 Les paramètres possibles sont les suivants : 
 
 * **simulationName** : Nom de la simulation
-* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
-* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
-* **mcYears** : mcYears à conserver, par défaut tous
+* **mcAll** : Calcul de la vision synthétique, fichiers mc-all (TRUE ou FALSE)
+* **mcInd** : Conservation de la vision année par année, fichiers mc-ind (TRUE ou FALSE)
+* **mcYears** : mcYears à conserver, par défaut tous (équivalent à une playlist)
 * **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
 * **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
 
-L'étude est alors consultable directement dans antares.
+Les résultats des simulations sont alors consultables directement dans antares et/ou lisible avec le package antaresRead.

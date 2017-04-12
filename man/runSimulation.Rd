@@ -2,11 +2,10 @@
 % Please edit documentation in R/runSimulation.R
 \name{runSimulation}
 \alias{runSimulation}
-\title{Run all simulations}
+\title{Run antares Simulation with several flow-based time series}
 \usage{
 runSimulation(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-  mcYears = NULL, opts = antaresRead::simOptions(), verbose = 1,
-  .test = TRUE)
+  mcYears = NULL, opts = antaresRead::simOptions(), verbose = 1)
 }
 \arguments{
 \item{simulationName}{\code{character} name of simulation. Defaut to 'FlowBased'.}
@@ -25,11 +24,24 @@ runSimulation(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
  \item{1}{ : Short log}
  \item{2}{ : Long log}
 }}
-
-\item{.test}{\code{boolean} if TRUE, just run 3 scenarios.}
 }
 \description{
-Run all simulations
+This function runs the simulation of an ANTARES study and changes the second members
+of the binding constraints for each MC year so as to take into account several flow-based
+domains time series in the model.
+
+\code{runSimulation} function works on an ANTARES study whose input have been detailled with 
+four new files, located in user/flowbased/ directory :
+
+\itemize
+{
+ \item weight.txt : names and weights of the binding constraints which define the FB domains
+ \item second_member.txt : second members of the binding constraints for each typical day and hour 
+ \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
+ \item scenario.txt : equivalent to scenario builder, define which time series should be use for each simulated mc-year
+}
+
+Those files can be automatically build with the function \link{initFlowBased}.
 }
 \examples{
 

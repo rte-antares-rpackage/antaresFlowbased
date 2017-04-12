@@ -80,7 +80,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>scenario.txt</li>
 <li>ts.txt</li>
 </ul>
-<p>Cette fonction utilise par défaut des fichiers présents dans le packages.</p>
+<p>Cette fonction utilise par défaut des fichiers présents dans le package. Ces fichers contiennent 12 jours types issus d’un clustering sur des domaines historique avec :</p>
+<ul>
+<li>une période historique s’étallant de Novembre 2015 à Janvier 2017</li>
+<li>une pondération plus forte des domaines aux heures de pointes.</li>
+</ul>
 <p>Avant toute chose, il est nécéssaire d’indiquer l’étude antares sur laquelle nous souhaitons travailler via la fonction <em>setSimulationPath()</em> du package <strong>antaresRead</strong> :</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">antaresRead::<span class="kw">setSimulationPath</span>(<span class="st">&quot;D:/exemple_test&quot;</span>, <span class="dv">0</span>)
 
@@ -100,13 +104,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Les paramètres possibles sont les suivants :</p>
 <ul>
 <li><strong>simulationName</strong> : Nom de la simulation</li>
-<li><strong>mcAll</strong> : Calcul des mcAll (TRUE ou FALSE)</li>
-<li><strong>mcInd</strong> : Conservation des mcInd (TRUE ou FALSE)</li>
-<li><strong>mcYears</strong> : mcYears à conserver, par défaut tous</li>
+<li><strong>mcAll</strong> : Calcul de la vision synthétique, fichiers mc-all (TRUE ou FALSE)</li>
+<li><strong>mcInd</strong> : Conservation de la vision année par année, fichiers mc-ind (TRUE ou FALSE)</li>
+<li><strong>mcYears</strong> : mcYears à conserver, par défaut tous (équivalent à une playlist)</li>
 <li><strong>opts</strong> : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l’environnement global</li>
 <li><strong>verbose</strong> : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.</li>
 </ul>
-<p>L’étude est alors consultable directement dans antares.</p>
+<p>Les résultats des simulations sont alors consultables directement dans antares et/ou lisible avec le package antaresRead.</p>
 </div>
 
 
