@@ -21,6 +21,3 @@ moveFilesAfterStudy(opts, simulationName, verbose = 1)
 \description{
 Move file after simulations
 }
-\examples{
-
-}

@@ -11,3 +11,6 @@ modifyGeneralSettingPlayList(generaldataIniPatch, playList)
 
 \item{playList}{\code{numeric}, playList}
 }
+\description{
+Modify playList
+}

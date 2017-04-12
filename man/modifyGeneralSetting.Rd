@@ -9,3 +9,6 @@ modifyGeneralSetting(generaldataIniPatch)
 \arguments{
 \item{generaldataIniPatch}{\code{character}, path of generaldataIni}
 }
+\description{
+update general data
+}

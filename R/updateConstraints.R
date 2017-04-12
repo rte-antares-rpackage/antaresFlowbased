@@ -90,8 +90,6 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
 #' @param listData \code{list}, bindingconstraints.ini as list R
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #'
-#' @examples
-#'
 #' @export
 #'
 writeBindingConstraintsIni <- function(listData, opts = antaresRead::simOptions()){

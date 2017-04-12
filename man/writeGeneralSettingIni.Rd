@@ -11,3 +11,6 @@ writeGeneralSettingIni(generaldataIniPatch, generalSetting)
 
 \item{generalSetting}{\code{Character}, Path to ini file}
 }
+\description{
+Write generaldata.ini file
+}

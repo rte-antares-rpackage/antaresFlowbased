@@ -1,5 +1,7 @@
-#' Move file after simulations
+#' @title Move file after simulations
 #'
+#' @description Move file after simulations
+#' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param simulationName \code{character} name of simulation return by \link{runSimulation}
 #' @param verbose \code{numeric} show log in console. Defaut to 1
@@ -8,7 +10,6 @@
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#' @examples
 #'
 #' @export
 #' @import antaresRead
@@ -91,10 +92,6 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 #'  \item{2}{ : Long log}
 #'}
 #'
-#' @examples
-#'
-#' \dontrun{
-#' }
 #'
 #' @export
 #' @import plyr data.table

@@ -21,9 +21,3 @@ aggregateResult(opts, newname, verbose = 1)
 \description{
 Creation of Mc_all
 }
-\examples{
-
-\dontrun{
-}
-
-}

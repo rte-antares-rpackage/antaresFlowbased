@@ -11,6 +11,9 @@ updateGeneralSettingIni(opts = antaresRead::simOptions(), playList = NULL)
 
 \item{playList}{\code{numeric}, playList}
 }
+\description{
+Change bindingconstraints.ini file
+}
 \examples{
 
 \dontrun{

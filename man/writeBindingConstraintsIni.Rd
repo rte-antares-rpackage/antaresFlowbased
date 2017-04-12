@@ -14,6 +14,3 @@ writeBindingConstraintsIni(listData, opts = antaresRead::simOptions())
 \description{
 Write bindingconstraints.ini file
 }
-\examples{
-
-}
