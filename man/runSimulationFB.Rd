@@ -20,9 +20,9 @@ runSimulationFB(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
 
 \item{verbose}{\code{numeric} show log in console. Defaut to 1
 \itemize{
- \item{0}{ : No log}
- \item{1}{ : Short log}
- \item{2}{ : Long log}
+ \item 0 : No log
+ \item 1 : Short log
+ \item 2 : Long log
 }}
 }
 \description{
@@ -33,8 +33,7 @@ domains time series in the model.
 \code{runSimulationFB} function works on an ANTARES study whose input have been detailled with 
 four new files, located in user/flowbased/ directory :
 
-\itemize
-{
+\itemize{
  \item weight.txt : names and weights of the binding constraints which define the FB domains
  \item second_member.txt : second members of the binding constraints for each typical day and hour 
  \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
@@ -46,7 +45,6 @@ Those files can be automatically build with the function \link{initFlowBased}.
 \examples{
 
 \dontrun{
-
 # set study
 antaresRead::setSimulationPath("D:/exemple_test", 0)
 
@@ -58,7 +56,6 @@ initFlowBased()
 
 # run flowbased simulation
 runSimulationFB(simulationName = "R_from", verbose = 1)
-
 }
 
 }

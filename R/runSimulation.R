@@ -8,8 +8,7 @@
 #' \code{runSimulationFB} function works on an ANTARES study whose input have been detailled with 
 #' four new files, located in user/flowbased/ directory :
 #' 
-#' \itemize
-#' {
+#' \itemize{
 #'  \item weight.txt : names and weights of the binding constraints which define the FB domains
 #'  \item second_member.txt : second members of the binding constraints for each typical day and hour 
 #'  \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
@@ -25,15 +24,14 @@
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param verbose \code{numeric} show log in console. Defaut to 1
 #' \itemize{
-#'  \item{0}{ : No log}
-#'  \item{1}{ : Short log}
-#'  \item{2}{ : Long log}
-#'}
+#'  \item 0 : No log
+#'  \item 1 : Short log
+#'  \item 2 : Long log
+#' }
 #'
 #' @examples
 #'
 #' \dontrun{
-#'
 #' # set study
 #' antaresRead::setSimulationPath("D:/exemple_test", 0)
 #'
@@ -45,8 +43,7 @@
 #'
 #' # run flowbased simulation
 #' runSimulationFB(simulationName = "R_from", verbose = 1)
-#'
-#'}
+#' }
 #'
 #' @export
 #'
@@ -106,8 +103,8 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   .errorTest(scenario, verbose, "Load of scenario.txt")
 
   #Exclude scenarios to redefine
-  if(mcYears != "all"){
-    scenario <- scenario[!mcYears] <- NA
+  if(mcYears[1] != "all"){
+    scenario[-c(mcYears)] <- NA
   }
 
   ##Prepare CMD to run antares
@@ -123,7 +120,8 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   cmd <- sprintf(cmd, AntaresPatch, opts$studyPath, simNameAlea)
 
   # simulation
-  allScenario <- unique(scenario$simulation)
+  allScenario <- as.numeric(na.omit(unique(scenario$simulation)))
+  
   # if(.test){
   #   allScenario <- allScenario[2:3]
   # }
