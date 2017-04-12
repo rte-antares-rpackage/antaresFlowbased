@@ -21,7 +21,7 @@
 #' @param simulationName \code{character} name of simulation. Defaut to 'FlowBased'.
 #' @param mcAll \code{boolean} give mc_all compress results. Defaut to TRUE.
 #' @param mcInd \code{boolean} keep mc_ind. Defaut to TRUE.
-#' @param mcYears \code{numeric} include mcYears. Default NULL (all mcYears are included)
+#' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are included)
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param verbose \code{numeric} show log in console. Defaut to 1
 #' \itemize{
@@ -53,7 +53,7 @@
 #' @import plyr
 #'
 runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-                          mcYears = NULL, opts = antaresRead::simOptions(),
+                          mcYears = "all", opts = antaresRead::simOptions(),
                           verbose = 1){
 
   # mcAll & mcInd control
@@ -106,7 +106,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   .errorTest(scenario, verbose, "Load of scenario.txt")
 
   #Exclude scenarios to redefine
-  if(!is.null(mcYears)){
+  if(mcYears != "all"){
     scenario <- scenario[!mcYears] <- NA
   }
 

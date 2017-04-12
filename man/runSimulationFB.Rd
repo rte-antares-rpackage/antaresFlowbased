@@ -5,7 +5,7 @@
 \title{Run antares Simulation with several flow-based time series}
 \usage{
 runSimulationFB(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-  mcYears = NULL, opts = antaresRead::simOptions(), verbose = 1)
+  mcYears = "all", opts = antaresRead::simOptions(), verbose = 1)
 }
 \arguments{
 \item{simulationName}{\code{character} name of simulation. Defaut to 'FlowBased'.}
@@ -14,7 +14,7 @@ runSimulationFB(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
 
 \item{mcInd}{\code{boolean} keep mc_ind. Defaut to TRUE.}
 
-\item{mcYears}{\code{numeric} include mcYears. Default NULL (all mcYears are included)}
+\item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are included)}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
