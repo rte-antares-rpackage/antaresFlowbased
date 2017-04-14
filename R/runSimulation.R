@@ -57,13 +57,27 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   if(mcAll == FALSE & mcInd == FALSE){
     stop("mcAll and mcInd are equal to FALSE")
   }
-
+  
+  
   # set simulation parent / first study
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
   options(warn = oldw)
 
+  ##Test version of antares solver
+  solver <- getSolverAntares()
+  solver <- unlist(gsub("-solver.exe", "", solver))
+  solver <- strsplit(solver, "antares-")[[1]]
+  solver <- solver[[length(solver)]]
+  versionSolver <- substr(solver, 1, 1)
+  versionStudy <- substr(opts$antaresVersion,1,1)
+  
+  if(versionSolver != versionStudy){
+    stop(paste0("Imcompatibility between antares solver version (", versionSolver, ") and study version(", versionStudy), ")")
+  }
+  
+  
   # control mode
   if(!opts$parameters$general$mode %in%c("Economy" , "Adequacy")){
     stop(paste0("Study must be in 'Economy' or 'Adequacy' mode. Function not available for '", opts$parameters$general$mode, "'"))
@@ -102,9 +116,32 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
   .errorTest(scenario, verbose, "Load of scenario.txt")
 
+  
+  ##Control input files scenario
+  if(opts$parameters$general$nbyears < nrow(scenario))
+  {
+    stop(paste0("Error in input files : there are more scenarios (in user/flowbased/scenario.txt) than MCyears"))
+  }
+  
+  #All scenario in ts
+  if(!all(as.character(scenario$simulation) %in% names(ts))){
+    concernScenario <-  paste(unique(as.character(scenario$simulation)[!as.character(scenario$simulation) %in% names(ts)]), collapse = "; ")
+    stop(paste0("Error in input files : no ts (in /user/flowbased/ts.txt) for scenarios :",concernScenario))
+  }
+  
+
+  
   #Exclude scenarios to redefine
   if(mcYears[1] != "all"){
     scenario[-c(mcYears)] <- NA
+  }
+  
+  #All hours in second members
+  second_member2 <- second_member[,.(Id_hour = list(sort(Id_hour))), by = c("Name", "Id_day")]
+  if(!all(unlist(lapply(second_member2$Id_hour, function(X)all(X == 1:24))))){
+    concernTuples <- second_member2[!unlist(lapply(second_member2$Id_hour, function(X)all(X == 1:24)))]
+    concernTuples <- paste("Constraint", concernTuples$Name, "Day",concernTuples$Id_day, collapse = ";")
+    stop(paste0("Missing hours for tuples constraints/day ", concernTuples))
   }
 
   ##Prepare CMD to run antares
