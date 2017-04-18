@@ -2,6 +2,8 @@
 #'
 #' @param weigth \code{character} path
 #' 
+#' @return weigth \code{data.table} weigth file
+#' 
 .getWeight <- function(weigth){
   weigth <- data.table::fread(weigth, sep = ";", dec = ",")
   names(weigth) <- names(weigth)%>>%
@@ -26,6 +28,8 @@
 #'
 #' @param secondMember \code{character} path
 #' 
+#' @return secondMember \code{data.table} secondMember file
+#' 
 .getSecondMember <- function(secondMember){
   secondMember <- data.table::fread(secondMember, sep = ";", dec = ",")
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
@@ -46,6 +50,8 @@
 #'
 #' @param daytype \code{character} path
 #' 
+#' @return daytype \code{data.table} daytype file
+#' 
 .getDayType <- function(daytype){
   data.table::fread(daytype, sep = " ", dec = ",", header = TRUE)
 }
@@ -62,6 +68,8 @@
 }
 
 #' generate scenario
+#' 
+#' @return scenario \code{data.frame} scenario file
 .generateScenario <- function(){
   data.frame(simulation = rep(1:200, 5))
 }

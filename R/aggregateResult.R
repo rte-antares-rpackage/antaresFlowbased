@@ -415,6 +415,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @param SDcolsStartareas \code{numeric} first column of data for areas
 #' @param SDcolsStartClust \code{numeric} first column of data for details
 #'
+#' @return value {data.table} value selected
 .giveValue <- function(dta, SDcolsStartareas, SDcolsStartClust)
 {
   value <- list(areas = dta$areas[,lapply(.SD, as.numeric), .SDcols = (SDcolsStartareas+1):ncol(dta$areas)],
@@ -429,7 +430,9 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' 
 #' @param X \code{data.table} data load which 
 #' antaresRead::readAntares and extract which .giveValue
-#'  
+#' 
+#' @return res {data.table} stats computed
+#' 
 .creatStats <- function(X){
   res <- list(sum = X, min = X, max = X,
               sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
@@ -447,6 +450,8 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @param X \code{data.table} data init which .creatStats
 #' @param Y \code{data.table} data load which 
 #' antaresRead::readAntares and extract which .giveValue
+#' 
+#' @return X {data.table} stats updated
 #' 
 .updateStats <- function(X, Y){
   X$sum <-  X$sum + Y$sum
@@ -561,6 +566,8 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
 #' @param mcALLNum \code{numeric} current mcYears position
 #' @param nbmcallTOT \code{numeric} number of  mcYear
+#' 
+#' @return progress bar update
 #' 
 .progBar <- function(pb, timeStep, mcALLNum, nbmcallTOT)
 {

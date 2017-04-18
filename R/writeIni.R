@@ -29,7 +29,9 @@ writeIni <- function(listData, pathIni){
 }
 
 #' Change R format to ini format
-#' @param val value to update
+#' @param val value to format
+#' 
+#' @return val formated value
 #' 
 .formatedIni <- function(val)
 {
