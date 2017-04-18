@@ -1,4 +1,7 @@
-#Get weigth file
+#' Load weigth file
+#'
+#' @param weigth \code{character} path
+#' 
 .getWeight <- function(weigth){
   weigth <- data.table::fread(weigth, sep = ";", dec = ",")
   names(weigth) <- names(weigth)%>>%
@@ -8,44 +11,66 @@
   weigth
 }
 
-#set weigth file
+#' Write weigth file
+#'
+#' @param path \code{character} path
+#' @param weightData \code{data.frame} data
+#' 
 .setWeight <- function(path, weightData){
   tmpfile <- file(description=path, "w")
   write.table(weightData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
   close(tmpfile) 
 }
 
-#get second member file
+#' Load second member file
+#'
+#' @param secondMember \code{character} path
+#' 
 .getSecondMember <- function(secondMember){
   secondMember <- data.table::fread(secondMember, sep = ";", dec = ",")
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
 }
 
-#set second member file
+#' Write second member file
+#'
+#' @param path \code{character} path
+#' @param secondMemberData \code{data.frame} data
+#' 
 .setSecondMember <- function(path, secondMemberData){
   tmpfile <- file(description=path, "w")
   write.table(secondMemberData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
   close(tmpfile) 
 }
 
-#get day type file
+#' Load daytype file
+#'
+#' @param daytype \code{character} path
+#' 
 .getDayType <- function(daytype){
   data.table::fread(daytype, sep = " ", dec = ",", header = TRUE)
 }
 
-#set day type file
+#' Write daytype file
+#'
+#' @param path \code{character} path
+#' @param dayTypeData \code{data.frame} data
+#' 
 .setDayType <- function(path, dayTypeData){
   tmpfile <- file(description=path, "w")
   write.table(dayTypeData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
   close(tmpfile) 
 }
 
-#generate scenario
+#' generate scenario
 .generateScenario <- function(){
   data.frame(simulation = rep(1:200, 5))
 }
 
-#set scenario
+#' Write scenario file
+#'
+#' @param path \code{character} path
+#' @param scenario \code{data.frame} data
+#' 
 .setScenario <- function(path, scenario){
   tmpfile <- file(description=path, "w")
   write.table(scenario, tmpfile, sep = "\t", dec = ".", row.names = FALSE)

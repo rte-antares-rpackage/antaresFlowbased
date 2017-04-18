@@ -407,7 +407,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
 
 }
 
-
+#' @title Extract value part of data
+#'
+#' @description Extract value part of data
+#' 
+#' @param dta \code{data.table} of data load which antaresRead::readAntares
+#' @param SDcolsStartareas \code{numeric} first column of data for areas
+#' @param SDcolsStartClust \code{numeric} first column of data for details
+#'
 .giveValue <- function(dta, SDcolsStartareas, SDcolsStartClust)
 {
   value <- list(areas = dta$areas[,lapply(.SD, as.numeric), .SDcols = (SDcolsStartareas+1):ncol(dta$areas)],
@@ -416,6 +423,13 @@ aggregateResult <- function(opts, newname, verbose = 1){
   value
 }
 
+#' @title Create stat file compute min, max sd and mean
+#'
+#' @description Create stat file compute min, max sd and mean
+#' 
+#' @param X \code{data.table} data load which 
+#' antaresRead::readAntares and extract which .giveValue
+#'  
 .creatStats <- function(X){
   res <- list(sum = X, min = X, max = X,
               sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
@@ -426,6 +440,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
   res
 }
 
+#' @title Update data min, max sd and mean
+#'
+#' @description Update data min, max sd and mean
+#' 
+#' @param X \code{data.table} data init which .creatStats
+#' @param Y \code{data.table} data load which 
+#' antaresRead::readAntares and extract which .giveValue
+#' 
 .updateStats <- function(X, Y){
   X$sum <-  X$sum + Y$sum
   X$min <-  pmin(X$min , Y$min)
@@ -434,6 +456,27 @@ aggregateResult <- function(opts, newname, verbose = 1){
   X
 }
 
+
+
+#' @title Write mc-all files
+#'
+#' @description Write mc-all files
+#' 
+#' @param dta \code{data.table} data
+#' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
+#' @param fileType \code{character} must be values or details
+#' @param ctry \code{character} country.
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
+#' @param folderType \code{character} must be areas or links
+#' @param nbvar \code{numeric} for header write, currently ncol(dta)
+#' @param indexMin \code{numeric} for header write, depend of number of row write and calandar
+#' @param indexMax \code{numeric} for header write, depend of number of row write and calandar
+#' @param ncolFix \code{numeric} for header write
+#' @param nomcair \code{character} for header write, names of variables
+#' @param unit \code{character} for header write, unit of variables
+#' @param nomStruct \code{character} for header write, depend of timestep
+#' @param Stats \code{character} for header write, stats compute for eatch variables
+#'  
 .writeFileOut <- function(dta, timestep, fileType, ctry, opts, folderType, nbvar,
                           indexMin, indexMax, ncolFix, nomcair, unit, nomStruct, Stats){
 
@@ -483,6 +526,16 @@ aggregateResult <- function(opts, newname, verbose = 1){
   close(file)
 }
 
+
+#' @title Edit info on output folder
+#'
+#' @description Edit info on output folder
+#' 
+#' @param outData \code{character} out folder path
+#' @param simulationName \code{character} simulation name
+#' @param dateTim2 \code{datetime} simulation begin date time
+#' @param dtTim \code{datetime} simulation end date time
+#' 
 .editOutputInfo <- function(outData, simulationName, dateTim2, dtTim)
 {
   #Edit infos output simulation
@@ -498,6 +551,17 @@ aggregateResult <- function(opts, newname, verbose = 1){
   writeIni(infosIni, iniPath)
 }
 
+
+#' @title Progress bar
+#'
+#' @description Progress bar
+#' 
+#' @param pb \code{progressbar} progress bar to update
+#' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
+#' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
+#' @param mcALLNum \code{numeric} current mcYears position
+#' @param nbmcallTOT \code{numeric} number of  mcYear
+#' 
 .progBar <- function(pb, timeStep, mcALLNum, nbmcallTOT)
 {
 

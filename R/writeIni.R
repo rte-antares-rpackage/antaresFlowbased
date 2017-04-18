@@ -28,7 +28,9 @@ writeIni <- function(listData, pathIni){
   close(con)
 }
 
-# Change R format to ini format
+#' Change R format to ini format
+#' @param val value to update
+#' 
 .formatedIni <- function(val)
 {
   if(class(val) %in% c("numeric", "integer")){
@@ -45,7 +47,12 @@ writeIni <- function(listData, pathIni){
   }
 }
 
-# write ini (raw by raw)
+#' write ini (raw by raw)
+#' 
+#' @param dtaToTransform \code{list} data to write
+#' @param namesdtaToTransform \code{character} names of data to write
+#' @param con file connection where data are write
+#'  
 .formatedIniList <- function(x, dtaToTransform, namesdtaToTransform, con = con){
   if(!is.null(namesdtaToTransform))
   {
