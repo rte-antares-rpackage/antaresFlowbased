@@ -144,6 +144,16 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
     stop(paste0("Missing hours for tuples constraints/day ", concernTuples))
   }
 
+  #all ts day are predent in second_member
+  typeDayCtrl <- unique(second_member$Id_day)
+  
+  if(!all(unlist(data.frame(ts)[,-1])%in%typeDayCtrl)){
+    concerDay <- unique(unlist(data.frame(ts)[,-1])[!unlist(data.frame(ts)[,-1])%in%typeDayCtrl])
+    concerDay <- paste0(concerDay, collapse = "; ")
+    stop(paste0("Some days specify in ts (in /user/flowbased/ts.txt) are not in second_member (in user/flowbased/second_member.txt) :", concerDay))
+  }
+  
+  
   ##Prepare CMD to run antares
   AntaresPatch <- getSolverAntares()
   if(is.null(AntaresPatch)){
