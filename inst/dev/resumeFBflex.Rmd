@@ -1,0 +1,66 @@
+---
+title: ""
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    css: styles_flex.css
+---
+
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(antaresFlowbased)
+```
+
+Row 
+-----------------------------------------------------------------------
+### C {.no-title .centertext}
+```{r}
+valueBox(paste0("Results for hour ", hour, " and day type ", dayType, " generate ", Sys.Date()))
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### C {.no-title .display}
+```{r}
+```
+
+### Error of type 1
+```{r}
+valueBox(paste0(round(dta$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(dta$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+### C {.no-title .display}
+
+Row 
+-----------------------------------------------------------------------
+
+### BE/DE
+```{r}
+graphFlowBased2D(dta, "BE", "DE")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(dta, "BE", "FR")
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(dta, "DE", "FR")
+```
+
+
+
+
