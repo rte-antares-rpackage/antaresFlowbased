@@ -11,39 +11,44 @@ getVertices <- function(face, b){
   IDfin <- 1:nrow(B)
   res <- sapply(IDfin, function(X)
   {
-    sapply(IDfin, function(Y){
-      if(Y>=X)
-      {
+    # sapply(IDfin, function(Y){
+    #   if(Y>=X)
+    #   {
         sapply(IDfin, function(Z){
           if(Z>=Y)
           {
             sapply(IDfin, function(ZZ){
               if(ZZ>=Z)
               {
-                Bijk <- rbind(B[X,], B[Y,], B[Z,], B[ZZ,], rep(1, 4))
-                bijk <- c(b[X], b[Y], b[Z], b[ZZ], 0)
-                try({x <- qr.solve(Bijk, bijk)
+                Bijk <- rbind(B[X,], B[X,], B[Z,], B[ZZ,], rep(1, 4))
+                bijk <- c(b[X], b[X], b[Z], b[ZZ], 0)
+                try({
+                qr(Bijk)
+                  
+                x <- qr.solve(Bijk, bijk)
                 d <- b+1e-6
                 if(all(B%*%x<=d)){
-                  return(list(x = X, y = Y, z = Z, zz = ZZ, y1 = x[1], y2 = x[2], y3 = x[3], y4 = x[4]))
+                  return(list(x = X, y = X, z = Z, zz = ZZ, y1 = x[1], y2 = x[2], y3 = x[3], y4 = x[4]))
                 }
                 }, silent = TRUE)
               }
               NULL
             },simplify = FALSE)
-          }
-          
-        }, simplify = FALSE)
+        #   }
+        #   
+        # }, simplify = FALSE)
       }
     }, simplify = FALSE)
   }, simplify = FALSE)%>>%
     unlist%>>%
     matrix(ncol = 8, byrow = TRUE)
+  
   res <- res[round(rowSums(res[,5:8]), 2) == 0,]
-  DD <- dist(res[,5:7], method = "euclidean", p = 2, upper = FALSE)
+  DD <- dist(res[,5:8], method = "euclidean", p = 2, upper = FALSE)
   DD <- as.matrix(DD)
   DD[lower.tri(DD, diag = TRUE)] <- 1
   res <- res[which(apply(DD, 2, min)>1e-6),5:7]
+  
   res
 }
 
@@ -287,5 +292,18 @@ resolvB <- function(pointX, faceY, probleme, alpha)
   tt
 }
 
+#' Transform B to antares format
+#'
+#' @param B \code{data.table}, face for 3 country, BE, DE anf FR
+#' 
+.fromBtoAntares <- function(B){
+  coefAntares <- data.table(Name = paste0("FB", 1:nrow(B)),
+                            BE.FR = B$BE - B$FR,
+                            DE.FR = B$DE - B$FR,
+                            DE.NL = B$DE,
+                            BE.NL = B$BE,
+                            BE.DE = B$BE - B$DE )
+  coefAntares
+}
 
 

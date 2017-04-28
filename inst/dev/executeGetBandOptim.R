@@ -5,20 +5,66 @@
 # 
 
 
-allFB <- cumputeFB(dayType = 5, hour = 8)
-generateRaportFb(allFB, 5, 8)
+#B avec kemans
+PTDF <- fread("inst/optimWork/PTDF.csv")
+PTDFKm <- PTDF[,list(BE-NL, DE-NL, FR - NL)]
+PTDFKm <- scale(PTDFKm)
+res <- cutree(hclust(dist(PTDFKm)), 36)
+PTDF$vect <- res
+PTDF[, lapply(.SD, mean), .SDcols = c("BE", "DE", "FR"), by = "vect"]
 
 
 
 
-sapply(1:12, function(X){
-  generateRaportFb(allFB, 1, 8)
+
+
+
+res <- round(res, 1)
+res <- data.table(res)
+out2 <- round(out2, 1)
+
+write.table(res[!apply(res, 1, function(X){
+  paste0(X[5:8], collapse = "")%in%paste0(out2$V1, out2$V2, out2$V3, out2$V4)
+}),], "../../getSom/nein.csv", row.names = FALSE, sep = ";", dec = ",")
+write.table(res[apply(res, 1, function(X){
+  paste0(X[5:8], collapse = "")%in%paste0(out2$V1, out2$V2, out2$V3, out2$V4)
+}),], "../../getSom/in.csv", row.names = FALSE, sep = ";", dec = ",")
+
+##Optim et rapport
+allFB <- cumputeFB(dayType = 1:12, hour = 12:24)
+#generateRaportFb(allFB, 2, 2)
+allFBT <- cumputeFB(dayType = 1:12, hour = 12:24)
+
+
+sapply( 1:12, function(X){
+  sapply( 12:24, function(Y){
+    generateRaportFb(allFB, Y, X)
+  })
 })
 
+names(res) <- c("BE", "DE", "FR")
+res <- data.frame(res)
 
-graphFlowBased2D(allFB$outFlowBased[[1]], "BE", "FR")
-
-
+res2 <- data.frame(ctry1 = res[,1], 
+                   ctry2 = res[,2])
+res2 <- res2[chull(res2),]
+res2 <- rbind(res2, res2[1,])
+res <-  res2
+library(rAmCharts)
+amPlot(res$ctry1, res$ctry2, type = "l")
+##Data
+##Plot
+pipeR::pipeline(
+  amXYChart(dataProvider = res),
+  addGraph(balloonText = 'x:<b>[[x]]</b> y:<b>[[y]]</b>',
+           bullet = 'circle', xField = 'ctry1',yField = 'ctry2',
+           lineAlpha = 1),
+  addGraph(balloonText = 'x:<b>[[x]]</b> y:<b>[[y]]</b>',
+           bullet = 'circle', xField = 'ctry1',yField = 'ctry2',
+           lineAlpha = 1),
+  setChartCursor()
+  
+)
 
 
 

@@ -8,12 +8,10 @@
 #' @param hour \code{character / numeric} default All, can specify hour to compute
 #' 
 #' @import ROI
-#' @import ROI.plugin.glpk
+#' @import ROI.plugin.clp
 #'
 #' @export
-cumputeFB <- function(constrain = system.file("/optimWork/constraints.csv", package
-                                              = "antaresFlowbased"),
-                      cluster = system.file("/optimWork/cluster.csv", package
+cumputeFB <- function(cluster = system.file("/optimWork/cluster.csv", package
                                             = "antaresFlowbased"),
                       PTDF = system.file("/optimWork/PTDF.csv", package
                                          = "antaresFlowbased"),
@@ -23,7 +21,6 @@ cumputeFB <- function(constrain = system.file("/optimWork/constraints.csv", pack
 {
   
   univ <- .univ(nb = 200000, bInf = -10000, bSup = 10000)
-  constrain <- fread(constrain)
   cluster <- fread(cluster)
   face <- fread(face)
   PTDF <- fread(PTDF)
@@ -41,11 +38,12 @@ cumputeFB <- function(constrain = system.file("/optimWork/constraints.csv", pack
   flowbased$outFlowBased <- rep(list(), nrow(flowbased))
   sapply(hour, function(X){
     sapply(dayType, function(Y){
-      
+      print(paste0("hour ", X))
+      print(paste0("dayType ", Y))
       dateD <- cluster[Id == Y]$Num_date
-      constrainSel <- constrain[Num_date == dateD & Period == X]
-      
       PTDFsel <- PTDF[Id_day == Y & Period == X]
+   
+      
       pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
       pointX <- data.table(pointX)  
       
@@ -57,7 +55,7 @@ cumputeFB <- function(constrain = system.file("/optimWork/constraints.csv", pack
       out <- searchAlpha(face = face, pointX = pointX, 
                          faceY = faceY,
                          probleme = res,
-                         constraints = constrainSel,
+                         PTDF = PTDFsel,
                          univ = univ)
       out$pointX <- data.frame(pointX) 
       names(out$pointX) <- c( "BE", "DE", "FR")
@@ -69,6 +67,10 @@ cumputeFB <- function(constrain = system.file("/optimWork/constraints.csv", pack
       NULL
     })
   })%>>%invisible
+  
+  ##From B to antares
+ antaresFace <- .fromBtoAntares(face)
+  
   
   flowbased
 }

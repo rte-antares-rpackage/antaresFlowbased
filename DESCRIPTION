@@ -20,10 +20,10 @@ Imports:
   testthat (>= 1.0.2),
   plyr (>= 1.8.4),
   ROI (>= 0.2-1),
-  ROI.plugin.glpk (>= 0.2-1),
+  ROI.plugin.clp (>= 0.1),
   rmarkdown (>= 1.4),
   flexdashboard(>= 0.5),
-  ggplot2(>= 2.2.1)
+  rAmCharts(>= 2.1.3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

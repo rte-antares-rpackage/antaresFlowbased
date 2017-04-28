@@ -46,9 +46,9 @@ valueBox(paste0(round(dta$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row 
 -----------------------------------------------------------------------
 
-### BE/DE
+### BE/NL
 ```{r}
-graphFlowBased2D(dta, "BE", "DE")
+graphFlowBased2D(dta, "BE", "NL")
 ```
 
 ### BE/FR

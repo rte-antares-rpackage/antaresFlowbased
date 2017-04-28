@@ -4,28 +4,65 @@
 #' @param ctry1 \code{character}, country in X
 #' @param ctry2 \code{character}, country in Y
 #'
-#' @import pipeR
+#' @import rAmCharts
 #'
 #' @export
 graphFlowBased2D <- function(flowbased, ctry1, ctry2)
 {
   
+  if(ctry2 == "NL"){
+    ptctry2 <- -rowSums(flowbased$pointsY)
+    ptctry2X <- -rowSums(flowbased$pointX)
+  }else{
+    ptctry2 <- flowbased$pointsY[[ctry2]]
+    ptctry2X <- flowbased$pointX[[ctry2]]
+  }
+  
   res <- data.frame(ctry1 = flowbased$pointsY[[ctry1]], 
-                    ctry2 = flowbased$pointsY[[ctry2]])
+                    ctry2 = ptctry2)
   res <- res[chull(res),]
+  res <- rbind(res, res[1,])
   res2 <- data.frame(ctry1 = flowbased$pointX[[ctry1]], 
-                     ctry2 = flowbased$pointX[[ctry2]])
+                     ctry2 = ptctry2X)
   res2 <- res2[chull(res2),]
-  res$Domaine <- "Modélisé"
-  res2$Domaine <- "Réel"
-  res <- rbind(res, res2)
-  library(ggplot2)
-  plot <- ggplot(data = res, aes(x = ctry1, y = ctry2, colour=Domaine, fill = Domaine)) +
-    geom_polygon(data = res, alpha = 0.5) +
-    labs(x = ctry1, y = ctry2) + 
-    ylim(-7000, 7000) +
-    xlim(-7000, 7000)
-  plot
+  res2 <- rbind(res2, res2[1,])
+
+  
+  max_r <- max(nrow(res), nrow(res2))
+  if(nrow(res)<max_r){
+    res <- rbind(res, data.frame(ctry1 = rep(NA, max_r-nrow(res)),
+                 ctry2 = rep(NA, max_r-nrow(res))))
+  }
+  if(nrow(res2)<max_r){
+    res2 <- rbind(res2, data.frame(ctry1 = rep(NA,max_r- nrow(res2)),
+                                 ctry2 = rep(NA, max_r-nrow(res2))))
+  }
+  
+  out <- cbind(res, res2)
+  names(out) <- c("Mctry1", "Mctry2", "Rctry1", "Rctry2")
+  
+  out <- round(out, 2)
+  
+  
+  pipeR::pipeline(
+    amXYChart(dataProvider = out),
+    addGraph(title = "Modélisé", balloonText = 
+               paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             
+             bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
+             lineAlpha = 1),
+    addGraph(title = "Réel",balloonText =    
+               paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
+             lineAlpha = 1),
+    setChartCursor(),
+    addValueAxes(title = ctry1, minimum = -7000, maximum = 7000),
+    addValueAxes(title = ctry2, position = "bottom", minimum = -7000, maximum = 7000),
+    setExport(enabled = TRUE),
+    setLegend(enabled = TRUE)
+    
+  )
+  
 }
 
 #' Generate html report

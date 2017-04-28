@@ -4,13 +4,13 @@
 #' @param pointX \code{data.table}, extreme points for 3 country, BE, DE anf FR
 #' @param faceY \code{data.table}, face for 3 country, BE, DE anf FR for all tuple in face
 #' @param probleme \code{optimization_model}, make which askProbleme
-#' @param constraints \code{data.frame} constraints
+#' @param PTDF \code{data.frame} PTDF
 #' @param univ \code{matrix} generate which .univ
 #' 
 #' @import pipeR
 #'
 #' @export
-searchAlpha <- function(face, pointX, faceY, probleme, constraints, univ){
+searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ){
   alpha <- 0.5
   tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
   tt
@@ -22,7 +22,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, constraints, univ){
   # FY <- cbind(FACE_Y, bSol)
   FY <- cbind(face,  bSol = tt$solution[1:nrow(face)])
   
-  error <- .giveError(FY, constraints = constraints, univ = univ)
+  error <- .giveError(FY, PTDF = PTDF, univ = univ)
   
   nbrep <- 0
   bsup <- 1
@@ -39,7 +39,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, constraints, univ){
     # bSol <- get_solution(tt, b[i])$value
     # FY <- cbind(FACE_Y, bSol)
     FY <- cbind(face, bSol = tt$solution[1:nrow(face)])
-    error <- .giveError(FY, constraints = constraints, univ = univ)
+    error <- .giveError(FY, PTDF = PTDF, univ = univ)
     nbrep <- nbrep + 1
     print(alpha)
   }
@@ -65,12 +65,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, constraints, univ){
 #'
 #' @export
 askProblemeMat <- function(pointX, faceY, face){
-  addCons <- function(mat, long, conc, val){
-    cont <- rep(0, long)
-    cont[conc] <- val
-    mat <- list(mat, cont)
-    mat
-  }
+
   
   ID <- 1:nrow(face)
   
@@ -134,19 +129,19 @@ askProblemeMat <- function(pointX, faceY, face){
   allconstraint <- NULL
   rhs <- NULL
   direction <- NULL
-  allconstraint <- allconstraint %>>% addCons(Nbvar, be_min_face, 1)  %>>% 
-    addCons(Nbvar, de_min_face, 1)  %>>% 
-    addCons(Nbvar, de_min_face, 1)  %>>% 
-    addCons(Nbvar, fr_min_face, 1)  %>>% 
-    addCons(Nbvar, de_max_face, 1) %>>% 
-    addCons(Nbvar, de_max_face, 1)
+  allconstraint <- allconstraint %>>% .addCons(Nbvar, be_min_face, 1)  %>>% 
+    .addCons(Nbvar, de_min_face, 1)  %>>% 
+    .addCons(Nbvar, de_min_face, 1)  %>>% 
+    .addCons(Nbvar, fr_min_face, 1)  %>>% 
+    .addCons(Nbvar, de_max_face, 1) %>>% 
+    .addCons(Nbvar, de_max_face, 1)
   rhs <- list(rhs, list(-be_min, -de_min - 500, -de_min, - fr_min, de_max - 500, de_max))
   direction <- list(direction, "==",  ">=", "<=", "==", ">=", "<=")
   
   if(length(Beclu)>0)
   {
     sapply(1:length(Beclu), function(i){
-      allconstraint <<- allconstraint %>>%  addCons(Nbvar, Beclu[i], 1)
+      allconstraint <<- allconstraint %>>%  .addCons(Nbvar, Beclu[i], 1)
       rhs <<- list(rhs, 10000)
       direction <<- list(direction, "==")
     })
@@ -158,7 +153,7 @@ askProblemeMat <- function(pointX, faceY, face){
   
   sapply(iEX, function(i){
     sapply(iFY, function(j){
-      allconstraint <<- allconstraint %>>%  addCons(Nbvar,c(j, 
+      allconstraint <<- allconstraint %>>%  .addCons(Nbvar,c(j, 
                                                             actual + i, 
                                                             actual + length(iEX) + i,
                                                             actual + 2*length(iEX) + i,
@@ -178,7 +173,7 @@ askProblemeMat <- function(pointX, faceY, face){
   Bbons <- match(data.frame(t(faceY[,1:3, drop = FALSE])), data.frame(t(face)))
   
   sapply(iEY, function(vv){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(Bbons[vv],
                                                     actual + vv,
                                                     actual + length(iEY) + vv,
@@ -191,7 +186,7 @@ askProblemeMat <- function(pointX, faceY, face){
   
   Bbons <- match(data.frame(t(faceY[,4:6, drop = FALSE])), data.frame(t(face)))
   sapply(iEY, function(vv){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(Bbons[vv],
                                                     actual + vv,
                                                     actual + length(iEY) + vv,
@@ -205,7 +200,7 @@ askProblemeMat <- function(pointX, faceY, face){
   Bbons <- match(data.frame(t(faceY[,7:9, drop = FALSE])), data.frame(t(face)))
   
   sapply(iEY, function(vv){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(Bbons[vv],
                                                     actual + vv,
                                                     actual + length(iEY) + vv,
@@ -219,7 +214,7 @@ askProblemeMat <- function(pointX, faceY, face){
   
   sapply(iEY, function(j){
     sapply(iFY, function(i){
-      allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+      allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                     c(i, actual + j,
                                                       actual + length(iEY) + j,
                                                       actual + length(iEY) * 2 + j),
@@ -232,7 +227,7 @@ askProblemeMat <- function(pointX, faceY, face){
   
   
   sapply(iEY, function(j){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   actual + j + (iEX-1)*length(iEY) + length(iEY)*3,
                                                   1)
     direction <<- list(direction, "==")
@@ -242,7 +237,7 @@ askProblemeMat <- function(pointX, faceY, face){
   actual <- actual + length(iEY) * 3
   
   sapply(iEY, function(j){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(j + length(iFY) + length(iEX) * 6,
                                                     actual + j + ((iEX-1)*length(iEY)), 
                                                     actual + length(iEX)*length(iEY)+j,
@@ -254,7 +249,7 @@ askProblemeMat <- function(pointX, faceY, face){
   
   
   sapply(iEY, function(j){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(j + length(iEY)+ length(iFY) + length(iEX) * 6, actual + j + ((iEX-1)*length(iEY)),
                                                     actual + length(iEX)*length(iEY) + j + length(iEY),
                                                     actual + length(iEX)*length(iEY) + length(iEY)*3 + j + length(iEY)),
@@ -264,7 +259,7 @@ askProblemeMat <- function(pointX, faceY, face){
   })
   
   sapply(iEY, function(j){
-    allconstraint <<- allconstraint %>>%  addCons(Nbvar,
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(j+length(iEY)*2 + length(iFY) + length(iEX) * 6, actual + j + ((iEX-1)*length(iEY)),
                                                     actual+length(iEX)*length(iEY)+j+length(iEY)*2,
                                                     actual+length(iEX)*length(iEY)+length(iEY)*3+j+length(iEY)*2),
@@ -302,18 +297,30 @@ resolvBmat <- function(face, pointX, faceY, probleme, alpha)
   iEX <- 1:nrow(pointX)
   iEY <- 1:nrow(faceY)
   iFY <- 1:nrow(face)
-  addCons <- function(mat, long, conc, val){
-    cont <- rep(0, long)
-    cont[conc] <- val
-    mat <- list(mat, cont)
-    mat
-  }
-  obj <- unlist(addCons(NULL, Nbvar, c((length(iFY) +1): (length(iFY) + length(iEX)*6),
+
+  obj <- unlist(.addCons(NULL, Nbvar, c((length(iFY) +1): (length(iFY) + length(iEX)*6),
                                        (1+length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX)):
                                          (length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX) + 6*length(iEY))),
                         c(rep((1-alpha)/nrow(pointX),  length(iEX)*6), rep((alpha)/nrow(faceY), 6*length(iEY)))))
   LP <- OP(obj, probleme$l_constraint, maximum = FALSE,
            bounds = probleme$bounds)
-  y <- ROI_solve(LP, solver = "glpk")
+  y <- ROI_solve(LP, solver = "clp")
   y
 }
+
+
+
+#' Add contraints
+#'
+#' @param mat \code{list}, previous constraints
+#' @param long \code{numeric}, number of element
+#' @param conc \code{conc}, place of no 0 elements
+#' @param val \code{val}, value of elmeents
+#' 
+.addCons <- function(mat, long, conc, val){
+  cont <- rep(0, long)
+  cont[conc] <- val
+  mat <- list(mat, cont)
+  mat
+}
+

@@ -4,15 +4,12 @@
 \alias{cumputeFB}
 \title{Compute flowbased approximation}
 \usage{
-cumputeFB(constrain = system.file("/optimWork/constraints.csv", package =
-  "antaresFlowbased"), cluster = system.file("/optimWork/cluster.csv", package
-  = "antaresFlowbased"), PTDF = system.file("/optimWork/PTDF.csv", package =
+cumputeFB(cluster = system.file("/optimWork/cluster.csv", package =
+  "antaresFlowbased"), PTDF = system.file("/optimWork/PTDF.csv", package =
   "antaresFlowbased"), face = system.file("/optimWork/B.csv", package =
   "antaresFlowbased"), dayType = "All", hour = "All")
 }
 \arguments{
-\item{constrain}{\code{character}, path for constrain file}
-
 \item{cluster}{\code{character},path for cluster file}
 
 \item{PTDF}{\code{character}, path for PTDF file}
@@ -22,6 +19,8 @@ cumputeFB(constrain = system.file("/optimWork/constraints.csv", package =
 \item{dayType}{\code{character / numeric} default All, can specify dayType to compute}
 
 \item{hour}{\code{character / numeric} default All, can specify hour to compute}
+
+\item{constrain}{\code{character}, path for constrain file}
 }
 \description{
 Compute flowbased approximation

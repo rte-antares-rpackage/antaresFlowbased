@@ -4,7 +4,7 @@
 \alias{searchAlpha}
 \title{Search alpha for a daytype and a hour}
 \usage{
-searchAlpha(face, pointX, faceY, probleme, constraints, univ)
+searchAlpha(face, pointX, faceY, probleme, PTDF, univ)
 }
 \arguments{
 \item{face}{\code{data.table}, face for 3 country, BE, DE anf FR}
@@ -15,7 +15,7 @@ searchAlpha(face, pointX, faceY, probleme, constraints, univ)
 
 \item{probleme}{\code{optimization_model}, make which askProbleme}
 
-\item{constraints}{\code{data.frame} constraints}
+\item{PTDF}{\code{data.frame} PTDF}
 
 \item{univ}{\code{matrix} generate which .univ}
 }

@@ -28,7 +28,7 @@
 #'  \item 3 : FR
 #'  \item 4 : bSol
 #' }
-#' @param constraints \code{data.frame} 5 columns :
+#' @param PTDF \code{data.frame} 5 columns :
 #' \itemize{
 #'  \item 1 : BE
 #'  \item 2 : DE
@@ -40,12 +40,12 @@
 #' 
 #' @return \code{data.frame} error inf and error sup
 #' 
-.giveError <- function(FY, constraints, univ)
+.giveError <- function(FY, PTDF, univ)
 {
-  constrainmat <- constraints[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]%>>%as.matrix
+  constrainmat <- PTDF[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]%>>%as.matrix
   FYMat <- as.matrix(FY[, .SD, .SDcols = 1:3])
   points1 <- univ %*% t(constrainmat)
-  indomaine1 <- which(apply(points1, 1, function(X, Y){all(X<Y)}, Y = constraints$RAM_0))
+  indomaine1 <- which(apply(points1, 1, function(X, Y){all(X<Y)}, Y = PTDF$RAM_0))
   points2 <- univ[, 1:3] %*% t(FYMat)
   indomaine2 <- which(apply(points2, 1, function(X, Y){all(X<Y)}, Y = FY$bSol))
   error1 <- (1-length(intersect(indomaine1, indomaine2))/length(indomaine1))*100
