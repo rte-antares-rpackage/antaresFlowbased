@@ -33,7 +33,7 @@ write.table(res[apply(res, 1, function(X){
 ##Optim et rapport
 allFB <- cumputeFB(dayType = 1:12, hour = 12:24)
 #generateRaportFb(allFB, 2, 2)
-allFBT <- cumputeFB(dayType = 1:12, hour = 12:24)
+allFBT <- cumputeFB(dayType = 1:12, hour = 9:11)
 
 
 sapply( 1:12, function(X){

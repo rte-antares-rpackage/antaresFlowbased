@@ -50,14 +50,14 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2)
                paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
              
              bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
-             lineAlpha = 1),
+             lineAlpha = 1, bulletAlpha = 0),
     addGraph(title = "Réel",balloonText =    
                paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
              bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
-             lineAlpha = 1),
+             lineAlpha = 1, bulletAlpha = 0),
     setChartCursor(),
-    addValueAxes(title = ctry1, minimum = -7000, maximum = 7000),
-    addValueAxes(title = ctry2, position = "bottom", minimum = -7000, maximum = 7000),
+    addValueAxes(title = ctry1, minimum = -7000, maximum = 7000, unit = " MW"),
+    addValueAxes(title = ctry2, position = "bottom", minimum = -7000, maximum = 7000, unit = " MW"),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
     
