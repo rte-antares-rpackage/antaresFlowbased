@@ -4,12 +4,10 @@
 \alias{generateRaportFb}
 \title{Generate html report}
 \usage{
-generateRaportFb(allFB, hour, dayType)
+generateRaportFb(allFB, dayType)
 }
 \arguments{
 \item{allFB}{\code{list}, object obtain which computeFB function}
-
-\item{hour}{\code{numeric}, hour}
 
 \item{dayType}{\code{numeric}, dayType}
 }

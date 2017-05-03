@@ -1,10 +1,12 @@
 ---
-title: ""
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    vertical_layout: fill
+    vertical_layout: scroll
     css: styles_flex.css
+params: 
+    set_title: ""
+title: "`r params$set_title`"
 ---
 
 
@@ -13,54 +15,1232 @@ output:
 library(flexdashboard)
 library(rAmCharts)
 library(antaresFlowbased)
-```
-
-Row 
------------------------------------------------------------------------
-### C {.no-title .centertext}
-```{r}
-valueBox(paste0("Results for hour ", hour, " and day type ", dayType, " generate ", Sys.Date()))
+library(manipulateWidget)
 ```
 
 
-Row 
+Errors
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+data_error <- data.table::rbindlist(lapply(1:nrow(dta), function(x){
+  cbind(dta[x, list(hour, dayType)], dta[x, outFlowBased][[1]]$error)
+}))
+
+```
+
+### Table
+```{r}
+knitr::kable(data_error)
+```
+
+### Histogram
+```{r}
+
+combineWidgets(
+    plot(amHist(x = data_error$error1, main = "Error 1", export = T, xlab = "Error 1")),
+    plot(amHist(x = data_error$error2, main = "Error 2", export = T, xlab = "Error 2"))
+)
+```
+
+
+Hour 1 {data-navmenu="Hour"}
+=====================================  
+
+Row
 -----------------------------------------------------------------------
 
-### C {.no-title .display}
-```{r}
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 1, outFlowBased][[1]]
 ```
 
 ### Error of type 1
+
 ```{r}
-valueBox(paste0(round(dta$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 ### Error of type 2
 
 ```{r}
-valueBox(paste0(round(dta$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### C {.no-title .display}
 
-Row 
+Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(dta, "BE", "NL")
+graphFlowBased2D(data, "BE", "NL")
 ```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(dta, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR")
 ```
+
+Row {data-height=650}
+------------------------------------------------------------------
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(dta, "DE", "FR")
+graphFlowBased2D(data, "DE", "FR")
 ```
 
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+Hour 2 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 2, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 3 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 3, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 4 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 4, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 5 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 5, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 6 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 6, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 7 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 7, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 8 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 8, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 9 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 9, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 10 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 10, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 11 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 11, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 12 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 12, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 13 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 13, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 14 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 14, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 15 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 15, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 16 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 16, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 17 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 17, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 18 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 18, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 19 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 19, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 20 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 20, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 21 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 21, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 22 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 22, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 23 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 23, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
+
+
+Hour 24 {data-navmenu="Hour"}
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+data <- dta[hour == 24, outFlowBased][[1]]
+```
+
+### Error of type 1
+
+```{r}
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+```
+
+### Error of type 2
+
+```{r}
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+```
+
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### BE/NL {.no-padding}
+```{r}
+graphFlowBased2D(data, "BE", "NL")
+```
+
+### BE/FR
+```{r}
+graphFlowBased2D(data, "BE", "FR")
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR")
+```
+
+### DE/NL
+```{r}
+graphFlowBased2D(data, "DE", "NL")
+```
 
 
 

@@ -1,15 +1,19 @@
-#' @title Create unvivers to test error
+#' @title Create univers to test error
 #'
-#' @description  Create unvivers to test error
+#' @description  Create univers to test error
 #' @param nb \code{numeric} number of points
 #' @param bInf \code{numeric} minimum
 #' @param bSup \code{numeric} maximum
-#' 
+#' @param seed \code{numeric} a single value, interpreted as an integer, or NULL.
+#'
 #' @return \code{matrix}
-#' 
-.univ <- function(nb, bInf, bSup)
+#'
+.univ <- function(nb, bInf, bSup, seed = 123456789)
 {
-  set.seed(123456789)
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+
   Inuv <- data.table(BE = runif(nb, bInf, bSup),
                      DE = runif(nb, bInf, bSup),
                      FR = runif(nb, bInf, bSup))
@@ -37,9 +41,9 @@
 #'  \item 5 : RAM_0
 #' }
 #' @param univ \code{matrix} generate which .univ
-#' 
+#'
 #' @return \code{data.frame} error inf and error sup
-#' 
+#'
 .giveError <- function(FY, PTDF, univ)
 {
   constrainmat <- PTDF[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]%>>%as.matrix
