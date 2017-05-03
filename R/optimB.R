@@ -15,7 +15,7 @@ getVertices <- function(face, b){
     #   if(Y>=X)
     #   {
         sapply(IDfin, function(Z){
-          if(Z>=Y)
+          if(Z>=X)
           {
             sapply(IDfin, function(ZZ){
               if(ZZ>=Z)
@@ -23,8 +23,6 @@ getVertices <- function(face, b){
                 Bijk <- rbind(B[X,], B[X,], B[Z,], B[ZZ,], rep(1, 4))
                 bijk <- c(b[X], b[X], b[Z], b[ZZ], 0)
                 try({
-                qr(Bijk)
-                  
                 x <- qr.solve(Bijk, bijk)
                 d <- b+1e-6
                 if(all(B%*%x<=d)){
@@ -297,6 +295,7 @@ resolvB <- function(pointX, faceY, probleme, alpha)
 #' @param B \code{data.table}, face for 3 country, BE, DE anf FR
 #' 
 .fromBtoAntares <- function(B){
+  names(B) <- c("BE", "DE", "FR")
   coefAntares <- data.table(Name = paste0("FB", 1:nrow(B)),
                             BE.FR = B$BE - B$FR,
                             DE.FR = B$DE - B$FR,

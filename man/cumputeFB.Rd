@@ -4,14 +4,11 @@
 \alias{cumputeFB}
 \title{Compute flowbased approximation}
 \usage{
-cumputeFB(cluster = system.file("/optimWork/cluster.csv", package =
-  "antaresFlowbased"), PTDF = system.file("/optimWork/PTDF.csv", package =
+cumputeFB(PTDF = system.file("/optimWork/PTDF.csv", package =
   "antaresFlowbased"), face = system.file("/optimWork/B.csv", package =
   "antaresFlowbased"), dayType = "All", hour = "All")
 }
 \arguments{
-\item{cluster}{\code{character},path for cluster file}
-
 \item{PTDF}{\code{character}, path for PTDF file}
 
 \item{face}{\code{character}, path for face file}

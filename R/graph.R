@@ -73,7 +73,6 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2)
 #'
 #' @import rmarkdown
 #' @import flexdashboard
-#' @import ggplot2
 #' 
 #' @export
 generateRaportFb <- function(allFB, hour, dayType){

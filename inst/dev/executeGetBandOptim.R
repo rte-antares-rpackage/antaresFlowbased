@@ -4,40 +4,32 @@
 # library(ROI)
 # 
 
+#GiB
+# PTDF <- fread("inst/optimWork/PTDF.csv")
+# setwd("../../PresolveFB/")
+# out <- sapply(1:12, function(X){
+#   sapply(1:24, function(Y){
+#     write.table(PTDF[Id_day == X & Period == Y, .SD,
+#                      .SDcols = c("BE","DE","FR","NL","RAM_0","Row")],
+#                 "D:/Users/titorobe/Desktop/PresolveFB/A.csv", row.names = FALSE, sep = ";")
+#     system("D:/Users/titorobe/Desktop/PresolveFB/EXEC.bat")
+#     tt <- read.table("FiltrageDe_A.csv", sep = "@")
+#     write.table(as.matrix(tt[(which(tt == 'SOMMETS')+1):nrow(tt),]), "tp.csv", 
+#                 row.names = FALSE, col.names = FALSE, quote = FALSE)
+#     data.table(Id_day = X, Period = Y,   fread("tp.csv"))
+#   }, simplify = FALSE)
+# }, simplify = FALSE)
+# 
+# res <- rbindlist(lapply(out, rbindlist))
+# write.table(res,"sommets_which_solver.csv", row.names = FALSE)
+# 
 
-#B avec kemans
-PTDF <- fread("inst/optimWork/PTDF.csv")
-PTDFKm <- PTDF[,list(BE-NL, DE-NL, FR - NL)]
-PTDFKm <- scale(PTDFKm)
-res <- cutree(hclust(dist(PTDFKm)), 36)
-PTDF$vect <- res
-PTDF[, lapply(.SD, mean), .SDcols = c("BE", "DE", "FR"), by = "vect"]
-
-
-
-
-
-
-
-res <- round(res, 1)
-res <- data.table(res)
-out2 <- round(out2, 1)
-
-write.table(res[!apply(res, 1, function(X){
-  paste0(X[5:8], collapse = "")%in%paste0(out2$V1, out2$V2, out2$V3, out2$V4)
-}),], "../../getSom/nein.csv", row.names = FALSE, sep = ";", dec = ",")
-write.table(res[apply(res, 1, function(X){
-  paste0(X[5:8], collapse = "")%in%paste0(out2$V1, out2$V2, out2$V3, out2$V4)
-}),], "../../getSom/in.csv", row.names = FALSE, sep = ";", dec = ",")
 
 ##Optim et rapport
-allFB <- cumputeFB(dayType = 1:12, hour = 12:24)
-#generateRaportFb(allFB, 2, 2)
-allFBT <- cumputeFB(dayType = 1:12, hour = 9:11)
-
+allFB <- cumputeFB(dayType = 8, hour = 12)
 
 sapply( 1:12, function(X){
-  sapply( 12:24, function(Y){
+  sapply( 1:24, function(Y){
     generateRaportFb(allFB, Y, X)
   })
 })

@@ -1,9 +1,9 @@
 context("Function askProblemeMat")
 
-pointX <- fread("test/data/optim/pointX.csv")
-face <- fread("test/data/optim/face.csv")
+pointX <- fread(system.file("test/data/optim/pointX.csv",package = "antaresFlowbased"))
+face <- fread(system.file("test/data/optim/face.csv",package = "antaresFlowbased"))
 
-B <- fread("test/data/optim/B.csv")
+B <- fread(system.file("test/data/optim/B.csv",package = "antaresFlowbased"))
 
 res <- giveTuples(face, pointX)
 faceY <- do.call("cbind", apply(res, 2, function(X){
@@ -11,6 +11,6 @@ faceY <- do.call("cbind", apply(res, 2, function(X){
 }))
 res <- askProblemeMat(pointX, faceY, face)
 alpha <- 0.56
-tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
+tt <- resolvBmat(face, pointX, faceY, res, alpha)
 
-expect_equal(sum(round(tt$solution[1:nrow(face)]-B, 2)), 0)
+expect_equal(sum(round(tt$solution[1:nrow(face)]-B, 0)), 0)

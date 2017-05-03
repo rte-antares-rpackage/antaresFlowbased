@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-library(ggplot2)
+library(rAmCharts)
 library(antaresFlowbased)
 ```
 
