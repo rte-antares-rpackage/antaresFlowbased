@@ -31,15 +31,17 @@ data_error <- data.table::rbindlist(lapply(1:nrow(dta), function(x){
 
 ### Table
 ```{r}
-knitr::kable(data_error)
+data_render <- copy(data_error)
+setnames(data_render, c("error1", "error2"), c("Negative error", "Positive error"))
+knitr::kable(data_render)
 ```
 
 ### Histogram
 ```{r}
 
 combineWidgets(
-    plot(amHist(x = data_error$error1, main = "Error 1", export = T, xlab = "Error 1")),
-    plot(amHist(x = data_error$error2, main = "Error 2", export = T, xlab = "Error 2"))
+    plot(amHist(x = data_error$error1, main = "Negative error", export = T, xlab = "Negative error")),
+    plot(amHist(x = data_error$error2, main = "Positive error", export = T, xlab = "Positive error"))
 )
 ```
 
@@ -54,13 +56,13 @@ Row
 data <- dta[hour == 1, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
