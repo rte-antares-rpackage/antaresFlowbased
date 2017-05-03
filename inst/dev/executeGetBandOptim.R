@@ -26,7 +26,7 @@
 
 
 ##Optim et rapport
-allFB <- cumputeFB(dayType = 8, hour = 12)
+allFB <- cumputeFB(dayType = 8, hour = 8)
 
 sapply( 1:12, function(X){
   sapply( 1:24, function(Y){

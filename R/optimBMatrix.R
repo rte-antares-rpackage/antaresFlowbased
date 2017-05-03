@@ -80,13 +80,13 @@ askProblemeMat <- function(pointX, faceY, face){
   Nbvar <- nrow(face) +
     6 * nrow(pointX)+
     9 * nrow(faceY) +
-    nrow(pointX) * nrow(faceY)
+    nrow(pointX) * nrow(faceY) + 12
   
   bounds <- c(rep(-Inf, length(iFY)),
               rep(0, length(iEX) * 6),
               rep(-Inf, length(iEY) * 3),
               rep(0, length(iEY)* length(iEX)),
-              rep(0, length(iEY) * 6))
+              rep(0, length(iEY) * 6), rep(-Inf, 12))
   bounds <- V_bound(li=1:length(bounds), lb=bounds)
   ##Contraints on particular face
   be_min <- min(pointX[, .SD, .SDcols = 1])
@@ -131,18 +131,23 @@ askProblemeMat <- function(pointX, faceY, face){
   direction <- NULL
   allconstraint <- allconstraint %>>% .addCons(Nbvar, be_min_face, 1)  %>>% 
     .addCons(Nbvar, de_min_face, 1)  %>>% 
-    .addCons(Nbvar, de_min_face, 1)  %>>% 
+   # .addCons(Nbvar, de_min_face, 1)  %>>% 
     .addCons(Nbvar, fr_min_face, 1)  %>>% 
-    .addCons(Nbvar, de_max_face, 1) %>>% 
+    #.addCons(Nbvar, de_max_face, 1) %>>% 
     .addCons(Nbvar, de_max_face, 1)
-  rhs <- list(rhs, list(-be_min, -de_min - 500, -de_min, - fr_min, de_max - 500, de_max))
-  direction <- list(direction, "==",  ">=", "<=", "==", ">=", "<=")
+   #rhs <- list(rhs, list(-be_min, -de_min - 500, -de_min, - fr_min, de_max - 500, de_max))
+   #direction <- list(direction, "==",  ">=", "<=", "==", ">=", "<=")
+  # 
+
+  rhs <- list(rhs, list(-be_min, -de_min, - fr_min, de_max))
+  direction <- list(direction, "==", "==", "==", "==")
+
   
   if(length(Beclu)>0)
   {
     sapply(1:length(Beclu), function(i){
       allconstraint <<- allconstraint %>>%  .addCons(Nbvar, Beclu[i], 1)
-      rhs <<- list(rhs, 10000)
+      rhs <<- list(rhs,max(apply(pointX, 1, function(X){sum(face[Beclu[i],]*X)})))#
       direction <<- list(direction, "==")
     })
   }
@@ -267,6 +272,61 @@ askProblemeMat <- function(pointX, faceY, face){
     direction <<- list(direction, "==")
     rhs <<- list(rhs, 0)
   })
+  
+  
+  #Nvx pb
+  actual <- Nbvar - 12 + 1
+  allconstraint <- allconstraint %>>% .addCons(Nbvar,
+                                               actual + 2, 1)
+  direction <- list(direction, "==")
+  rhs <- list(rhs, fr_min)
+
+  allconstraint <- allconstraint %>>% .addCons(Nbvar,
+                                               actual + 3, 1)
+  direction <- list(direction, "==")
+  rhs <- list(rhs, be_min)
+
+  allconstraint <- allconstraint %>>% .addCons(Nbvar,
+                                               actual + 7, 1)
+  direction <- list(direction, "==")
+  rhs <- list(rhs, de_min)
+
+  allconstraint <- allconstraint %>>% .addCons(Nbvar,
+                                               actual + 10, 1)
+  direction <- list(direction, "==")
+  rhs <- list(rhs, de_max)
+
+  sapply(iFY, function(j){
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
+                                                  c(j, actual:(actual + 2)),
+                                                  c(-1,face[j,1],face[j,2],face[j,3]))
+    direction <<- list(direction, "<=")
+    rhs <<- list(rhs, 0)
+  })
+
+
+  sapply(iFY, function(j){
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
+                                                   c(j, (actual + 3):(actual + 5)),
+                                                   c(-1,face[j,1],face[j,2],face[j,3]))
+    direction <<- list(direction, "<=")
+    rhs <<- list(rhs, 0)
+  })
+  sapply(iFY, function(j){
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
+                                                   c(j, (actual + 6):(actual + 8)),
+                                                   c(-1,face[j,1],face[j,2],face[j,3]))
+    direction <<- list(direction, "<=")
+    rhs <<- list(rhs, 0)
+  })
+  sapply(iFY, function(j){
+    allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
+                                                   c(j, (actual + 9):(actual + 11)),
+                                                   c(-1,face[j,1],face[j,2],face[j,3]))
+    direction <<- list(direction, "<=")
+    rhs <<- list(rhs, 0)
+  })
+  
   
   rhs <- unlist(rhs)
   direction <- unlist(direction)

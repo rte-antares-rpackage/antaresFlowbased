@@ -20,8 +20,8 @@ cumputeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
   univ <- .univ(nb = 200000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
-  #face <- fread(face)
-  face <- giveBClassif(PTDF, nbClust = 36)
+  face <- fread(face)
+  #face <- giveBClassif(PTDF, nbClust = 36)
   
   if(dayType[1] == "All"){
     dayType <- unique(PTDF$Id_day)
@@ -39,7 +39,6 @@ cumputeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
       print(paste0("hour ", X))
       print(paste0("dayType ", Y))
       PTDFsel <- PTDF[Id_day == Y & Period == X]
-   
       
       pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
       pointX <- data.table(pointX)  
