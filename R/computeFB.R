@@ -17,7 +17,7 @@ cumputeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
                       dayType = "All", hour = "All")
 {
   
-  univ <- .univ(nb = 1000000, bInf = -10000, bSup = 10000)
+  univ <- .univ(nb = 200000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
   #face <- fread(face)
