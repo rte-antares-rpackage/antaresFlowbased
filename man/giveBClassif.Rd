@@ -4,10 +4,12 @@
 \alias{giveBClassif}
 \title{Give B from PTDF}
 \usage{
-giveBClassif(PTDF)
+giveBClassif(PTDF, nbClust = 36)
 }
 \arguments{
 \item{PTDF}{\code{data.frame}, PTDF}
+
+\item{nbClust}{\code{numeric}, number of cluster}
 }
 \description{
 Give B from PTDF
