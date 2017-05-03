@@ -46,21 +46,23 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2)
   
   pipeR::pipeline(
     amXYChart(dataProvider = out),
+    addTitle(text = paste0("Flowbased ", ctry1, "/", ctry2)),
     addGraph(title = "Modélisé", balloonText = 
                paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
              
              bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
-             lineAlpha = 1, bulletAlpha = 0),
+             lineAlpha = 1, bullet = "bubble", bulletSize = 6, lineColor = "#0101DF",
+             lineThickness = 1),
     addGraph(title = "Réel",balloonText =    
                paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
              bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
-             lineAlpha = 1, bulletAlpha = 0),
+             lineAlpha = 1, bullet = "bubble", bulletSize = 6, lineColor = "#58ACFA",
+             lineThickness = 2,  dashLength = 7),
     setChartCursor(),
-    addValueAxes(title = ctry1, minimum = -7000, maximum = 7000, unit = " MW"),
-    addValueAxes(title = ctry2, position = "bottom", minimum = -7000, maximum = 7000, unit = " MW"),
+    addValueAxes(title = paste(ctry1, "(MW)"), minimum = -7000, maximum = 7000),
+    addValueAxes(title =  paste(ctry2, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
-    
   )
   
 }
