@@ -105,13 +105,13 @@ Row
 data <- dta[hour == 2, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -155,17 +155,18 @@ Row
 data <- dta[hour == 3, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -205,13 +206,13 @@ Row
 data <- dta[hour == 4, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -255,13 +256,13 @@ Row
 data <- dta[hour == 5, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -305,13 +306,13 @@ Row
 data <- dta[hour == 6, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -355,17 +356,18 @@ Row
 data <- dta[hour == 7, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -405,13 +407,13 @@ Row
 data <- dta[hour == 8, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -455,13 +457,13 @@ Row
 data <- dta[hour == 9, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -505,13 +507,13 @@ Row
 data <- dta[hour == 10, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -555,13 +557,13 @@ Row
 data <- dta[hour == 11, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -605,17 +607,18 @@ Row
 data <- dta[hour == 12, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -655,13 +658,13 @@ Row
 data <- dta[hour == 13, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -705,13 +708,13 @@ Row
 data <- dta[hour == 14, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -755,17 +758,18 @@ Row
 data <- dta[hour == 15, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -805,13 +809,13 @@ Row
 data <- dta[hour == 16, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -855,17 +859,18 @@ Row
 data <- dta[hour == 17, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -905,17 +910,18 @@ Row
 data <- dta[hour == 18, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -955,13 +961,13 @@ Row
 data <- dta[hour == 19, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -1005,17 +1011,18 @@ Row
 data <- dta[hour == 20, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -1055,13 +1062,13 @@ Row
 data <- dta[hour == 21, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -1105,17 +1112,18 @@ Row
 data <- dta[hour == 22, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}
@@ -1155,13 +1163,13 @@ Row
 data <- dta[hour == 23, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
@@ -1205,17 +1213,18 @@ Row
 data <- dta[hour == 24, outFlowBased][[1]]
 ```
 
-### Error of type 1
+### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
 valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
 ```
 
-### Error of type 2
+### Positive error (belong in the model but not in the historical domain)
 
 ```{r}
 valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
+
 
 
 Row {data-height=650}

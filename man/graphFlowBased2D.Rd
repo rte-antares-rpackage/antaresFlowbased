@@ -7,7 +7,7 @@
 graphFlowBased2D(flowbased, ctry1, ctry2)
 }
 \arguments{
-\item{flowbased}{\code{list}, flowbased outout obtain which cumputeFB function}
+\item{flowbased}{\code{list}, flowbased outout obtain which computeFB function}
 
 \item{ctry1}{\code{character}, country in X}
 

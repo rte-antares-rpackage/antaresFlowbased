@@ -14,3 +14,10 @@ generateRaportFb(allFB, dayType)
 \description{
 Generate html report
 }
+\examples{
+
+\dontrun{
+allFB <- computeFB(dayType = 7)
+generateRaportFb(allFB, dayType = 7)
+}
+}
