@@ -26,13 +26,16 @@
 
 
 ##Optim et rapport
-allFB <- cumputeFB(dayType = 8, hour = 8)
+allFB <- computeFB(dayType = 2:3, hour = 1:24)
+saveRDS(allFB, "outModel.RDS")
 
-sapply( 1:12, function(X){
-  sapply( 1:24, function(Y){
-    generateRaportFb(allFB, Y, X)
-  })
-})
+
+generateRaportFb(allFB, 2)
+runAppError(allFB)
+dta <- allFB
+
+
+
 
 names(res) <- c("BE", "DE", "FR")
 res <- data.frame(res)

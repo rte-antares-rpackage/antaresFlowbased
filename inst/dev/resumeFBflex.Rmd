@@ -72,27 +72,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 Hour 2 {data-navmenu="Hour"}
@@ -121,29 +122,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 3 {data-navmenu="Hour"}
 =====================================  
@@ -154,6 +155,7 @@ Row
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 3, outFlowBased][[1]]
 ```
+
 
 ### Negative error (belong in the historical domain but not in the model)
 
@@ -168,31 +170,31 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -206,6 +208,7 @@ Row
 data <- dta[hour == 4, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -222,27 +225,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -256,6 +260,7 @@ Row
 data <- dta[hour == 5, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -272,27 +277,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -306,6 +312,7 @@ Row
 data <- dta[hour == 6, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -322,27 +329,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -356,6 +364,7 @@ Row
 data <- dta[hour == 7, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -369,31 +378,31 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -407,6 +416,7 @@ Row
 data <- dta[hour == 8, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -423,28 +433,30 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 
 Hour 9 {data-navmenu="Hour"}
@@ -457,6 +469,7 @@ Row
 data <- dta[hour == 9, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -473,27 +486,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -507,6 +521,7 @@ Row
 data <- dta[hour == 10, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -523,27 +538,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -557,6 +573,7 @@ Row
 data <- dta[hour == 11, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -573,29 +590,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 12 {data-navmenu="Hour"}
 =====================================  
@@ -607,6 +624,7 @@ Row
 data <- dta[hour == 12, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -620,33 +638,32 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 13 {data-navmenu="Hour"}
 =====================================  
@@ -658,6 +675,7 @@ Row
 data <- dta[hour == 13, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -674,27 +692,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -708,6 +727,7 @@ Row
 data <- dta[hour == 14, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -724,28 +744,30 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 
 Hour 15 {data-navmenu="Hour"}
@@ -758,6 +780,7 @@ Row
 data <- dta[hour == 15, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -771,31 +794,31 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -809,6 +832,7 @@ Row
 data <- dta[hour == 16, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -825,27 +849,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -859,6 +884,7 @@ Row
 data <- dta[hour == 17, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -872,31 +898,31 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -910,6 +936,7 @@ Row
 data <- dta[hour == 18, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -923,33 +950,32 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 19 {data-navmenu="Hour"}
 =====================================  
@@ -961,6 +987,7 @@ Row
 data <- dta[hour == 19, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -977,29 +1004,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 20 {data-navmenu="Hour"}
 =====================================  
@@ -1011,6 +1038,7 @@ Row
 data <- dta[hour == 20, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -1024,33 +1052,32 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 21 {data-navmenu="Hour"}
 =====================================  
@@ -1062,6 +1089,7 @@ Row
 data <- dta[hour == 21, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -1078,29 +1106,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 22 {data-navmenu="Hour"}
 =====================================  
@@ -1112,6 +1140,7 @@ Row
 data <- dta[hour == 22, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -1125,33 +1154,32 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 Hour 23 {data-navmenu="Hour"}
 =====================================  
@@ -1163,6 +1191,7 @@ Row
 data <- dta[hour == 23, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -1179,27 +1208,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
 
 
@@ -1213,6 +1243,7 @@ Row
 data <- dta[hour == 24, outFlowBased][[1]]
 ```
 
+
 ### Negative error (belong in the historical domain but not in the model)
 
 ```{r}
@@ -1226,32 +1257,31 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
 ```
 
 
-
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-### BE/NL {.no-padding}
-```{r}
-graphFlowBased2D(data, "BE", "NL")
-```
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR")
+graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+```
+
+### DE/FR
+```{r}
+graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
-
-### DE/FR
+### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "DE", "FR")
+graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
 ```
+
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL")
+graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
 ```
-
 
 

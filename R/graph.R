@@ -3,13 +3,25 @@
 #' @param flowbased \code{list}, flowbased outout obtain which computeFB function
 #' @param ctry1 \code{character}, country in X
 #' @param ctry2 \code{character}, country in Y
+#' @param hour \code{numeric}, hour
+#' @param dayType \code{numeric}, dayType
 #'
 #' @import rAmCharts
 #'
 #' @export
-graphFlowBased2D <- function(flowbased, ctry1, ctry2)
+graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL)
 {
 
+  
+  if(!is.null(hour)){
+    hour <- paste0(" Hour ", hour)
+  }
+  
+  
+  if(!is.null(dayType)){
+    dayType <- paste0(" Typical day ", dayType)
+  }
+  
   if(ctry2 == "NL"){
     ptctry2 <- -rowSums(flowbased$pointsY)
     ptctry2X <- -rowSums(flowbased$pointX)
@@ -46,21 +58,21 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2)
 
   pipeR::pipeline(
     amXYChart(dataProvider = out),
-    addTitle(text = paste0("Flowbased ", ctry1, "/", ctry2)),
+    addTitle(text = paste0("Flowbased ", ctry1, "/", ctry2, hour, dayType)),
     addGraph(title = "Modélisé", balloonText =
                paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
 
-             bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
+             bullet = 'circle', xField = 'Mctry2',yField = 'Mctry1',
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#0101DF",
              lineThickness = 1),
     addGraph(title = "Réel",balloonText =
                paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-             bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
+             bullet = 'circle', xField = 'Rctry2',yField = 'Rctry1',
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF8000",
              lineThickness = 1,  dashLength = 7),
     setChartCursor(),
-    addValueAxes(title = paste(ctry1, "(MW)"), minimum = -7000, maximum = 7000),
-    addValueAxes(title =  paste(ctry2, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
@@ -95,3 +107,14 @@ generateRaportFb <- function(allFB, dayType){
                     intermediates_dir = getwd(), envir = e)
 }
 
+
+#' Generate html report
+#'
+#' @param dta \code{list}, object obtain which computeFB function
+#' @import DT shiny
+#' @export
+runAppError <- function(dta){
+  G <- .GlobalEnv
+  assign("dtaUseByShiny", dta, envir = G)
+  shiny::runApp(system.file("shinyError", package = "antaresFlowbased"))
+}

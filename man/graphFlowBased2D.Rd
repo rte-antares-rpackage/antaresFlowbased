@@ -4,7 +4,7 @@
 \alias{graphFlowBased2D}
 \title{Plot 2D for flowbased areas}
 \usage{
-graphFlowBased2D(flowbased, ctry1, ctry2)
+graphFlowBased2D(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL)
 }
 \arguments{
 \item{flowbased}{\code{list}, flowbased outout obtain which computeFB function}
@@ -12,6 +12,10 @@ graphFlowBased2D(flowbased, ctry1, ctry2)
 \item{ctry1}{\code{character}, country in X}
 
 \item{ctry2}{\code{character}, country in Y}
+
+\item{hour}{\code{numeric}, hour}
+
+\item{dayType}{\code{numeric}, dayType}
 }
 \description{
 Plot 2D for flowbased areas
