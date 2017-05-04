@@ -27,14 +27,11 @@
 
 ##Optim et rapport
 allFB <- computeFB(dayType = 2:3, hour = 1:24)
-saveRDS(allFB, "outModel.RDS")
+
+runAppError(allFB)
 
 
 generateRaportFb(allFB, 2)
-runAppError(allFB)
-dta <- allFB
-
-
 
 
 names(res) <- c("BE", "DE", "FR")
