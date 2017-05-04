@@ -1,37 +1,11 @@
-# #Get B
-# library(data.table)
-# library(pipeR)
-# library(ROI)
-# 
-
-#GiB
-# PTDF <- fread("inst/optimWork/PTDF.csv")
-# setwd("../../PresolveFB/")
-# out <- sapply(1:12, function(X){
-#   sapply(1:24, function(Y){
-#     write.table(PTDF[Id_day == X & Period == Y, .SD,
-#                      .SDcols = c("BE","DE","FR","NL","RAM_0","Row")],
-#                 "D:/Users/titorobe/Desktop/PresolveFB/A.csv", row.names = FALSE, sep = ";")
-#     system("D:/Users/titorobe/Desktop/PresolveFB/EXEC.bat")
-#     tt <- read.table("FiltrageDe_A.csv", sep = "@")
-#     write.table(as.matrix(tt[(which(tt == 'SOMMETS')+1):nrow(tt),]), "tp.csv", 
-#                 row.names = FALSE, col.names = FALSE, quote = FALSE)
-#     data.table(Id_day = X, Period = Y,   fread("tp.csv"))
-#   }, simplify = FALSE)
-# }, simplify = FALSE)
-# 
-# res <- rbindlist(lapply(out, rbindlist))
-# write.table(res,"sommets_which_solver.csv", row.names = FALSE)
-# 
-
 
 ##Optim et rapport
-allFB <- computeFB(dayType = 2:3, hour = 1:24)
+allFB <- computeFB(dayType = 7:8, hour = 1:24)
 
 runAppError(allFB)
 
 
-generateRaportFb(allFB, 2)
+generateRaportFb(allFB, 7)
 
 
 names(res) <- c("BE", "DE", "FR")
@@ -58,95 +32,35 @@ pipeR::pipeline(
   
 )
 
+library(ROI)
 
+##ADQ Patch
+b <- fread("inst/ADQpatch/b.txt")
+b36 <- fread("inst/ADQpatch/B36.txt")
+lole <- fread("inst/ADQpatch/lole.txt")
+lole <- unlist(lole)
+D <- as.vector(ifelse(lole == 0, 0, 1))
+res <- c(
+  1, 1, 1, 1,
+  D[1]*D[2]*lole[2], -D[1]*D[2]*lole[1],0,0,
+  D[1]*D[3]*lole[3], 0, -D[1]*D[3]*lole[1], 0,
+  D[1]*D[4]*lole[4],0,0,-D[1]*D[4]*lole[1],
+  0,D[2]*D[3]*lole[3],-D[2]*D[3]*lole[2],0,
+  0, D[2]*D[4]*lole[4], 0, -D[2]*D[4]*lole[2],
+  0,0,D[3]*D[4]*lole[4],-D[3]*D[4]*lole[3])
+res <- matrix(res, ncol = 4, byrow = TRUE)
+b36 <- as.matrix(b36)[,2:4]
+b36 <- cbind(b36, 0)
+allMat <- rbind(res, b36)
+rep <- c(rep(0, 7), b$V2)
+sens <- c(rep("==", 7), rep("<=", length(b$V2)))
+objetiv <- c(lole)
+l_constraint <- L_constraint(L = allMat,
+                             dir = sens,
+                             rhs = rep)
+bounds <- V_bound(li=1:4, lb=rep(-Inf, 4))
 
-# 
-# #Pareto 
-# sum(get_solution(tt, y1_plus[i])$value) + 
-#   sum(get_solution(tt, y2_plus[i])$value) +
-#   sum(get_solution(tt, y3_plus[i])$value) +
-#   sum(get_solution(tt, y1_moins[i])$value) +
-#   sum(get_solution(tt, y2_moins[i])$value) +
-#   sum(get_solution(tt, y3_moins[i])$value) 
-# 
-# sum(get_solution(tt, x1_plus[i])$value) + 
-#   sum(get_solution(tt, x2_plus[i])$value) +
-#   sum(get_solution(tt, x3_plus[i])$value) +
-#   sum(get_solution(tt, x1_moins[i])$value) +
-#   sum(get_solution(tt, x2_moins[i])$value) +
-#   sum(get_solution(tt, x3_moins[i])$value) 
-# 
-# 
-# #Sommets
-# sommets <- data.frame(y1 = get_solution(tt, y1[i])$value,
-#                       y2 = get_solution(tt, y2[i])$value,
-#                       y3 = get_solution(tt, y3[i])$value)
-# 
-# 
-# 
-# 
-# convexData <- function(data){
-#   ch <- chull(data)
-#   data[c(ch, ch[1]), ] 
-#   
-# }
-# 
-# library(geometry)
-# library(rgl)
-# 
-# all <- rbind(as.matrix(EXTREME_X), as.matrix(sommets))
-# denom <- convhulln(EXTREME_X,option = "FA")$vol + convhulln(sommets,option = "FA")$vol - convhulln(all,option = "FA")$vol
-# 1-denom/convhulln(EXTREME_X,option = "FA")$vol
-# 1-denom/convhulln(sommets,option = "FA")$vol
-# 
-# 
-# 
-# library(hypervolume)
-# vol <- expectation_convex(data.frame(EXTREME_X), check_memory = FALSE)
-# vol2 <- expectation_convex(data.frame(sommets), check_memory = FALSE)
-# hypervolume_holes(vol, vol2)
-# 
-# 
-# EXTREME_X <- data.frame(EXTREME_X)
-# ts.EXTREME_X<- t(convhulln(EXTREME_X))  # see the qhull documentations for the options
-# ## Not run: 
-# rgl.triangles(EXTREME_X[ts.EXTREME_X,1],EXTREME_X[ts.EXTREME_X,2],EXTREME_X[ts.EXTREME_X,3],col="blue",alpha=1)
-# 
-# sommets <- data.frame(sommets)
-# ts.sommets<- t(convhulln(sommets))  
-# rgl.triangles(sommets[ts.sommets,1],sommets[ts.sommets,2],sommets[ts.sommets,3],col="green",alpha=1)
-# 
-# ashape3d()
-# 
-# polygon3d()
-# mesh.diff(mesh.dsphere(cbind(sommets[ts.sommets,1],sommets[ts.sommets,2],sommets[ts.sommets,3])),
-#           mesh.dsphere(cbind(EXTREME_X[ts.EXTREME_X,1],EXTREME_X[ts.EXTREME_X,2],EXTREME_X[ts.EXTREME_X,3])))
-# 
-# 
-# mesh.dsphere(cbind(sommets[ts.sommets,1],sommets[ts.sommets,2],sommets[ts.sommets,3]))
-# 
-# 
-# 
-# 
-# 
-# convhulln(EXTREME_X)
-# convex.sommet <- cbind(sommets[ts.sommets,1],sommets[ts.sommets,2],sommets[ts.sommets,3])
-# convex.EXTREME_X <- cbind(EXTREME_X[ts.EXTREME_X,1],EXTREME_X[ts.EXTREME_X,2],EXTREME_X[ts.EXTREME_X,3])
-# 
-# 
-# 
-# 
-# p = Polygon( convexData(sommets[, c(1,2)]))
-# ps = Polygons(list(p),1)
-# sps = SpatialPolygons(list(ps))
-# plot(sps, col = "blue")
-# 
-# p = Polygon( convexData(EXTREME_X[, c(1,2)]))
-# ps = Polygons(list(p),1)
-# sps2 = SpatialPolygons(list(ps))
-# plot(sps2, col = "red", add = TRUE)
-# sps3 <- intersect(sps, sps2)
-# plot(sps3, col = "green", add = TRUE)
-# sps3@polygons[[1]]@Polygons[[1]]@area/sps2@polygons[[1]]@Polygons[[1]]@area
-# sps3@polygons[[1]]@Polygons[[1]]@area/sps@polygons[[1]]@Polygons[[1]]@area
-# 
+LP <- OP(objetiv, l_constraint, maximum = FALSE,
+         bounds = bounds)
+y <- ROI_solve(LP, solver = "clp")
+y$solution

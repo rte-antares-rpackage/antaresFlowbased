@@ -19,8 +19,8 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
   univ <- .univ(nb = 200000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
-  face <- fread(face)
-  #face <- giveBClassif(PTDF, nbClust = 36)
+  #face <- fread(face)
+  face <- giveBClassif(PTDF, nbClust = 36)
 
   if(dayType[1] == "All"){
     dayType <- unique(PTDF$Id_day)
