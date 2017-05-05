@@ -9,7 +9,7 @@
 #' @import rAmCharts
 #'
 #' @export
-graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL)
+graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
 
   
@@ -51,28 +51,28 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
   }
 
   out <- cbind(res, res2)
-  names(out) <- c("Mctry1", "Mctry2", "Rctry1", "Rctry2")
+  names(out) <- c(paste0("Model", ctry1), paste0("Model", ctry2),  paste0("Real", ctry1),  paste0("Real", ctry2))
 
   out <- round(out, 2)
 
 
   pipeR::pipeline(
     amXYChart(dataProvider = out),
-    addTitle(text = paste0("Flowbased ", ctry1, "/", ctry2, hour, dayType)),
-    addGraph(title = "Modélisé", balloonText =
-               paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, hour, dayType)),
+    addGraph(title = "Model", balloonText =
+               paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
 
-             bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
+             bullet = 'circle', xField = names(out)[1],yField = names(out)[2],
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
              lineThickness = 1),
-    addGraph(title = "Réel",balloonText =
-               paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-             bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
+    addGraph(title = "Real",balloonText =
+               paste0('<b>Real<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             bullet = 'circle', xField = names(out)[3],yField = names(out)[4],
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#0000FF",
              lineThickness = 1,  dashLength = 7),
     setChartCursor(),
-    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
-    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
+    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = min, maximum = max),
+    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = min, maximum = max),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
@@ -94,12 +94,12 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' }
 #' @export
 generateRaportFb <- function(allFB, dayType){
-
+  dayType2 <- dayType
   output_file <- getwd()
   output_file <- paste0(output_file, "/", "FlowBased_TD",dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
-  e$dta <- allFB[dayType == dayType]
+  e$dta <- allFB[dayType == dayType2]
 
   rmarkdown::render(system.file("/dev/resumeFBflex.Rmd", package = "antaresFlowbased"),
                     output_file = output_file,
