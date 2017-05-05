@@ -4,6 +4,7 @@
 #' @param face \code{character}, path for face file
 #' @param dayType \code{character / numeric} default All, can specify dayType to compute
 #' @param hour \code{character / numeric} default All, can specify hour to compute
+#' @param nbFaces \code{numeric} number of faces to keep, default 36.
 #'
 #' @import ROI
 #' @import ROI.plugin.clp
@@ -13,14 +14,14 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
                                          = "antaresFlowbased"),
                       face = system.file("/optimWork/B.csv", package
                                          = "antaresFlowbased"),
-                      dayType = "All", hour = "All")
+                      dayType = "All", hour = "All", nbFaces = 36)
 {
 
-  univ <- .univ(nb = 200000, bInf = -10000, bSup = 10000)
+  univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
   #face <- fread(face)
-  face <- giveBClassif(PTDF, nbClust = 36)
+  face <- giveBClassif(PTDF, nbClust = nbFaces)
 
   if(dayType[1] == "All"){
     dayType <- unique(PTDF$Id_day)

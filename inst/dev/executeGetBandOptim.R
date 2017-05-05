@@ -1,10 +1,10 @@
 
 ##Optim et rapport
 allFB <- computeFB(dayType = 7:8, hour = 1:24)
-
+allFB
 runAppError(allFB)
 
-
+allFB$outFlowBased[[16]]
 generateRaportFb(allFB, 7)
 
 

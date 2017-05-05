@@ -2,7 +2,11 @@
 shinyServer(function(input, output) {
   
   output$tableauError <- DT::renderDataTable({
-    DT::datatable(giveTableError(dtaUseByShiny),options = list(pageLength = 30000, dom = 't'), rownames = FALSE)
+    dta2 <- giveTableError(dtaUseByShiny)
+    names(dta2)[3] <- paste0("Inf error", " (", round(mean(dta2$error1), 1), " )")
+    names(dta2)[4] <- paste0("Sup error", " (", round(mean(dta2$error2), 1), " )")
+    
+    DT::datatable(dta2,options = list(pageLength = 30000, dom = 't'), rownames = FALSE)
   })
   
   
@@ -23,7 +27,7 @@ shinyServer(function(input, output) {
         sapply(input$Reports, function(X){
           generateRaportFb(dtaUseByShiny, X)
         })
-        filtFiles <- paste0("Flowbased_DT",input$Reports, "_", Sys.Date(), ".html")
+        filtFiles <- paste0("Flowbased_TD",input$Reports, "_", Sys.Date(), ".html")
     
         temp <- zip(file,files = filtFiles)
         file.remove(filtFiles)

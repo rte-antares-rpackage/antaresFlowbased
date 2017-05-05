@@ -32,7 +32,7 @@ data_error <- data.table::rbindlist(lapply(1:nrow(dta), function(x){
 ### Table
 ```{r}
 data_render <- copy(data_error)
-setnames(data_render, c("error1", "error2"), c("Negative error", "Positive error"))
+setnames(data_render, c("error1", "error2"), c("Inf error", "Sup error"))
 knitr::kable(data_render)
 ```
 
@@ -40,8 +40,8 @@ knitr::kable(data_render)
 ```{r}
 
 combineWidgets(
-    plot(amHist(x = data_error$error1, main = "Negative error", export = T, xlab = "Negative error")),
-    plot(amHist(x = data_error$error2, main = "Positive error", export = T, xlab = "Positive error"))
+    plot(amHist(x = data_error$error1, main = "Inf error", export = T, xlab = "Inf error")),
+    plot(amHist(x = data_error$error2, main = "Sup error", export = T, xlab = "Sup error"))
 )
 ```
 
@@ -56,16 +56,16 @@ Row
 data <- dta[hour == 1, outFlowBased][[1]]
 ```
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -106,16 +106,17 @@ Row
 data <- dta[hour == 2, outFlowBased][[1]]
 ```
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -157,17 +158,19 @@ data <- dta[hour == 3, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -209,16 +212,16 @@ data <- dta[hour == 4, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -261,16 +264,17 @@ data <- dta[hour == 5, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -313,16 +317,17 @@ data <- dta[hour == 6, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -365,17 +370,19 @@ data <- dta[hour == 7, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -417,17 +424,19 @@ data <- dta[hour == 8, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -470,17 +479,19 @@ data <- dta[hour == 9, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -522,17 +533,18 @@ data <- dta[hour == 10, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -574,16 +586,17 @@ data <- dta[hour == 11, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -625,16 +638,17 @@ data <- dta[hour == 12, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -676,17 +690,19 @@ data <- dta[hour == 13, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -728,16 +744,17 @@ data <- dta[hour == 14, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -781,17 +798,18 @@ data <- dta[hour == 15, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -833,16 +851,16 @@ data <- dta[hour == 16, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -885,16 +903,17 @@ data <- dta[hour == 17, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 
@@ -937,17 +956,19 @@ data <- dta[hour == 18, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -988,17 +1009,18 @@ data <- dta[hour == 19, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -1039,17 +1061,19 @@ data <- dta[hour == 20, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -1090,18 +1114,18 @@ data <- dta[hour == 21, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
-
 
 Row {data-height=650}
 -----------------------------------------------------------------------
@@ -1141,17 +1165,19 @@ data <- dta[hour == 22, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -1192,17 +1218,19 @@ data <- dta[hour == 23, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
+
 
 
 Row {data-height=650}
@@ -1244,16 +1272,17 @@ data <- dta[hour == 24, outFlowBased][[1]]
 ```
 
 
-### Negative error (belong in the historical domain but not in the model)
+
+### Inf error (points belonging to the historical domain but not to the model)
 
 ```{r}
-valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-plus")
+valueBox(paste0(round(data$error$error1, 1) , "%"), icon = "ion-ios-minus")
 ```
 
-### Positive error (belong in the model but not in the historical domain)
+### Sup error (points belonging to the model but not to the historical domain)
 
 ```{r}
-valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-minus")
+valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 ```
 
 

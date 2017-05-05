@@ -62,13 +62,13 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     addGraph(title = "Modélisé", balloonText =
                paste0('<b>Modélisé<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
 
-             bullet = 'circle', xField = 'Mctry2',yField = 'Mctry1',
-             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#0101DF",
+             bullet = 'circle', xField = 'Mctry1',yField = 'Mctry2',
+             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
              lineThickness = 1),
     addGraph(title = "Réel",balloonText =
                paste0('<b>Réel<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-             bullet = 'circle', xField = 'Rctry2',yField = 'Rctry1',
-             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF8000",
+             bullet = 'circle', xField = 'Rctry1',yField = 'Rctry2',
+             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#0000FF",
              lineThickness = 1,  dashLength = 7),
     setChartCursor(),
     addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
@@ -96,7 +96,7 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 generateRaportFb <- function(allFB, dayType){
 
   output_file <- getwd()
-  output_file <- paste0(output_file, "/", "FlowBased_DT",dayType, "_", Sys.Date(), ".html")
+  output_file <- paste0(output_file, "/", "FlowBased_TD",dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
   e$dta <- allFB[dayType == dayType]
