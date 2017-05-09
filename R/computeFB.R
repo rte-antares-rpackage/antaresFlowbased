@@ -14,6 +14,8 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
                                          = "antaresFlowbased"),
                       face = system.file("/optimWork/B.csv", package
                                          = "antaresFlowbased"),
+                      outputName = "antaresInput",
+                      reports = TRUE,
                       dayType = "All", hour = "All", nbFaces = 36)
 {
 
@@ -67,6 +69,26 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
   ##From B to antares
 
  antaresFace <- .fromBtoAntares(face)
+ 
+ ##Output
+ allFaces <- rbindlist(apply(flowbased,1, function(X){
+   data.table(Id_day = X$dayType, Id_hour = X$hour,
+              X$outFlowBased$face,
+              Name = paste0("FB", 1:nrow(X$outFlowBased$face)))
+ }))
+ setnames(allFaces, "B", "vect_b")
+ outputName <- paste0(getwd(), "/", outputName)
+ dir.create(outputName)
+ write.table(antaresFace, paste0(outputName, "/coefficients_Antares.csv"), row.names = FALSE, sep = ";", dec = ",")
+ saveRDS(flowbased, paste0(outputName, "/domainesFB.RDS"))
+ write.table(allFaces, paste0(outputName, "/fichier_b_final.csv"), row.names = FALSE, sep = ";", dec = ",")
+ if(reports){
+   outputName <- paste0(outputName, "/reports")
+   file.create(outputName)
+   sapply(unique(flowbased$dayType), function(X){
+     generateRaportFb(flowbased, X, outputName)
+   })
+  }
 
 
   flowbased

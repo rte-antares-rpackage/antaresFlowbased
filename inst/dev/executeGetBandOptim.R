@@ -1,6 +1,7 @@
 
 ##Optim et rapport
 allFB <- computeFB(dayType = 7, hour = 1:24, nbFaces = 36)
+devtools::use_data(allFB)
 generateRaportFb(allFB, 7)
 allFB
 runAppError(allFB)

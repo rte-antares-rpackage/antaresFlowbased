@@ -93,9 +93,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' generateRaportFb(allFB, dayType = 7)
 #' }
 #' @export
-generateRaportFb <- function(allFB, dayType){
+generateRaportFb <- function(allFB, dayType, output_file = NULL){
   dayType2 <- dayType
-  output_file <- getwd()
+  if(is.null(output_file)){
+    output_file <- getwd()
+  }
   output_file <- paste0(output_file, "/", "FlowBased_TD",dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
