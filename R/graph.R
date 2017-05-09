@@ -12,16 +12,16 @@
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
 
-  
+
   if(!is.null(hour)){
     hour <- paste0(" Hour ", hour)
   }
-  
-  
+
+
   if(!is.null(dayType)){
     dayType <- paste0(" Typical day ", dayType)
   }
-  
+
   if(ctry2 == "NL"){
     ptctry2 <- -rowSums(flowbased$pointsY)
     ptctry2X <- -rowSums(flowbased$pointX)
@@ -111,10 +111,12 @@ generateRaportFb <- function(allFB, dayType){
 #' Generate html report
 #'
 #' @param dta \code{list}, object obtain which computeFB function
-#' @import DT shiny
+#' @import DT shiny manipulateWidget
 #' @export
 runAppError <- function(dta){
   G <- .GlobalEnv
+  stopifnot(all(c("hour", "dayType", "outFlowBased") %in% colnames(dta)))
   assign("dtaUseByShiny", dta, envir = G)
-  shiny::runApp(system.file("shinyError", package = "antaresFlowbased"))
+  shiny::runApp(system.file("shinyError", package = "antaresFlowbased"),
+                launch.browser = TRUE)
 }
