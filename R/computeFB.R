@@ -1,7 +1,6 @@
 #' Compute flowbased approximation
 #'
 #' @param PTDF \code{character}, path for PTDF file
-#' @param face \code{character}, path for face file
 #' @param dayType \code{character / numeric} default All, can specify dayType to compute
 #' @param hour \code{character / numeric} default All, can specify hour to compute
 #' @param nbFaces \code{numeric} number of faces to keep, default 36.
@@ -12,8 +11,6 @@
 #' @export
 computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
                                          = "antaresFlowbased"),
-                      face = system.file("/optimWork/B.csv", package
-                                         = "antaresFlowbased"),
                       outputName = "antaresInput",
                       reports = TRUE,
                       dayType = "All", hour = "All", nbFaces = 36)
@@ -22,7 +19,6 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
-  #face <- fread(face)
   face <- giveBClassif(PTDF, nbClust = nbFaces)
 
   if(dayType[1] == "All"){

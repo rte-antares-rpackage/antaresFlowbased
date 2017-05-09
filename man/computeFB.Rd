@@ -5,13 +5,11 @@
 \title{Compute flowbased approximation}
 \usage{
 computeFB(PTDF = system.file("/optimWork/PTDF.csv", package =
-  "antaresFlowbased"), face = system.file("/optimWork/B.csv", package =
-  "antaresFlowbased"), dayType = "All", hour = "All", nbFaces = 36)
+  "antaresFlowbased"), outputName = "antaresInput", reports = TRUE,
+  dayType = "All", hour = "All", nbFaces = 36)
 }
 \arguments{
 \item{PTDF}{\code{character}, path for PTDF file}
-
-\item{face}{\code{character}, path for face file}
 
 \item{dayType}{\code{character / numeric} default All, can specify dayType to compute}
 
