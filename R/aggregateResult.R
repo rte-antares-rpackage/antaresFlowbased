@@ -110,7 +110,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
   options(warn = oldw)
 
   #Version which readAntares
-  linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/input/format_output/tableOutput.csv")),
+  linkTable <- try(data.table::fread(system.file("/input/format_output/tableOutput.csv", package = "antaresFlowbased")),
                    silent = TRUE)
   .errorTest(linkTable, verbose, "Load of link table")
 
