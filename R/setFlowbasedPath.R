@@ -3,7 +3,7 @@
 #'
 #' @details
 #' The repertory choosen with \code{setFlowbasedPath} becomes the default
-#' parameters for all functions of the package. The package have some availabled bp \code{getAvailabledBP}.
+#' parameters for all functions of the package. The package have some availabled bp \code{getAvailableBP}.
 #' Current path can be retrieve using \code{fbOptions}
 #'
 #' @param path (optional)
@@ -14,9 +14,9 @@
 #'    \item{id_FB.csv}{}
 #'    \item{domainesFB.RDS}{}
 #'   }
-#' @param bp (optional) If "path" is missing. The name of input availabled inside the package. Linked to \code{\link{getAvailabledBP}}
+#' @param bp (optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableBP}}
 #'
-#' @return A vector of availabled bp for \code{getAvailabledBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
+#' @return A vector of available bp for \code{getAvailableBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
 #'   \item{path}{path of the current input repository}
 #'
 #'
@@ -26,8 +26,8 @@
 #' # Defaut path set loading the package
 #' fbOptions()
 #'
-#' # Specify a availabled bp
-#' getAvailabledBP()
+#' # Specify a available bp
+#' getAvailableBP()
 #' setFlowbasedPath(bp = "BP2017")
 #'
 #' # Select a repository
@@ -52,7 +52,7 @@ setFlowbasedPath <- function(path, bp) {
     dir_bp <- system.file("input/BP", package = "antaresFlowbased")
     available_bp <- list.dirs(dir_bp, full.names = FALSE, recursive = FALSE)
     if(!bp%in%available_bp){
-      stop("Invalid bp name. See availabled BP with getAvailabledBP()")
+      stop("Invalid bp name. See availabled BP with getAvailableBP()")
     }
     path <- paste(dir_bp, bp, sep = "/")
   }
@@ -83,6 +83,6 @@ fbOptions <- function() {
 #' @rdname flowbased-path
 #' @export
 #'
-getAvailabledBP <- function(){
+getAvailableBP <- function(){
   return(list.dirs(system.file("input/BP", package = "antaresFlowbased"), full.names = FALSE, recursive = FALSE))
 }

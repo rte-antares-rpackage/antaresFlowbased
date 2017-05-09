@@ -4,14 +4,14 @@
 \alias{flowbased-path}
 \alias{setFlowbasedPath}
 \alias{fbOptions}
-\alias{getAvailabledBP}
+\alias{getAvailableBP}
 \title{Set of function to control the flowbased input repository}
 \usage{
 setFlowbasedPath(path, bp)
 
 fbOptions()
 
-getAvailabledBP()
+getAvailableBP()
 }
 \arguments{
 \item{path}{(optional)
@@ -23,10 +23,10 @@ If "bp" is missing. Path to the input repertory. . Must have :
  \item{domainesFB.RDS}{}
 }}
 
-\item{bp}{(optional) If "path" is missing. The name of input availabled inside the package. Linked to \code{\link{getAvailabledBP}}}
+\item{bp}{(optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableBP}}}
 }
 \value{
-A vector of availabled bp for \code{getAvailabledBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
+A vector of available bp for \code{getAvailableBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
   \item{path}{path of the current input repository}
 }
 \description{
@@ -34,7 +34,7 @@ Set of function to control the flowbased input repository
 }
 \details{
 The repertory choosen with \code{setFlowbasedPath} becomes the default
-parameters for all functions of the package. The package have some availabled bp \code{getAvailabledBP}.
+parameters for all functions of the package. The package have some availabled bp \code{getAvailableBP}.
 Current path can be retrieve using \code{fbOptions}
 }
 \examples{
@@ -43,8 +43,8 @@ Current path can be retrieve using \code{fbOptions}
 # Defaut path set loading the package
 fbOptions()
 
-# Specify a availabled bp
-getAvailabledBP()
+# Specify a available bp
+getAvailableBP()
 setFlowbasedPath(bp = "BP2017")
 
 # Select a repository

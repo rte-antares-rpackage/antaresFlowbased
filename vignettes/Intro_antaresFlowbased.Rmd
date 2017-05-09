@@ -1,0 +1,60 @@
+---
+title: "Utilisation du package AntaresFlowbased "
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Le package antaresFlowbased permet de lancer des études **flowbased** à partir du logiciel antares.
+
+## 1 - Initialisation de l'étude :
+
+L'initialisation de l'étude se fait via la fonction *initFlowBased()*. Cela se traduit par l'écriture des 4 fichiers suivant dans le répertoire */user/flowbased*, ainsi que la modification temporaire de la configuration du projet : 
+
+* second_member.txt
+* weight.txt
+* scenario.txt
+* ts.txt
+
+Cette fonction utilise par défaut des fichiers présents dans le packages.
+
+Avant toute chose, il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction *setSimulationPath()* du package **antaresRead** :
+
+```{r, eval=FALSE}
+antaresRead::setSimulationPath("D:/exemple_test", 0)
+
+# initialisation de l'étude flowbased
+initFlowBased()
+```
+
+
+## 2 - Lancement des simulations
+
+Préalablement, il est nécéssaire d'indiquer l'emplacement du solver antares via la fonction *setSolverAntares()* :
+
+```{r, eval=FALSE}
+# chemin du solver antares
+setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+
+# affichage du solver renseigne
+getSolverAntares()
+```
+
+Finalement, la fonction *runSimulationFB()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
+
+```{r, eval=FALSE}
+res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
+```
+
+Les paramètres possibles sont les suivants : 
+
+* **simulationName** : Nom de la simulation
+* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
+* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
+* **mcYears** : mcYears à conserver, par défaut tous
+* **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
+* **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
+
+L'étude est alors consultable directement dans antares.

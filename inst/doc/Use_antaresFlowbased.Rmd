@@ -1,5 +1,5 @@
 ---
-title: "Utilisation du package AntaresFlowbased "
+title: "Use antaresFlowbased"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -7,7 +7,103 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Le package antaresFlowbased permet de lancer des études **flowbased** à partir du logiciel antares.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+``antaresFlowbased`` allows the computation of **flowbased** studies using the software *antares*, with 3 main parts : 
+
+- Generation of flowbased domains
+- DayType allocation
+- Simulations
+
+## 1 - Generation of domains
+
+The function *computeFB()* generate flowbased domains from PTDF, using the main following parameters : 
+
+* **PTDF** : PTDF file path
+* **outputName** : name of output directory.
+* **reports** : Boolean. product html reports by typical day or not
+
+**PTDF** is by default file of 2017 FB. This file must be a csv file with **;** field separator string, **,** for decimal points and the following columns :
+
+* **Id_day** : Id of typical day
+* **Period** : Hour
+* **BE** : Face for be
+* **DE** : Face for de
+* **FR** : Face for fr
+* **NL** : Face for nl
+* **RAM_0** : B
+
+You can also control **dayType**, **hour** and **nbFaces** to compute.
+
+The function create a directory with the following files :
+
+* **coefficients_Antares.csv** : Coefficient of face for antares
+* **fichier_b_final.csv** : Faces for each typical day and hour
+* **domainesFB.RDS** : Information about domains (points, errors ,...)
+* **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
+
+## 2 - Input initialization
+
+The other functionnalities need to know the input created with *computeFB()*. You can use input availabled in the package, or your own parameters with this 3 functions : 
+
+* **setFlowbasedPath** : set the input directory
+* **getAvailableBP** : get available input
+* **fbOptions** : current directory
+
+On load, a defaut directory is set.
+
+```{r, echo = FALSE}
+suppressWarnings(require(antaresFlowbased, quietly = T))
+
+```
+
+```{r}
+require(antaresFlowbased)
+
+# default settings
+fbOptions()
+
+# available in package
+getAvailableBP()
+
+# Specify a availabled bp
+setFlowbasedPath(bp = "BP2017")
+
+# Specify a repository
+# setFlowbasedPath(bp = "C:/PATH/TO/INPUT")
+
+```
+
+The directory must contain :
+
+* **coefficients_Antares.csv** : Coefficient of face for antares
+* **fichier_b_final.csv** : Faces for each typical day and hour
+* **domainesFB.RDS** : Information about domains (points, errors ,...)
+* **id_FB.csv** : Calendar
+
+## 3 - Visualization & diffusion
+
+You can visualize, download data and reports for all the domains using a **shiny** application with the function **runAppError()**
+
+<div style="text-align:center" markdown="1">
+<img src="shiny.png" alt="Drawing" style="width: 90%; height: 90%">
+</div>
+
+
+You can also use **plotFB()** to plot one or more domains directly in R : 
+
+```{r, fig.width= 7, fig.height= 7}
+# one graphic
+plotFB(hour = 5, dayType = 1, country1 = "FR", country2 = "DE")
+
+# multiple countries and hour
+plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL"))
+
+```
+
 
 ## 1 - Initialisation de l'étude :
 
@@ -18,12 +114,7 @@ L'initialisation de l'étude se fait via la fonction *initFlowBased()*. Cela se 
 * scenario.txt
 * ts.txt
 
-Cette fonction utilise par défaut des fichiers présents dans le package. Ces fichers contiennent 12 jours types issus d'un clustering sur des domaines historique avec :
-
-* une période historique s'étallant de Novembre 2015 à Janvier 2017
-* une pondération plus forte des domaines aux heures de pointes.
-
-
+Cette fonction utilise par défaut des fichiers présents dans le packages.
 
 Avant toute chose, il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction *setSimulationPath()* du package **antaresRead** :
 
@@ -56,10 +147,16 @@ res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 Les paramètres possibles sont les suivants : 
 
 * **simulationName** : Nom de la simulation
-* **mcAll** : Calcul de la vision synthétique, fichiers mc-all (TRUE ou FALSE)
-* **mcInd** : Conservation de la vision année par année, fichiers mc-ind (TRUE ou FALSE)
-* **mcYears** : mcYears à conserver, par défaut tous (équivalent à une playlist)
+* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
+* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
+* **mcYears** : mcYears à conserver, par défaut tous
 * **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
 * **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
 
-Les résultats des simulations sont alors consultables directement dans antares et/ou lisible avec le package antaresRead.
+L'étude est alors consultable directement dans antares.
+
+
+antaresFlowbased package allows generation of flow based domains.
+
+
+

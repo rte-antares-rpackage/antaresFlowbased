@@ -20,10 +20,10 @@ get_plot_output_list <- function(dta, input_n) {
     plot_output_object <- combineWidgetsOutput(plotname)
     plot_output_object <- renderCombineWidgets({
       combineWidgets(
-      plot(graphFlowBased2D(dta$outFlowBased[[i]], "BE", "FR", hour = dta$hour[i], dayType = dta$dayType[i] )),
-      plot(graphFlowBased2D( dta$outFlowBased[[i]], "DE", "FR", hour = dta$hour[i], dayType = dta$dayType[i])),
-      plot(graphFlowBased2D( dta$outFlowBased[[i]], "BE", "NL", hour = dta$hour[i], dayType = dta$dayType[i])),
-      plot(graphFlowBased2D( dta$outFlowBased[[i]], "DE", "NL", hour = dta$hour[i], dayType = dta$dayType[i]))
+      plot(antaresFlowbased:::graphFlowBased2D(dta$outFlowBased[[i]], "BE", "FR", hour = dta$hour[i], dayType = dta$dayType[i] )),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "FR", hour = dta$hour[i], dayType = dta$dayType[i])),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "BE", "NL", hour = dta$hour[i], dayType = dta$dayType[i])),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "NL", hour = dta$hour[i], dayType = dta$dayType[i]))
       )
     })
     attributes(plot_output_object)$outputFunc <- function (outputId, width = "100%", height = "1000px")
