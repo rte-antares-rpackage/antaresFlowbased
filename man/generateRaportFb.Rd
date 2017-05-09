@@ -4,7 +4,7 @@
 \alias{generateRaportFb}
 \title{Generate html report}
 \usage{
-generateRaportFb(allFB, dayType)
+generateRaportFb(allFB, dayType, output_file = NULL)
 }
 \arguments{
 \item{allFB}{\code{list}, object obtain which computeFB function}
