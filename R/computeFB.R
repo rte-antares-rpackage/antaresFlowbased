@@ -1,6 +1,8 @@
 #' Compute flowbased approximation
 #'
 #' @param PTDF \code{character}, path for PTDF file
+#' @param outputName \code{character}, name of output directory
+#' @param reports \code{boolean}, product html reports by typical day or not
 #' @param dayType \code{character / numeric} default All, can specify dayType to compute
 #' @param hour \code{character / numeric} default All, can specify hour to compute
 #' @param nbFaces \code{numeric} number of faces to keep, default 36.
@@ -11,7 +13,7 @@
 #' @export
 computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
                                          = "antaresFlowbased"),
-                      outputName = "antaresInput",
+                      outputName =  paste0(getwd(), "/antaresInput"),
                       reports = TRUE,
                       dayType = "All", hour = "All", nbFaces = 36)
 {
@@ -74,21 +76,20 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
               Name = paste0("FB", 1:nrow(X$outFlowBased$face)))
  }))
  setnames(allFaces, "B", "vect_b")
- outputName <- paste0(getwd(), "/", outputName)
+
  dir.create(outputName)
  write.table(antaresFace, paste0(outputName, "/coefficients_Antares.csv"), row.names = FALSE, sep = ";", dec = ",")
  saveRDS(flowbased, paste0(outputName, "/domainesFB.RDS"))
  write.table(allFaces, paste0(outputName, "/fichier_b_final.csv"), row.names = FALSE, sep = ";", dec = ",")
  if(reports){
-   outputName <- paste0(outputName, "/reports")
-   file.create(outputName)
+   outputNameReports <- paste0(outputName, "/reports")
+   file.create(outputNameReports)
    sapply(unique(flowbased$dayType), function(X){
-     generateRaportFb(flowbased, X, outputName)
+     generateRaportFb(flowbased, X, outputNameReports)
    })
   }
 
-
-  flowbased
+ outputName
 }
 
 
