@@ -5,11 +5,15 @@
 \title{Compute flowbased approximation}
 \usage{
 computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
-  "antaresFlowbased"), outputName = "antaresInput", reports = TRUE,
-  dayType = "All", hour = "All", nbFaces = 36)
+  "antaresFlowbased"), outputName = paste0(getwd(), "/antaresInput"),
+  reports = TRUE, dayType = "All", hour = "All", nbFaces = 36)
 }
 \arguments{
 \item{PTDF}{\code{character}, path for PTDF file}
+
+\item{outputName}{\code{character}, name of output directory}
+
+\item{reports}{\code{boolean}, product html reports by typical day or not}
 
 \item{dayType}{\code{character / numeric} default All, can specify dayType to compute}
 
