@@ -4,7 +4,8 @@
 \alias{graphFlowBased2D}
 \title{Plot 2D for flowbased areas}
 \usage{
-graphFlowBased2D(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL)
+graphFlowBased2D(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL,
+  min = -7000, max = 7000)
 }
 \arguments{
 \item{flowbased}{\code{list}, flowbased outout obtain which computeFB function}
