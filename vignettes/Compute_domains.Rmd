@@ -37,4 +37,4 @@ In output of this function, a directory is create. The name of directory is info
 
 ## 2 - Visualisation and diffusion
 
-You can visualised domains with function **runAppError**.
+You can visualised domains with function **runAppError**. 
