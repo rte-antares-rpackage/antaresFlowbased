@@ -55,8 +55,6 @@ adQpath <- function(opts)
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
                      select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
   
-  
-  
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
   links[, be :=`be - de` + `be - fr` + `be - nl`]
   links[, de := - `be - de` + `de - fr` + `de - nl`]
