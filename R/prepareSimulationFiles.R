@@ -58,7 +58,8 @@ prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber,
 #' @param nameFb \code{character} name of FB file
 #' @param patch \code{character} patch
 #' @param data \code{data.frame} data
-#' 
+#'
+#' @noRd
 .writeFb <- function(nameFb, patch, data){
   #adding 24 hours (0 : bisextile)
   data <- c(data[Name == nameFb]$vect_b, rep(0,24))

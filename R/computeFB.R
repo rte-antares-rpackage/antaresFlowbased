@@ -9,7 +9,7 @@
 #' @import ROI.plugin.clp
 #'
 #' @export
-computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
+computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
                                          = "antaresFlowbased"),
                       outputName = "antaresInput",
                       reports = TRUE,
@@ -19,6 +19,7 @@ computeFB <- function(PTDF = system.file("/optimWork/PTDF.csv", package
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
+
   face <- giveBClassif(PTDF, nbClust = nbFaces)
 
   if(dayType[1] == "All"){

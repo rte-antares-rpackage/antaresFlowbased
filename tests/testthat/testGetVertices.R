@@ -3,8 +3,8 @@ context("getVertices")
 library(data.table)
 
 
-PTDF <- fread(system.file("test/data/sommets/PTDF.csv",package = "antaresFlowbased"))
-SOMMETS <- fread(system.file("test/data/sommets/sommets_which_solver.csv",package = "antaresFlowbased"))
+PTDF <- fread(system.file("testdata/sommets/PTDF.csv",package = "antaresFlowbased"))
+SOMMETS <- fread(system.file("testdata/sommets/sommets_which_solver.csv",package = "antaresFlowbased"))
 
 tt <- sapply(unique(SOMMETS$Id_day), function(X){
   sapply(unique(SOMMETS$Period),  function(Y){

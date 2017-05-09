@@ -1,20 +1,20 @@
 #' Run antares Simulation with several flow-based time series
-#' 
+#'
 #' @description
 #' This function runs the simulation of an ANTARES study and changes the second members
 #' of the binding constraints for each MC year so as to take into account several flow-based
 #' domains time series in the model.
-#' 
-#' \code{runSimulationFB} function works on an ANTARES study whose input have been detailled with 
+#'
+#' \code{runSimulationFB} function works on an ANTARES study whose input have been detailled with
 #' four new files, located in user/flowbased/ directory :
-#' 
+#'
 #' \itemize{
 #'  \item weight.txt : names and weights of the binding constraints which define the FB domains
-#'  \item second_member.txt : second members of the binding constraints for each typical day and hour 
+#'  \item second_member.txt : second members of the binding constraints for each typical day and hour
 #'  \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
 #'  \item scenario.txt : equivalent to scenario builder, define which time series should be use for each simulated mc-year
 #' }
-#' 
+#'
 #' Those files can be automatically build with the function \link{initFlowBased}.
 #'
 #' @param simulationName \code{character} name of simulation. Defaut to 'FlowBased'.
@@ -57,8 +57,8 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   if(mcAll == FALSE & mcInd == FALSE){
     stop("mcAll and mcInd are equal to FALSE")
   }
-  
-  
+
+
   # set simulation parent / first study
   oldw <- getOption("warn")
   options(warn = -1)
@@ -72,12 +72,12 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   solver <- solver[[length(solver)]]
   versionSolver <- substr(solver, 1, 1)
   versionStudy <- substr(opts$antaresVersion,1,1)
-  
+
   if(versionSolver != versionStudy){
     stop(paste0("Imcompatibility between antares solver version (", versionSolver, ") and study version(", versionStudy), ")")
   }
-  
-  
+
+
   # control mode
   if(!opts$parameters$general$mode %in%c("Economy" , "Adequacy")){
     stop(paste0("Study must be in 'Economy' or 'Adequacy' mode. Function not available for '", opts$parameters$general$mode, "'"))
@@ -116,26 +116,26 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
   .errorTest(scenario, verbose, "Load of scenario.txt")
 
-  
+
   ##Control input files scenario
   if(opts$parameters$general$nbyears < nrow(scenario))
   {
     stop(paste0("Error in input files : there are more scenarios (in user/flowbased/scenario.txt) than MCyears"))
   }
-  
+
   #All scenario in ts
   if(!all(as.character(scenario$simulation) %in% names(ts))){
     concernScenario <-  paste(unique(as.character(scenario$simulation)[!as.character(scenario$simulation) %in% names(ts)]), collapse = "; ")
     stop(paste0("Error in input files : no ts (in /user/flowbased/ts.txt) for scenarios :",concernScenario))
   }
-  
 
-  
+
+
   #Exclude scenarios to redefine
   if(mcYears[1] != "all"){
     scenario[-c(mcYears)] <- NA
   }
-  
+
   #All hours in second members
   second_member2 <- second_member[,.(Id_hour = list(sort(Id_hour))), by = c("Name", "Id_day")]
   if(!all(unlist(lapply(second_member2$Id_hour, function(X)all(X == 1:24))))){
@@ -146,14 +146,14 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
 
   #all ts day are predent in second_member
   typeDayCtrl <- unique(second_member$Id_day)
-  
+
   if(!all(unlist(data.frame(ts)[,-1])%in%typeDayCtrl)){
     concerDay <- unique(unlist(data.frame(ts)[,-1])[!unlist(data.frame(ts)[,-1])%in%typeDayCtrl])
     concerDay <- paste0(concerDay, collapse = "; ")
     stop(paste0("Some days specify in ts (in /user/flowbased/ts.txt) are not in second_member (in user/flowbased/second_member.txt) :", concerDay))
   }
-  
-  
+
+
   ##Prepare CMD to run antares
   AntaresPatch <- getSolverAntares()
   if(is.null(AntaresPatch)){
@@ -168,7 +168,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
 
   # simulation
   allScenario <- as.numeric(na.omit(unique(scenario$simulation)))
-  
+
   # if(.test){
   #   allScenario <- allScenario[2:3]
   # }
@@ -263,7 +263,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
       oldw <- getOption("warn")
       options(warn = -1)
       opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
-      diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/output/digest.csv"))
+      diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/input/format_output/digest.csv"))
       options(warn = oldw)
       areas <- antaresRead::readAntares(timeStep = "annual", showProgress = FALSE)
       areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]

@@ -8,6 +8,8 @@
 #'
 #' @return \code{matrix}
 #'
+#' @noRd
+#'
 .univ <- function(nb, bInf, bSup, seed = 123456789)
 {
   if(!is.null(seed)){
@@ -44,6 +46,7 @@
 #'
 #' @return \code{data.frame} error inf and error sup
 #'
+#' @noRd
 .giveError <- function(FY, PTDF, univ)
 {
   constrainmat <- PTDF[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]%>>%as.matrix

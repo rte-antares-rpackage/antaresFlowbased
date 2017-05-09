@@ -1,7 +1,7 @@
 context("Function aggregateResult")
 
 #Untar and read study
-testStudy <- system.file("test/data/exemple_test.tgz",package = "antaresFlowbased")
+testStudy <- system.file("testdata/exemple_test.tgz",package = "antaresFlowbased")
 untar(testStudy)
 testStudy <- paste0(getwd(), "/exemple_test")
 opts <- antaresRead::setSimulationPath(testStudy)
@@ -20,7 +20,7 @@ resAW <- readAntares(areas = "all", links = "all", clusters = "all", timeStep = 
 unlink(paste0(testStudy, "/output/testAggregate/economy/mc-all"), recursive = TRUE)
 
 dir.create( paste0(testStudy, "/output/testAggregate/economy/mc-all/"))
-file.copy(paste0(paste0(testStudy, "/output/testAggregate/economy/mc-all-antares/"), 
+file.copy(paste0(paste0(testStudy, "/output/testAggregate/economy/mc-all-antares/"),
                  list.files(paste0(testStudy, "/output/testAggregate/economy/mc-all-antares/"))),
             paste0(testStudy, "/output/testAggregate/economy/mc-all/"), recursive = TRUE)
 
@@ -44,10 +44,10 @@ resH <- resAH$areas - resRH$areas
 resM <- resAM$areas - resRM$areas
 resW <- resAW$areas - resRW$areas
 
-expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) + 
-  sum(resD>2 | resD < -2 , na.rm = TRUE) + 
-  sum(resH>2 | resH < -2 , na.rm = TRUE) + 
-  sum(resM>2 | resM < -2 , na.rm = TRUE) + 
+expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) +
+  sum(resD>2 | resD < -2 , na.rm = TRUE) +
+  sum(resH>2 | resH < -2 , na.rm = TRUE) +
+  sum(resM>2 | resM < -2 , na.rm = TRUE) +
   sum(resW>2 | resW < -2 , na.rm = TRUE), 0)
 
 #Test if antares aggregation and R aggregation are similar for links
@@ -58,10 +58,10 @@ resD <- resAD$links - resRD$links
 resH <- resAH$links - resRH$links
 resM <- resAM$links - resRM$links
 resW <- resAW$links - resRW$links
-expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) + 
-               sum(resD>2 | resD < -2 , na.rm = TRUE) + 
-               sum(resH>2 | resH < -2 , na.rm = TRUE) + 
-               sum(resM>2 | resM < -2 , na.rm = TRUE) + 
+expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) +
+               sum(resD>2 | resD < -2 , na.rm = TRUE) +
+               sum(resH>2 | resH < -2 , na.rm = TRUE) +
+               sum(resM>2 | resM < -2 , na.rm = TRUE) +
                sum(resW>2 | resW < -2 , na.rm = TRUE), 0)
 
 
@@ -73,10 +73,10 @@ resD <- resAD$clusters - resRD$clusters
 resH <- resAH$clusters - resRH$clusters
 resM <- resAM$clusters - resRM$clusters
 resW <- resAW$clusters - resRW$clusters
-expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) + 
-               sum(resD>2 | resD < -2 , na.rm = TRUE) + 
-               sum(resH>2 | resH < -2 , na.rm = TRUE) + 
-               sum(resM>2 | resM < -2 , na.rm = TRUE) + 
+expect_equal(sum(resA>2 | resA < -2 , na.rm = TRUE) +
+               sum(resD>2 | resD < -2 , na.rm = TRUE) +
+               sum(resH>2 | resH < -2 , na.rm = TRUE) +
+               sum(resM>2 | resM < -2 , na.rm = TRUE) +
                sum(resW>2 | resW < -2 , na.rm = TRUE), 0)
 
 

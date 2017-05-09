@@ -30,12 +30,12 @@ This function runs the simulation of an ANTARES study and changes the second mem
 of the binding constraints for each MC year so as to take into account several flow-based
 domains time series in the model.
 
-\code{runSimulationFB} function works on an ANTARES study whose input have been detailled with 
+\code{runSimulationFB} function works on an ANTARES study whose input have been detailled with
 four new files, located in user/flowbased/ directory :
 
 \itemize{
  \item weight.txt : names and weights of the binding constraints which define the FB domains
- \item second_member.txt : second members of the binding constraints for each typical day and hour 
+ \item second_member.txt : second members of the binding constraints for each typical day and hour
  \item ts.txt : several time series of typical days to describe several aleas on flow-based domains
  \item scenario.txt : equivalent to scenario builder, define which time series should be use for each simulated mc-year
 }
