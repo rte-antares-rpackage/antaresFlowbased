@@ -100,7 +100,7 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' plotFB(1,1,"FR","NL")
 #' plotFB(1:2,1,"FR","NL")
 #' plotFB(1:2,1:2,"FR","NL")
-#' plotFB(1,1,c("FR", "DE"),c("NL", "BE"))
+#' plotFB(1,1,c("FR", "DE"),c("NL", "FR"))
 #' }
 #' 
 #' 
@@ -112,11 +112,11 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
   dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
 
   if(!all(hour%in%dta$hour)){
-    stop(paste0("Some hour are not in data :",paste0(hour[!hour%in%dta$hour])))
+    stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%dta$hour])))
   }
   
   if(!all(dayType%in%dta$dayType)){
-    stop(paste0("Some typical day are not in data :",paste0(dayType[!dayType%in%dta$dayType])))
+    stop(paste0("Some typical day are not in data : ",paste0(dayType[!dayType%in%dta$dayType])))
   }
   
   if(!all(country1 %in% c("DE","BE","FR","NL"))){
@@ -125,17 +125,27 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
   if(!all(country2 %in% c("DE","BE","FR","NL"))){
     stop("All country2 must be in : DE, BE, FR, NL")
   }
-  res <- sapply(hour, function(hoursel){
+  if(length(country1) != length(country2)){
+    stop("country1 must be same length to country2")
+  }
+  
+  allCtry <- data.frame(country1 = country1, country2 = country2)
+  graphList <- sapply(hour, function(hoursel){
     sapply(dayType, function(dayTypesel){
-      sapply(country1, function(count1sel){
-        sapply(country2, function(count2sel){
-          graphFlowBased2D(dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]],
-                           count1sel, count2sel, dayType = dayTypesel, hour = hoursel) %>>% plot()
-        }, simplify = FALSE)
-      })
+        apply(allCtry, 1, function(countsel){
+          ctsel <- data.frame(t(countsel))
+          tempData <- dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]]
+          if(length(tempData)==0)
+          {
+            stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
+          }
+          graphFlowBased2D(tempData,
+                           as.character(ctsel$country1), as.character(ctsel$country2)
+                           , dayType = dayTypesel, hour = hoursel) %>>% plot()
+        })
     })
   })
-  combineWidgets(list = res)
+  combineWidgets(list = graphList)
 }
 
 
