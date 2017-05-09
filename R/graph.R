@@ -101,7 +101,7 @@ generateRaportFb <- function(allFB, dayType){
   e$dayType <- dayType
   e$dta <- allFB[dayType == dayType2]
 
-  rmarkdown::render(system.file("/dev/resumeFBflex.Rmd", package = "antaresFlowbased"),
+  rmarkdown::render(system.file("/report/resumeFBflex.Rmd", package = "antaresFlowbased"),
                     output_file = output_file,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
                     intermediates_dir = getwd(), envir = e)

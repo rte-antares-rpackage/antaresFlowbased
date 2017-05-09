@@ -1,7 +1,7 @@
 #' @title Move file after simulations
 #'
 #' @description Move file after simulations
-#' 
+#'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param simulationName \code{character} name of simulation return by \link{runSimulationFB}
 #' @param verbose \code{numeric} show log in console. Defaut to 1
@@ -110,7 +110,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
   options(warn = oldw)
 
   #Version which readAntares
-  linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/output/tableOutput.csv")),
+  linkTable <- try(data.table::fread(paste0(path.package("antaresFlowbased"), "/input/format_output/tableOutput.csv")),
                    silent = TRUE)
   .errorTest(linkTable, verbose, "Load of link table")
 
@@ -410,12 +410,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Extract value part of data
 #'
 #' @description Extract value part of data
-#' 
+#'
 #' @param dta \code{data.table} of data load which antaresRead::readAntares
 #' @param SDcolsStartareas \code{numeric} first column of data for areas
 #' @param SDcolsStartClust \code{numeric} first column of data for details
 #'
 #' @return value {data.table} value selected
+#'
+#' @noRd
 .giveValue <- function(dta, SDcolsStartareas, SDcolsStartClust)
 {
   value <- list(areas = dta$areas[,lapply(.SD, as.numeric), .SDcols = (SDcolsStartareas+1):ncol(dta$areas)],
@@ -427,12 +429,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Create stat file compute min, max sd and mean
 #'
 #' @description Create stat file compute min, max sd and mean
-#' 
-#' @param X \code{data.table} data load which 
+#'
+#' @param X \code{data.table} data load which
 #' antaresRead::readAntares and extract which .giveValue
-#' 
+#'
 #' @return res {data.table} stats computed
-#' 
+#'
+#' @noRd
+#'
 .creatStats <- function(X){
   res <- list(sum = X, min = X, max = X,
               sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
@@ -446,13 +450,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Update data min, max sd and mean
 #'
 #' @description Update data min, max sd and mean
-#' 
+#'
 #' @param X \code{data.table} data init which .creatStats
-#' @param Y \code{data.table} data load which 
+#' @param Y \code{data.table} data load which
 #' antaresRead::readAntares and extract which .giveValue
-#' 
+#'
 #' @return X {data.table} stats updated
-#' 
+#'
+#' @noRd
 .updateStats <- function(X, Y){
   X$sum <-  X$sum + Y$sum
   X$min <-  pmin(X$min , Y$min)
@@ -466,7 +471,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Write mc-all files
 #'
 #' @description Write mc-all files
-#' 
+#'
 #' @param dta \code{data.table} data
 #' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
 #' @param fileType \code{character} must be values or details
@@ -481,7 +486,9 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @param unit \code{character} for header write, unit of variables
 #' @param nomStruct \code{character} for header write, depend of timestep
 #' @param Stats \code{character} for header write, stats compute for eatch variables
-#'  
+#'
+#'
+#' @noRd
 .writeFileOut <- function(dta, timestep, fileType, ctry, opts, folderType, nbvar,
                           indexMin, indexMax, ncolFix, nomcair, unit, nomStruct, Stats){
 
@@ -535,12 +542,13 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Edit info on output folder
 #'
 #' @description Edit info on output folder
-#' 
+#'
 #' @param outData \code{character} out folder path
 #' @param simulationName \code{character} simulation name
 #' @param dateTim2 \code{datetime} simulation begin date time
 #' @param dtTim \code{datetime} simulation end date time
-#' 
+#'
+#' @noRd
 .editOutputInfo <- function(outData, simulationName, dateTim2, dtTim)
 {
   #Edit infos output simulation
@@ -560,15 +568,16 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @title Progress bar
 #'
 #' @description Progress bar
-#' 
+#'
 #' @param pb \code{progressbar} progress bar to update
 #' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
 #' @param timestep \code{character} must be annual, monthly, weekly, daily or hourly
 #' @param mcALLNum \code{numeric} current mcYears position
 #' @param nbmcallTOT \code{numeric} number of  mcYear
-#' 
+#'
 #' @return progress bar update
-#' 
+#'
+#' @noRd
 .progBar <- function(pb, timeStep, mcALLNum, nbmcallTOT)
 {
 

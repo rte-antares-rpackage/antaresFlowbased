@@ -33,20 +33,20 @@ getVertices <- function(face, b){
               NULL
             },simplify = FALSE)
         #   }
-        #   
+        #
         # }, simplify = FALSE)
       }
     }, simplify = FALSE)
   }, simplify = FALSE)%>>%
     unlist%>>%
     matrix(ncol = 8, byrow = TRUE)
-  
+
   res <- res[round(rowSums(res[,5:8]), 2) == 0,]
   DD <- dist(res[,5:8], method = "euclidean", p = 2, upper = FALSE)
   DD <- as.matrix(DD)
   DD[lower.tri(DD, diag = TRUE)] <- 1
   res <- res[which(apply(DD, 2, min)>1e-6),5:7]
-  
+
   res
 }
 
@@ -66,7 +66,7 @@ giveTuples <- function(face, pointX){
   }
   )
   B <- face
-  
+
   B <- as.matrix(B)
   IDfin <- 1:nrow(B)
   res <- sapply(IDfin, function(X)
@@ -103,7 +103,8 @@ giveTuples <- function(face, pointX){
 #' Transform B to antares format
 #'
 #' @param B \code{data.table}, face for 3 country, BE, DE anf FR
-#' 
+#'
+#' @noRd
 .fromBtoAntares <- function(B){
   names(B) <- c("BE", "DE", "FR")
   coefAntares <- data.table(Name = paste0("FB", 1:nrow(B)),

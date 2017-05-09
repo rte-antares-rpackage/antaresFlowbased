@@ -2,5 +2,6 @@
 
 library(testthat)
 library(antaresFlowbased)
+library(antaresRead)
 
 testthat::test_check("antaresFlowbased")
