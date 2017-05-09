@@ -39,6 +39,7 @@
 #' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
 #' # init directory for study
+#' setFlowbasedPath(bp = "BP2017")
 #' initFlowBased()
 #'
 #' # run flowbased simulation

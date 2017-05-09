@@ -8,10 +8,8 @@
 #'
 #' @import rAmCharts
 #'
-#' @export
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
-
 
   if(!is.null(hour)){
     hour <- paste0(" Hour ", hour)
@@ -21,6 +19,15 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
   if(!is.null(dayType)){
     dayType <- paste0(" Typical day ", dayType)
   }
+  
+  if(ctry1 == "NL"){
+    ptctry <- -rowSums(flowbased$pointsY)
+    ptctryX <- -rowSums(flowbased$pointX)
+  }else{
+    ptctry <- flowbased$pointsY[[ctry1]]
+    ptctryX <- flowbased$pointX[[ctry1]]
+  }
+  
 
   if(ctry2 == "NL"){
     ptctry2 <- -rowSums(flowbased$pointsY)
@@ -30,11 +37,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     ptctry2X <- flowbased$pointX[[ctry2]]
   }
 
-  res <- data.frame(ctry1 = flowbased$pointsY[[ctry1]],
+  res <- data.frame(ctry1 = ptctry,
                     ctry2 = ptctry2)
   res <- res[chull(res),]
   res <- rbind(res, res[1,])
-  res2 <- data.frame(ctry1 = flowbased$pointX[[ctry1]],
+  res2 <- data.frame(ctry1 = ptctryX,
                      ctry2 = ptctry2X)
   res2 <- res2[chull(res2),]
   res2 <- rbind(res2, res2[1,])
@@ -79,9 +86,34 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 
 }
 
+#' Plot 2D for flowbased areas
+#'
+#' @param flowbased \code{list}, flowbased outout obtain which computeFB function
+#' @param ctry1 \code{character}, country in X
+#' @param ctry2 \code{character}, country in Y
+#' @param hour \code{numeric}, hour
+#' @param dayType \code{numeric}, dayType
+#' 
+#' @export
+plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased::fbOptions()){
+  hoursel <- hour
+  dayTypesel <- dayType
+  dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
+  graphFlowBased2D(dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]],
+                   country1, country2)
+}
+
+
+
+
+
+
+
+
 #' Generate html report
 #'
-#' @param allFB \code{list}, object obtain which computeFB function
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @param output_file \code{character}, output directory
 #' @param dayType \code{numeric}, dayType
 #'
 #' @import rmarkdown flexdashboard rAmCharts manipulateWidget
@@ -93,7 +125,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' generateRaportFb(allFB, dayType = 7)
 #' }
 #' @export
-generateRaportFb <- function(allFB, dayType, output_file = NULL){
+generateRaportFb <- function(dayType, output_file = NULL,
+                             fb_opts = antaresFlowbased::fbOptions()){
+  
+  
+  allFB <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
   dayType2 <- dayType
   if(is.null(output_file)){
     output_file <- getwd()
@@ -110,12 +146,15 @@ generateRaportFb <- function(allFB, dayType, output_file = NULL){
 }
 
 
-#' Generate html report
+#' Run shiny visualisation of error
 #'
-#' @param dta \code{list}, object obtain which computeFB function
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#'
 #' @import DT shiny manipulateWidget
 #' @export
-runAppError <- function(dta){
+runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
+  
+  dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
   G <- .GlobalEnv
   stopifnot(all(c("hour", "dayType", "outFlowBased") %in% colnames(dta)))
   assign("dtaUseByShiny", dta, envir = G)

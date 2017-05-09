@@ -2,9 +2,7 @@
 #'
 #' @description  Generate environment for a flow-based study
 #'
-#' @param weight \code{character}, path of weight file. Defaut use data in package.
-#' @param secondMember \code{character}, path of secondMember file. Defaut use data in package.
-#' @param dayType \code{character}, path of dayType file. Defaut use data in package.
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #'
 #' @examples
@@ -13,7 +11,9 @@
 #' # target antares study
 #' path <- "D:/exemple_test"
 #' antaresRead::setSimulationPath(path, 0)
-#'
+#' 
+#' setFlowbasedPath(bp = "BP2017")
+#' 
 #' initFlowBased()
 #' }
 #'
@@ -21,9 +21,7 @@
 #'
 #' @export
 #'
-initFlowBased <- function(weight = system.file("/input/BP/BP2017/coefficients_Antares.csv", package = "antaresFlowbased"),
-                          secondMember = system.file("/input/BP/BP2017/fichier_b_final.csv", package = "antaresFlowbased"),
-                          dayType =  system.file("/input/BP/BP2017/id_FB.csv", package = "antaresFlowbased"),
+initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
                           opts = antaresRead::simOptions()){
 
 
@@ -34,20 +32,20 @@ initFlowBased <- function(weight = system.file("/input/BP/BP2017/coefficients_An
   dir.create(newDir, showWarnings = FALSE, recursive = TRUE)
 
   #Get weight
-  weightData <- .getWeight(weight)
+  weightData <- .getWeight(paste0(fb_opts$path, "/coefficients_Antares.csv"))
 
   #Write weight.txt
   .setWeight(path = paste0(newDir, "/weight.txt"), weightData = weightData)
 
   #Get second members
-  secondMemberData <- .getSecondMember(secondMember)
+  secondMemberData <- .getSecondMember(paste0(fb_opts$path, "/fichier_b_final.csv"))
 
   #Write second_member.txt
   .setSecondMember(path = paste0(newDir, "/second_member.txt"), secondMemberData = secondMemberData)
 
   #Create type day matrix, just load, it will change in next version
-  if(!is.null(dayType)){
-    dayTypeData <- .getDayType(dayType)
+  if(paste0(fb_opts$path, "/id_FB.csv") != ""){
+    dayTypeData <- .getDayType(paste0(fb_opts$path, "/id_FB.csv"))
     .setDayType(path = paste0(newDir, "/ts.txt"),
                 dayTypeData = dayTypeData)
   }

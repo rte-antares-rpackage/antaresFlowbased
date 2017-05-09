@@ -59,7 +59,7 @@
 #'
 #' @noRd
 .getDayType <- function(daytype){
-  data.table::fread(daytype, sep = " ", dec = ",", header = TRUE)
+  data.table::fread(daytype, sep = ";", dec = ",", header = TRUE)
 }
 
 #' Write daytype file

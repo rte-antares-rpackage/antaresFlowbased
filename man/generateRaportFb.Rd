@@ -4,12 +4,15 @@
 \alias{generateRaportFb}
 \title{Generate html report}
 \usage{
-generateRaportFb(allFB, dayType, output_file = NULL)
+generateRaportFb(dayType, output_file = NULL,
+  fb_opts = antaresFlowbased::fbOptions())
 }
 \arguments{
-\item{allFB}{\code{list}, object obtain which computeFB function}
-
 \item{dayType}{\code{numeric}, dayType}
+
+\item{output_file}{\code{character}, output directory}
+
+\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
 }
 \description{
 Generate html report

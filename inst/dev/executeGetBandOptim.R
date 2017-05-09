@@ -7,8 +7,9 @@ runAppError(allFB)
 
 allFB$outFlowBased[[16]]
 generateRaportFb(allFB, 7)
-
-
+setFlowbasedPath(path = "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/antaresInput")
+setFlowbasedPath(bp = "BP2017")
+runAppError()
 names(res) <- c("BE", "DE", "FR")
 res <- data.frame(res)
 
