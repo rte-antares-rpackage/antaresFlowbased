@@ -13,7 +13,7 @@ giveBClassif <- function(PTDF, nbClust = 36)
   PTDFKmCare <- rowSums(PTDFKmCare)
   PTDFKm <- PTDFKm / sqrt(PTDFKmCare)
  
-  res <- cutree(hclust(dist(PTDFKm, method = "manhattan"), method = "ward.D2"), 36)
+  res <- cutree(hclust(dist(PTDFKm, method = "euclidean"), method = "ward.D"), 36)
   
   # res <- NULL
   # for(i in 1:300){
