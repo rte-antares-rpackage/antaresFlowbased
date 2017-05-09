@@ -2,13 +2,13 @@
 % Please edit documentation in R/graph.R
 \name{runAppError}
 \alias{runAppError}
-\title{Generate html report}
+\title{Run shiny visualisation of error}
 \usage{
-runAppError(dta)
+runAppError(fb_opts = antaresFlowbased::fbOptions())
 }
 \arguments{
-\item{dta}{\code{list}, object obtain which computeFB function}
+\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
 }
 \description{
-Generate html report
+Run shiny visualisation of error
 }

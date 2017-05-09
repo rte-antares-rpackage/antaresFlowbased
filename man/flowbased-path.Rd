@@ -41,7 +41,6 @@ Current path can be retrieve using \code{fbOptions}
 
 \dontrun{
 # Defaut path set loading the package
-
 fbOptions()
 
 # Specify a availabled bp

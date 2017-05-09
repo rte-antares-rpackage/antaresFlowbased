@@ -8,10 +8,8 @@
 #'
 #' @import rAmCharts
 #'
-#' @export
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
-
 
   if(!is.null(hour)){
     hour <- paste0(" Hour ", hour)
@@ -81,7 +79,8 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 
 #' Generate html report
 #'
-#' @param allFB \code{list}, object obtain which computeFB function
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @param output_file \code{character}, output directory
 #' @param dayType \code{numeric}, dayType
 #'
 #' @import rmarkdown flexdashboard rAmCharts manipulateWidget
@@ -93,7 +92,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' generateRaportFb(allFB, dayType = 7)
 #' }
 #' @export
-generateRaportFb <- function(allFB, dayType, output_file = NULL){
+generateRaportFb <- function(dayType, output_file = NULL,
+                             fb_opts = antaresFlowbased::fbOptions()){
+  
+  
+  allFB <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
   dayType2 <- dayType
   if(is.null(output_file)){
     output_file <- getwd()
@@ -110,12 +113,15 @@ generateRaportFb <- function(allFB, dayType, output_file = NULL){
 }
 
 
-#' Generate html report
+#' Run shiny visualisation of error
 #'
-#' @param dta \code{list}, object obtain which computeFB function
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#'
 #' @import DT shiny manipulateWidget
 #' @export
-runAppError <- function(dta){
+runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
+  
+  dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
   G <- .GlobalEnv
   stopifnot(all(c("hour", "dayType", "outFlowBased") %in% colnames(dta)))
   assign("dtaUseByShiny", dta, envir = G)
