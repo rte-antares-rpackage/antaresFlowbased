@@ -19,6 +19,15 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
   if(!is.null(dayType)){
     dayType <- paste0(" Typical day ", dayType)
   }
+  
+  if(ctry1 == "NL"){
+    ptctry <- -rowSums(flowbased$pointsY)
+    ptctryX <- -rowSums(flowbased$pointX)
+  }else{
+    ptctry <- flowbased$pointsY[[ctry1]]
+    ptctryX <- flowbased$pointX[[ctry1]]
+  }
+  
 
   if(ctry2 == "NL"){
     ptctry2 <- -rowSums(flowbased$pointsY)
@@ -28,11 +37,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     ptctry2X <- flowbased$pointX[[ctry2]]
   }
 
-  res <- data.frame(ctry1 = flowbased$pointsY[[ctry1]],
+  res <- data.frame(ctry1 = ptctry,
                     ctry2 = ptctry2)
   res <- res[chull(res),]
   res <- rbind(res, res[1,])
-  res2 <- data.frame(ctry1 = flowbased$pointX[[ctry1]],
+  res2 <- data.frame(ctry1 = ptctryX,
                      ctry2 = ptctry2X)
   res2 <- res2[chull(res2),]
   res2 <- rbind(res2, res2[1,])
@@ -76,6 +85,30 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
   )
 
 }
+
+#' Plot 2D for flowbased areas
+#'
+#' @param flowbased \code{list}, flowbased outout obtain which computeFB function
+#' @param ctry1 \code{character}, country in X
+#' @param ctry2 \code{character}, country in Y
+#' @param hour \code{numeric}, hour
+#' @param dayType \code{numeric}, dayType
+#' 
+#' @export
+plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased::fbOptions()){
+  hoursel <- hour
+  dayTypesel <- dayType
+  dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
+  graphFlowBased2D(dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]],
+                   country1, country2)
+}
+
+
+
+
+
+
+
 
 #' Generate html report
 #'
