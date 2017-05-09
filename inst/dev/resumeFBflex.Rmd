@@ -54,6 +54,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 1, outFlowBased][[1]]
+hour <- 1
 ```
 
 ### Inf error (points belonging to the historical domain but not to the model)
@@ -75,25 +76,25 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 Hour 2 {data-navmenu="Hour"}
@@ -104,6 +105,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 2, outFlowBased][[1]]
+hour <- 2
 ```
 
 
@@ -126,26 +128,27 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 3 {data-navmenu="Hour"}
 =====================================  
@@ -155,6 +158,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 3, outFlowBased][[1]]
+hour <- 3
 ```
 
 
@@ -179,26 +183,27 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 4 {data-navmenu="Hour"}
@@ -209,6 +214,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 4, outFlowBased][[1]]
+hour <- 4
 ```
 
 
@@ -231,26 +237,27 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 5 {data-navmenu="Hour"}
@@ -261,6 +268,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 5, outFlowBased][[1]]
+hour <- 5
 ```
 
 
@@ -284,25 +292,25 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -314,6 +322,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 6, outFlowBased][[1]]
+hour <- 6
 ```
 
 
@@ -337,25 +346,25 @@ Row {data-height=650}
 
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -367,6 +376,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 7, outFlowBased][[1]]
+hour <- 7
 ```
 
 
@@ -388,29 +398,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 8 {data-navmenu="Hour"}
@@ -421,6 +431,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 8, outFlowBased][[1]]
+hour <- 8
 ```
 
 
@@ -441,31 +452,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 
 Row {data-height=650}
 -----------------------------------------------------------------------
-
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
-
 
 
 Hour 9 {data-navmenu="Hour"}
@@ -476,6 +484,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 9, outFlowBased][[1]]
+hour <- 9
 ```
 
 
@@ -497,28 +506,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -530,6 +538,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 10, outFlowBased][[1]]
+hour <- 10
 ```
 
 
@@ -550,29 +559,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 11 {data-navmenu="Hour"}
@@ -583,6 +592,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 11, outFlowBased][[1]]
+hour <- 11
 ```
 
 
@@ -602,30 +612,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 
 Row {data-height=650}
 -----------------------------------------------------------------------
-
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 12 {data-navmenu="Hour"}
 =====================================  
@@ -635,6 +644,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 12, outFlowBased][[1]]
+hour <- 12
 ```
 
 
@@ -655,28 +665,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 Hour 13 {data-navmenu="Hour"}
@@ -687,6 +696,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 13, outFlowBased][[1]]
+hour <- 13
 ```
 
 
@@ -707,30 +717,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 
 Row {data-height=650}
 -----------------------------------------------------------------------
-
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 14 {data-navmenu="Hour"}
@@ -741,6 +750,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 14, outFlowBased][[1]]
+hour <- 14
 ```
 
 
@@ -760,29 +770,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 
 Row {data-height=650}
 -----------------------------------------------------------------------
-
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -795,6 +803,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 15, outFlowBased][[1]]
+hour <- 15
 ```
 
 
@@ -815,29 +824,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 16 {data-navmenu="Hour"}
@@ -848,6 +857,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 16, outFlowBased][[1]]
+hour <- 16
 ```
 
 
@@ -867,29 +877,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
 Hour 17 {data-navmenu="Hour"}
@@ -900,6 +910,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 17, outFlowBased][[1]]
+hour <- 17
 ```
 
 
@@ -920,28 +931,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -953,6 +963,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 18, outFlowBased][[1]]
+hour <- 18
 ```
 
 
@@ -974,29 +985,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 19 {data-navmenu="Hour"}
 =====================================  
@@ -1006,6 +1017,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 19, outFlowBased][[1]]
+hour <- 19
 ```
 
 
@@ -1026,29 +1038,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 20 {data-navmenu="Hour"}
 =====================================  
@@ -1058,6 +1070,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 20, outFlowBased][[1]]
+hour <- 20
 ```
 
 
@@ -1079,28 +1092,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 Hour 21 {data-navmenu="Hour"}
@@ -1111,6 +1123,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 21, outFlowBased][[1]]
+hour <- 21
 ```
 
 
@@ -1130,29 +1143,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 22 {data-navmenu="Hour"}
 =====================================  
@@ -1162,6 +1175,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 22, outFlowBased][[1]]
+hour <- 22
 ```
 
 
@@ -1183,29 +1197,29 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 Hour 23 {data-navmenu="Hour"}
 =====================================  
@@ -1215,6 +1229,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 23, outFlowBased][[1]]
+hour <- 23
 ```
 
 
@@ -1236,28 +1251,27 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
 
 
@@ -1269,6 +1283,7 @@ Row
 
 ```{r, echo = FALSE, eval = TRUE}
 data <- dta[hour == 24, outFlowBased][[1]]
+hour <- 24
 ```
 
 
@@ -1289,28 +1304,28 @@ valueBox(paste0(round(data$error$error2, 1) , "%"), icon = "ion-ios-plus")
 Row {data-height=650}
 -----------------------------------------------------------------------
 
-
 ### BE/FR
 ```{r}
-graphFlowBased2D(data, "BE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "FR", hour = hour, dayType = dayType)
 ```
 
 ### DE/FR
 ```{r}
-graphFlowBased2D(data, "DE", "FR", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "FR", hour = hour, dayType = dayType)
 ```
 
 Row {data-height=650}
 ------------------------------------------------------------------
 ### BE/NL {.no-padding}
 ```{r}
-graphFlowBased2D(data, "BE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "BE", "NL", hour = hour, dayType = dayType)
 ```
 
 
 ### DE/NL
 ```{r}
-graphFlowBased2D(data, "DE", "NL", hour = data$hour, dayType = data$dayType)
+graphFlowBased2D(data, "DE", "NL", hour = hour, dayType = dayType)
 ```
+
 
 
