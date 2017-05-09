@@ -10,12 +10,12 @@
 #'
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
-
+  
   if(!is.null(hour)){
     hour <- paste0(" Hour ", hour)
   }
-
-
+  
+  
   if(!is.null(dayType)){
     dayType <- paste0(" Typical day ", dayType)
   }
@@ -28,7 +28,7 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     ptctryX <- flowbased$pointX[[ctry1]]
   }
   
-
+  
   if(ctry2 == "NL"){
     ptctry2 <- -rowSums(flowbased$pointsY)
     ptctry2X <- -rowSums(flowbased$pointX)
@@ -36,7 +36,7 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     ptctry2 <- flowbased$pointsY[[ctry2]]
     ptctry2X <- flowbased$pointX[[ctry2]]
   }
-
+  
   res <- data.frame(ctry1 = ptctry,
                     ctry2 = ptctry2)
   res <- res[chull(res),]
@@ -45,30 +45,30 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
                      ctry2 = ptctry2X)
   res2 <- res2[chull(res2),]
   res2 <- rbind(res2, res2[1,])
-
-
+  
+  
   max_r <- max(nrow(res), nrow(res2))
   if(nrow(res)<max_r){
     res <- rbind(res, data.frame(ctry1 = rep(NA, max_r-nrow(res)),
-                 ctry2 = rep(NA, max_r-nrow(res))))
+                                 ctry2 = rep(NA, max_r-nrow(res))))
   }
   if(nrow(res2)<max_r){
     res2 <- rbind(res2, data.frame(ctry1 = rep(NA,max_r- nrow(res2)),
-                                 ctry2 = rep(NA, max_r-nrow(res2))))
+                                   ctry2 = rep(NA, max_r-nrow(res2))))
   }
-
+  
   out <- cbind(res, res2)
   names(out) <- c(paste0("Model", ctry1), paste0("Model", ctry2),  paste0("Real", ctry1),  paste0("Real", ctry2))
-
+  
   out <- round(out, 2)
-
-
+  
+  
   pipeR::pipeline(
     amXYChart(dataProvider = out),
     addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, hour, dayType)),
     addGraph(title = "Model", balloonText =
                paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-
+             
              bullet = 'circle', xField = names(out)[1],yField = names(out)[2],
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
              lineThickness = 1),
@@ -83,24 +83,59 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
-
+  
 }
 
 #' Plot 2D for flowbased areas
 #'
-#' @param flowbased \code{list}, flowbased outout obtain which computeFB function
-#' @param ctry1 \code{character}, country in X
-#' @param ctry2 \code{character}, country in Y
 #' @param hour \code{numeric}, hour
 #' @param dayType \code{numeric}, dayType
+#' @param country1 \code{character}, country in X
+#' @param country2 \code{character}, country in Y
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' 
+#' @examples
+#'
+#' \dontrun{
+#' plotFB(1,1,"FR","NL")
+#' plotFB(1:2,1,"FR","NL")
+#' plotFB(1:2,1:2,"FR","NL")
+#' plotFB(1,1,c("FR", "DE"),c("NL", "BE"))
+#' }
+#' 
 #' 
 #' @export
 plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased::fbOptions()){
   hoursel <- hour
   dayTypesel <- dayType
+
   dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
-  graphFlowBased2D(dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]],
-                   country1, country2)
+
+  if(!all(hour%in%dta$hour)){
+    stop(paste0("Some hour are not in data :",paste0(hour[!hour%in%dta$hour])))
+  }
+  
+  if(!all(dayType%in%dta$dayType)){
+    stop(paste0("Some typical day are not in data :",paste0(dayType[!dayType%in%dta$dayType])))
+  }
+  
+  if(!all(country1 %in% c("DE","BE","FR","NL"))){
+    stop("All country1 must be in : DE, BE, FR, NL")
+  }
+  if(!all(country2 %in% c("DE","BE","FR","NL"))){
+    stop("All country2 must be in : DE, BE, FR, NL")
+  }
+  res <- sapply(hour, function(hoursel){
+    sapply(dayType, function(dayTypesel){
+      sapply(country1, function(count1sel){
+        sapply(country2, function(count2sel){
+          graphFlowBased2D(dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]],
+                           count1sel, count2sel, dayType = dayTypesel, hour = hoursel) %>>% plot()
+        }, simplify = FALSE)
+      })
+    })
+  })
+  combineWidgets(list = res)
 }
 
 
@@ -138,7 +173,7 @@ generateRaportFb <- function(dayType, output_file = NULL,
   e <- environment()
   e$dayType <- dayType
   e$dta <- allFB[dayType == dayType2]
-
+  
   rmarkdown::render(system.file("/report/resumeFBflex.Rmd", package = "antaresFlowbased"),
                     output_file = output_file,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
