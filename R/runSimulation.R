@@ -263,7 +263,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
       oldw <- getOption("warn")
       options(warn = -1)
       opts <- antaresRead::setSimulationPath(opts$studyPath, filesMoves)
-      diges <- data.table::fread(paste0(path.package("antaresFlowbased"), "/input/format_output/digest.csv"))
+      diges <- data.table::fread(system.file("/input/format_output/digest.csv", package = "antaresFlowbased"))
       options(warn = oldw)
       areas <- antaresRead::readAntares(timeStep = "annual", showProgress = FALSE)
       areas <- areas[, .SD, .SDcols = c(1:3,which(names(areas)%in%diges$Variable))]
