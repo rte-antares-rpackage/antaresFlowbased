@@ -63,3 +63,4 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   invisible(TRUE)
 
 }
+

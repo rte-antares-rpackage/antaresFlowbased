@@ -112,7 +112,15 @@ You can also produce reports in html format. This solution can be use to facilit
 
 ## 1 - Study init
 
-Initialisation of study is done by the function *initFlowBased ()*. This result by the write of the following 4 files in the folder */user/flowbased* as well as the temporary modification of the project configuration :
+
+First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
+
+## Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
+
+Initialisation of study is done by the function *initFlowBased()*. 
+
+
+This result by the write of the following 4 files in the folder */user/flowbased* as well as the temporary modification of the project configuration :
 
 * second_member.txt
 * weight.txt
@@ -121,7 +129,6 @@ Initialisation of study is done by the function *initFlowBased ()*. This result 
 
 This function uses default files in the package.
 
-First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)

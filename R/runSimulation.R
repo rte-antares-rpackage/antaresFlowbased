@@ -64,7 +64,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
-  options(warn = oldw)
+ 
 
   ##Test version of antares solver
   solver <- getSolverAntares()
@@ -293,6 +293,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
       write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
     }, silent = TRUE)
   }
+  options(warn = oldw)
   .errorTest(digetsWrite, verbose, "Digest write")
   .addMessage(verbose, "End of run")
 }

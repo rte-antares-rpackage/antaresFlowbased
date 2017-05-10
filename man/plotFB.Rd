@@ -12,12 +12,23 @@ plotFB(dayType, hour, country1, country2,
 
 \item{hour}{\code{numeric}, hour}
 
-\item{flowbased}{\code{list}, flowbased outout obtain which computeFB function}
+\item{country1}{\code{character}, country in X}
 
-\item{ctry1}{\code{character}, country in X}
+\item{country2}{\code{character}, country in Y}
 
-\item{ctry2}{\code{character}, country in Y}
+\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
 }
 \description{
 Plot 2D for flowbased areas
+}
+\examples{
+
+\dontrun{
+plotFB(1,1,"FR","NL")
+plotFB(1:2,1,"FR","NL")
+plotFB(1:2,1:2,"FR","NL")
+plotFB(1,1,c("FR", "DE"),c("NL", "FR"))
+}
+
+
 }

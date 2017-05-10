@@ -29,6 +29,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   }
 
   if(hour[1] == "All"){
+    reports <- FALSE
     hour <- unique(PTDF$Period)
   }
 
@@ -83,9 +84,9 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
  write.table(allFaces, paste0(outputName, "/fichier_b_final.csv"), row.names = FALSE, sep = ";", dec = ",")
  if(reports){
    outputNameReports <- paste0(outputName, "/reports")
-   file.create(outputNameReports)
+   dir.create(outputNameReports)
    sapply(unique(flowbased$dayType), function(X){
-     generateRaportFb(flowbased, X, outputNameReports)
+     generateRaportFb(allFB = flowbased, X, outputNameReports)
    })
   }
 

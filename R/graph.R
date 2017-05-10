@@ -108,9 +108,9 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased::fbOptions()){
   hoursel <- hour
   dayTypesel <- dayType
-
+  
   dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
-
+  
   if(!all(hour%in%dta$hour)){
     stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%dta$hour])))
   }
@@ -132,17 +132,17 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
   allCtry <- data.frame(country1 = country1, country2 = country2)
   graphList <- sapply(hour, function(hoursel){
     sapply(dayType, function(dayTypesel){
-        apply(allCtry, 1, function(countsel){
-          ctsel <- data.frame(t(countsel))
-          tempData <- dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]]
-          if(length(tempData)==0)
-          {
-            stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
-          }
-          graphFlowBased2D(tempData,
-                           as.character(ctsel$country1), as.character(ctsel$country2)
-                           , dayType = dayTypesel, hour = hoursel) %>>% plot()
-        })
+      apply(allCtry, 1, function(countsel){
+        ctsel <- data.frame(t(countsel))
+        tempData <- dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]]
+        if(length(tempData)==0)
+        {
+          stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
+        }
+        graphFlowBased2D(tempData,
+                         as.character(ctsel$country1), as.character(ctsel$country2)
+                         , dayType = dayTypesel, hour = hoursel) %>>% plot()
+      })
     })
   })
   combineWidgets(list = graphList)
@@ -171,10 +171,13 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #' }
 #' @export
 generateRaportFb <- function(dayType, output_file = NULL,
-                             fb_opts = antaresFlowbased::fbOptions()){
+                             fb_opts = antaresFlowbased::fbOptions(),
+                             allFB = NULL){
   
-  
-  allFB <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
+  if(is.null(allFB))
+  {
+    allFB <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
+  }
   dayType2 <- dayType
   if(is.null(output_file)){
     output_file <- getwd()
