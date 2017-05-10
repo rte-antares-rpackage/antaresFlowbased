@@ -104,19 +104,24 @@ plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL
 
 ```
 
+You can also produce reports in html format. This solution can be use to facilitate the sharing.
+<div style="text-align:center" markdown="1">
+<img src="report.png" alt="Drawing" style="width: 90%; height: 90%">
+</div>
 
-## 1 - Initialisation de l'étude :
 
-L'initialisation de l'étude se fait via la fonction *initFlowBased()*. Cela se traduit par l'écriture des 4 fichiers suivant dans le répertoire */user/flowbased*, ainsi que la modification temporaire de la configuration du projet : 
+## 1 - Study init
+
+Initialisation of study is done by the function *initFlowBased ()*. This result by the write of the following 4 files in the folder */user/flowbased* as well as the temporary modification of the project configuration :
 
 * second_member.txt
 * weight.txt
 * scenario.txt
 * ts.txt
 
-Cette fonction utilise par défaut des fichiers présents dans le packages.
+This function uses default files in the package.
 
-Avant toute chose, il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction *setSimulationPath()* du package **antaresRead** :
+First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)
@@ -126,9 +131,9 @@ initFlowBased()
 ```
 
 
-## 2 - Lancement des simulations
+## 2 - Launching simulations
 
-Préalablement, il est nécéssaire d'indiquer l'emplacement du solver antares via la fonction *setSolverAntares()* :
+Previously, it is necessary to indicate the location of the antares solver via the function : *setSolverAntares()*
 
 ```{r, eval=FALSE}
 # chemin du solver antares
@@ -138,25 +143,21 @@ setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solv
 getSolverAntares()
 ```
 
-Finalement, la fonction *runSimulationFB()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
+Finally, the function * runSimulationFB () * runs the flowbased study, simulating the different scenarios before aggregating the results.
 
 ```{r, eval=FALSE}
 res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 ```
 
-Les paramètres possibles sont les suivants : 
+Possible parameters are :
 
-* **simulationName** : Nom de la simulation
-* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
-* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
-* **mcYears** : mcYears à conserver, par défaut tous
-* **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
-* **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
+* **simulationName** : Name of simulation
+* **mcAll** : Calculation of mcAll (TRUE or FALSE)
+* **mcInd** : Preserving of mcInd (TRUE or FALSE)
+* **mcYears** : McYears to retain, default all
+* **opts** : Antares project (obtained with the setSimulationPath function). By default, it loads into the global environment
+* **verbose** : Log level in the R console (0, 1 or 2)  default 1.
 
-L'étude est alors consultable directement dans antares.
-
-
-antaresFlowbased package allows generation of flow based domains.
-
+The study can then be consulted directly in antares.
 
 
