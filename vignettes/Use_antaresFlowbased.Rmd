@@ -117,7 +117,7 @@ You can also produce reports in html format. This solution can be use to facilit
 
 First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
 
-## Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
+Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
 
 **path** parameters can be use to specify a folder generate by *computeFB()* funciton.
 
@@ -153,7 +153,7 @@ setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solv
 getSolverAntares()
 ```
 
-Finally, the function * runSimulationFB () * runs the flowbased study, simulating the different scenarios before aggregating the results.
+Finally, the function * runSimulationFB() * runs the flowbased study, simulating the different scenarios before aggregating the results.
 
 ```{r, eval=FALSE}
 res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
