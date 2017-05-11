@@ -60,6 +60,8 @@ library(antaresRead)
 library(antaresFlowbased)
 opts <- setSimulationPath('D:/Users/titorobe/Desktop/exemple_test/', '20170403-1622r_from')
 dta <- adqPatch(opts)
+
+
 dta2 <- readAntares(areas = c("fr", "be", "de", "nl"), 
                     links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
                     select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))

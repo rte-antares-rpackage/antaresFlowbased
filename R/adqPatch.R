@@ -38,7 +38,6 @@ adqPatch <- function(opts)
   b36Prim <- as.matrix(b36)[,2:4]
   b36Prim <- cbind(b36Prim, 0)
   
-  
   new <- rbindlist(sapply(1:nrow(out), function(X){
     outR <- out[X]
     if(nrow(outR[c(which(LOLD_fr!=0),
@@ -50,7 +49,6 @@ adqPatch <- function(opts)
                      which(lole_de!=0),
                      which(lole_nl!=0))])>1)
       {
-        print("ici")
         senar <- scenario[outR$mcYear]$simulation
         dayType <- ts[[as.character(senar)]][yday(outR$time)]
         Hour <- hour(outR$time) + 1
@@ -62,33 +60,9 @@ adqPatch <- function(opts)
         #b36 <- fread("inst/ADQpatch/B36.txt")
         lole <- outR[, .SD, .SDcols = c("lole_be", "lole_de", "lole_fr", "lole_nl")]
         lole <- unlist(lole)
-        D <- as.vector(ifelse(lole == 0, 0, 1))
-        res <- c(
-          1, 1, 1, 1,
-          D[1]*D[2]*lole[2], -D[1]*D[2]*lole[1],0,0,
-          D[1]*D[3]*lole[3], 0, -D[1]*D[3]*lole[1], 0,
-          D[1]*D[4]*lole[4],0,0,-D[1]*D[4]*lole[1],
-          0,D[2]*D[3]*lole[3],-D[2]*D[3]*lole[2],0,
-          0, D[2]*D[4]*lole[4], 0, -D[2]*D[4]*lole[2],
-          0,0,D[3]*D[4]*lole[4],-D[3]*D[4]*lole[3])
-        res <- matrix(res, ncol = 4, byrow = TRUE)
-        allMat <- rbind(res, b36Prim)
-        rep <- c(rep(0, 7), b$V2)
-        sens <- c(rep("==", 7), rep("<=", length(b$V2)))
-        objetiv <- c(lole)
-        l_constraint <- L_constraint(L = allMat,
-                                     dir = sens,
-                                     rhs = rep)
-        bounds <- V_bound(li=1:4, lb=rep(-Inf, 4))
-        LP <- OP(objetiv, l_constraint, maximum = FALSE,
-                 bounds = bounds)
-        y <- ROI_solve(LP, solver = "clp")
-        y$solution
-        outR$PN_be <- y$solution[1]
-        outR$PN_de <- y$solution[2]
-        outR$PN_fr <- y$solution[3]
-        outR$PN_nl <- y$solution[4]
-        outR
+        sol <- resolveAdq(b36Prim, lole, b)
+        
+        cbind(outR, sol)
       }
     }
   }))
@@ -144,4 +118,41 @@ adqPatch <- function(opts)
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   dta
+}
+
+
+
+#' Correction of lole
+#' 
+#' @param b36 \code{matrix}, faces
+#' @param lole \code{data.frame}, energy
+#' @param b \code{numeric}, b
+#' 
+#' @export
+resolveAdq <- function(b36, lole, b){
+  D <- as.vector(ifelse(lole == 0, 0, 1))
+  res <- c(
+    1, 1, 1, 1,
+    D[1]*D[2]*lole[2], -D[1]*D[2]*lole[1],0,0,
+    D[1]*D[3]*lole[3], 0, -D[1]*D[3]*lole[1], 0,
+    D[1]*D[4]*lole[4],0,0,-D[1]*D[4]*lole[1],
+    0,D[2]*D[3]*lole[3],-D[2]*D[3]*lole[2],0,
+    0, D[2]*D[4]*lole[4], 0, -D[2]*D[4]*lole[2],
+    0,0,D[3]*D[4]*lole[4],-D[3]*D[4]*lole[3])
+  res <- matrix(res, ncol = 4, byrow = TRUE)
+  allMat <- rbind(res, b36)
+  rep <- c(rep(0, 7), b$V2)
+  sens <- c(rep("==", 7), rep("<=", length(b$V2)))
+  objetiv <- c(lole)
+  l_constraint <- L_constraint(L = allMat,
+                               dir = sens,
+                               rhs = rep)
+  bounds <- V_bound(li=1:4, lb=rep(-Inf, 4))
+  LP <- OP(objetiv, l_constraint, maximum = FALSE,
+           bounds = bounds)
+  y <- ROI_solve(LP, solver = "clp", control = list(amount = 0))
+  data.table(PN_be = y$solution[1],
+             PN_de = y$solution[2],
+             PN_fr = y$solution[3],
+             PN_nl = y$solution[4])
 }
