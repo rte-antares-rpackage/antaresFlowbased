@@ -45,6 +45,9 @@ The function create a directory with the following files :
 * **domainesFB.RDS** : Information about domains (points, errors ,...)
 * **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
 
+To add chronics file to this folder, you must use function *addChroniquesFile()*. In this version of package, chronics file can't be change. The **outputName** specify the directory where chroniques files will be save. We recommend to specify same folder as *computeFB()* call.
+
+
 ## 2 - Input initialization
 
 The other functionnalities need to know the input created with *computeFB()*. You can use input availabled in the package, or your own parameters with this 3 functions : 
@@ -104,59 +107,94 @@ plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL
 
 ```
 
+You can also produce reports in html format. This solution can be use to facilitate the sharing.
+<div style="text-align:center" markdown="1">
+<img src="report.png" alt="Drawing" style="width: 90%; height: 90%">
+</div>
 
-## 1 - Initialisation de l'étude :
 
-L'initialisation de l'étude se fait via la fonction *initFlowBased()*. Cela se traduit par l'écriture des 4 fichiers suivant dans le répertoire */user/flowbased*, ainsi que la modification temporaire de la configuration du projet : 
+## 4 - Study init
+
+First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
+
+## Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
+
+**path** parameters can be use to specify a folder generate by *computeFB()* funciton.
+
+Initialisation of study is done by the function *initFlowBased()*. 
+
+
+This result by the write of the following 4 files in the folder */user/flowbased* as well as the temporary modification of the project configuration :
 
 * second_member.txt
 * weight.txt
 * scenario.txt
 * ts.txt
 
-Cette fonction utilise par défaut des fichiers présents dans le packages.
-
-Avant toute chose, il est nécéssaire d'indiquer l'étude antares sur laquelle nous souhaitons travailler via la fonction *setSimulationPath()* du package **antaresRead** :
+This function uses default files contain in your optimisation forlder (create by *computeFB()* function)
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)
 
-# initialisation de l'étude flowbased
+# initialisation of flowbased study
 initFlowBased()
 ```
 
 
-## 2 - Lancement des simulations
+## 5 - Launching simulations
 
-Préalablement, il est nécéssaire d'indiquer l'emplacement du solver antares via la fonction *setSolverAntares()* :
+Previously, it is necessary to indicate the location of the antares solver via the function : *setSolverAntares()*
 
 ```{r, eval=FALSE}
-# chemin du solver antares
+# antares solver
 setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
 
-# affichage du solver renseigne
+
 getSolverAntares()
 ```
 
-Finalement, la fonction *runSimulationFB()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
+Finally, the function * runSimulationFB () * runs the flowbased study, simulating the different scenarios before aggregating the results.
 
 ```{r, eval=FALSE}
 res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 ```
 
-Les paramètres possibles sont les suivants : 
+Possible parameters are :
 
-* **simulationName** : Nom de la simulation
-* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
-* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
-* **mcYears** : mcYears à conserver, par défaut tous
-* **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
-* **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
+* **simulationName** : Name of simulation
+* **mcAll** : Calculation of mcAll (TRUE or FALSE)
+* **mcInd** : Preserving of mcInd (TRUE or FALSE)
+* **mcYears** : McYears to retain, default all
+* **opts** : Antares project (obtained with the setSimulationPath function). By default, it loads into the global environment
+* **verbose** : Log level in the R console (0, 1 or 2)  default 1.
 
-L'étude est alors consultable directement dans antares.
+The study can then be consulted directly in antares.
 
+## 6 - Resume, complet exemple
 
-antaresFlowbased package allows generation of flow based domains.
+```{r, eval=FALSE}
 
+#Compute FB from package PTDF file, save in directory "model1"
+computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
+          outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
+#Add Chronics file to directory "model1"
+addChroniquesFile("D:/Users/titorobe/Desktop/model1")
 
+#Set setFlowbased directory path
+setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
 
+#Run shiny application for error visualisation
+runAppError()
+
+#Set antares study path
+antaresRead::setSimulationPath("D:/exemple_test", 0)
+
+#Init flowbased study
+initFlowBased()
+
+#Set antares solver path
+setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+
+#Run antares simulation
+runSimulationFB()
+```
