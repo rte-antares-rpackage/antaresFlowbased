@@ -113,7 +113,7 @@ You can also produce reports in html format. This solution can be use to facilit
 </div>
 
 
-## 1 - Study init
+## 4 - Study init
 
 First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
 
@@ -136,20 +136,20 @@ This function uses default files contain in your optimisation forlder (create by
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)
 
-# initialisation de l'étude flowbased
+# initialisation of flowbased study
 initFlowBased()
 ```
 
 
-## 2 - Launching simulations
+## 5 - Launching simulations
 
 Previously, it is necessary to indicate the location of the antares solver via the function : *setSolverAntares()*
 
 ```{r, eval=FALSE}
-# chemin du solver antares
+# antares solver
 setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
 
-# affichage du solver renseigne
+
 getSolverAntares()
 ```
 
@@ -170,4 +170,31 @@ Possible parameters are :
 
 The study can then be consulted directly in antares.
 
+## 6 - Resume, complet exemple
 
+```{r, eval=FALSE}
+
+#Compute FB from package PTDF file, save in directory "model1"
+computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
+          outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
+#Add Chronics file to directory "model1"
+addChroniquesFile("D:/Users/titorobe/Desktop/model1")
+
+#Set setFlowbased directory path
+setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
+
+#Run shiny application for error visualisation
+runAppError()
+
+#Set antares study path
+antaresRead::setSimulationPath("D:/exemple_test", 0)
+
+#Init flowbased study
+initFlowBased()
+
+#Set antares solver path
+setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+
+#Run antares simulation
+runSimulationFB()
+```
