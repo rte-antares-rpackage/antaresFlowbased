@@ -202,7 +202,11 @@ generateRaportFb <- function(dayType, output_file = NULL,
 #'
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #'
-#' @import DT shiny manipulateWidget
+#' @import shiny manipulateWidget
+#' @importFrom DT renderDataTable
+#' @importFrom DT dataTableOutput
+#' @importFrom DT datatable
+#' 
 #' @export
 runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
   

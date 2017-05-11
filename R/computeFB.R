@@ -7,6 +7,7 @@
 #' @param hour \code{character / numeric} default All, can specify hour to compute
 #' @param nbFaces \code{numeric} number of faces to keep, default 36.
 #' @param verbose \code{numeric} show log in console. Defaut to 0
+#' @param allFB \code{data.table}, FB data.table directly load in R.
 #' \itemize{
 #'  \item 0 : No log
 #'  \item 1 : Short log
