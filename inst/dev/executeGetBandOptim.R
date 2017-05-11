@@ -1,13 +1,29 @@
 
+
+
+
+
 ##Optim et rapport
-allFB <- computeFB(dayType = 7, hour = 1:24, nbFaces = 36)
+computeFB(outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0)
+addChroniquesFile("D:/Users/titorobe/Desktop/model1")
+setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
+runAppError()
+
+antaresRead::setSimulationPath("D:/exemple_test", 0)
+initFlowBased()
+setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+runSimulationFB()
+
+
+
+
+
 generateRaportFb(allFB, 7)
 allFB
 runAppError(allFB)
 
 allFB$outFlowBased[[16]]
 generateRaportFb(allFB, 7)
-setFlowbasedPath(path = "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/antaresInput")
 setFlowbasedPath(bp = "BP2017")
 runAppError()
 names(res) <- c("BE", "DE", "FR")

@@ -45,6 +45,9 @@ The function create a directory with the following files :
 * **domainesFB.RDS** : Information about domains (points, errors ,...)
 * **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
 
+To add chronics file to this folder, you must use function *addChroniquesFile()*. In this version of package, chronics file can't be change. The **outputName** specify the directory where chroniques files will be save. We recommend to specify same folder as *computeFB()* call.
+
+
 ## 2 - Input initialization
 
 The other functionnalities need to know the input created with *computeFB()*. You can use input availabled in the package, or your own parameters with this 3 functions : 
@@ -112,10 +115,11 @@ You can also produce reports in html format. This solution can be use to facilit
 
 ## 1 - Study init
 
-
 First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
 
 ## Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
+
+**path** parameters can be use to specify a folder generate by *computeFB()* funciton.
 
 Initialisation of study is done by the function *initFlowBased()*. 
 
@@ -127,8 +131,7 @@ This result by the write of the following 4 files in the folder */user/flowbased
 * scenario.txt
 * ts.txt
 
-This function uses default files in the package.
-
+This function uses default files contain in your optimisation forlder (create by *computeFB()* function)
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)

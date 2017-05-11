@@ -6,15 +6,18 @@
 #' @param probleme \code{optimization_model}, make which askProbleme
 #' @param PTDF \code{data.frame} PTDF
 #' @param univ \code{matrix} generate which .univ
-#'
+#' @param verbose \code{numeric} show log in console. Defaut to 1
+#' \itemize{
+#'  \item 0 : No log
+#'  \item 1 : Short log
+#' }
+#' 
 #' @import pipeR
 #'
 #' @export
-searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ){
+searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
   alpha <- 0.5
   tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
-  tt
-
   stratPoint <- (nrow(face) + nrow(pointX) * 6)
 
 
@@ -35,13 +38,9 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ){
     }
     alpha <- (bsup + binf) / 2
     tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
-    tt
-    # bSol <- get_solution(tt, b[i])$value
-    # FY <- cbind(FACE_Y, bSol)
     FY <- cbind(face, bSol = tt$solution[1:nrow(face)])
     error <- .giveError(FY, PTDF = PTDF, univ = univ)
     nbrep <- nbrep + 1
-    print(alpha)
   }
   pointsY <- data.frame(BE = tt$solution[(stratPoint+ 1) :
                                            (stratPoint + nrow(faceY))],
@@ -52,6 +51,9 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ){
   )
   names(FY) <- c("BE", "DE", "FR", "B")
   FY <- data.frame(FY)
+  if(verbose>0){
+    cat(paste0( "\n", "Objective out :" ,tt$objval, "\n"))
+  }
   return(list(alpha = alpha, error = error, face = FY, pointsY = pointsY))
 }
 
@@ -364,7 +366,7 @@ resolvBmat <- function(face, pointX, faceY, probleme, alpha)
                         c(rep((1-alpha)/nrow(pointX),  length(iEX)*6), rep((alpha)/nrow(faceY), 6*length(iEY)))))
   LP <- OP(obj, probleme$l_constraint, maximum = FALSE,
            bounds = probleme$bounds)
-  y <- ROI_solve(LP, solver = "clp")
+  y <- ROI_solve(LP, solver = "clp", control = list(amount = 0))
   y
 }
 

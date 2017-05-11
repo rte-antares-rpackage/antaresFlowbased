@@ -6,7 +6,11 @@
 #' @param dayType \code{character / numeric} default All, can specify dayType to compute
 #' @param hour \code{character / numeric} default All, can specify hour to compute
 #' @param nbFaces \code{numeric} number of faces to keep, default 36.
-#'
+#' @param verbose \code{numeric} show log in console. Defaut to 1
+#' \itemize{
+#'  \item 0 : No log
+#'  \item 1 : Short log
+#' }
 #' @import ROI
 #' @import ROI.plugin.clp
 #'
@@ -15,15 +19,16 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
                                          = "antaresFlowbased"),
                       outputName =  paste0(getwd(), "/antaresInput"),
                       reports = TRUE,
-                      dayType = "All", hour = "All", nbFaces = 36)
+                      dayType = "All", hour = "All", nbFaces = 36,
+                      verbose = 0)
 {
-
+  pb <- txtProgressBar(style = 3)
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
   PTDF <- fread(PTDF)
 
   face <- giveBClassif(PTDF, nbClust = nbFaces)
-
+  face <- round(face, 2)
   if(dayType[1] == "All"){
     dayType <- unique(PTDF$Id_day)
   }
@@ -36,10 +41,15 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   flowbased <- data.table(expand.grid(hour, dayType))
   names(flowbased) <- c("hour", "dayType")
   flowbased$outFlowBased <- rep(list(), nrow(flowbased))
+  Nsim <- nrow(flowbased)
+  RowUse <- 0
   sapply(hour, function(X){
     sapply(dayType, function(Y){
-      print(paste0("hour ", X))
-      print(paste0("dayType ", Y))
+      if(verbose>0){
+        cat(paste0("\n", "Optim for hour : ", X, " and typical day : ", Y, "\n"))
+      }
+      RowUse <<- RowUse + 1
+      setTxtProgressBar(pb, RowUse/Nsim)
       PTDFsel <- PTDF[Id_day == Y & Period == X]
 
       pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
@@ -54,7 +64,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
                          faceY = faceY,
                          probleme = probleme,
                          PTDF = PTDFsel,
-                         univ = univ)
+                         univ = univ, verbose = verbose)
       out$pointX <- data.frame(pointX)
       names(out$pointX) <- c( "BE", "DE", "FR")
       out$param$hour <- X
@@ -86,7 +96,8 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
    outputNameReports <- paste0(outputName, "/reports")
    dir.create(outputNameReports)
    sapply(unique(flowbased$dayType), function(X){
-     generateRaportFb(allFB = flowbased, X, outputNameReports)
+     print(outputNameReports)
+     generateRaportFb(allFB = flowbased, dayType = X, output_file = outputNameReports)
    })
   }
 
@@ -94,3 +105,14 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
 }
 
 
+
+#' Chronique file to optimisation output
+#' 
+#' @param outputName \code{character}, name of output directory
+#' @export
+addChroniquesFile <- function(outputName){
+  Chroniques <- system.file("/input/id_FB.txt", package
+                            = "antaresFlowbased")
+  Chroniques <- fread(Chroniques)
+  write.table(Chroniques,paste0(outputName, "/id_FB.csv"), row.names = FALSE, sep = ";")
+}

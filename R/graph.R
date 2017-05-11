@@ -182,6 +182,7 @@ generateRaportFb <- function(dayType, output_file = NULL,
   if(is.null(output_file)){
     output_file <- getwd()
   }
+  output_Dir <- output_file
   output_file <- paste0(output_file, "/", "FlowBased_TD",dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
@@ -190,7 +191,8 @@ generateRaportFb <- function(dayType, output_file = NULL,
   rmarkdown::render(system.file("/report/resumeFBflex.Rmd", package = "antaresFlowbased"),
                     output_file = output_file,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
-                    intermediates_dir = getwd(), envir = e)
+                    intermediates_dir = output_Dir, envir = e,
+                    quiet = TRUE)
 }
 
 
