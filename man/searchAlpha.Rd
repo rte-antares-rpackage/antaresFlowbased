@@ -4,7 +4,7 @@
 \alias{searchAlpha}
 \title{Search alpha for a daytype and a hour}
 \usage{
-searchAlpha(face, pointX, faceY, probleme, PTDF, univ)
+searchAlpha(face, pointX, faceY, probleme, PTDF, univ, verbose = 0)
 }
 \arguments{
 \item{face}{\code{data.table}, face for 3 country, BE, DE anf FR}
@@ -18,6 +18,12 @@ searchAlpha(face, pointX, faceY, probleme, PTDF, univ)
 \item{PTDF}{\code{data.frame} PTDF}
 
 \item{univ}{\code{matrix} generate which .univ}
+
+\item{verbose}{\code{numeric} show log in console. Defaut to 1
+\itemize{
+ \item 0 : No log
+ \item 1 : Short log
+}}
 }
 \description{
 Search alpha for a daytype and a hour

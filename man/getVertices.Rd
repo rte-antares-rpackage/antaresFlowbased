@@ -9,7 +9,7 @@ getVertices(face, b)
 \arguments{
 \item{face}{\code{data.table}, face for 3 country, BE, DE anf FR}
 
-\item{pointX}{\code{numeric}, extreme points b}
+\item{b}{\code{numeric}, extreme points b}
 }
 \description{
 Get vertices from faces

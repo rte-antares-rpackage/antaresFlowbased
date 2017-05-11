@@ -17,6 +17,10 @@ graphFlowBased2D(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL,
 \item{hour}{\code{numeric}, hour}
 
 \item{dayType}{\code{numeric}, dayType}
+
+\item{min}{\code{numeric}, minimum of axis}
+
+\item{max}{\code{numeric}, maximum of axis}
 }
 \description{
 Plot 2D for flowbased areas

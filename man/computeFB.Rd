@@ -6,7 +6,8 @@
 \usage{
 computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
   "antaresFlowbased"), outputName = paste0(getwd(), "/antaresInput"),
-  reports = TRUE, dayType = "All", hour = "All", nbFaces = 36)
+  reports = TRUE, dayType = "All", hour = "All", nbFaces = 36,
+  verbose = 0)
 }
 \arguments{
 \item{PTDF}{\code{character}, path for PTDF file}
@@ -20,6 +21,12 @@ computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
 \item{hour}{\code{character / numeric} default All, can specify hour to compute}
 
 \item{nbFaces}{\code{numeric} number of faces to keep, default 36.}
+
+\item{verbose}{\code{numeric} show log in console. Defaut to 0
+\itemize{
+ \item 0 : No log
+ \item 1 : Short log
+}}
 }
 \description{
 Compute flowbased approximation

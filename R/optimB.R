@@ -1,7 +1,7 @@
 #' Get vertices from faces
 #'
 #' @param face \code{data.table}, face for 3 country, BE, DE anf FR
-#' @param pointX \code{numeric}, extreme points b
+#' @param b \code{numeric}, extreme points b
 #'
 #' @import pipeR
 #'

@@ -5,7 +5,7 @@
 \title{Generate html report}
 \usage{
 generateRaportFb(dayType, output_file = NULL,
-  fb_opts = antaresFlowbased::fbOptions())
+  fb_opts = antaresFlowbased::fbOptions(), allFB = NULL)
 }
 \arguments{
 \item{dayType}{\code{numeric}, dayType}

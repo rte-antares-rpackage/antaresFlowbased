@@ -5,6 +5,8 @@
 #' @param ctry2 \code{character}, country in Y
 #' @param hour \code{numeric}, hour
 #' @param dayType \code{numeric}, dayType
+#' @param min \code{numeric}, minimum of axis
+#' @param max \code{numeric}, maximum of axis
 #'
 #' @import rAmCharts
 #'
