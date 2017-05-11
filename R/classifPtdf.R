@@ -15,12 +15,6 @@ giveBClassif <- function(PTDF, nbClust = 36)
  
   res <- cutree(hclust(dist(PTDFKm, method = "euclidean"), method = "ward.D"), 36)
   
-  # res <- NULL
-  # for(i in 1:300){
-  #   res[[i]] <- kmeans(PTDFKm, 36)
-  # }
-  # res <- res[[which.min(unlist(lapply(res, function(X)X$tot.withins)))]]$cluster
-  # 
   PTDFKm$V4 <- res
   centers <- PTDFKm[,lapply(.SD, mean), by = "V4"]
   centers <- centers[, .SD, .SDcols = c("V1", "V2", "V3")]

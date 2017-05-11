@@ -21,7 +21,7 @@ setFlowbasedPath(bp = "BP2017")
 # setFlowbasedPath(bp = "C:/PATH/TO/INPUT")
 
 
-## ---- fig.width= 7, fig.height= 7----------------------------------------
+## ---- fig.width= 7, fig.height= 7, warning=FALSE-------------------------
 # one graphic
 plotFB(hour = 5, dayType = 1, country1 = "FR", country2 = "DE")
 

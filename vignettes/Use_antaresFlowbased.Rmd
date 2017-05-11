@@ -98,7 +98,7 @@ You can visualize, download data and reports for all the domains using a **shiny
 
 You can also use **plotFB()** to plot one or more domains directly in R : 
 
-```{r, fig.width= 7, fig.height= 7}
+```{r, fig.width= 7, fig.height= 7, warning=FALSE}
 # one graphic
 plotFB(hour = 5, dayType = 1, country1 = "FR", country2 = "DE")
 
@@ -107,7 +107,7 @@ plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL
 
 ```
 
-You can also produce reports in html format. This solution can be use to facilitate the sharing.
+You can also produce reports in html format with shiny application. This solution can be use to facilitate the sharing.
 <div style="text-align:center" markdown="1">
 <img src="report.png" alt="Drawing" style="width: 90%; height: 90%">
 </div>
@@ -131,7 +131,7 @@ This result by the write of the following 4 files in the folder */user/flowbased
 * scenario.txt
 * ts.txt
 
-This function uses default files contain in your optimisation forlder (create by *computeFB()* function)
+This function uses  files contain in your optimisation forlder (create by *computeFB()* function) and specify with *setFlowbasedPath()* function.
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)
@@ -170,7 +170,7 @@ Possible parameters are :
 
 The study can then be consulted directly in antares.
 
-## 6 - Resume, complet exemple
+## 6 - Abstract, Full exemple
 
 ```{r, eval=FALSE}
 

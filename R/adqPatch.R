@@ -16,7 +16,6 @@ adqPatch <- function(opts)
   links[, fr := - (`be - fr` + `de - fr`)]
   links[, nl := - (`be - nl` + `de - nl`)]
   
-  
   links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
   links <- melt(links, id = 1:2)
   setnames(links, "variable", "area")
@@ -60,7 +59,7 @@ adqPatch <- function(opts)
         #b36 <- fread("inst/ADQpatch/B36.txt")
         lole <- outR[, .SD, .SDcols = c("lole_be", "lole_de", "lole_fr", "lole_nl")]
         lole <- unlist(lole)
-        sol <- resolveAdq(b36Prim, lole, b)
+        sol <- .resolveAdq(b36Prim, lole, b)
         
         cbind(outR, sol)
       }
@@ -128,8 +127,8 @@ adqPatch <- function(opts)
 #' @param lole \code{data.frame}, energy
 #' @param b \code{numeric}, b
 #' 
-#' @export
-resolveAdq <- function(b36, lole, b){
+#' @noRd
+.resolveAdq <- function(b36, lole, b){
   D <- as.vector(ifelse(lole == 0, 0, 1))
   res <- c(
     1, 1, 1, 1,
