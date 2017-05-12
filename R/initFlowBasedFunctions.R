@@ -6,7 +6,7 @@
 #'
 #' @noRd
 .getWeight <- function(weigth){
-  weigth <- data.table::fread(weigth, sep = ";", dec = ",")
+  weigth <- data.table::fread(weigth, sep = "\t", dec = ".")
   names(weigth) <- names(weigth)%>>%
     tolower()
 
@@ -35,7 +35,7 @@
 #'
 #' @noRd
 .getSecondMember <- function(secondMember){
-  secondMember <- data.table::fread(secondMember, sep = ";", dec = ",")
+  secondMember <- data.table::fread(secondMember, sep = "\t", dec = ".")
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
 }
 
@@ -59,7 +59,7 @@
 #'
 #' @noRd
 .getDayType <- function(daytype){
-  data.table::fread(daytype, sep = ";", dec = ",", header = TRUE)
+  data.table::fread(daytype, sep = "\t", dec = ".", header = TRUE)
 }
 
 #' Write daytype file

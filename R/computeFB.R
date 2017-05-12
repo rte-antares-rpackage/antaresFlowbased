@@ -90,9 +90,9 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
  setnames(allFaces, "B", "vect_b")
 
  dir.create(outputName)
- write.table(antaresFace, paste0(outputName, "/coefficients_Antares.csv"), row.names = FALSE, sep = ";", dec = ",")
+ write.table(antaresFace, paste0(outputName, "/weight.txt"), row.names = FALSE, sep = "\t", dec = ".")
  saveRDS(flowbased, paste0(outputName, "/domainesFB.RDS"))
- write.table(allFaces, paste0(outputName, "/fichier_b_final.csv"), row.names = FALSE, sep = ";", dec = ",")
+ write.table(allFaces, paste0(outputName, "/second_member.txt"), row.names = FALSE, sep = "\t", dec = ".")
  if(reports){
    outputNameReports <- paste0(outputName, "/reports")
    dir.create(outputNameReports)
@@ -112,8 +112,8 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
 #' @param outputName \code{character}, name of output directory
 #' @export
 addChroniquesFile <- function(outputName){
-  Chroniques <- system.file("/input/id_FB.txt", package
+  Chroniques <- system.file("/input/ts.txt", package
                             = "antaresFlowbased")
   Chroniques <- fread(Chroniques)
-  write.table(Chroniques,paste0(outputName, "/id_FB.csv"), row.names = FALSE, sep = ";")
+  write.table(Chroniques,paste0(outputName, "/ts.txt"), row.names = FALSE, sep = "\t")
 }

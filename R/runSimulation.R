@@ -51,92 +51,92 @@
 #' @import plyr
 #'
 runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-                          mcYears = "all", opts = antaresRead::simOptions(),
-                          verbose = 1){
-
+                            mcYears = "all", opts = antaresRead::simOptions(),
+                            verbose = 1){
+  
   # mcAll & mcInd control
   if(mcAll == FALSE & mcInd == FALSE){
     stop("mcAll and mcInd are equal to FALSE")
   }
-
-
+  
+  
   # set simulation parent / first study
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
- 
-
-  ##Test version of antares solver
-  solver <- getSolverAntares()
-  solver <- unlist(gsub("-solver.exe", "", solver))
-  solver <- strsplit(solver, "antares-")[[1]]
-  solver <- solver[[length(solver)]]
-  versionSolver <- substr(solver, 1, 1)
-  versionStudy <- substr(opts$antaresVersion,1,1)
-
-  if(versionSolver != versionStudy){
-    stop(paste0("Imcompatibility between antares solver version (", versionSolver, ") and study version(", versionStudy), ")")
-  }
-
-
+  
+  try({
+    ##Test version of antares solver
+    solver <- getSolverAntares()
+    solver <- unlist(gsub("-solver.exe", "", solver))
+    solver <- strsplit(solver, "antares-")[[1]]
+    solver <- solver[[length(solver)]]
+    versionSolver <- substr(solver, 1, 1)
+    versionStudy <- substr(opts$antaresVersion,1,1)
+    
+    if(versionSolver != versionStudy){
+      stop(paste0("Imcompatibility between antares solver version (", versionSolver, ") and study version(", versionStudy), ")")
+    }
+  })
+  
   # control mode
   if(!opts$parameters$general$mode %in%c("Economy" , "Adequacy")){
     stop(paste0("Study must be in 'Economy' or 'Adequacy' mode. Function not available for '", opts$parameters$general$mode, "'"))
   }
-
+  
   #random name to identify simulation
   aleatNameSime <- sample(letters, 10, replace = TRUE) %>>%
     paste0(collapse = "")
   simNameAlea <- paste0(simulationName, aleatNameSime)
   simNameAlea <- tolower(simNameAlea)
-
+  
   if(verbose == 2){
     cat(paste("Random name generation :", simNameAlea), "\n")
   }
-
+  
   #Generate path for generaldata.ini
   generaldataIniPatch <- paste0(opts$studyPath, "/settings/generaldata.ini")
   generaldataIniOld <- paste0(opts$studyPath, "/settings/generaldata_old.ini")
-
+  
   #copy old settings file
   file.copy(generaldataIniPatch, generaldataIniOld)
-
+  
   #Update general settings and copy old file
   upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
   .errorTest(upGenIni, verbose, "Write of generaldata")
-
+  
   #load second member
   second_member <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
   .errorTest(second_member, verbose, "Load of second_member.txt")
-
+  
   #load ts
   ts <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
   .errorTest(ts, verbose, "Load of ts.txt")
-
+  
   #load scenarios
   scenario <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/scenario.txt")), silent = TRUE)
   .errorTest(scenario, verbose, "Load of scenario.txt")
-
-
+  
+  
   ##Control input files scenario
   if(opts$parameters$general$nbyears < nrow(scenario))
   {
     stop(paste0("Error in input files : there are more scenarios (in user/flowbased/scenario.txt) than MCyears"))
   }
-
+  
   #All scenario in ts
   if(!all(as.character(scenario$simulation) %in% names(ts))){
     concernScenario <-  paste(unique(as.character(scenario$simulation)[!as.character(scenario$simulation) %in% names(ts)]), collapse = "; ")
     stop(paste0("Error in input files : no ts (in /user/flowbased/ts.txt) for scenarios :",concernScenario))
   }
-
-
-
+  
+  
+  
   #Exclude scenarios to redefine
   if(mcYears[1] != "all"){
     scenario[-c(mcYears)] <- NA
   }
-
+  
   #All hours in second members
   second_member2 <- second_member[,.(Id_hour = list(sort(Id_hour))), by = c("Name", "Id_day")]
   if(!all(unlist(lapply(second_member2$Id_hour, function(X)all(X == 1:24))))){
@@ -144,17 +144,17 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
     concernTuples <- paste("Constraint", concernTuples$Name, "Day",concernTuples$Id_day, collapse = ";")
     stop(paste0("Missing hours for tuples constraints/day ", concernTuples))
   }
-
+  
   #all ts day are predent in second_member
   typeDayCtrl <- unique(second_member$Id_day)
-
+  
   if(!all(unlist(data.frame(ts)[,-1])%in%typeDayCtrl)){
     concerDay <- unique(unlist(data.frame(ts)[,-1])[!unlist(data.frame(ts)[,-1])%in%typeDayCtrl])
     concerDay <- paste0(concerDay, collapse = "; ")
     stop(paste0("Some days specify in ts (in /user/flowbased/ts.txt) are not in second_member (in user/flowbased/second_member.txt) :", concerDay))
   }
-
-
+  
+  
   ##Prepare CMD to run antares
   AntaresPatch <- getSolverAntares()
   if(is.null(AntaresPatch)){
@@ -163,22 +163,22 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   if(!file.exists(AntaresPatch)){
     stop("Antares solver does no exist. Use setSolverAntares()")
   }
-
+  
   cmd <- '"%s" "%s" -n "%s"'
   cmd <- sprintf(cmd, AntaresPatch, opts$studyPath, simNameAlea)
-
+  
   # simulation
   allScenario <- as.numeric(na.omit(unique(scenario$simulation)))
-
+  
   # if(.test){
   #   allScenario <- allScenario[2:3]
   # }
-
+  
   .addMessage(verbose, "---------- Antares part ---------- ", valAf = 1)
   timBegin <- Sys.time()
-
+  
   progress <- ifelse(verbose == 0, "none" , "text")
-
+  
   plyr::l_ply(allScenario, function(X, opts, ts, second_member,
                                     scenario, cmd, verbose, timBegin, allScenario){
     #Prepare files before simulation
@@ -189,34 +189,34 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
                            scenarios = scenario,
                            simNumber = X,
                            verbose = verbose)
-
-
+    
+    
     cmd <- paste0(cmd, "Sim",X)
     .addMessage(verbose, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
     out <- .runAntares(cmd)
     out <- out[length(out)]
-
+    
     if(grepl("error", out)){
       stop(paste0("The antares simulation ", X," must stop see antares logs for more details"))
     }
-
+    
     .addMessage(verbose, paste0("Antares end for scenario : ",X))
     .addMessage(verbose, paste0("Compute time for scenario ",X, " : ",
                                 as.numeric(round(Sys.time()-beg)), " secondes"))
-
+    
     pourcentDo <- which(allScenario==X)/length(allScenario)
-
+    
     timeRun <- as.numeric(difftime( Sys.time(), timBegin , units = "min"))
     timeRunMin <- trunc(timeRun)
     timMinSec <- timeRun %% 1
     timMinSec <- round(timMinSec/100*60, 2) * 100
-
+    
     timeToDo <- timeRun * (1-pourcentDo)/pourcentDo
     timeToDoMin <- trunc(timeToDo)
     timeToDoSec <- timeToDo %% 1
     timeToDoSec <- round(timeToDoSec/100*60, 2) * 100
-
+    
     if(verbose>1)
     {
       cat(paste0("\nAntares simulation : ", which(allScenario==X), " / ", length(allScenario),
@@ -224,7 +224,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
                  "Sec\n Approximate remaning run time before aggregation : ",
                  timeToDoMin , ":", timeToDoSec, "Sec\n"))
     }
-
+    
   }, opts = opts,
   ts = ts,
   second_member = second_member,
@@ -235,30 +235,30 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   allScenario = allScenario,
   .progress = progress)
   .addMessage(verbose, "---------- End of antares part ----------", valAf = 1)
-
-
+  
+  
   try({
     #Return old param setting
     file.remove(generaldataIniPatch)
     file.rename(generaldataIniOld, generaldataIniPatch)})
-
+  
   if(mcAll){
-
+    
     filesMoves <- try(moveFilesAfterStudy(opts, simNameAlea, verbose = verbose), silent = TRUE)
     .errorTest(filesMoves, verbose, "Creation of a single study with Antares format")
-
+    
     # Mc-all creation
     .addMessage(verbose, "---------------- Mc-all computation ----------------", valAf = 1)
-
+    
     aggregateResult(opts = opts, newname = filesMoves, verbose = verbose)
-
+    
     try({
       dtaMc <- paste0(opts$simDataPath, "/mc-ind")
       if(!mcInd){
         unlink(dtaMc, recursive = TRUE)
       }})
     .addMessage(verbose, "---------------- End of Mc-all computation ----------------", valAf = 1)
-
+    
     #Write digest
     digetsWrite <- try({
       oldw <- getOption("warn")

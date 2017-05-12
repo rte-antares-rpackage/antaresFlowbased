@@ -32,20 +32,20 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   dir.create(newDir, showWarnings = FALSE, recursive = TRUE)
 
   #Get weight
-  weightData <- .getWeight(paste0(fb_opts$path, "/coefficients_Antares.csv"))
+  weightData <- .getWeight(paste0(fb_opts$path, "/weight.txt"))
 
   #Write weight.txt
   .setWeight(path = paste0(newDir, "/weight.txt"), weightData = weightData)
 
   #Get second members
-  secondMemberData <- .getSecondMember(paste0(fb_opts$path, "/fichier_b_final.csv"))
+  secondMemberData <- .getSecondMember(paste0(fb_opts$path, "/second_member.txt"))
 
   #Write second_member.txt
   .setSecondMember(path = paste0(newDir, "/second_member.txt"), secondMemberData = secondMemberData)
 
   #Create type day matrix, just load, it will change in next version
-  if(paste0(fb_opts$path, "/id_FB.csv") != ""){
-    dayTypeData <- .getDayType(paste0(fb_opts$path, "/id_FB.csv"))
+  if(paste0(fb_opts$path, "/ts.txt") != ""){
+    dayTypeData <- .getDayType(paste0(fb_opts$path, "/ts.txt"))
     .setDayType(path = paste0(newDir, "/ts.txt"),
                 dayTypeData = dayTypeData)
   }

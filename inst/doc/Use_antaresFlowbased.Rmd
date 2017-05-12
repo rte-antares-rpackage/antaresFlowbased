@@ -40,8 +40,8 @@ You can also control **dayType**, **hour** and **nbFaces** to compute.
 
 The function create a directory with the following files :
 
-* **coefficients_Antares.csv** : Coefficient of face for antares
-* **fichier_b_final.csv** : Faces for each typical day and hour
+* **weight.txt** : Coefficient of face for antares
+* **second_member.txt** : Faces for each typical day and hour
 * **domainesFB.RDS** : Information about domains (points, errors ,...)
 * **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
 
@@ -82,10 +82,10 @@ setFlowbasedPath(bp = "BP2017")
 
 The directory must contain :
 
-* **coefficients_Antares.csv** : Coefficient of face for antares
-* **fichier_b_final.csv** : Faces for each typical day and hour
+* **weight.txt** : Coefficient of face for antares
+* **second_member.txt** : Faces for each typical day and hour
 * **domainesFB.RDS** : Information about domains (points, errors ,...)
-* **id_FB.csv** : Calendar
+* **ts.txt** : Calendar
 
 ## 3 - Visualization & diffusion
 

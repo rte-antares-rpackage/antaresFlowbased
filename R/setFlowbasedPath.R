@@ -9,9 +9,9 @@
 #' @param path (optional)
 #'   If "bp" is missing. Path to the input repertory. . Must have :
 #'   \itemize{
-#'    \item{coefficients_Antares.csv}{}
-#'    \item{fichier_b_final.csv}{}
-#'    \item{id_FB.csv}{}
+#'    \item{weight.txt}{}
+#'    \item{second_member.txt}{}
+#'    \item{ts.txt}{}
 #'    \item{domainesFB.RDS}{}
 #'   }
 #' @param bp (optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableBP}}
@@ -60,8 +60,8 @@ setFlowbasedPath <- function(path, bp) {
   # verify path
   all_files <- list.files(path, full.names = FALSE, recursive = FALSE)
 
-  if(!all(c("coefficients_Antares.csv", "domainesFB.RDS", "fichier_b_final.csv", "id_FB.csv") %in% all_files)){
-    stop("Flowbased reportory must have this 4 files : 'coefficients_Antares.csv', 'domainesFB.RDS', 'fichier_b_final.csv' and 'id_FB.csv'")
+  if(!all(c("weight.txt", "domainesFB.RDS", "second_member.txt", "ts.txt") %in% all_files)){
+    stop("Flowbased reportory must have this 4 files : 'weight.txt', 'domainesFB.RDS', 'second_member.txt' and 'ts.txt'")
   }
 
   res <- list(path = path)
