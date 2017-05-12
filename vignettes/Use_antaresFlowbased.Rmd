@@ -12,51 +12,93 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-``antaresFlowbased`` allows the computation of **flowbased** studies using the software *antares*, with 3 main parts : 
+``antaresFlowbased`` allows to model **flow-based** domains into adequacy studies using the software *Antares*, with 3 main parts : 
 
-- Generation of flowbased domains
-- DayType allocation
-- Simulations
+- Projection of flow-based domains on a fix basis, so as to be able to describe them in Antares with binding constraints.
+- Construction of probabilistic flow-based time series, respecting the correlations with other inputs of the study (e.g. load, wind power generation, solar generation).
+- Simulation of an Antares study where CWE exchanges are bounded by flow-based domains.
 
-## 1 - Generation of domains
 
-The function *computeFB()* generate flowbased domains from PTDF, using the main following parameters : 
 
-* **PTDF** : PTDF file path
-* **outputName** : name of output directory.
-* **reports** : Boolean. product html reports by typical day or not
+## 1 - Summary
 
-**PTDF** is by default file of 2017 FB. This file must be a csv file with **;** field separator string, **,** for decimal points and the following columns :
+```{r, eval=FALSE}
 
-* **Id_day** : Id of typical day
-* **Period** : Hour
-* **BE** : Face for be
-* **DE** : Face for de
-* **FR** : Face for fr
-* **NL** : Face for nl
-* **RAM_0** : B
+#Convert domains from PTDF file, save the output in the directory "model1"
+computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
+          outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
 
-You can also control **dayType**, **hour** and **nbFaces** to compute.
+#Add time series file to directory "model1"
+addChroniquesFile("D:/Users/titorobe/Desktop/model1")
 
-The function create a directory with the following files :
+#Set setFlowbased directory path
+setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
 
-* **weight.txt** : Coefficient of face for antares
-* **second_member.txt** : Faces for each typical day and hour
-* **domainesFB.RDS** : Information about domains (points, errors ,...)
+#Run shiny application to visualise the results of the convertion
+runAppError()
+
+#Set antares study path
+antaresRead::setSimulationPath("D:/exemple_test", 0)
+
+#Initialize the Antares study
+initFlowBased()
+
+#Set Antares solver path
+setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
+
+#Run Antares simulation
+runSimulationFB()
+```
+
+## 2 - Projection of domains
+
+The function ``computeFB()`` converts flow-based domains (e.g. historical flow-based domains of some "typical representative days") into an Antares model with fixed PTDF. It uses the main following parameters : 
+
+* ``PTDF`` : PTDF file path
+* ``outputName`` : name of output directory
+* ``reports`` : Boolean indicating whether the function generates html reports or not
+
+``PTDF`` is a csv file with **;** field separator, **,** for decimal points and the following columns :
+
+* **Id_day** : Id of typical day (integer)
+* **Period** : Hour (integer)
+* **BE** : PTDF for be 
+* **DE** : PTDF for de
+* **FR** : PTDF for fr
+* **NL** : PTDF for nl
+* **RAM_0** : margin
+
+By default, ``PTDF`` argument takes the value **BP2017**. In that case, the typical days used in the Bilan Previsionnel 2017 will be loaded in input.
+
+One can also set the following optionnal arguments of the function :
+
+* ``dayType`` : subset of typical days to process
+* ``hour`` : subset of hours to process
+* ``nbFaces`` : number of binding constraints in the final Antares model (by default : 36).
+
+The function creates a directory with the following files :
+
+* **weight.txt** : PTDF for the antares model (weight of the binding constraints - constant over time)
+* **second_member.txt** : RAM for the antares model (second member of the binding constraints - variable over the typical days and hours)
+* **domainesFB.RDS** : Information about the modeled domains (points, errors , accuracy of the model,...)
 * **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
 
-To add chronics file to this folder, you must use function *addChroniquesFile()*. In this version of package, chronics file can't be change. The **outputName** specify the directory where chroniques files will be save. We recommend to specify same folder as *computeFB()* call.
+To add flow-based time series file to this folder, the function ``addChroniquesFile()`` must be used. In this version of the package, the time series file can't be changed, they are the ones used in the Bilan Previsionnel 2017. The ``outputName`` specifies the directory where the time series files will be saved. We recommend to specify the same folder as the one given to ``computeFB()``.
 
 
-## 2 - Input initialization
+## 3 - Data initialization
 
-The other functionnalities need to know the input created with *computeFB()*. You can use input availabled in the package, or your own parameters with this 3 functions : 
+Once the modeled flow-based domains have been created with ``computeFB()``, they can be loaded using the following function :
 
-* **setFlowbasedPath** : set the input directory
-* **getAvailableBP** : get available input
-* **fbOptions** : current directory
+* ``setFlowbasedPath()`` : set the model directory (directory in which the output of ``computeFB()`` have been saved)
 
-On load, a defaut directory is set.
+```{r, eval = FALSE}
+# Specify a repository
+setFlowbasedPath(path = "C:/PATH/TO/INPUT")
+```
+
+Moreover, ``the antaresFlowbased`` package contains some already built domains, notably the ones used in the last BP. The data contained in the package can be seen with the function ``getAvailableBP()``. Thus, instead of loading an external directory with ``setFlowbasedPath()``, the internal data of the package can be used.
+
 
 ```{r, echo = FALSE}
 suppressWarnings(require(antaresFlowbased, quietly = T))
@@ -66,37 +108,32 @@ suppressWarnings(require(antaresFlowbased, quietly = T))
 ```{r}
 require(antaresFlowbased)
 
-# default settings
-fbOptions()
-
 # available in package
 getAvailableBP()
 
 # Specify a availabled bp
 setFlowbasedPath(bp = "BP2017")
 
-# Specify a repository
-# setFlowbasedPath(bp = "C:/PATH/TO/INPUT")
-
 ```
 
 The directory must contain :
 
-* **weight.txt** : Coefficient of face for antares
-* **second_member.txt** : Faces for each typical day and hour
+* **weight.txt** : PTDF for the antares model (weight of the binding constraints - constant over time)
+* **second_member.txt** : RAM for the antares model (second member of the binding constraints - variable over the typical days and hours)
 * **domainesFB.RDS** : Information about domains (points, errors ,...)
-* **ts.txt** : Calendar
+* **ts.txt** : flow-based time series
 
-## 3 - Visualization & diffusion
 
-You can visualize, download data and reports for all the domains using a **shiny** application with the function **runAppError()**
+## 4 - Visualization & reports
+
+One can visualize the modeled flow-based domains, download the associated data or create a summary of the model accuracy in a html document using a **shiny** application with the function ``runAppError()``.
 
 <div style="text-align:center" markdown="1">
 <img src="shiny.png" alt="Drawing" style="width: 90%; height: 90%">
 </div>
 
 
-You can also use **plotFB()** to plot one or more domains directly in R : 
+``plotFB()`` can also be used to plot one or more domains directly in R : 
 
 ```{r, fig.width= 7, fig.height= 7, warning=FALSE}
 # one graphic
@@ -107,43 +144,41 @@ plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL
 
 ```
 
-You can also produce reports in html format with shiny application. This solution can be use to facilitate the sharing.
+Reports in html format can also be generated within the shiny application. This solution can be use to facilitate the transmission and communication of the results.
 <div style="text-align:center" markdown="1">
 <img src="report.png" alt="Drawing" style="width: 90%; height: 90%">
 </div>
 
 
-## 4 - Study init
+## 5 - Study initialization
 
-First of all, it is necessary to indicate the antares study on which we wish to work via the function *setSimulationPath()* of package **antaresRead** :
+First of all, it is necessary to indicate an antares study using ``setSimulationPath()`` function of the package ``antaresRead``.
 
-Secondly, it's necessary to indicate witch flow based domains you want to use with function *setFlowbasedPath()*. 
+Then, the flow-based model which will be set on this study must be specified with ``setFlowbasedPath()``. 
 
-**path** parameters can be use to specify a folder generate by *computeFB()* funciton.
-
-Initialisation of study is done by the function *initFlowBased()*. 
+The initialization of the study is finally done with the function ``initFlowBased()``. 
 
 
-This result by the write of the following 4 files in the folder */user/flowbased* as well as the temporary modification of the project configuration :
+``initFlowBased()`` write the following 4 files in the folder */user/flowbased* of the study :
 
 * second_member.txt
 * weight.txt
 * scenario.txt
 * ts.txt
 
-This function uses  files contain in your optimisation forlder (create by *computeFB()* function) and specify with *setFlowbasedPath()* function.
+Moreover, ``initFlowbased()`` creates new binding constraints in the Antares study.
 
 ```{r, eval=FALSE}
 antaresRead::setSimulationPath("D:/exemple_test", 0)
 
-# initialisation of flowbased study
+# initialisation of flow-based study
 initFlowBased()
 ```
 
 
-## 5 - Launching simulations
+## 6 - Run simulations
 
-Previously, it is necessary to indicate the location of the antares solver via the function : *setSolverAntares()*
+The path of the Antares solver can be set using the function : ``setSolverAntares()``.
 
 ```{r, eval=FALSE}
 # antares solver
@@ -153,7 +188,7 @@ setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solv
 getSolverAntares()
 ```
 
-Finally, the function * runSimulationFB() * runs the flowbased study, simulating the different scenarios before aggregating the results.
+Finally, the function ``runSimulationFB()`` runs the Antares simulation, using the flow-based model previsouly saved in */user/flowbased*. The different flow-based scenarios are handled with succesive Antares simulations before aggregating the results.
 
 ```{r, eval=FALSE}
 res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
@@ -161,40 +196,11 @@ res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
 
 Possible parameters are :
 
-* **simulationName** : Name of simulation
-* **mcAll** : Calculation of mcAll (TRUE or FALSE)
-* **mcInd** : Preserving of mcInd (TRUE or FALSE)
-* **mcYears** : McYears to retain, default all
-* **opts** : Antares project (obtained with the setSimulationPath function). By default, it loads into the global environment
-* **verbose** : Log level in the R console (0, 1 or 2)  default 1.
+* ``simulationName`` : Name of the simulation
+* ``mcAll`` : Calculation of mcAll (TRUE or FALSE)
+* ``mcInd`` : Calculation of mcInd (TRUE or FALSE)
+* ``mcYears`` : McYears to simulate, default is ``"all"``
+* ``opts`` : Antares study informations (obtained with the ``setSimulationPath()`` function). By default, the function used the study loaded into the R environement
+* ``verbose`` : Log level in the R console (0, 1 or 2)  default 1.
 
-The study can then be consulted directly in antares.
-
-## 6 - Abstract, Full exemple
-
-```{r, eval=FALSE}
-
-#Compute FB from package PTDF file, save in directory "model1"
-computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
-          outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
-#Add Chronics file to directory "model1"
-addChroniquesFile("D:/Users/titorobe/Desktop/model1")
-
-#Set setFlowbased directory path
-setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
-
-#Run shiny application for error visualisation
-runAppError()
-
-#Set antares study path
-antaresRead::setSimulationPath("D:/exemple_test", 0)
-
-#Init flowbased study
-initFlowBased()
-
-#Set antares solver path
-setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-
-#Run antares simulation
-runSimulationFB()
-```
+The outputs of the study can then be read directly in Antares or using ``antaresRead`` R package.
