@@ -3,20 +3,20 @@
 #'
 #' @details
 #' The repertory choosen with \code{setFlowbasedPath} becomes the default
-#' parameters for all functions of the package. The package have some availabled bp \code{getAvailableBP}.
+#' parameters for all functions of the package. The package have some availabled model \code{getAvailableModel}.
 #' Current path can be retrieve using \code{fbOptions}
 #'
 #' @param path (optional)
-#'   If "bp" is missing. Path to the input repertory. . Must have :
+#'   If "model" is missing. Path to the input repertory. . Must have :
 #'   \itemize{
 #'    \item{weight.txt}{}
 #'    \item{second_member.txt}{}
 #'    \item{ts.txt}{}
 #'    \item{domainesFB.RDS}{}
 #'   }
-#' @param bp (optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableBP}}
+#' @param model (optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableModel}}
 #'
-#' @return A vector of available bp for \code{getAvailableBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
+#' @return A vector of available model for \code{getAvailableModel}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
 #'   \item{path}{path of the current input repository}
 #'
 #'
@@ -26,35 +26,35 @@
 #' # Defaut path set loading the package
 #' fbOptions()
 #'
-#' # Specify a available bp
-#' getAvailableBP()
-#' setFlowbasedPath(bp = "BP2017")
+#' # Specify a available model
+#' getAvailableModel()
+#' setFlowbasedPath(model = "model2017")
 #'
 #' # Select a repository
-#' setFlowbasedPath(bp = "C:/PATH/TO/INPUT")
+#' setFlowbasedPath(model = "C:/PATH/TO/INPUT")
 #' }
 #'
 #' @export
 #'
 #' @name flowbased-path
 #'
-setFlowbasedPath <- function(path, bp) {
+setFlowbasedPath <- function(path, model) {
 
-  if (missing(path) & missing(bp)) {
-    stop("Please specify a path to a flowbased input directory or a existed bp name")
+  if (missing(path) & missing(model)) {
+    stop("Please specify a path to a flowbased input directory or a existed model name")
   }
 
-  if (!missing(path) & !missing(bp)) {
-    stop("Please specify a path to a flowbased input directory or a existed bp name")
+  if (!missing(path) & !missing(model)) {
+    stop("Please specify a path to a flowbased input directory or a existed model name")
   }
 
-  if (!missing(bp)) {
-    dir_bp <- system.file("input/BP", package = "antaresFlowbased")
-    available_bp <- list.dirs(dir_bp, full.names = FALSE, recursive = FALSE)
-    if(!bp%in%available_bp){
-      stop("Invalid bp name. See availabled BP with getAvailableBP()")
+  if (!missing(model)) {
+    dir_model <- system.file("input/model", package = "antaresFlowbased")
+    available_model <- list.dirs(dir_model, full.names = FALSE, recursive = FALSE)
+    if(!model%in%available_model){
+      stop("Invalid model name. See availabled model with getAvailableModel()")
     }
-    path <- paste(dir_bp, bp, sep = "/")
+    path <- paste(dir_model, model, sep = "/")
   }
 
   # verify path
@@ -83,6 +83,6 @@ fbOptions <- function() {
 #' @rdname flowbased-path
 #' @export
 #'
-getAvailableBP <- function(){
-  return(list.dirs(system.file("input/BP", package = "antaresFlowbased"), full.names = FALSE, recursive = FALSE))
+getAvailableModel <- function(){
+  return(list.dirs(system.file("input/model", package = "antaresFlowbased"), full.names = FALSE, recursive = FALSE))
 }

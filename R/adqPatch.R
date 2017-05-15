@@ -21,10 +21,11 @@ adqPatch <- function(opts)
   setnames(links, "variable", "area")
   dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
   dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
+  dta$areas[, ipn := lole]
   dta$areas[, lole:=(ifelse(lole<=0, 0, lole))]
   
-  out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD")]
-  out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD"))
+  out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn")]
+  out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn"))
   
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
@@ -59,7 +60,12 @@ adqPatch <- function(opts)
         #b36 <- fread("inst/ADQpatch/B36.txt")
         lole <- outR[, .SD, .SDcols = c("lole_be", "lole_de", "lole_fr", "lole_nl")]
         lole <- unlist(lole)
-        sol <- .resolveAdq(b36Prim, lole, b)
+        ipn <- outR[, .SD, .SDcols = c("ipn_be", "ipn_de", "ipn_fr", "ipn_nl")]
+        ipn <- unlist(ipn)
+        mrg <- outR[, .SD, .SDcols = c("DTG MRG_be", "DTG MRG_de", "DTG MRG_fr", "DTG MRG_nl")]
+        mrg <- unlist(mrg)
+        
+        sol <- .resolveAdq(b36Prim, lole, b,margin = mrg , ipn = ipn)
         
         cbind(outR, sol)
       }
@@ -128,7 +134,7 @@ adqPatch <- function(opts)
 #' @param b \code{numeric}, b
 #' 
 #' @noRd
-.resolveAdq <- function(b36, lole, b){
+.resolveAdq <- function(b36, lole, b, margin, ipn){
   D <- as.vector(ifelse(lole == 0, 0, 1))
   res <- c(
     1, 1, 1, 1,
@@ -137,11 +143,45 @@ adqPatch <- function(opts)
     D[1]*D[4]*lole[4],0,0,-D[1]*D[4]*lole[1],
     0,D[2]*D[3]*lole[3],-D[2]*D[3]*lole[2],0,
     0, D[2]*D[4]*lole[4], 0, -D[2]*D[4]*lole[2],
-    0,0,D[3]*D[4]*lole[4],-D[3]*D[4]*lole[3])
+    0,0,D[3]*D[4]*lole[4],-D[3]*D[4]*lole[3],
+    1-D[1], 1-D[2], 1-D[3], 1-D[4])
+  
+  outpt <- NULL
+  sign <- NULL
+  if(D[1] == 0){
+    res <- c(res, c(1, 0, 0, 0))
+    outpt <- c(outpt, margin[1] + ipn[1])
+    sign <- c(sign, "<=")
+  }
+  
+  if(D[2] == 0){
+    res <- c(res, c(0, 1, 0, 0))
+    outpt <- c(outpt, margin[2] + ipn[2])
+    sign <- c(sign, "<=")
+  }
+  
+  if(D[3] == 0){
+    res <- c(res, c(0, 0, 1, 0))
+    outpt <- c(outpt, margin[3] + ipn[3])
+    sign <- c(sign, "<=")
+  }
+  
+  if(D[4] == 0){
+    res <- c(res, c(0, 0, 0, 1))
+    outpt <- c(outpt, margin[4] + ipn[4])
+    sign <- c(sign, "<=")
+  }
+  
+  
+  
+  
   res <- matrix(res, ncol = 4, byrow = TRUE)
   allMat <- rbind(res, b36)
-  rep <- c(rep(0, 7), b$V2)
-  sens <- c(rep("==", 7), rep("<=", length(b$V2)))
+  rep <- c(rep(0, 7), (1 - D[1])*ipn[1] +
+             (1 - D[2])*ipn[2] +
+             (1 - D[3])*ipn[3] +
+             (1 - D[4])*ipn[4], outpt, b$V2)
+  sens <- c(rep("==", 7), "<=", sign, rep("<=", length(b$V2)))
   objetiv <- c(lole)
   l_constraint <- L_constraint(L = allMat,
                                dir = sens,

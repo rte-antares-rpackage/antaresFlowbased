@@ -4,29 +4,29 @@
 \alias{flowbased-path}
 \alias{setFlowbasedPath}
 \alias{fbOptions}
-\alias{getAvailableBP}
+\alias{getAvailableModel}
 \title{Set of function to control the flowbased input repository}
 \usage{
-setFlowbasedPath(path, bp)
+setFlowbasedPath(path, model)
 
 fbOptions()
 
-getAvailableBP()
+getAvailableModel()
 }
 \arguments{
 \item{path}{(optional)
-If "bp" is missing. Path to the input repertory. . Must have :
+If "model" is missing. Path to the input repertory. . Must have :
 \itemize{
- \item{coefficients_Antares.csv}{}
- \item{fichier_b_final.csv}{}
- \item{id_FB.csv}{}
+ \item{weight.txt}{}
+ \item{second_member.txt}{}
+ \item{ts.txt}{}
  \item{domainesFB.RDS}{}
 }}
 
-\item{bp}{(optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableBP}}}
+\item{model}{(optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableModel}}}
 }
 \value{
-A vector of available bp for \code{getAvailableBP}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
+A vector of available model for \code{getAvailableModel}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
   \item{path}{path of the current input repository}
 }
 \description{
@@ -34,7 +34,7 @@ Set of function to control the flowbased input repository
 }
 \details{
 The repertory choosen with \code{setFlowbasedPath} becomes the default
-parameters for all functions of the package. The package have some availabled bp \code{getAvailableBP}.
+parameters for all functions of the package. The package have some availabled model \code{getAvailableModel}.
 Current path can be retrieve using \code{fbOptions}
 }
 \examples{
@@ -43,12 +43,12 @@ Current path can be retrieve using \code{fbOptions}
 # Defaut path set loading the package
 fbOptions()
 
-# Specify a available bp
-getAvailableBP()
-setFlowbasedPath(bp = "BP2017")
+# Specify a available model
+getAvailableModel()
+setFlowbasedPath(model = "model2017")
 
 # Select a repository
-setFlowbasedPath(bp = "C:/PATH/TO/INPUT")
+setFlowbasedPath(model = "C:/PATH/TO/INPUT")
 }
 
 }

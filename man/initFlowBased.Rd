@@ -22,7 +22,7 @@ Generate environment for a flow-based study
 path <- "D:/exemple_test"
 antaresRead::setSimulationPath(path, 0)
 
-setFlowbasedPath(bp = "BP2017")
+setFlowbasedPath(model = "model2017")
 
 initFlowBased()
 }

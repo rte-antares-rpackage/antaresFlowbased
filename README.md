@@ -20,5 +20,6 @@ The simplest way is to look the vignette :
 
 ```r
 require(antaresFlowbased)
-vignette("Use_antaresFlowbased")
+vignette("English")
+vignette("FranCais")
 ```
