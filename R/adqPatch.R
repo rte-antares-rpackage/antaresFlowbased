@@ -10,6 +10,20 @@ adqPatch <- function(opts)
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
                      select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
   
+  .applyAdq(opts = opts, dta)
+
+  
+}
+
+#' Compute adqPatch for antares study
+#' 
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param dta \code{list} data load with readAntares
+#' 
+#' @noRd
+.applyAdq <- function(opts, dta){
+  
+  
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
   links[, be :=`be - de` + `be - fr` + `be - nl`]
   links[, de := - `be - de` + `de - fr` + `de - nl`]
@@ -21,7 +35,7 @@ adqPatch <- function(opts)
   setnames(links, "variable", "area")
   dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
   dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
-  dta$areas[, ipn := lole]
+  dta$areas[, ipn := value]
   dta$areas[, lole:=(ifelse(lole<=0, 0, lole))]
   
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn")]
@@ -31,6 +45,10 @@ adqPatch <- function(opts)
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
   b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  
+  
+  ####Pour test
+  #b36 <- fread("D:/Users/titorobe/Desktop/ADQ PATCH/B36.txt")
   
   b36 <- b36p[, list(V1 = 1:.N, V2 = `be%nl`, V3 = `de%nl`, V4 = `be%fr`)]
   b36[,V4:= V2-V4]
@@ -49,15 +67,39 @@ adqPatch <- function(opts)
                      which(lole_de!=0),
                      which(lole_nl!=0))])>1)
       {
+        ret = 0
+        if(outR$lole_be == 0 & outR$LOLD_be == 1){
+          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                     " be a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+          ret = 1
+        }
+        if(outR$lole_de == 0 & outR$LOLD_de == 1){
+          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                     " de a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+          ret = 1
+        }
+        if(outR$lole_fr == 0 & outR$LOLD_fr == 1){
+          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                     " fr a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+          ret = 1
+        }
+        if(outR$lole_nl == 0 & outR$LOLD_nl == 1){
+          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                     " nl a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+          ret = 1
+        }
+        if(ret == 0){
+          
+
         senar <- scenario[outR$mcYear]$simulation
         dayType <- ts[[as.character(senar)]][yday(outR$time)]
         Hour <- hour(outR$time) + 1
         b <- data.table(1:length(secondM[Id_day == dayType & Id_hour == Hour]$vect_b),
                         secondM[Id_day == dayType & Id_hour == Hour]$vect_b)
-        
         ##ADQ Patch
         #b <- fread("inst/ADQpatch/b.txt")
         #b36 <- fread("inst/ADQpatch/B36.txt")
+        
         lole <- outR[, .SD, .SDcols = c("lole_be", "lole_de", "lole_fr", "lole_nl")]
         lole <- unlist(lole)
         ipn <- outR[, .SD, .SDcols = c("ipn_be", "ipn_de", "ipn_fr", "ipn_nl")]
@@ -65,13 +107,24 @@ adqPatch <- function(opts)
         mrg <- outR[, .SD, .SDcols = c("DTG MRG_be", "DTG MRG_de", "DTG MRG_fr", "DTG MRG_nl")]
         mrg <- unlist(mrg)
         
-        sol <- .resolveAdq(b36Prim, lole, b,margin = mrg , ipn = ipn)
+        
+        # write.table(b, "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/b.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
+        # write.table(b36, "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/B36.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
+        # write.table(data.table(t(lole)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/lole.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
+        # write.table(data.table(t(ipn)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/InitialPN.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
+        # write.table(data.table(t(mrg)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/margins.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
+        # 
+        # 
+        sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn)
         
         cbind(outR, sol)
+        }else{
+          NULL
+        }
       }
     }
   }))
-  
+  print(new)
   new$`be - de` <- new$PN_be - new$PN_de 
   new$`be - fr` <- new$PN_be - new$PN_fr
   new$`be - nl` <- new$PN_be - new$PN_nl
@@ -114,16 +167,22 @@ adqPatch <- function(opts)
   
   setkeyv(chang, c("area", "time", "mcYear"))
   setkeyv(dta$areas, c("area", "time", "mcYear"))
-  dta$area[chang, `BALANCE` := as.integer(BALANCEN)] 
-  dta$area[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
-  dta$area[chang, `LOLD` := LOLDN] 
-  dta$area[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
-  dta$area$value <- NULL
-  dta$area$lole <- NULL
+  dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
+  dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
+  dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
+  dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
+  dta$areas$value <- NULL
+  dta$areas$lole <- NULL
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   dta
 }
+
+
+
+
+
+
 
 
 
@@ -189,7 +248,7 @@ adqPatch <- function(opts)
   bounds <- V_bound(li=1:4, lb=rep(-Inf, 4))
   LP <- OP(objetiv, l_constraint, maximum = FALSE,
            bounds = bounds)
-  y <- ROI_solve(LP, solver = "clp", control = list(amount = 0))
+  y <- ROI_solve(LP, solver = "clp",  control = list(amount = 0))
   data.table(PN_be = y$solution[1],
              PN_de = y$solution[2],
              PN_fr = y$solution[3],
