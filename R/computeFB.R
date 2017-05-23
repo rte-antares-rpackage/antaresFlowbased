@@ -83,12 +83,15 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
  
  ##Output
  allFaces <- rbindlist(apply(flowbased,1, function(X){
+   nam <- 1:nrow(X$outFlowBased$face)
+   nam <- as.character(nam)
+   nam <- ifelse(nchar(nam) == 1, paste0("0", nam), nam)
    data.table(Id_day = X$dayType, Id_hour = X$hour,
-              X$outFlowBased$face,
-              Name = paste0("FB", 1:nrow(X$outFlowBased$face)))
+              vect_b = X$outFlowBased$face$B,
+              Name = paste0("FB", nam))
  }))
- setnames(allFaces, "B", "vect_b")
 
+ allFaces$vect_b <- round(allFaces$vect_b, 0)
  dir.create(outputName)
  write.table(antaresFace, paste0(outputName, "/weight.txt"), row.names = FALSE, sep = "\t", dec = ".")
  saveRDS(flowbased, paste0(outputName, "/domainesFB.RDS"))

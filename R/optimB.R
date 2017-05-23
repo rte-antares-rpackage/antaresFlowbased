@@ -107,12 +107,14 @@ giveTuples <- function(face, pointX){
 #' @noRd
 .fromBtoAntares <- function(B){
   names(B) <- c("BE", "DE", "FR")
-  coefAntares <- data.table(Name = paste0("FB", 1:nrow(B)),
-                            BE.FR = B$BE - B$FR,
-                            DE.FR = B$DE - B$FR,
-                            DE.NL = B$DE,
-                            BE.NL = B$BE,
-                            BE.DE = B$BE - B$DE )
+  nam <- as.character(1:nrow(B))
+  nam <- ifelse(nchar(nam)==1, paste0(0, nam), nam)
+  coefAntares <- data.table(Name = paste0("FB", nam),
+                            BE.FR = round(B$BE - B$FR, 2),
+                            DE.FR = round(B$DE - B$FR, 2),
+                            DE.NL = round(B$DE, 2),
+                            BE.NL = round(B$BE, 2),
+                            BE.DE = round(B$BE - B$DE, 2) )
   coefAntares
 }
 

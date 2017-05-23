@@ -36,6 +36,18 @@
 #' @noRd
 .getSecondMember <- function(secondMember){
   secondMember <- data.table::fread(secondMember, sep = "\t", dec = ".")
+  if(!all( c("Id_day", "Id_hour", "vect_b", "Name") %in% names(secondMember))){
+    stop("Names of second_member.txt must contains Id_day, Id_hour, vect_b, Name")
+  }
+  secondMember$vect_b <- round(secondMember$vect_b, 0)
+  nameConstraints <- sort(unique(secondMember$Name)) 
+  nam <- 1:length(nameConstraints)
+  nam <- ifelse(nchar(nam)==1, paste0(0, nam), nam)
+  nam <- paste0("FB", nam)
+  if(!(all(nameConstraints == nam))){
+    stop("Probleme in name of constraints")
+  }
+  
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
 }
 
