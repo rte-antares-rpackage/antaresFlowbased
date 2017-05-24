@@ -34,9 +34,10 @@ prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber,
 
   #Creation of bindingconstraints chronicles
   clim <- data.table::data.table(Id_day = unlist(ts[,.SD, .SDcols = colnames(ts)==simNumber]))
-  setorderv(secondMember, c("Id_day", "Id_hour", "Name"))
-  allFB <- merge(clim, secondMember, by = "Id_day", allow.cartesian = TRUE)
-  data.table::setkeyv(allFB, c("Id_day", "Name"))
+  clim[,OrderN := 1:nrow(clim)]
+  allFB <- merge(secondMember, clim, by = "Id_day", allow.cartesian = TRUE)
+  setorderv(allFB, c("OrderN", "Id_hour", "Name"))
+  allFB$OrderN <- NULL
   #Write of bindingconstraints
   upFb <- try(
     sapply(unique(allFB$Name),
