@@ -9,7 +9,19 @@
   weigth <- data.table::fread(weigth, sep = "\t", dec = ".")
   names(weigth) <- names(weigth)%>>%
     tolower()
-
+  if(any(names(weigth) != c("name", "be.fr", "de.fr", "de.nl", "be.nl", "be.de"))){
+    stop("Names of weigth.txt must be name, be.fr, de.fr, de.nl, be.nl, be.de")
+  }
+  recontructName <- 1:nrow(weigth)
+  recontructName <- as.character(recontructName)
+  recontructName <- ifelse(nchar(recontructName) == 1, paste0(0, recontructName), recontructName)
+  recontructName <- paste0("FB", recontructName)
+  
+  if(any(recontructName != weigth$name)){
+    stop(paste0("name column of weigth.txt must contain in order : ", paste0(recontructName, collapse = ","),
+         " ||  actualy : ", paste0( weigth$name, collapse = ",")))
+  }
+  
   names(weigth) <- gsub(x=names(weigth), pattern =  "[.]", replacement = "%")
   weigth
 }
@@ -45,7 +57,7 @@
   nam <- ifelse(nchar(nam)==1, paste0(0, nam), nam)
   nam <- paste0("FB", nam)
   if(!(all(nameConstraints == nam))){
-    stop("Probleme in name of constraints")
+    stop("Probleme in name of constraints in file second_member.txt")
   }
   
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
@@ -71,7 +83,29 @@
 #'
 #' @noRd
 .getDayType <- function(daytype){
-  data.table::fread(daytype, sep = "\t", dec = ".", header = TRUE)
+  daytype <- data.table::fread(daytype, sep = "\t", dec = ".", header = TRUE)
+  
+  if(dim(daytype)[2] == 1){
+    stop("Problem in ts.txt format, sep must be tabulation")
+  }
+  #Control format date
+  
+  if(!"Date" %in% names(daytype)){
+    stop('Missing Date column in ts.txt (must have a D uppercase')
+  }
+  if(!all(names(daytype)[2:ncol(daytype)] == as.character(1:(ncol(daytype)-1)))){
+    stop(paste0("Probleme in ts.txt chroniques names actual : ",
+                paste0(names(daytype)[2:ncol(daytype)], collapse = ","),
+                "  ||  Must be",
+                paste0(as.character(1:(ncol(daytype)-1)), collapse = ",")))
+  }
+  
+  dateControl <- strsplit(daytype$Date[1], "-")[[1]]
+  if(length(dateControl)!=3){
+    stop(paste0("Probleme of date format in file ts.txt, must be AAAA-MM-DD, actual : ", daytype$Date[1]))
+  }
+
+  daytype
 }
 
 #' Write daytype file

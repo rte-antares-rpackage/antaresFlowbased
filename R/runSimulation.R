@@ -106,11 +106,11 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   .errorTest(upGenIni, verbose, "Write of generaldata")
   
   #load second member
-  second_member <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
+  second_member <- try(.getSecondMember(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
   .errorTest(second_member, verbose, "Load of second_member.txt")
   
   #load ts
-  ts <- try(data.table::fread(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
+  ts <- try(.getDayType(paste0(opts$studyPath,"/user/flowbased/ts.txt")), silent = TRUE)
   .errorTest(ts, verbose, "Load of ts.txt")
   
   #load scenarios

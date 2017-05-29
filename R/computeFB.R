@@ -26,7 +26,9 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   pb <- txtProgressBar(style = 3)
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
-  PTDF <- fread(PTDF)
+  
+  
+  PTDF <- .readPTDF(PTDF)
 
   face <- giveBClassif(PTDF, nbClust = nbFaces)
   face <- round(face, 2)
@@ -108,7 +110,23 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
  outputName
 }
 
-
+#' @title read PTDF file
+#'
+#' @description read PTDF file
+#' @param PTDF \code{character} PTDF path.
+#'
+#' @return \code{data.table}
+#'
+#' @noRd
+#'
+.readPTDF <- function(PTDF){
+  PTDF <- try(fread(PTDF))
+  if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
+    stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM_0 in this order")
+  }
+  
+  PTDF
+}
 
 #' Chronique file to optimisation output
 #' 
