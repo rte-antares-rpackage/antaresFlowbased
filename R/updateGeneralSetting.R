@@ -1,6 +1,6 @@
-#' @title Change bindingconstraints.ini file
+#' @title Change generaldata.ini file
 #' 
-#' @description Change bindingconstraints.ini file
+#' @description Change generaldata.ini file
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param playList \code{numeric}, playList

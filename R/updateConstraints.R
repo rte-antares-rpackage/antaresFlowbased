@@ -55,16 +55,52 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
 
   # update binding constraints
   # Q : control if we have 36FB ? linked between data & update ?
+  
+  sapply(info_weight$name,function(Nam){
+    Nam <- as.character(Nam)
+    if(!any(unlist(lapply(binding_cstr, function(X){
+     X$name %in% Nam
+    })))){
+      
+      
+      newConstraint <- list(
+        name = as.character(Nam),
+        id = as.character(tolower(Nam)),
+        enabled = TRUE,
+        type = "hourly",
+        operator = "less"
+      )
+      rowSel <- info_weight[info_weight$name == Nam,]
+      if(rowSel$`be%fr` != 0){
+        newConstraint$`be%fr` <- rowSel$`be%fr`
+      }
+      if(rowSel$`de%fr` != 0){
+        newConstraint$`de%fr` <- rowSel$`de%fr`
+      }
+      if(rowSel$`de%nl` != 0){
+        newConstraint$`de%nl` <- rowSel$`de%nl`
+      }
+      if(rowSel$`be%nl` != 0){
+        newConstraint$`be%nl` <- rowSel$`be%nl`
+      }
+      if(rowSel$`be%de` != 0){
+        newConstraint$`be%de` <- rowSel$`be%de`
+      }
+      
+      binding_cstr[[as.character(length(binding_cstr) + 1)]] <<- newConstraint
+    }
+  })
+  
+  
   up_binding_cstr <- lapply(binding_cstr, function(x){
     if(x$name %in% info_weight$name){
       # really have to set this 3 parameters ?
       x$enabled = TRUE
       x$type = "hourly"
       x$operator = "less"
-
       # remove other parameters
       x[(which(names(x)%in%"operator")+1) : length(x)] <- NULL
-
+      
       # add new weight
       tmp_weight <- info_weight[info_weight$name %in% x$name, -1]
       ctrl_add <- lapply(colnames(tmp_weight), function(x){
@@ -76,7 +112,7 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
       })
       x
     } else {
-      # just remove values
+      # just remove values??
       x$values <- NULL
       x
     }

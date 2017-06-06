@@ -23,12 +23,12 @@ adqPatch <- function(opts)
 #' @noRd
 .applyAdq <- function(opts, dta){
   
-  
+  dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
-  links[, be :=`be - de` + `be - fr` + `be - nl`]
+  links[, be := `be - de` + `be - fr` + `be - nl`]
   links[, de := - `be - de` + `de - fr` + `de - nl`]
-  links[, fr := - (`be - fr` + `de - fr`)]
-  links[, nl := - (`be - nl` + `de - nl`)]
+  links[, fr := - `be - fr` - `de - fr`]
+  links[, nl := - `be - nl` - `de - nl`]
   
   links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
   links <- melt(links, id = 1:2)
@@ -92,7 +92,9 @@ adqPatch <- function(opts)
           
 
         senar <- scenario[outR$mcYear]$simulation
-        dayType <- ts[[as.character(senar)]][yday(outR$time)]
+        
+       
+        dayType <- ts[[as.character(senar)]][which( substr(outR$time, 6, 10) ==    substr(ts$Date, 6, 10))]
         Hour <- hour(outR$time) + 1
         b <- data.table(1:length(secondM[Id_day == dayType & Id_hour == Hour]$vect_b),
                         secondM[Id_day == dayType & Id_hour == Hour]$vect_b)
@@ -116,20 +118,30 @@ adqPatch <- function(opts)
         # 
         # 
         sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn)
+        sol <- round(sol, 0)
+        sol <- data.frame(sol)
+        if(sum(sol)>0){
+          sol[,which.max(sol)] <-  sol[,which.max(sol)] - sum(sol)
+        }
+        if(sum(sol)<0){
+          sol[,which.min(sol)] <-  sol[,which.min(sol)] - sum(sol)
+          
+        }
         
+        print(sum(sol))
         cbind(outR, sol)
         }else{
           NULL
         }
       }
     }
-  }))
-  print(new)
-  new$`be - de` <- new$PN_be - new$PN_de 
-  new$`be - fr` <- new$PN_be - new$PN_fr
-  new$`be - nl` <- new$PN_be - new$PN_nl
-  new$`de - fr` <- new$PN_de - new$PN_fr 
-  new$`de - nl` <- new$PN_de - new$PN_nl
+  }, simplify = FALSE))
+  
+  new$`be - fr` <- new$PN_be
+  new$`de - nl` <- - new$PN_nl
+  new$`de - fr` <- - new$PN_be - new$PN_fr 
+  new$`be - de` <- 0
+  new$`be - nl` <- 0
   
   
   re_link <- melt(new[, .SD, .SDcols = c(
@@ -152,9 +164,9 @@ adqPatch <- function(opts)
   setnames(re, "variable", "area")
   chang <- merge(dta$areas, re, by = c("time" ,"mcYear", "area"))
   chang[, BALANCEN:=BALANCE - value + PN]
-  chang[, UNSPN:=ifelse(lole>abs(PN), lole, abs(PN))]
+  chang[, UNSPN:=ifelse(lole>abs(PN), lole -  abs(PN),0)]
   chang[,LOLDN := ifelse(UNSPN==0, 0, 1)]
-  chang[,`DTG MRGN` := ifelse(UNSPN==0, 0, `DTG MRG` + value - PN)]
+  chang[,`DTG MRGN` := ifelse(UNSPN==0, `DTG MRG` + value - PN, 0)]
   
   
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
@@ -212,27 +224,24 @@ adqPatch <- function(opts)
     outpt <- c(outpt, margin[1] + ipn[1])
     sign <- c(sign, "<=")
   }
-  
+
   if(D[2] == 0){
     res <- c(res, c(0, 1, 0, 0))
     outpt <- c(outpt, margin[2] + ipn[2])
     sign <- c(sign, "<=")
   }
-  
+
   if(D[3] == 0){
     res <- c(res, c(0, 0, 1, 0))
     outpt <- c(outpt, margin[3] + ipn[3])
     sign <- c(sign, "<=")
   }
-  
+
   if(D[4] == 0){
     res <- c(res, c(0, 0, 0, 1))
     outpt <- c(outpt, margin[4] + ipn[4])
     sign <- c(sign, "<=")
   }
-  
-  
-  
   
   res <- matrix(res, ncol = 4, byrow = TRUE)
   allMat <- rbind(res, b36)
