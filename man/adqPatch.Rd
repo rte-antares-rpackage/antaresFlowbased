@@ -4,11 +4,19 @@
 \alias{adqPatch}
 \title{Compute adqPatch for antares study}
 \usage{
-adqPatch(opts)
+adqPatch(opts = antaresRead::simOptions())
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 }
 \description{
 Compute adqPatch for antares study
+}
+\examples{
+
+\dontrun{
+antaresRead::setSimulationPath("D:/exemple_test", 1)
+res <- adqPatch()
+}
+
 }

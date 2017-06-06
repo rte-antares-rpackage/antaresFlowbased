@@ -2,7 +2,7 @@
 % Please edit documentation in R/updateGeneralSetting.R
 \name{updateGeneralSettingIni}
 \alias{updateGeneralSettingIni}
-\title{Change bindingconstraints.ini file}
+\title{Change generaldata.ini file}
 \usage{
 updateGeneralSettingIni(opts = antaresRead::simOptions(), playList = NULL)
 }
@@ -12,7 +12,7 @@ updateGeneralSettingIni(opts = antaresRead::simOptions(), playList = NULL)
 \item{playList}{\code{numeric}, playList}
 }
 \description{
-Change bindingconstraints.ini file
+Change generaldata.ini file
 }
 \examples{
 

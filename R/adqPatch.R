@@ -2,6 +2,13 @@
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' 
+#' @examples
+#'
+#' \dontrun{
+#' antaresRead::setSimulationPath("D:/exemple_test", 1)
+#' res <- adqPatch()
+#' }
+#' 
 #' @export
 adqPatch <- function(opts = antaresRead::simOptions())
 {
