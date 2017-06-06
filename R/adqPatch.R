@@ -3,7 +3,7 @@
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' 
 #' @export
-adqPatch <- function(opts)
+adqPatch <- function(opts = antaresRead::simOptions())
 {
   
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
