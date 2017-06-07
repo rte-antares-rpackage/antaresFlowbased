@@ -59,6 +59,18 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   #Init constraint
   updateBindingConstraintsIni(paste0(newDir, "/weight.txt"), opts = opts)
 
+  #Create temp empty file for antares study if they not exsists
+  info_weight <- try(read.table(paste0(newDir, "/weight.txt"), sep = "\t", dec = ".", header = T, check.names = F), silent= T)
+  info_weight$name <- paste0(info_weight$name, "_fb")
+  
+  dirContraints <- paste0(opts$inputPath, "/bindingconstraints/")
+  sapply(info_weight$name, function(X){
+    fil <- paste0(dirContraints, X, ".txt")
+    if(!file.exists(fil)){
+      file.create(fil)
+    }
+  })
+  
   #Return TRUE
   invisible(TRUE)
 
