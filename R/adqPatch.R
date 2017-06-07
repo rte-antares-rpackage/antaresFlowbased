@@ -5,7 +5,7 @@
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/exemple_test", 1)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/TestrunSimulationFb/antaresStudy", 1)
 #' res <- adqPatch()
 #' }
 #' 
@@ -63,12 +63,16 @@ adqPatch <- function(opts = antaresRead::simOptions())
   b36Prim <- as.matrix(b36)[,2:4]
   b36Prim <- cbind(b36Prim, 0)
   
+  
+  out <- out[LOLD_fr!=0|LOLD_be!=0|LOLD_de!=0|LOLD_nl!=0]
+  
+  if(nrow(out) == 0){
+    cat("No row concern by adq patch")
+    return(dta)
+  }
+  
   new <- rbindlist(sapply(1:nrow(out), function(X){
     outR <- out[X]
-    if(nrow(outR[c(which(LOLD_fr!=0),
-                   which(LOLD_be!=0),
-                   which(LOLD_de!=0),
-                   which(LOLD_nl!=0))])>0){
       if(nrow(outR[c(which(lole_fr!=0),
                      which(lole_be!=0),
                      which(lole_de!=0),
@@ -134,16 +138,18 @@ adqPatch <- function(opts = antaresRead::simOptions())
           sol[,which.min(sol)] <-  sol[,which.min(sol)] - sum(sol)
           
         }
-        
-        print(sum(sol))
         cbind(outR, sol)
         }else{
           NULL
         }
       }
-    }
+    
   }, simplify = FALSE))
   
+  if(nrow(new) == 0){
+    cat("No row concern by adq patch")
+    return(dta)
+  }
   new$`be - fr` <- new$PN_be
   new$`de - nl` <- - new$PN_nl
   new$`de - fr` <- - new$PN_be - new$PN_fr 
