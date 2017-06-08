@@ -199,9 +199,11 @@ aggregateResult <- function(opts, newname, verbose = 1){
           b <- Sys.time()
           valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
           valueTP <- lapply(valueTP, .creatStats)
+
           value$areas <- .updateStats(value$areas, valueTP$areas)
           value$links <- .updateStats(value$links, valueTP$links)
           value$clusters <- .updateStats(value$clusters, valueTP$clusters)
+
           btot <- btot + as.numeric(Sys.time() - b)
           if(verbose>0)
           {
@@ -239,11 +241,11 @@ aggregateResult <- function(opts, newname, verbose = 1){
       value$links$sum <- value$links$sum / N
       value$clusters$sum <- value$clusters$sum / N
       btot <- btot + as.numeric(Sys.time() - b)
-      .addMessage(verbose, paste0("Time for reading data : ", round(aTot,1), " seondes"))
-      .addMessage(verbose, paste0("Time for calculating : ", round(btot,1), " seondes"))
+      .addMessage(verbose, paste0("Time for reading data : ", round(aTot,1), " secondes"))
+      .addMessage(verbose, paste0("Time for calculating : ", round(btot,1), " secondes"))
     }, silent = TRUE)
 
-    .errorTest(dtaLoadAndcalcul, verbose, "Load of data and calcul")
+    .errorTest(dtaLoadAndcalcul, verbose, "Load data and calcul")
 
     #Write area
     allfiles <- c("values")
@@ -438,8 +440,12 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @noRd
 #'
 .creatStats <- function(X){
-  res <- list(sum = X, min = X, max = X,
-              sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
+
+  # res <- list(sum = X, min = X, max = X,
+  #             sumC = data.table::data.table(sapply(X, function(Z) Z*Z)))
+
+  res <- list(sum = X, min = X, max = X, sumC = X*X)
+
   names(res$sum) <- paste(names(X), "EXP")
   names(res$min) <- paste(names(X), "min")
   names(res$max) <- paste(names(X), "max")
@@ -460,11 +466,15 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #' @noRd
 .updateStats <- function(X, Y){
   X$sum <-  X$sum + Y$sum
-  X$min <-  pmin(X$min , Y$min)
-  X$max <-  pmax(X$max , Y$max)
+  X$min <-  pmin.fast(X$min , Y$min)
+  X$max <-  pmax.fast(X$max , Y$max)
   X$sumC <-  X$sumC + Y$sumC
   X
 }
+
+# fast pmin and pmax for two elements
+pmin.fast <- function(k,x) (x+k - abs(x-k))/2
+pmax.fast <- function(k,x) (x+k + abs(x-k))/2
 
 
 
@@ -489,8 +499,14 @@ aggregateResult <- function(opts, newname, verbose = 1){
 #'
 #'
 #' @noRd
+#'
+
 .writeFileOut <- function(dta, timestep, fileType, ctry, opts, folderType, nbvar,
                           indexMin, indexMax, ncolFix, nomcair, unit, nomStruct, Stats){
+
+
+  # threads for fwrite
+  data.table::setDTthreads(2)
 
   folderTypesansS <- substr(folderType, 1, nchar(folderType)-1)
   abrtype <- substr(fileType, 1, 2)
@@ -527,15 +543,24 @@ aggregateResult <- function(opts, newname, verbose = 1){
   file <- file(outputFile, "wb")
 
   write.table(entete,file , row.names = FALSE, eol = "",
-              quote = FALSE, col.names = FALSE)
+                          quote = FALSE, col.names = FALSE)
 
-  write.table(cbind(NA, dta), file,
+  # write.table(cbind(NA, dta), file,
+  #             append = TRUE,
+  #             row.names = FALSE,
+  #             col.names =FALSE,
+  #             quote = FALSE,sep = "\t",
+  #             na = "")
+
+  close(file)
+
+  data.table::fwrite(cbind(NA, dta), outputFile,
               append = TRUE,
               row.names = FALSE,
-              col.names =FALSE,
-              quote = FALSE,sep = "\t",
-              na = "")
-  close(file)
+              quote = FALSE, sep = "\t",
+              eol = "\n", na = "")
+
+
 }
 
 
