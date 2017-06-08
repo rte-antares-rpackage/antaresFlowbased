@@ -72,10 +72,10 @@ area;values;economy;SPIL. ENRG;MWh;EXP;0
 area;values;economy;SPIL. ENRG;MWh;std;0
 area;values;economy;SPIL. ENRG;MWh;min;0
 area;values;economy;SPIL. ENRG;MWh;max;0
-area;values;economy;LOLD;Hours;EXP;0
-area;values;economy;LOLD;Hours;std;0
-area;values;economy;LOLD;Hours;min;0
-area;values;economy;LOLD;Hours;max;0
+area;values;economy;LOLD;Hours;EXP;2
+area;values;economy;LOLD;Hours;std;2
+area;values;economy;LOLD;Hours;min;2
+area;values;economy;LOLD;Hours;max;2
 area;values;economy;LOLP;%;values;2
 area;values;economy;AVL DTG;MWh;EXP;0
 area;values;economy;AVL DTG;MWh;std;0
@@ -170,10 +170,10 @@ area;values;adequacy;SPIL. ENRG;MWh;EXP;0
 area;values;adequacy;SPIL. ENRG;MWh;std;0
 area;values;adequacy;SPIL. ENRG;MWh;min;0
 area;values;adequacy;SPIL. ENRG;MWh;max;0
-area;values;adequacy;LOLD;Hours;EXP;0
-area;values;adequacy;LOLD;Hours;std;0
-area;values;adequacy;LOLD;Hours;min;0
-area;values;adequacy;LOLD;Hours;max;0
+area;values;adequacy;LOLD;Hours;EXP;2
+area;values;adequacy;LOLD;Hours;std;2
+area;values;adequacy;LOLD;Hours;min;2
+area;values;adequacy;LOLD;Hours;max;2
 area;values;adequacy;LOLP;%;values;2
 area;values;adequacy;AVL DTG;MWh;EXP;0
 area;values;adequacy;AVL DTG;MWh;std;0
