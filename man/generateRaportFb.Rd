@@ -13,6 +13,8 @@ generateRaportFb(dayType, output_file = NULL,
 \item{output_file}{\code{character}, output directory}
 
 \item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
+
+\item{allFB}{\code{data.table}, load FB directaly in package}
 }
 \description{
 Generate html report

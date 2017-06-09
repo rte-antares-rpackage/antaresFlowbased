@@ -162,6 +162,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param output_file \code{character}, output directory
 #' @param dayType \code{numeric}, dayType
+#' @param allFB \code{data.table}, load FB directaly in package
 #'
 #' @import rmarkdown flexdashboard rAmCharts manipulateWidget
 #'

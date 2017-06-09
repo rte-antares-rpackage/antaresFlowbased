@@ -22,9 +22,7 @@ computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
 
 \item{nbFaces}{\code{numeric} number of faces to keep, default 36.}
 
-\item{verbose}{\code{numeric} show log in console. Defaut to 0}
-
-\item{allFB}{\code{data.table}, FB data.table directly load in R.
+\item{verbose}{\code{numeric} show log in console. Defaut to 0.
 \itemize{
  \item 0 : No log
  \item 1 : Short log

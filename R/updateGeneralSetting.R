@@ -60,7 +60,9 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 
   # activation of playlist
   generalSetting$general$`user-playlist` <- TRUE
-
+  if(generalSetting$general$filtering){
+    stop("Param Output profile : Results filtering is Custom, he must be None for flowbased simulation")
+  }
   generalSetting
 }
 
@@ -80,6 +82,8 @@ modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   # read current .ini
   generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
 
+  
+  
   # format playlist
   playList <- sapply(playList, function(X){
     as.character(X)
