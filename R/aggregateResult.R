@@ -10,8 +10,7 @@
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#'
-#' @export
+#' 
 #' @import antaresRead
 #'
 moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
@@ -91,9 +90,7 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#'
-#'
-#' @export
+#' 
 #' @import plyr data.table
 #'
 aggregateResult <- function(opts, newname, verbose = 1){

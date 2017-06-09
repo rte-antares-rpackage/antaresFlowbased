@@ -28,7 +28,7 @@
 #' }
 #'
 #' @import data.table
-#' @export
+#' 
 prepareSimulationFiles <- function(ts, secondMember, scenarios, simNumber,
                                    opts = antaresRead::simOptions(), verbose = 1){
 

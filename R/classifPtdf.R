@@ -3,7 +3,6 @@
 #' @param PTDF \code{data.frame}, PTDF
 #' @param nbClust \code{numeric}, number of cluster
 #' 
-#' @export
 giveBClassif <- function(PTDF, nbClust = 36)
 {
   PTDF <- PTDF[!(DE == 0 & DE == 0 & FR == 0)]

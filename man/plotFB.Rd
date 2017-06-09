@@ -2,7 +2,7 @@
 % Please edit documentation in R/graph.R
 \name{plotFB}
 \alias{plotFB}
-\title{Plot 2D for flowbased areas}
+\title{Plot 2D for flowbased areas can combine more than one plot}
 \usage{
 plotFB(dayType, hour, country1, country2,
   fb_opts = antaresFlowbased::fbOptions())
@@ -19,7 +19,7 @@ plotFB(dayType, hour, country1, country2,
 \item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
 }
 \description{
-Plot 2D for flowbased areas
+Plot 2D for flowbased areas can combine more than one plot
 }
 \examples{
 

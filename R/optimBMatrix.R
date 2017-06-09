@@ -13,8 +13,7 @@
 #' }
 #' 
 #' @import pipeR
-#'
-#' @export
+#' 
 searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
   alpha <- 0.5
   tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
@@ -64,8 +63,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
 #' @param faceY \code{data.table}, face for 3 country, BE, DE anf FR for all tuple in face
 #'
 #' @import pipeR
-#'
-#' @export
+#' 
 askProblemeMat <- function(pointX, faceY, face){
 
 
@@ -351,8 +349,7 @@ askProblemeMat <- function(pointX, faceY, face){
 #' if 1 error of type 0 is ignored
 #'
 #' @import pipeR
-#'
-#' @export
+#' 
 resolvBmat <- function(face, pointX, faceY, probleme, alpha)
 {
   Nbvar <- probleme$Nbvar

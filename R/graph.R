@@ -9,7 +9,7 @@
 #' @param max \code{numeric}, maximum of axis
 #'
 #' @import rAmCharts
-#'
+#' 
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
 {
   
@@ -88,7 +88,7 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
   
 }
 
-#' Plot 2D for flowbased areas
+#' Plot 2D for flowbased areas can combine more than one plot
 #'
 #' @param hour \code{numeric}, hour
 #' @param dayType \code{numeric}, dayType
@@ -204,9 +204,6 @@ generateRaportFb <- function(dayType, output_file = NULL,
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #'
 #' @import shiny manipulateWidget
-#' @importFrom DT renderDataTable
-#' @importFrom DT dataTableOutput
-#' @importFrom DT datatable
 #' 
 #' @export
 runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){

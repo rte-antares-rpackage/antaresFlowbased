@@ -14,8 +14,7 @@
 #' @rdname update-BindingConstraints
 #'
 #' @seealso \code{writeBindingConstraintsIni}
-#'
-#' @export
+#' 
 #'
 updateBindingConstraintsIni <- function(pathWeight, opts = antaresRead::simOptions()){
   # udpate data
@@ -34,8 +33,7 @@ updateBindingConstraintsIni <- function(pathWeight, opts = antaresRead::simOptio
 #' @rdname update-BindingConstraints
 #'
 #' @import antaresRead
-#'
-#' @export
+#' 
 #'
 changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions()){
   # reading binding constraints
@@ -148,8 +146,7 @@ changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions(
 #'
 #' @param listData \code{list}, bindingconstraints.ini as list R
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#'
-#' @export
+#' 
 #'
 writeBindingConstraintsIni <- function(listData, opts = antaresRead::simOptions()){
   # open new file

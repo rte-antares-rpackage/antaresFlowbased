@@ -15,8 +15,7 @@
 #' }
 #'
 #' @seealso \code{writeGeneralSettingIni}
-#'
-#' @export
+#' 
 #'
 updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList = NULL){
 
@@ -45,8 +44,7 @@ updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList =
 #' @param generaldataIniPatch \code{character}, path of generaldataIni
 #'
 #' @import antaresRead
-#'
-#' @export
+#' 
 #'
 modifyGeneralSetting <- function(generaldataIniPatch){
   # read current .ini
@@ -75,8 +73,7 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 #' @param playList \code{numeric}, playList
 #'
 #' @import antaresRead
-#'
-#' @export
+#' 
 #'
 modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   # read current .ini
@@ -104,8 +101,7 @@ modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
 #'
 #' @param generaldataIniPatch \code{list}
 #' @param generalSetting \code{Character}, Path to ini file
-#'
-#' @export
+#' 
 #'
 writeGeneralSettingIni <- function(generaldataIniPatch, generalSetting)
 {
