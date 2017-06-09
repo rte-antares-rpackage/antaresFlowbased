@@ -15,7 +15,7 @@ Compute adqPatch for antares study
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/exemple_test", 1)
+antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/TestrunSimulationFb/antaresStudy", 1)
 res <- adqPatch()
 }
 

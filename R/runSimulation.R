@@ -28,6 +28,7 @@
 #'  \item 1 : Short log
 #'  \item 2 : Long log
 #' }
+#' @param antaresParallel \code{boolean} use antares parallel compute
 #'
 #' @examples
 #'
@@ -52,7 +53,7 @@
 #'
 runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
                             mcYears = "all", opts = antaresRead::simOptions(),
-                            verbose = 1){
+                            verbose = 1, antaresParallel = TRUE){
   
   # mcAll & mcInd control
   if(mcAll == FALSE & mcInd == FALSE){
@@ -64,7 +65,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   oldw <- getOption("warn")
   options(warn = -1)
   opts <- antaresRead::setSimulationPath(opts$studyPath ,0)
-  
+  parallelAntares <- NULL
   try({
     ##Test version of antares solver
     solver <- getSolverAntares()
@@ -77,6 +78,9 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
     if(versionSolver != versionStudy){
       stop(paste0("Imcompatibility between antares solver version (", versionSolver, ") and study version(", versionStudy), ")")
     }
+    if(as.numeric(versionSolver)>5 & antaresParallel){
+      parallelAntares <- " --parallel"
+      }
   })
   
   # control mode
@@ -180,7 +184,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   progress <- ifelse(verbose == 0, "none" , "text")
   
   plyr::l_ply(allScenario, function(X, opts, ts, second_member,
-                                    scenario, cmd, verbose, timBegin, allScenario){
+                                    scenario, cmd, verbose, timBegin, allScenario, parallelAntares){
     #Prepare files before simulation
     .addMessage(verbose, paste0("\n-Scenario : ",X))
     prepareSimulationFiles(opts = opts,
@@ -191,7 +195,8 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
                            verbose = verbose)
     
     
-    cmd <- paste0(cmd, "Sim",X)
+    cmd <- paste0(cmd, "Sim",X, parallelAntares)
+    print(cmd)
     .addMessage(verbose, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
     out <- .runAntares(cmd)
@@ -233,7 +238,8 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   verbose = verbose,
   timBegin = timBegin,
   allScenario = allScenario,
-  .progress = progress)
+  .progress = progress,
+  parallelAntares = parallelAntares)
   .addMessage(verbose, "---------- End of antares part ----------", valAf = 1)
   
   

@@ -5,7 +5,8 @@
 \title{Run antares Simulation with several flow-based time series}
 \usage{
 runSimulationFB(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
-  mcYears = "all", opts = antaresRead::simOptions(), verbose = 1)
+  mcYears = "all", opts = antaresRead::simOptions(), verbose = 1,
+  antaresParallel = TRUE)
 }
 \arguments{
 \item{simulationName}{\code{character} name of simulation. Defaut to 'FlowBased'.}
@@ -24,6 +25,8 @@ runSimulationFB(simulationName = "FlowBased", mcAll = TRUE, mcInd = TRUE,
  \item 1 : Short log
  \item 2 : Long log
 }}
+
+\item{antaresParallel}{\code{boolean} use antares parallel compute}
 }
 \description{
 This function runs the simulation of an ANTARES study and changes the second members
