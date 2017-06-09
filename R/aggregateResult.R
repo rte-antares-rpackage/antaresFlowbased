@@ -128,7 +128,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
 
     .addMessage(verbose, paste0("------- Mc-all : ", type, " -------"))
 
-    
+    try({
     
     #load first MC-year
     a <- Sys.time()
@@ -404,7 +404,7 @@ aggregateResult <- function(opts, newname, verbose = 1){
     .errorTest(detailWrite, verbose, "Detail write")
 
     }
-    
+    })
     .addMessage(verbose, paste0("------- End Mc-all : ", type, " -------"))
 
   }, verbose = verbose)
