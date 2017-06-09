@@ -196,7 +196,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
     
     
     cmd <- paste0(cmd, "Sim",X, parallelAntares)
-    print(cmd)
+
     .addMessage(verbose, paste0("Antares launching for ",  paste0("scenario : ",X) ))
     beg <- Sys.time()
     out <- .runAntares(cmd)
