@@ -128,11 +128,18 @@ aggregateResult <- function(opts, newname, verbose = 1){
 
     .addMessage(verbose, paste0("------- Mc-all : ", type, " -------"))
 
+    
+    
     #load first MC-year
-    dtaLoadAndcalcul <- try({
-      a <- Sys.time()
-      dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
-                                      timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+    a <- Sys.time()
+    dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
+                                    timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+   
+    if(length(dta)>0){  
+   dtaLoadAndcalcul <- try({
+     
+    
+      
       aTot <- as.numeric(Sys.time() - a)
       SDcolsStartareas <- switch(type,
                                  daily = 6,
@@ -396,6 +403,8 @@ aggregateResult <- function(opts, newname, verbose = 1){
     }), silent = TRUE)
     .errorTest(detailWrite, verbose, "Detail write")
 
+    }
+    
     .addMessage(verbose, paste0("------- End Mc-all : ", type, " -------"))
 
   }, verbose = verbose)
