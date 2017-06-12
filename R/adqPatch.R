@@ -12,7 +12,7 @@
 #' @export
 adqPatch <- function(opts = antaresRead::simOptions())
 {
-  
+  #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
                      select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
@@ -30,6 +30,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
 #' @noRd
 .applyAdq <- function(opts, dta){
   
+  #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
   links[, be := `be - de` + `be - fr` + `be - nl`]
@@ -37,33 +38,34 @@ adqPatch <- function(opts = antaresRead::simOptions())
   links[, fr := - `be - fr` - `de - fr`]
   links[, nl := - `be - nl` - `de - nl`]
   
+  #Merge with data
   links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
   links <- melt(links, id = 1:2)
   setnames(links, "variable", "area")
   dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
+  
+  #Compute lole
   dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
   dta$areas[, ipn := value]
   dta$areas[, lole:=(ifelse(lole<=0, 0, lole))]
   
+  #Keep only useful data
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn")]
   out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn"))
   
+  #Load from study
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
   b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
   
-  
-  ####Pour test
-  #b36 <- fread("D:/Users/titorobe/Desktop/ADQ PATCH/B36.txt")
-  
+  #Compute b36
   b36 <- b36p[, list(V1 = 1:.N, V2 = `be%nl`, V3 = `de%nl`, V4 = `be%fr`)]
   b36[,V4:= V2-V4]
-  
   b36Prim <- as.matrix(b36)[,2:4]
   b36Prim <- cbind(b36Prim, 0)
   
-  
+  #Filtered unconcorded line
   out <- out[LOLD_fr!=0|LOLD_be!=0|LOLD_de!=0|LOLD_nl!=0]
   
   if(nrow(out) == 0){
@@ -72,6 +74,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
   }
   
   new <- rbindlist(sapply(1:nrow(out), function(X){
+    #Filtered unconcorded line
     outR <- out[X]
       if(nrow(outR[c(which(lole_fr!=0),
                      which(lole_be!=0),
@@ -101,17 +104,16 @@ adqPatch <- function(opts = antaresRead::simOptions())
         }
         if(ret == 0){
           
-
+        #Found rigth scenario
         senar <- scenario[outR$mcYear]$simulation
         
        
         dayType <- ts[[as.character(senar)]][which( substr(outR$time, 6, 10) ==    substr(ts$Date, 6, 10))]
         Hour <- hour(outR$time) + 1
+        
+        #Found rigth b
         b <- data.table(1:length(secondM[Id_day == dayType & Id_hour == Hour]$vect_b),
                         secondM[Id_day == dayType & Id_hour == Hour]$vect_b)
-        ##ADQ Patch
-        #b <- fread("inst/ADQpatch/b.txt")
-        #b36 <- fread("inst/ADQpatch/B36.txt")
         
         lole <- outR[, .SD, .SDcols = c("lole_be", "lole_de", "lole_fr", "lole_nl")]
         lole <- unlist(lole)
@@ -119,15 +121,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
         ipn <- unlist(ipn)
         mrg <- outR[, .SD, .SDcols = c("DTG MRG_be", "DTG MRG_de", "DTG MRG_fr", "DTG MRG_nl")]
         mrg <- unlist(mrg)
-        
-        
-        # write.table(b, "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/b.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
-        # write.table(b36, "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/B36.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
-        # write.table(data.table(t(lole)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/lole.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
-        # write.table(data.table(t(ipn)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/InitialPN.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
-        # write.table(data.table(t(mrg)), "D:/Users/titorobe/Desktop/ADQ PATCH/test2ampl/margins.txt", row.names = FALSE, sep = "\t", dec = ".", col.names = FALSE)
-        # 
-        # 
+        #Apply adq patch
         sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn)
         sol <- round(sol, 0)
         sol <- data.frame(sol)
@@ -150,6 +144,8 @@ adqPatch <- function(opts = antaresRead::simOptions())
     cat("No row concern by adq patch")
     return(dta)
   }
+  
+  #Compute net position
   new$`be - fr` <- new$PN_be
   new$`de - nl` <- - new$PN_nl
   new$`de - fr` <- - new$PN_be - new$PN_fr 
@@ -167,7 +163,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
   re_PN$variable <- gsub("PN_", "",re_PN$variable  )
   
   re_LOLD <- melt(new[, .SD, .SDcols = c(
-    "time", "mcYear",    "LOLD_fr",    "LOLD_be",   "LOLD_de",      "LOLD_nl"
+    "time", "mcYear", "LOLD_fr",    "LOLD_be",   "LOLD_de",      "LOLD_nl"
   )], c("time", "mcYear"))
   
   re_LOLD$variable <- gsub("LOLD_", "",re_LOLD$variable  )
