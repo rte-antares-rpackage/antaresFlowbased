@@ -4,7 +4,8 @@
 #' @param b \code{numeric}, extreme points b
 #'
 #' @import pipeR
-#' 
+#'
+#' @noRd
 getVertices <- function(face, b){
   B <- as.matrix(face)
   IDfin <- 1:nrow(B)
@@ -57,7 +58,8 @@ getVertices <- function(face, b){
 #' @param pointX \code{data.table}, extreme points for 3 country, BE, DE anf FR
 #'
 #' @import pipeR
-#' 
+#'
+#' @noRd
 giveTuples <- function(face, pointX){
   b <- apply(face, 1, function(x){
     max(t(as.matrix(x))%*%t(as.matrix(pointX)))

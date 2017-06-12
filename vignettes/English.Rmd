@@ -29,12 +29,12 @@ computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased
           outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
 
 #Add time series file to directory "model1"
-addChroniquesFile("D:/Users/titorobe/Desktop/model1")
+addTSFile("D:/Users/titorobe/Desktop/model1")
 
 #Set setFlowbased directory path
 setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
 
-#Run shiny application to visualise the results of the convertion
+#Run shiny application to visualize the results of the convertion
 runAppError()
 
 #Set antares study path
@@ -83,7 +83,7 @@ The function creates a directory with the following files :
 * **domainesFB.RDS** : Information about the modeled domains (points, errors , accuracy of the model,...)
 * **reports** : a directory, created only if ``reports == TRUE`` with a html report for each typical day.
 
-To add flow-based time series file to this folder, the function ``addChroniquesFile()`` must be used. In this version of the package, the time series file can't be changed, they are the ones generated for adequacy studies in 2017. The ``outputName`` specifies the directory where the time series files will be saved. We recommend to specify the same folder as the one given to ``computeFB()``.
+To add flow-based time series file to this folder, the function ``addTSFile()`` must be used. In this version of the package, the time series file can't be changed, they are the ones generated for adequacy studies in 2017. The ``outputName`` specifies the directory where the time series files will be saved. We recommend to specify the same folder as the one given to ``computeFB()``.
 
 
 ## 3 - Data initialization

@@ -25,8 +25,8 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   pb <- txtProgressBar(style = 3)
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
-  
-  
+
+
   PTDF <- .readPTDF(PTDF)
 
   face <- giveBClassif(PTDF, nbClust = nbFaces)
@@ -81,7 +81,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   ##From B to antares
 
  antaresFace <- .fromBtoAntares(face)
- 
+
  ##Output
  allFaces <- rbindlist(apply(flowbased,1, function(X){
    nam <- 1:nrow(X$outFlowBased$face)
@@ -102,7 +102,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
    dir.create(outputNameReports)
    sapply(unique(flowbased$dayType), function(X){
      print(outputNameReports)
-     generateRaportFb(allFB = flowbased, dayType = X, output_file = outputNameReports)
+     generateReportFb(allFB = flowbased, dayType = X, output_file = outputNameReports)
    })
   }
 
@@ -123,15 +123,15 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
     stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM_0 in this order")
   }
-  
+
   PTDF
 }
 
-#' Chronique file to optimisation output
-#' 
+#' Time Series file to optimisation output
+#'
 #' @param outputName \code{character}, name of output directory
 #' @export
-addChroniquesFile <- function(outputName){
+addTSFile <- function(outputName){
   Chroniques <- system.file("/input/ts.txt", package
                             = "antaresFlowbased")
   Chroniques <- fread(Chroniques)

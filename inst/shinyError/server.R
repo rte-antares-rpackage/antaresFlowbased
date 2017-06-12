@@ -40,7 +40,7 @@ shinyServer(function(input, output) {
     filename = function() { paste("Error.zip", sep='') },
     content = function(file) {
       sapply(input$Reports, function(X){
-        generateRaportFb(allFB = dtaUseByShiny, dayType = X)
+        generateReportFb(allFB = dtaUseByShiny, dayType = X)
       })
       filtFiles <- paste0("Flowbased_TD",input$Reports, "_", Sys.Date(), ".html")
 

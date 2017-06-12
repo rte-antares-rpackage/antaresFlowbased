@@ -10,9 +10,9 @@
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#' 
-#' @import antaresRead
 #'
+#' @import antaresRead
+#' @noRd
 moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 {
   #Found files
@@ -90,9 +90,9 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 #'  \item{1}{ : Short log}
 #'  \item{2}{ : Long log}
 #'}
-#' 
-#' @import plyr data.table
 #'
+#' @import plyr data.table
+#' @noRd
 aggregateResult <- function(opts, newname, verbose = 1){
   if(verbose > 0)
   {
@@ -126,17 +126,17 @@ aggregateResult <- function(opts, newname, verbose = 1){
     .addMessage(verbose, paste0("------- Mc-all : ", type, " -------"))
 
     try({
-    
+
     #load first MC-year
     a <- Sys.time()
     dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
                                     timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
-   
-    if(length(dta)>0){  
+
+    if(length(dta)>0){
    dtaLoadAndcalcul <- try({
-     
-    
-      
+
+
+
       aTot <- as.numeric(Sys.time() - a)
       SDcolsStartareas <- switch(type,
                                  daily = 6,

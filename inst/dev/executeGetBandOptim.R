@@ -4,7 +4,7 @@
 computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
           outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
 
-addChroniquesFile("D:/Users/titorobe/Desktop/model1")
+addTSFile("D:/Users/titorobe/Desktop/model1")
 setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
 runAppError()
 
@@ -18,5 +18,5 @@ antaresRead::setSimulationPath("D:/exemple_test", 1)
 library(antaresFlowbased)
 library(antaresRead)
 opts <- setSimulationPath('D:/Users/titorobe/Desktop/exemple_test/', '20170403-1622r_from')
-dta <- adqPatch(opts) 
+dta <- adqPatch(opts)
 dta

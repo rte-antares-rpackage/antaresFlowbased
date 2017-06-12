@@ -8,12 +8,12 @@ knitr::opts_chunk$set(echo = TRUE)
 #            outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
 #  
 #  #Add time series file to directory "model1"
-#  addChroniquesFile("D:/Users/titorobe/Desktop/model1")
+#  addTSFile("D:/Users/titorobe/Desktop/model1")
 #  
 #  #Set setFlowbased directory path
 #  setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")
 #  
-#  #Run shiny application to visualise the results of the convertion
+#  #Run shiny application to visualize the results of the convertion
 #  runAppError()
 #  
 #  #Set antares study path

@@ -11,9 +11,10 @@
 #'  \item 0 : No log
 #'  \item 1 : Short log
 #' }
-#' 
+#'
 #' @import pipeR
-#' 
+#'
+#' @noRd
 searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
   alpha <- 0.5
   tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
@@ -63,7 +64,8 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
 #' @param faceY \code{data.table}, face for 3 country, BE, DE anf FR for all tuple in face
 #'
 #' @import pipeR
-#' 
+#'
+#' @noRd
 askProblemeMat <- function(pointX, faceY, face){
 
 
@@ -170,9 +172,6 @@ askProblemeMat <- function(pointX, faceY, face){
       rhs <<- list(rhs, -t(face[j,])%*%pointX[i,])
       NULL
     })})
-
-
-
 
   actual <- actual + 6*length(iEX)
   Bbons <- match(data.frame(t(faceY[,1:3, drop = FALSE])), data.frame(t(face)))
@@ -349,7 +348,7 @@ askProblemeMat <- function(pointX, faceY, face){
 #' if 1 error of type 0 is ignored
 #'
 #' @import pipeR
-#' 
+#' @noRd
 resolvBmat <- function(face, pointX, faceY, probleme, alpha)
 {
   Nbvar <- probleme$Nbvar
