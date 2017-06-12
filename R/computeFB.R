@@ -61,10 +61,10 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
       faceY <- do.call("cbind", apply(res, 2, function(X){
         face[X,]
       }))
-      probleme <- askProblemeMat(pointX, faceY, face)
+      problem <- askProblemMat(pointX, faceY, face)
       out <- searchAlpha(face = face, pointX = pointX,
                          faceY = faceY,
-                         probleme = probleme,
+                         problem = problem,
                          PTDF = PTDFsel,
                          univ = univ, verbose = verbose)
       out$pointX <- data.frame(pointX)

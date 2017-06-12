@@ -1,4 +1,4 @@
-context("Function askProblemeMat")
+context("Function askProblemMat")
 
 
 PTDF <- system.file("testdata/optim/PTDF.csv",package = "antaresFlowbased")
@@ -20,9 +20,9 @@ res <- apply(resultsAMPL, 1, function(Z){
   faceY <- do.call("cbind", apply(res, 2, function(X){
     face[X,]
   }))
-  probleme <- askProblemeMat(pointX, faceY, face)
+  problem <- askProblemMat(pointX, faceY, face)
   alpha <- Z$alpha
-  tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
+  tt <- resolvBmat(face, pointX, faceY, problem, alpha)
   round(tt$objval, 1) == round(Z$objective, 1)
 })
 

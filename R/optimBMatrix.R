@@ -3,7 +3,7 @@
 #' @param face \code{data.table}, face for 3 country, BE, DE anf FR
 #' @param pointX \code{data.table}, extreme points for 3 country, BE, DE anf FR
 #' @param faceY \code{data.table}, face for 3 country, BE, DE anf FR for all tuple in face
-#' @param probleme \code{optimization_model}, make which askProbleme
+#' @param problem \code{optimization_model}, make with \link{askProblem}
 #' @param PTDF \code{data.frame} PTDF
 #' @param univ \code{matrix} generate which .univ
 #' @param verbose \code{numeric} show log in console. Defaut to 1
@@ -15,9 +15,9 @@
 #' @import pipeR
 #'
 #' @noRd
-searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
+searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   alpha <- 0.5
-  tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
+  tt <- resolvBmat(face, pointX, faceY, problem, alpha)
   stratPoint <- (nrow(face) + nrow(pointX) * 6)
 
 
@@ -37,7 +37,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
       binf <- alpha
     }
     alpha <- (bsup + binf) / 2
-    tt <- resolvBmat(face, pointX, faceY, probleme, alpha)
+    tt <- resolvBmat(face, pointX, faceY, problem, alpha)
     FY <- cbind(face, bSol = tt$solution[1:nrow(face)])
     error <- .giveError(FY, PTDF = PTDF, univ = univ)
     nbrep <- nbrep + 1
@@ -57,7 +57,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
   return(list(alpha = alpha, error = error, face = FY, pointsY = pointsY))
 }
 
-#' Write optimisation probleme, matrix version
+#' Write optimisation problem, matrix version
 #'
 #' @param face \code{data.table}, face for 3 country, BE, DE anf FR
 #' @param pointX \code{data.table}, extreme points for 3 country, BE, DE anf FR
@@ -66,7 +66,7 @@ searchAlpha <- function(face, pointX, faceY, probleme, PTDF, univ, verbose = 0){
 #' @import pipeR
 #'
 #' @noRd
-askProblemeMat <- function(pointX, faceY, face){
+askProblemMat <- function(pointX, faceY, face){
 
 
   ID <- 1:nrow(face)
@@ -338,20 +338,20 @@ askProblemeMat <- function(pointX, faceY, face){
 }
 
 
-#' Resolve optimisation probleme matrix probleme
+#' Resolve optimisation problem matrix
 #'
 #' @param face \code{data.table}, face for 3 country, BE, DE anf FR
 #' @param pointX \code{data.table}, extreme points for 3 country, BE, DE anf FR
 #' @param faceY \code{data.table}, face for 3 country, BE, DE anf FR for all tuple in face
-#' @param probleme \code{optimization_model}, make which askProbleme
+#' @param problem \code{optimization_model}, make with \link{askProblem}
 #' @param alpha \code{numeric}, between 0 and 1, error ponderation if 0 error of type 1 is ignored
 #' if 1 error of type 0 is ignored
 #'
 #' @import pipeR
 #' @noRd
-resolvBmat <- function(face, pointX, faceY, probleme, alpha)
+resolvBmat <- function(face, pointX, faceY, problem, alpha)
 {
-  Nbvar <- probleme$Nbvar
+  Nbvar <- problem$Nbvar
   iEX <- 1:nrow(pointX)
   iEY <- 1:nrow(faceY)
   iFY <- 1:nrow(face)
@@ -360,8 +360,8 @@ resolvBmat <- function(face, pointX, faceY, probleme, alpha)
                                        (1+length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX)):
                                          (length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX) + 6*length(iEY))),
                         c(rep((1-alpha)/nrow(pointX),  length(iEX)*6), rep((alpha)/nrow(faceY), 6*length(iEY)))))
-  LP <- OP(obj, probleme$l_constraint, maximum = FALSE,
-           bounds = probleme$bounds)
+  LP <- OP(obj, problem$l_constraint, maximum = FALSE,
+           bounds = problem$bounds)
   y <- ROI_solve(LP, solver = "clp", control = list(amount = 0))
   y
 }
