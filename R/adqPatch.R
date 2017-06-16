@@ -16,10 +16,9 @@ adqPatch <- function(opts = antaresRead::simOptions())
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
                      select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
-  
+ 
   .applyAdq(opts = opts, dta)
 
-  
 }
 
 #' Compute adqPatch for antares study
@@ -29,7 +28,9 @@ adqPatch <- function(opts = antaresRead::simOptions())
 #' 
 #' @noRd
 .applyAdq <- function(opts, dta){
-  
+  oldw <- getOption("warn")
+  options(warn = -1)
+
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
@@ -50,8 +51,8 @@ adqPatch <- function(opts = antaresRead::simOptions())
   dta$areas[, lole:=(ifelse(lole<=0, 0, lole))]
   
   #Keep only useful data
-  out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn")]
-  out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn"))
+  out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG")]
+  out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG"))
   
   #Load from study
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
@@ -76,38 +77,38 @@ adqPatch <- function(opts = antaresRead::simOptions())
   new <- rbindlist(sapply(1:nrow(out), function(X){
     #Filtered unconcorded line
     outR <- out[X]
+    
+    ret = 0
+    if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                 " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+      ret = 1
+    }
+    if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                 " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+      ret = 1
+    }
+    if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                 " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+      ret = 1
+    }
+    if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                 " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+      ret = 1
+    }
+    if(ret == 0){
       if(nrow(outR[c(which(lole_fr!=0),
                      which(lole_be!=0),
                      which(lole_de!=0),
                      which(lole_nl!=0))])>1)
       {
-        ret = 0
-        if(outR$lole_be == 0 & outR$LOLD_be == 1){
-          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                     " be a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-          ret = 1
-        }
-        if(outR$lole_de == 0 & outR$LOLD_de == 1){
-          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                     " de a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-          ret = 1
-        }
-        if(outR$lole_fr == 0 & outR$LOLD_fr == 1){
-          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                     " fr a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-          ret = 1
-        }
-        if(outR$lole_nl == 0 & outR$LOLD_nl == 1){
-          cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                     " nl a has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-          ret = 1
-        }
-        if(ret == 0){
-          
         #Found rigth scenario
         senar <- scenario[outR$mcYear]$simulation
         
-       
+        
         dayType <- ts[[as.character(senar)]][which( substr(outR$time, 6, 10) ==    substr(ts$Date, 6, 10))]
         Hour <- hour(outR$time) + 1
         
@@ -121,8 +122,11 @@ adqPatch <- function(opts = antaresRead::simOptions())
         ipn <- unlist(ipn)
         mrg <- outR[, .SD, .SDcols = c("DTG MRG_be", "DTG MRG_de", "DTG MRG_fr", "DTG MRG_nl")]
         mrg <- unlist(mrg)
+        
+        UNSP <-  outR[, .SD, .SDcols = c("UNSP. ENRG_be", "UNSP. ENRG_de", "UNSP. ENRG_fr", "UNSP. ENRG_nl")]
+        UNSP <- unlist(UNSP)
         #Apply adq patch
-        sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn)
+        sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn, UNSP = UNSP)
         sol <- round(sol, 0)
         sol <- data.frame(sol)
         if(sum(sol)>0){
@@ -132,11 +136,13 @@ adqPatch <- function(opts = antaresRead::simOptions())
           sol[,which.min(sol)] <-  sol[,which.min(sol)] - sum(sol)
           
         }
+        
         cbind(outR, sol)
-        }else{
-          NULL
-        }
-      }
+      }else{NULL}
+    }else{
+      NULL
+    }
+    
     
   }, simplify = FALSE))
   
@@ -175,7 +181,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
   chang[, BALANCEN:=BALANCE - value + PN]
   chang[, UNSPN:=ifelse(lole>abs(PN), lole -  abs(PN),0)]
   chang[,LOLDN := ifelse(UNSPN==0, 0, 1)]
-  chang[,`DTG MRGN` := ifelse(UNSPN==0, `DTG MRG` + value - PN, 0)]
+  chang[,`DTG MRGN` := ifelse(UNSPN==0, `DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
   
   
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
@@ -196,6 +202,7 @@ adqPatch <- function(opts = antaresRead::simOptions())
   dta$areas$lole <- NULL
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
+  options(warn = oldw)
   dta
 }
 
@@ -212,9 +219,12 @@ adqPatch <- function(opts = antaresRead::simOptions())
 #' @param b36 \code{matrix}, faces
 #' @param lole \code{data.frame}, energy
 #' @param b \code{numeric}, b
+#' @param margin \code{numeric} margin
+#' @param ipn \code{numeric} ipn
+#' @param UNSP \code{numeric} UNSP
 #' 
 #' @noRd
-.resolveAdq <- function(b36, lole, b, margin, ipn){
+.resolveAdq <- function(b36, lole, b, margin, ipn, UNSP){
   D <- as.vector(ifelse(lole == 0, 0, 1))
   res <- c(
     1, 1, 1, 1,
@@ -230,25 +240,25 @@ adqPatch <- function(opts = antaresRead::simOptions())
   sign <- NULL
   if(D[1] == 0){
     res <- c(res, c(1, 0, 0, 0))
-    outpt <- c(outpt, margin[1] + ipn[1])
+    outpt <- c(outpt, margin[1] + ipn[1] - UNSP[1])
     sign <- c(sign, "<=")
   }
-
+  
   if(D[2] == 0){
     res <- c(res, c(0, 1, 0, 0))
-    outpt <- c(outpt, margin[2] + ipn[2])
+    outpt <- c(outpt, margin[2] + ipn[2] - UNSP[2])
     sign <- c(sign, "<=")
   }
-
+  
   if(D[3] == 0){
     res <- c(res, c(0, 0, 1, 0))
-    outpt <- c(outpt, margin[3] + ipn[3])
+    outpt <- c(outpt, margin[3] + ipn[3] - UNSP[3])
     sign <- c(sign, "<=")
   }
-
+  
   if(D[4] == 0){
     res <- c(res, c(0, 0, 0, 1))
-    outpt <- c(outpt, margin[4] + ipn[4])
+    outpt <- c(outpt, margin[4] + ipn[4] - UNSP[4])
     sign <- c(sign, "<=")
   }
   
