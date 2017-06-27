@@ -17,6 +17,8 @@
 #' @noRd
 searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   alpha <- 0.5
+  
+  #Resolv optim for alpha : 0.5
   tt <- resolvBmat(face, pointX, faceY, problem, alpha)
   stratPoint <- (nrow(face) + nrow(pointX) * 6)
 
@@ -25,11 +27,13 @@ searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   # FY <- cbind(FACE_Y, bSol)
   FY <- cbind(face,  bSol = tt$solution[1:nrow(face)])
 
+  #Found error
   error <- .giveError(FY, PTDF = PTDF, univ = univ)
 
   nbrep <- 0
   bsup <- 1
   binf <- 0
+  #Recursive found of alpha who minimise error
   while(abs(bsup-binf)>0.01 & nbrep < 15){
     if(error$error1 - error$error2>0){
       bsup <- alpha
@@ -69,6 +73,7 @@ searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
 askProblemMat <- function(pointX, faceY, face){
 
 
+  #Get size of probleme
   ID <- 1:nrow(face)
 
   iFY <- 1:nrow(face)
@@ -79,11 +84,14 @@ askProblemMat <- function(pointX, faceY, face){
 
   iEY <- 1:nrow(faceY)
   jEY <- 1:ncol(faceY)
+  
+  #Variables
   Nbvar <- nrow(face) +
     6 * nrow(pointX)+
     9 * nrow(faceY) +
     nrow(pointX) * nrow(faceY) + 12
 
+  #Bounds for variables
   bounds <- c(rep(-Inf, length(iFY)),
               rep(0, length(iEX) * 6),
               rep(-Inf, length(iEY) * 3),
@@ -96,10 +104,12 @@ askProblemMat <- function(pointX, faceY, face){
   fr_min <- min(pointX[, .SD, .SDcols = 3])
   de_max <- max(pointX[, .SD, .SDcols = 2])
 
+  #Data convert
   pointX <- as.matrix(pointX)
   faceY <- as.matrix(faceY)
   face <- as.matrix(face)
 
+  #compute exclude B
   Beclu <- which(apply(face, 1, function(Y)
   {
     !any(apply(faceY,1, function(X){
@@ -158,6 +168,7 @@ askProblemMat <- function(pointX, faceY, face){
   actual <- length(iFY)
   face <- as.matrix(face)
 
+  ##### Application de la condition B.proj_x <= b,  B représenté par b1,b2,b3, proj_x = x + y+ - y-
   sapply(iEX, function(i){
     sapply(iFY, function(j){
       allconstraint <<- allconstraint %>>%  .addCons(Nbvar,c(j,
@@ -176,6 +187,13 @@ askProblemMat <- function(pointX, faceY, face){
   actual <- actual + 6*length(iEX)
   Bbons <- match(data.frame(t(faceY[,1:3, drop = FALSE])), data.frame(t(face)))
 
+  
+  #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+  #### calcul de l'erreur de projection des points extremes de Y sur X
+  #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+  
+  ###### Déclaration des coordonnées des points extrêmes de Y, chaque coord est défini par les coefficients dans B des 3 plans qui se croisent
+  ###### Definition implicite de y comme point extreme de Y par B.y = b pour chaque coord
   sapply(iEY, function(vv){
     allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(Bbons[vv],
@@ -201,7 +219,6 @@ askProblemMat <- function(pointX, faceY, face){
     rhs <<- list(rhs, 0)
   })
   Bbons <- match(data.frame(t(faceY[,7:9, drop = FALSE])), data.frame(t(face)))
-  Bbons <- match(data.frame(t(faceY[,7:9, drop = FALSE])), data.frame(t(face)))
 
   sapply(iEY, function(vv){
     allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
@@ -215,7 +232,7 @@ askProblemMat <- function(pointX, faceY, face){
     rhs <<- list(rhs, 0)
   })
 
-
+  ##### Vérification de l'appartenance du sommet au domaine (création de sommets dégénérés)
   sapply(iEY, function(j){
     sapply(iFY, function(i){
       allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
@@ -229,7 +246,8 @@ askProblemMat <- function(pointX, faceY, face){
   })
 
 
-
+  ##### projection sur X
+  ## Définition de la condition de X: x = somme(lambda(i).point extrême i de X) avec somme(lambda) = 1
   sapply(iEY, function(j){
     allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   actual + j + (iEX-1)*length(iEY) + length(iEY)*3,
@@ -239,7 +257,7 @@ askProblemMat <- function(pointX, faceY, face){
   })
 
   actual <- actual + length(iEY) * 3
-
+  ## Application de la condition y_sommet = proj_x + x+ - x-, avec proj_x = somme(lambda(i).x)
   sapply(iEY, function(j){
     allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
                                                   c(j + length(iFY) + length(iEX) * 6,
@@ -273,7 +291,7 @@ askProblemMat <- function(pointX, faceY, face){
   })
 
 
-  #Nvx pb
+  #Nouvelles contraintes
   actual <- Nbvar - 12 + 1
   allconstraint <- allconstraint %>>% .addCons(Nbvar,
                                                actual + 2, 1)
@@ -356,6 +374,7 @@ resolvBmat <- function(face, pointX, faceY, problem, alpha)
   iEY <- 1:nrow(faceY)
   iFY <- 1:nrow(face)
 
+  #Write result vector
   obj <- unlist(.addCons(NULL, Nbvar, c((length(iFY) +1): (length(iFY) + length(iEX)*6),
                                        (1+length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX)):
                                          (length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX) + 6*length(iEY))),

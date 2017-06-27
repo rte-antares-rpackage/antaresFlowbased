@@ -1,36 +1,65 @@
 #' Compute adqPatch for antares study
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
+#' @param pre_filter \code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears
+#' @param strategic_reserve_be \code{character} area use to compute new margin for BE
+#' @param strategic_reserve_de \code{character} area use to compute new margin for DE
 #' 
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/TestrunSimulationFb/antaresStudy", 1)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+#' 
+#' #No strategic reserve
 #' res <- adqPatch()
+#' 
+#' #Strategic reserve
+#' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
+#' 
+#' 
 #' }
 #' 
 #' @export
-adqPatch <- function(opts = antaresRead::simOptions())
+adqPatch <- function(mcYears = "all",
+                     pre_filter = FALSE,
+                     strategic_reserve_be = NULL,
+                     strategic_reserve_de = NULL,
+                     opts = antaresRead::simOptions())
 {
+  
+  if(pre_filter){
+    #Load useful data
+    dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
+                       select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
+                       timeStep = "annual")
+    mcYears <- unique(dta[dta$LOLD>0]$mcYear)
+  }
+  
+  
   #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
-                     links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = "all",
+                     links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
                      select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
- 
-  .applyAdq(opts = opts, dta)
-
+  
+  .applyAdq(opts = opts, dta, strategic_reserve_be = strategic_reserve_be, strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
+  
 }
 
 #' Compute adqPatch for antares study
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param dta \code{list} data load with readAntares
+#' @param strategic_reserve_be \code{character} area use to compute new margin for BE
+#' @param strategic_reserve_de \code{character} area use to compute new margin for DE
+#' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
+#' @param ... use for test
 #' 
 #' @noRd
-.applyAdq <- function(opts, dta){
+.applyAdq <- function(opts, dta, strategic_reserve_be = NULL, strategic_reserve_de = NULL, mcYears = "all", ...){
   oldw <- getOption("warn")
   options(warn = -1)
-
+  
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
@@ -179,11 +208,84 @@ adqPatch <- function(opts = antaresRead::simOptions())
   setnames(re, "variable", "area")
   chang <- merge(dta$areas, re, by = c("time" ,"mcYear", "area"))
   chang[, BALANCEN:=BALANCE - value + PN]
-  chang[, UNSPN:=ifelse(lole>abs(PN), lole -  abs(PN),0)]
+  
+  ##strategic reserve
+  setkeyv(chang, c("area", "time", "mcYear"))
+  
+  if(!exists("stategicBE"))
+  {
+    stategicBE <- data.table()
+  }
+  if(!exists("stategicDE"))
+  {
+    stategicDE <- data.table()
+  }
+  
+  BEstrategic <- data.table()
+  DEstrategic <- data.table()
+  
+  ##For BE
+  if(!is.null(strategic_reserve_be)){
+    stategicBE <- readAntares(opts = opts, areas = c(strategic_reserve_be), 
+                              mcYears = mcYears,
+                              select = c("DTG MRG"))
+  }
+  if(!is.null(stategicBE))
+  {
+    if(nrow(stategicBE)>0)
+    {
+      BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
+                           stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+      setkeyv(BEstrategic, c("area", "time", "mcYear"))
+      stategicBE$area <- "DE"
+      
+      setnames(BEstrategic, "DTG MRG", "strategicMargin")
+      
+    }
+  }
+  
+  ##For DE
+  if(!is.null(strategic_reserve_de)){
+    stategicDE <- readAntares(opts = opts, areas = c(strategic_reserve_de), 
+                              mcYears = mcYears,
+                              select = c("DTG MRG"))
+  }
+  if(!is.null(stategicDE))
+  {
+  if(nrow(stategicDE)>0)
+    {
+      DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
+                           stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+      stategicDE$area <- "DE"
+      setnames(DEstrategic, "DTG MRG", "strategicMargin")
+      
+    }
+  }
+  
+  strategicallData <- rbindlist(list(stategicBE, stategicDE))
+  if(nrow(strategicallData)>0){
+    setnames(strategicallData, "DTG MRG", "strategicMargin")
+  }
+  
+  stratMargin <- rbindlist(list(BEstrategic, DEstrategic))
+  if(nrow(stratMargin) == 0){
+    chang$strategicMargin <- 0
+  }else{
+    chang <- merge(chang, stratMargin, by = c("area", "mcYear", "time"), all.x = TRUE)
+    chang$strategicMargin[is.na(chang$strategicMargin)] <- 0
+    
+  }
+  
+  chang[, UNSPN:=ifelse(lole>(abs(PN)-strategicMargin), lole -  abs(PN) - strategicMargin,0)]
   chang[,LOLDN := ifelse(UNSPN==0, 0, 1)]
-  chang[,`DTG MRGN` := ifelse(UNSPN==0, `DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
+  chang[,`DTG MRGN` := ifelse(UNSPN==0,`DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
+  if(nrow(stratMargin) > 0){
+    chang[ area %in% c("be", "de"),strategicMargin := ifelse(UNSPN>0, 0, strategicMargin - (lole -  abs(PN))) ]
+  }else{
+    chang$strategicMargin <- NULL
+  }
   
-  
+  ##Update links
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
   chang_link$`FLOW LIN.` <- chang_link$value
   chang_link$value <- NULL
@@ -192,12 +294,24 @@ adqPatch <- function(opts = antaresRead::simOptions())
   setkeyv(dta$links, c("link", "time", "mcYear"))
   dta$links[chang_link, `FLOW LIN.` := as.integer(tocop)] 
   
+  
+  ##Update areas
   setkeyv(chang, c("area", "time", "mcYear"))
   setkeyv(dta$areas, c("area", "time", "mcYear"))
+  
+  ## Add strategicMargin column
+  if(nrow(strategicallData)>0)
+  {
+    dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month" ,"hour"), all.x = TRUE)
+    dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
+    dta$areas[chang, strategicMargin := as.integer(strategicMargin)] 
+  }
+  
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
   dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
   dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
   dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
+  
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))

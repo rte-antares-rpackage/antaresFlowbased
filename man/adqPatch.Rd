@@ -4,9 +4,18 @@
 \alias{adqPatch}
 \title{Compute adqPatch for antares study}
 \usage{
-adqPatch(opts = antaresRead::simOptions())
+adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
+  strategic_reserve_de = NULL, opts = antaresRead::simOptions())
 }
 \arguments{
+\item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}
+
+\item{pre_filter}{\code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears}
+
+\item{strategic_reserve_be}{\code{character} area use to compute new margin for BE}
+
+\item{strategic_reserve_de}{\code{character} area use to compute new margin for DE}
+
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 }
 \description{
@@ -15,8 +24,15 @@ Compute adqPatch for antares study
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/TestrunSimulationFb/antaresStudy", 1)
+antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+
+#No strategic reserve
 res <- adqPatch()
+
+#Strategic reserve
+res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
+
+
 }
 
 }
