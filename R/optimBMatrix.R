@@ -219,7 +219,6 @@ askProblemMat <- function(pointX, faceY, face){
     rhs <<- list(rhs, 0)
   })
   Bbons <- match(data.frame(t(faceY[,7:9, drop = FALSE])), data.frame(t(face)))
-  Bbons <- match(data.frame(t(faceY[,7:9, drop = FALSE])), data.frame(t(face)))
 
   sapply(iEY, function(vv){
     allconstraint <<- allconstraint %>>%  .addCons(Nbvar,
