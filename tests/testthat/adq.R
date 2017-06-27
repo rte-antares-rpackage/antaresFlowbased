@@ -5,20 +5,20 @@ library(data.table)
 library(antaresRead)
 
 
+rm(list=ls())
 
 opts <- list()
 opts$studyPath <- system.file("testdata/antaresInput/user/flowbased/ts.txt", package = "antaresFlowbased")
 opts$studyPath <- gsub("/user/flowbased/ts.txt","" , opts)
 
 
-dta <- readRDS(system.file("testdata/adq/adq.RDS", package = "antaresFlowbased"))
+dta <- readRDS(system.file("testdata/adq/adqSimple/adq.RDS", package = "antaresFlowbased"))
 dta <- .applyAdq(opts = opts, dta)
 
 
-outArea <- fread(system.file("testdata/adq/outputAreas.csv", package = "antaresFlowbased"))
-outLink <- fread(system.file("testdata/adq/outputLinks.csv", package = "antaresFlowbased"))
+outArea <- fread(system.file("testdata/adq/adqSimple/outputAreas.csv", package = "antaresFlowbased"))
+outLink <- fread(system.file("testdata/adq/adqSimple/outputLinks.csv", package = "antaresFlowbased"))
 
-dta$areas$BALANCE == outArea$BALANCE
 
 areaAll <- merge(outArea, dta$areas, by = c("mcYear", "timeId", "area"))
 linkAll <- merge(outLink, dta$links, by = c("mcYear", "timeId", "link"))

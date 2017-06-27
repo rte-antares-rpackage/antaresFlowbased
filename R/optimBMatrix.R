@@ -17,6 +17,8 @@
 #' @noRd
 searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   alpha <- 0.5
+  
+  #Resolv optim for alpha : 0.5
   tt <- resolvBmat(face, pointX, faceY, problem, alpha)
   stratPoint <- (nrow(face) + nrow(pointX) * 6)
 
@@ -25,11 +27,13 @@ searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   # FY <- cbind(FACE_Y, bSol)
   FY <- cbind(face,  bSol = tt$solution[1:nrow(face)])
 
+  #Found error
   error <- .giveError(FY, PTDF = PTDF, univ = univ)
 
   nbrep <- 0
   bsup <- 1
   binf <- 0
+  #Recursive found of alpha who minimise error
   while(abs(bsup-binf)>0.01 & nbrep < 15){
     if(error$error1 - error$error2>0){
       bsup <- alpha
@@ -356,6 +360,7 @@ resolvBmat <- function(face, pointX, faceY, problem, alpha)
   iEY <- 1:nrow(faceY)
   iFY <- 1:nrow(face)
 
+  #Write 
   obj <- unlist(.addCons(NULL, Nbvar, c((length(iFY) +1): (length(iFY) + length(iEX)*6),
                                        (1+length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX)):
                                          (length(iFY) + length(iEX)* 6 + length(iEY) * 3 + length(iEY)*length(iEX) + 6*length(iEY))),

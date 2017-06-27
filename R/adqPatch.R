@@ -10,7 +10,12 @@
 #'
 #' \dontrun{
 #' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
-#' res <- adqPatch(strategic_reserve_de = "lu_de")
+#' 
+#' #No strategic reserve
+#' res <- adqPatch()
+#' 
+#' #Strategic reserve
+#' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 #' 
 #' 
 #' }
@@ -48,9 +53,10 @@ adqPatch <- function(mcYears = "all",
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
 #' @param strategic_reserve_de \code{character} area use to compute new margin for DE
 #' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
+#' @param ... use for test
 #' 
 #' @noRd
-.applyAdq <- function(opts, dta, strategic_reserve_be = NULL, strategic_reserve_de = NULL, mcYears = "all"){
+.applyAdq <- function(opts, dta, strategic_reserve_be = NULL, strategic_reserve_de = NULL, mcYears = "all", ...){
   oldw <- getOption("warn")
   options(warn = -1)
   
@@ -206,36 +212,54 @@ adqPatch <- function(mcYears = "all",
   ##strategic reserve
   setkeyv(chang, c("area", "time", "mcYear"))
   
-  BEstrategic <- NULL
-  DEstrategic <- NULL
-  stategicBE <- NULL
-  stategicDE <- NULL
+  if(!exists("stategicBE"))
+  {
+    stategicBE <- data.table()
+  }
+  if(!exists("stategicDE"))
+  {
+    stategicDE <- data.table()
+  }
+  
+  BEstrategic <- data.table()
+  DEstrategic <- data.table()
+  
   ##For BE
   if(!is.null(strategic_reserve_be)){
-    stategicBE <- readAntares(areas = c(strategic_reserve_be), 
+    stategicBE <- readAntares(opts = opts, areas = c(strategic_reserve_be), 
                               mcYears = mcYears,
                               select = c("DTG MRG"))
-    
-    BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
-                         stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
-    setkeyv(BEstrategic, c("area", "time", "mcYear"))
-    stategicBE$area <- "DE"
-    
-    setnames(BEstrategic, "DTG MRG", "strategicMargin")
-    
+  }
+  if(!is.null(stategicBE))
+  {
+    if(nrow(stategicBE)>0)
+    {
+      BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
+                           stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+      setkeyv(BEstrategic, c("area", "time", "mcYear"))
+      stategicBE$area <- "DE"
+      
+      setnames(BEstrategic, "DTG MRG", "strategicMargin")
+      
+    }
   }
   
   ##For DE
   if(!is.null(strategic_reserve_de)){
-    stategicDE <- readAntares(areas = c(strategic_reserve_de), 
+    stategicDE <- readAntares(opts = opts, areas = c(strategic_reserve_de), 
                               mcYears = mcYears,
                               select = c("DTG MRG"))
-    
-    DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
-                         stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
-    stategicDE$area <- "DE"
-    setnames(DEstrategic, "DTG MRG", "strategicMargin")
-    
+  }
+  if(!is.null(stategicDE))
+  {
+  if(nrow(stategicDE)>0)
+    {
+      DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
+                           stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+      stategicDE$area <- "DE"
+      setnames(DEstrategic, "DTG MRG", "strategicMargin")
+      
+    }
   }
   
   strategicallData <- rbindlist(list(stategicBE, stategicDE))
