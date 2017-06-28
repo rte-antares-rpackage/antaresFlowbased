@@ -276,14 +276,15 @@ adqPatch <- function(mcYears = "all",
     
   }
   
-  chang[, UNSPN:=ifelse(lole>(abs(PN)-strategicMargin), lole -  abs(PN) - strategicMargin,0)]
+  chang[, UNSPN:=ifelse(lole>(abs(PN)+strategicMargin), lole -  abs(PN) - strategicMargin,0)]
   chang[,LOLDN := ifelse(UNSPN==0, 0, 1)]
-  chang[,`DTG MRGN` := ifelse(UNSPN==0,`DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
   if(nrow(stratMargin) > 0){
     chang[ area %in% c("be", "de"),strategicMargin := ifelse(UNSPN>0, 0, strategicMargin - (lole -  abs(PN))) ]
   }else{
     chang$strategicMargin <- NULL
   }
+  chang[,`DTG MRGN` := ifelse(UNSPN==0,`DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
+  
   
   ##Update links
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
