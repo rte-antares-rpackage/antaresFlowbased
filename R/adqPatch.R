@@ -237,7 +237,7 @@ adqPatch <- function(mcYears = "all",
       BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
                            stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
       setkeyv(BEstrategic, c("area", "time", "mcYear"))
-      stategicBE$area <- "DE"
+      stategicBE$area <- "be"
       
       setnames(BEstrategic, "DTG MRG", "strategicMargin")
       
@@ -256,7 +256,7 @@ adqPatch <- function(mcYears = "all",
     {
       DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
                            stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
-      stategicDE$area <- "DE"
+      stategicDE$area <- "de"
       setnames(DEstrategic, "DTG MRG", "strategicMargin")
       
     }
@@ -303,8 +303,13 @@ adqPatch <- function(mcYears = "all",
   if(nrow(strategicallData)>0)
   {
     dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month" ,"hour"), all.x = TRUE)
+    
+    setkeyv(chang, c("area", "time", "mcYear"))
+    setkeyv(dta$areas, c("area", "time", "mcYear"))
     dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
-    dta$areas[chang, strategicMargin := as.integer(strategicMargin)] 
+    setnames(chang, "strategicMargin", "strategicMarginN")
+    dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
+    
   }
   
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
