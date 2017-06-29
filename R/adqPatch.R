@@ -279,11 +279,15 @@ adqPatch <- function(mcYears = "all",
   chang[, UNSPN:=ifelse(lole>(abs(PN)+strategicMargin), lole -  abs(PN) - strategicMargin,0)]
   chang[,LOLDN := ifelse(UNSPN==0, 0, 1)]
   if(nrow(stratMargin) > 0){
-    chang[ area %in% c("be", "de"),strategicMargin := ifelse(UNSPN>0, 0, strategicMargin - (lole -  abs(PN))) ]
+    chang[ area %in% c("be", "de"),strategicMargin := ifelse(lole==0, 
+                                                             strategicMargin,
+                                                             ifelse(UNSPN>0, 0, strategicMargin - (lole -  abs(PN)))) ]
   }else{
     chang$strategicMargin <- NULL
   }
-  chang[,`DTG MRGN` := ifelse(UNSPN==0,`DTG MRG` + value - PN - `UNSP. ENRG`, 0)]
+  chang[,`DTG MRGN` := ifelse(UNSPN==0,
+                              ifelse((`DTG MRG` + value - PN - `UNSP. ENRG`)>0, `DTG MRG` + value - PN - `UNSP. ENRG`,0)
+                              , 0)]
   
   
   ##Update links
