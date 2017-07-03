@@ -129,10 +129,27 @@ adqPatch <- function(mcYears = "all",
       ret = 1
     }
     if(ret == 0){
+      ## addition Baptiste Seguinot 30/06/2017
+      # should adequacy patch be run ?
+      run_adq_patch <- FALSE
+      
+      #    if more than two countries have unsupplied energy : YES
       if(nrow(outR[c(which(lole_fr!=0),
                      which(lole_be!=0),
                      which(lole_de!=0),
                      which(lole_nl!=0))])>1)
+      {run_adq_patch <- TRUE}
+        
+      #   if one country wasn't in shortage in the output of ANTARES while contribution to CWE
+      #   unsupplied energy was not null : YES
+      if(nrow(outR[c(which(lole_fr!=0 & `UNSP. ENRG_fr`==0 ),
+                     which(lole_be!=0 & `UNSP. ENRG_be`==0),
+                     which(lole_de!=0 & `UNSP. ENRG_de`==0),
+                     which(lole_nl!=0 & `UNSP. ENRG_nl`==0))])>0)
+      {run_adq_patch <- TRUE}
+      
+      
+      if(run_adq_patch)  
       {
         #Found rigth scenario
         senar <- scenario[outR$mcYear]$simulation
