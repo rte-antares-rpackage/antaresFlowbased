@@ -1,12 +1,12 @@
 Package: antaresFlowbased
 Type: Package
 Title: Run FlowBased Simulations on Antares
-Version: 0.8.0
+Version: 0.10.0
 Date: 2017-04-04
 Authors@R: c(
     person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
     person("Baptiste", "SEGUINOT", , "baptiste.seguinot@rte-france.com", role = "ctb"),
-    person("Marion", "LI", , "marion.lie@rte-france.com", role = "ctb"),
+    person("Marion", "LI", , "marion.li@rte-france.com", role = "ctb"),
     person("RTE", role = "cph")
     )
 Maintainer: Baptiste SEGUINOT <baptiste.seguinot@rte-france.com>
