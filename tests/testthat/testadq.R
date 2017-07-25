@@ -5,7 +5,6 @@ library(data.table)
 library(antaresRead)
 
 
-rm(list=ls())
 
 opts <- list()
 opts$studyPath <- system.file("testdata/antaresInput/user/flowbased/ts.txt", package = "antaresFlowbased")

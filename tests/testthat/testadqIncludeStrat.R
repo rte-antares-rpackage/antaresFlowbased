@@ -21,8 +21,8 @@ dta <- .applyAdq(opts = opts, dta,
                  stategicBE = stategicBE,
                  stategicDE = stategicDE)
 
-fwrite(dta$areas, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputAreas.csv", sep = ";")
-fwrite(dta$links, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputLinks.csv", sep = ";")
+# fwrite(dta$areas, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputAreas.csv", sep = ";")
+# fwrite(dta$links, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputLinks.csv", sep = ";")
 
 
 outArea <- fread(system.file("testdata/adq/adqReserv/outputAreas.csv", package = "antaresFlowbased"))
