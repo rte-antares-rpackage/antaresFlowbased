@@ -5,3 +5,6 @@
     options(flowbased = list(path = available_model[1]))
   }
 }
+
+
+setAlias("adqPatch", "Alias for adqPatch", c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN.", "areas", "links"))

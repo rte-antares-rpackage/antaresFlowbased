@@ -5,6 +5,7 @@
 #' @param pre_filter \code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
 #' @param strategic_reserve_de \code{character} area use to compute new margin for DE
+#' @param select \code{character}, columns to select (columns need for adqPatch are automaticaly add)
 #' 
 #' @examples
 #'
@@ -17,6 +18,8 @@
 #' #Strategic reserve
 #' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 #' 
+#' #Add a new column
+#' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 #' 
 #' }
 #' 
@@ -25,13 +28,14 @@ adqPatch <- function(mcYears = "all",
                      pre_filter = FALSE,
                      strategic_reserve_be = NULL,
                      strategic_reserve_de = NULL,
-                     opts = antaresRead::simOptions())
+                     opts = antaresRead::simOptions(),
+                     select = NULL)
 {
   
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
-                       select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
+                       select = c(select, "adqPatch"),
                        timeStep = "annual")
     mcYears <- unique(dta[dta$LOLD>0]$mcYear)
   }
@@ -40,7 +44,7 @@ adqPatch <- function(mcYears = "all",
   #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                     select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
+                     select = c(select, "adqPatch"))
   
   
   if(!all(strategic_reserve_be %in% getAreas())){
@@ -365,8 +369,12 @@ adqPatch <- function(mcYears = "all",
   
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
-  dta$areas[, additionalSR:= `DTG MRG` - strategicMargin]
-  dta$areas$strategicMargin <- NULL
+  if(nrow(strategicallData)>0)
+  {
+    dta$areas[, additionalSR:= `DTG MRG` - strategicMargin]
+    dta$areas$strategicMargin <- NULL
+  }
+  
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   
