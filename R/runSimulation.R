@@ -109,6 +109,11 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
   .errorTest(upGenIni, verbose, "Write of generaldata")
   
+  #Check and addapt when filter : custom
+  if(antaresRead:::readIniFile(generaldataIniPatch)$general$filtering){
+    .updateAllAreasIni(opts)
+  }
+  
   #load second member
   second_member <- try(.getSecondMember(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
   .errorTest(second_member, verbose, "Load of second_member.txt")

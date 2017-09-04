@@ -58,9 +58,9 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 
   # activation of playlist
   generalSetting$general$`user-playlist` <- TRUE
-  if(generalSetting$general$filtering){
-    stop("Param Output profile : Results filtering is Custom, he must be None for flowbased simulation")
-  }
+  # if(generalSetting$general$filtering){
+  #   stop("Param Output profile : Results filtering is Custom, he must be None for flowbased simulation")
+  # }
   generalSetting
 }
 
@@ -108,4 +108,42 @@ writeGeneralSettingIni <- function(generaldataIniPatch, generalSetting)
   # open new file
   writeIni(generalSetting, generaldataIniPatch)
 
+}
+
+.updateOptimizationIni <- function(file){
+  ini <- antaresRead:::readIniFile(file)
+  ini$filtering$`filter-year-by-year` <- ini$filtering$`filter-synthesis`
+  writeIni(ini, file)
+}
+
+.updateProportiesLinksIni <- function(file){
+  ini <- antaresRead:::readIniFile(file)
+  if(length(ini) > 0)
+  {
+  for(i in 1:length(ini)){
+    if(!is.null(ini[[i]]$`filter-synthesis`)){
+      ini[[i]]$`filter-year-by-year` <- ini[[i]]$`filter-synthesis`
+    }
+  }
+  writeIni(ini, file)
+  }
+}
+
+
+.updateAllAreasIni <- function(opts){
+  cat("filtering option is activated input file will be change to apply flowbased simulation.")
+    ##Update areas
+    areasInputs <- paste0(opts$studyPath, "/input/areas/")
+    areaS <- list.dirs(areasInputs, full.names = FALSE)
+    areaS <- areaS[areaS!=""]
+    fileToUpdate <- paste0(areasInputs, areaS, "/optimization.ini")
+    sapply(fileToUpdate, .updateOptimizationIni) %>>% invisible()
+    
+    
+    ##Update links
+    linksInputs <- paste0(opts$studyPath, "/input/links/")
+    linkS <- list.dirs(linksInputs, full.names = FALSE)
+    linkS <- linkS[linkS!=""]
+    fileToUpdate <- paste0(linksInputs, linkS, "/properties.ini")
+    sapply(fileToUpdate, .updateProportiesLinksIni) %>>% invisible()
 }
