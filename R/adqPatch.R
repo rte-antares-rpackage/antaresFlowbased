@@ -31,11 +31,16 @@ adqPatch <- function(mcYears = "all",
                      opts = antaresRead::simOptions(),
                      select = NULL)
 {
+ 
+  
+  
+  ##Add alias
+  setAlias("adqPatch", "Alias for adqPatch", c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN.", "areas", "links"))
   
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
-                       select = c(select, "adqPatch"),
+                       select = unique(select, "adqPatch"),
                        timeStep = "annual")
     mcYears <- unique(dta[dta$LOLD>0]$mcYear)
   }
@@ -44,7 +49,7 @@ adqPatch <- function(mcYears = "all",
   #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                     select = c(select, "adqPatch"))
+                     select = unique(select, "adqPatch"))
   
   
   if(!all(strategic_reserve_be %in% getAreas())){
