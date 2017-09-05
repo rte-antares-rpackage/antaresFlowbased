@@ -4,6 +4,7 @@
 #'
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param scenarios\code{numeric} scenarios use for write scenario.txt.
 #'
 #' @examples
 #'
@@ -22,7 +23,7 @@
 #' @export
 #'
 initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
-                          opts = antaresRead::simOptions()){
+                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
 
 
   pathProject <- opts$studyPath
@@ -51,7 +52,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   }
 
   #Generate scenario
-  scenario <- .generateScenario()
+  scenario <- data.frame(simulation = scenarios)
 
   #Write scenario
   .setScenario(paste0(newDir, "/scenario.txt"), scenario = scenario)
