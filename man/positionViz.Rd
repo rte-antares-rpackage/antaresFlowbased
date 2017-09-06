@@ -25,7 +25,8 @@ positionViz(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2)
 Graph function
 }
 \examples{
-study <- "D:/Users/titorobe/Desktop/exemple_test_BP"
+\dontrun{
+study <- "D:/Users/BBB/Desktop/exemple_test_BP"
 # set the typical days used in the study
 fb_opts <- setFlowbasedPath(model = "model2017")
 # select the output study
@@ -37,7 +38,7 @@ positionViz(opts = output,
          dayType = 5, hour = 19, 
          mcYears = 1, 
          ctry1 = "BE", ctry2 = "FR")
-\dontrun{
+
 
 }
 

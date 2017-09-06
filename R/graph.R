@@ -232,7 +232,8 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' 
 #'
 #' @examples
-#' study <- "D:/Users/titorobe/Desktop/exemple_test_BP"
+#' \dontrun{
+#' study <- "D:/Users/BBB/Desktop/exemple_test_BP"
 #' # set the typical days used in the study
 #' fb_opts <- setFlowbasedPath(model = "model2017")
 #' # select the output study
@@ -244,7 +245,7 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #'          dayType = 5, hour = 19, 
 #'          mcYears = 1, 
 #'          ctry1 = "BE", ctry2 = "FR")
-#' \dontrun{
+#' 
 #' 
 #' }
 #'
