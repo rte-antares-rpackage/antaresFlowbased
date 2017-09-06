@@ -33,7 +33,9 @@ shinyServer(function(input, output) {
   )
 
   observe({
-    output$plots <- renderUI({ get_plot_output_list(dtaUseByShiny, input$tableauError_rows_selected) })
+    input$ylim
+    input$xlim
+    output$plots <- renderUI({ get_plot_output_list(dtaUseByShiny, input$tableauError_rows_selected, input$ylim, input$xlim) })
   })
 
   output$downloadReport<- downloadHandler(

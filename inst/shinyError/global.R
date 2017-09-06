@@ -13,17 +13,17 @@ giveTableError <- function(dta){
   dta
 }
 
-get_plot_output_list <- function(dta, input_n) {
+get_plot_output_list <- function(dta, input_n, ylim, xlim) {
   # Insert plot output objects the list
   plot_output_list <- lapply(input_n, function(i) {
     plotname <- paste("plot1", i, sep="")
     plot_output_object <- combineWidgetsOutput(plotname)
     plot_output_object <- renderCombineWidgets({
       combineWidgets(
-      plot(antaresFlowbased:::graphFlowBased2D(dta$outFlowBased[[i]], "BE", "FR", hour = dta$hour[i], dayType = dta$dayType[i] )),
-      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "FR", hour = dta$hour[i], dayType = dta$dayType[i])),
-      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "BE", "NL", hour = dta$hour[i], dayType = dta$dayType[i])),
-      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "NL", hour = dta$hour[i], dayType = dta$dayType[i]))
+      plot(antaresFlowbased:::graphFlowBased2D(dta$outFlowBased[[i]], "BE", "FR", hour = dta$hour[i], dayType = dta$dayType[i], xlim = xlim, ylim = ylim)),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "FR", hour = dta$hour[i], dayType = dta$dayType[i], xlim = xlim, ylim = ylim)),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "BE", "NL", hour = dta$hour[i], dayType = dta$dayType[i], xlim = xlim, ylim = ylim)),
+      plot(antaresFlowbased:::graphFlowBased2D( dta$outFlowBased[[i]], "DE", "NL", hour = dta$hour[i], dayType = dta$dayType[i], xlim = xlim, ylim = ylim))
       )
     })
     attributes(plot_output_object)$outputFunc <- function (outputId, width = "100%", height = "1000px")

@@ -5,7 +5,8 @@
 \title{Compute adqPatch for antares study}
 \usage{
 adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
-  strategic_reserve_de = NULL, opts = antaresRead::simOptions())
+  strategic_reserve_de = NULL, opts = antaresRead::simOptions(),
+  select = NULL)
 }
 \arguments{
 \item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}
@@ -17,6 +18,8 @@ adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
 \item{strategic_reserve_de}{\code{character} area use to compute new margin for DE}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+
+\item{select}{\code{character}, columns to select (columns need for adqPatch are automaticaly add)}
 }
 \description{
 Compute adqPatch for antares study
@@ -32,6 +35,8 @@ res <- adqPatch()
 #Strategic reserve
 res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 
+#Add a new column
+res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 
 }
 

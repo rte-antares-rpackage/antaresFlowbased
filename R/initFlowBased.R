@@ -4,7 +4,7 @@
 #'
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param scenarios\code{numeric} scenarios use for write scenario.txt.
+#' @param scenarios \code{numeric} scenarios use for write scenario.txt.
 #'
 #' @examples
 #'

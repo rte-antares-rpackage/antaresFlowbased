@@ -11,7 +11,7 @@
 #' @import rAmCharts
 #'
 #' @noRd
-graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, min = -7000, max = 7000)
+graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, xlim = c(-7000, 7000), ylim = c(-7000, 7000))
 {
 
   if(!is.null(hour)){
@@ -81,8 +81,8 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
              lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#0000FF",
              lineThickness = 1,  dashLength = 7),
     setChartCursor(),
-    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = min, maximum = max),
-    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = min, maximum = max),
+    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = xlim[1], maximum = xlim[2]),
+    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = ylim[1], maximum = ylim[2]),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
@@ -215,4 +215,135 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
   assign("dtaUseByShiny", dta, envir = G)
   shiny::runApp(system.file("shinyError", package = "antaresFlowbased"),
                 launch.browser = TRUE)
+}
+
+
+
+
+#' Graph function
+#' 
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @param dayType : day type
+#' @param hour : hour
+#' @param mcYears : mcYears
+#' @param ctry1 : first country
+#' @param ctry2 : second country
+#' 
+#'
+#' @examples
+#' study <- "D:/Users/titorobe/Desktop/exemple_test_BP"
+#' # set the typical days used in the study
+#' fb_opts <- setFlowbasedPath(model = "model2017")
+#' # select the output study
+#' output <- antaresRead::setSimulationPath(study, -1)
+#' 
+#' ## plot a domain and the matching output points 
+#' positionViz(opts = output, 
+#'          fb_opts = fb_opts, 
+#'          dayType = 5, hour = 19, 
+#'          mcYears = 1, 
+#'          ctry1 = "BE", ctry2 = "FR")
+#' \dontrun{
+#' 
+#' }
+#'
+#' @export
+positionViz <- function(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2){
+  dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+                                  links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
+                                  select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
+  
+  secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
+  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
+  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  
+  ipn <- .giveIpn(dta)
+  ipnout <- sapply(mcYears, function(mcy){
+    
+    ipntp <- ipn[which(hour(ipn$time)  == hour & ipn$mcYear == mcy)]
+    
+    dateSel <- unlist(ts[,.SD, .SDcols = as.character(mcy)] == dayType)
+    dateSel <- ts$Date[dateSel]
+    daysel <- substr(dateSel, 6, 10)
+    
+    ipntp <- ipntp[substr(ipntp$time, 6, 10) %in% daysel]
+    ipntp
+  }, simplify = FALSE)
+  ipn <- rbindlist(ipnout)
+  
+  hourS <- hour
+  dayTypeS <- dayType
+  demaines <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
+  
+  ######
+  dSel <- demaines[which(dayType==dayTypeS & hour ==( hourS  + 1))]
+  points <- dSel$outFlowBased[[1]]$pointsY
+  points$NL <-  - points$BE - points$DE - points$FR
+  ctry1 <- ctry1
+  ctry2 <- ctry2
+  
+  res <- data.frame("ctry1" = points[,ctry1],
+                    "ctry2" = points[,ctry2])
+  
+  
+  res2 <- data.frame("ctry11" = unlist(ipn[, .SD, .SDcols = tolower(ctry1)]),
+                     "ctry22" = unlist(ipn[, .SD, .SDcols = tolower(ctry2)]))
+  
+  res <- res[chull(res),]
+  res <- rbind(res, res[1,])
+  res <- round(res, 2)
+  
+  max_r <- max(nrow(res), nrow(res2))
+  if(nrow(res)<max_r){
+    res <- rbind(res, data.frame(ctry1 = rep(NA, max_r-nrow(res)),
+                                 ctry2 = rep(NA, max_r-nrow(res))))
+  }
+  if(nrow(res2)<max_r){
+    res2 <- rbind(res2, data.frame(ctry11 = rep(NA,max_r- nrow(res2)),
+                                   ctry22 = rep(NA, max_r-nrow(res2))))
+  }
+  
+  out <- cbind(res, res2)
+  
+  
+  pipeR::pipeline(
+    amXYChart(dataProvider = out),
+    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', hour, ', typical day : ', dayType)),
+    addGraph(title = "Model", balloonText =
+               paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             
+             bullet = 'circle', xField = names(out)[1],yField = names(out)[2],
+             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
+             lineThickness = 1),
+    
+    addGraph(title = "Position", balloonText =
+               paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             bullet = 'circle', xField = names(out)[3],yField = names(out)[4],
+             lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = "#0000FF",
+             lineThickness = 1),
+    setChartCursor(),
+    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
+    setExport(enabled = TRUE),
+    setLegend(enabled = TRUE)
+  )
+}
+
+.giveIpn <- function(dta){
+  links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
+  links[, be :=  `be - de` + `be - fr` + `be - nl`]
+  links[, de := - `be - de` + `de - fr` + `de - nl`]
+  links[, fr :=  -`be - fr` - `de - fr`]
+  links[, nl :=  -`be - nl` - `de - nl`]
+  links
+  links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
+  links <- melt(links, id = 1:2)
+  setnames(links, "variable", "area")
+  dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
+  dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
+  dta$areas[, ipn := value]
+  
+  ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
+  ipn
 }
