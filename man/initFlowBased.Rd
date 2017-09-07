@@ -17,6 +17,19 @@ initFlowBased(fb_opts = antaresFlowbased::fbOptions(),
 \description{
 Generate environment for a flow-based study
 }
+\note{
+folder deigned by fb_opts contain files :
+\itemize{
+  \item{domainesFB.RDS}{RDS file from \link{computeFB}}
+  \item{second_member.txt}{txt file wich following columns
+  \itemize{
+    \item{Id_day : numeric from 1 to number of day id}
+    \item{Id_hour : numeric from 1 to number of hour}
+    \item{vect_b : numeric}
+    \item{Name : character, name of constaints}
+  }}
+ }
+}
 \examples{
 
 \dontrun{

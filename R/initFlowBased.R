@@ -6,6 +6,20 @@
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
+#' 
+#' @note 
+#' folder deigned by fb_opts contain files :
+#' \itemize{
+#'   \item{domainesFB.RDS}{RDS file from \link{computeFB}}
+#'   \item{second_member.txt}{txt file wich following columns
+#'   \itemize{
+#'     \item{Id_day : numeric from 1 to number of day id}
+#'     \item{Id_hour : numeric from 1 to number of hour}
+#'     \item{vect_b : numeric}
+#'     \item{Name : character, name of constaints}
+#'   }}
+#'  }
+#' 
 #'
 #' @examples
 #'
