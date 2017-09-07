@@ -1,6 +1,7 @@
 #' @title Generate environment for a flow-based study
 #'
 #' @description  Generate environment for a flow-based study
+#' 
 #'
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}

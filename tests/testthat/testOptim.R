@@ -13,7 +13,7 @@ resultsAMPL <- fread(resultsAMPL)
 res <- apply(resultsAMPL, 1, function(Z){
   Z <- data.frame(t(Z))
   PTDFsel <- PTDF[Id_day == Z$day & Period == Z$hour]
-  pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
+  pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM)
   pointX <- data.table(pointX)
 
   res <- giveTuples(face, pointX)
