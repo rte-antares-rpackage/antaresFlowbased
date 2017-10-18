@@ -1,4 +1,5 @@
 #' Compute adqPatch for antares study
+#' @title 
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
