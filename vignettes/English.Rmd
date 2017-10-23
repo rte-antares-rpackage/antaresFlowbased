@@ -66,7 +66,7 @@ The function ``computeFB()`` converts flow-based domains (e.g. historical flow-b
 * **DE** : PTDF for de
 * **FR** : PTDF for fr
 * **NL** : PTDF for nl
-* **RAM_0** : margin
+* **RAM** : margin
 
 By default, ``PTDF`` argument takes the value **Adequacy2017**. In that case, the typical days used are coming from internal data stored in the package.
 

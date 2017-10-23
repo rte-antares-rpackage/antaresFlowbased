@@ -1,6 +1,15 @@
 #' Compute flowbased approximation
 #'
-#' @param PTDF \code{character}, path for PTDF file
+#' @param PTDF \code{character}, path for PTDF file format : 
+#' \itemize{
+#'  \item Id_day : column of id day, numeric. In default exemple between 1 and 12. 
+#'  \item Period : column of period, numeric. In default exemple between 1 and 24.
+#'  \item BE : column of BE, numeric. 
+#'  \item DE : column of DE, numeric. 
+#'  \item FR : column of FR, numeric. 
+#'  \item FR : column of FR, numeric. 
+#'  \item RAM : column of RAM, numeric. 
+#' }
 #' @param outputName \code{character}, name of output directory
 #' @param reports \code{boolean}, product html reports by typical day or not
 #' @param dayType \code{character / numeric} default All, can specify dayType to compute
@@ -25,7 +34,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   pb <- txtProgressBar(style = 3)
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
-
+  
 
   PTDF <- .readPTDF(PTDF)
 
@@ -54,7 +63,7 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
       setTxtProgressBar(pb, RowUse/Nsim)
       PTDFsel <- PTDF[Id_day == Y & Period == X]
 
-      pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
+      pointX <- getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM)
       pointX <- data.table(pointX)
 
       res <- giveTuples(face, pointX)
@@ -120,8 +129,12 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
 #'
 .readPTDF <- function(PTDF){
   PTDF <- try(fread(PTDF))
-  if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
-    stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM_0 in this order")
+  if("RAM_0" %in% names(PTDF)){
+    setnames(PTDF, "RAM_0", "RAM")
+  }
+  
+  if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM"))){
+    stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM in this order")
   }
 
   PTDF

@@ -85,6 +85,7 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}
 #' @param newname \code{character} name of simulation.
 #' @param verbose \code{numeric} show log in console. Defaut to 1
+#' @param filtering \code{boolean} filtering control
 #' \itemize{
 #'  \item{0}{ : No log}
 #'  \item{1}{ : Short log}
@@ -93,7 +94,7 @@ moveFilesAfterStudy <- function(opts, simulationName, verbose = 1)
 #'
 #' @import plyr data.table
 #' @noRd
-aggregateResult <- function(opts, newname, verbose = 1){
+aggregateResult <- function(opts, newname, verbose = 1, filtering = FALSE){
   if(verbose > 0)
   {
     try({
@@ -129,8 +130,16 @@ aggregateResult <- function(opts, newname, verbose = 1){
 
     #load first MC-year
     a <- Sys.time()
-    dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
-                                    timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+    if(!filtering)
+    {
+      dta <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
+                                      timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+    }else{
+      areasselect <- .getAreasToAggregate(opts, type)
+      linksSelect <- .getLinksToAggregate(opts, type)
+      dta <- antaresRead::readAntares(area = areasselect, links = linksSelect, clusters = areasselect,
+                                      timeStep = type, simplify = FALSE, mcYears = numMc[1], showProgress = FALSE)
+    }
 
     if(length(dta)>0){
    dtaLoadAndcalcul <- try({
@@ -195,10 +204,16 @@ aggregateResult <- function(opts, newname, verbose = 1){
         for(i in 2:N){
 
           a <- Sys.time()
-          dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
-                                            timeStep = type, simplify = FALSE, mcYears = numMc[i],
-                                            showProgress = FALSE)
-
+          if(!filtering)
+          {
+            dtaTP <- antaresRead::readAntares(area = "all", links = "all", clusters = "all",
+                                            timeStep = type, simplify = FALSE, mcYears = numMc[i], showProgress = FALSE)
+          }else{
+            dtaTP <- antaresRead::readAntares(area = areasselect, links = linksSelect, clusters = areasselect,
+                                            timeStep = type, simplify = FALSE, mcYears = numMc[i], showProgress = FALSE)
+          }
+          
+          
           aTot <- aTot + as.numeric(Sys.time() - a)
           b <- Sys.time()
           valueTP <- .giveValue(dtaTP, SDcolsStartareas, SDcolsStartClust)
@@ -620,4 +635,58 @@ pmax.fast <- function(k,x) (x+k + abs(x-k))/2
   i = (dif * approxEnd + usalTime$value[per - 1]) / usalTime$value[length( usalTime$value)]
   setTxtProgressBar(pb, i)
 
+}
+
+
+.getAreasToAggregate <- function(opts, timeStep){
+  inputsAreas <- paste0(opts$studyPath, "/input/areas")
+  allAreas <- list.dirs(inputsAreas, full.names = FALSE)
+  allAreas <- allAreas[!allAreas == ""]
+  out <- sapply(allAreas, function(X){
+    Ini <- paste0(inputsAreas, "/", X, "/optimization.ini")
+    gsub(" ", "", unlist(strsplit(antaresRead:::readIniFile(Ini)$filtering$`filter-synthesis`, ",")))
+  })
+  
+  out <- lapply(out, function(X){
+    any(X == timeStep)
+  })
+  names(out)[which(unlist(out))]
+}
+
+
+
+.getLinksToAggregate <- function(opts, timeStep){
+  inputsLinks <- paste0(opts$studyPath, "/input/links")
+  allLinks <- list.dirs(inputsLinks, full.names = FALSE)
+  allLinks <- allLinks[!allLinks == ""]
+  out <- sapply(allLinks, function(X){
+    Ini <- paste0(inputsLinks, "/", X, "/properties.ini")
+    res <- lapply(antaresRead:::readIniFile(Ini), function(X){X$`filter-synthesis`})
+    lapply(res, function(X)gsub(" ", "", unlist(strsplit(X, ","))))
+  })
+  out <- out[lapply(out, length)!=0]
+  out <- lapply(out, function(X){
+    lapply(X, function(Y){
+      any(Y == timeStep)
+    })
+  })
+  out <- lapply(out, unlist)
+  out <- lapply(out, function(X)X[X])
+  res <- list()
+  for(i in 1:length(out)){
+    res[[i]] <- paste(names(out)[i], names(out[[i]]), sep = " - ")
+  }
+  res <- unlist(res)
+  res
+}
+
+
+.recupeFilesUser <- function(opts){
+  if(dir.exists(paste0(opts$studyPath, "/user/tempfile/")))
+  {
+  tocp <- paste0(opts$studyPath, "/user/tempfile/", list.files(paste0(opts$studyPath, "/user/tempfile"), recursive = TRUE))
+  initialFile <- gsub("/user/tempfile/","/input/", tocp)
+  file.copy(tocp, initialFile, overwrite = TRUE)
+  unlink(paste0(opts$studyPath, "/user/tempfile"), recursive = TRUE)
+  }
 }

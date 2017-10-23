@@ -109,6 +109,12 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   upGenIni <- try(updateGeneralSettingIni(opts), silent = TRUE)
   .errorTest(upGenIni, verbose, "Write of generaldata")
   
+  #Check and addapt when filter : custom
+  filtering <- antaresRead:::readIniFile(generaldataIniPatch)$general$filtering
+  if(filtering){
+    .updateAllAreasIni(opts)
+  }
+  
   #load second member
   second_member <- try(.getSecondMember(paste0(opts$studyPath,"/user/flowbased/second_member.txt")), silent = TRUE)
   .errorTest(second_member, verbose, "Load of second_member.txt")
@@ -256,7 +262,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
     # Mc-all creation
     .addMessage(verbose, "---------------- Mc-all computation ----------------", valAf = 1)
     
-    aggregateResult(opts = opts, newname = filesMoves, verbose = verbose)
+    aggregateResult(opts = opts, newname = filesMoves, verbose = verbose, filtering = filtering) 
     
     try({
       dtaMc <- paste0(opts$simDataPath, "/mc-ind")
@@ -299,6 +305,12 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
       write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
     }, silent = TRUE)
   }
+  
+  if(filtering){
+    .recupeFilesUser(opts)
+  }
+  
+  
   options(warn = oldw)
   .errorTest(digetsWrite, verbose, "Digest write")
   .addMessage(verbose, "End of run")

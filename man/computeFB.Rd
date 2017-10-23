@@ -10,7 +10,16 @@ computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
   verbose = 0)
 }
 \arguments{
-\item{PTDF}{\code{character}, path for PTDF file}
+\item{PTDF}{\code{character}, path for PTDF file format : 
+\itemize{
+ \item Id_day : column of id day, numeric. In default exemple between 1 and 12. 
+ \item Period : column of period, numeric. In default exemple between 1 and 24.
+ \item BE : column of BE, numeric. 
+ \item DE : column of DE, numeric. 
+ \item FR : column of FR, numeric. 
+ \item FR : column of FR, numeric. 
+ \item RAM : column of RAM, numeric. 
+}}
 
 \item{outputName}{\code{character}, name of output directory}
 

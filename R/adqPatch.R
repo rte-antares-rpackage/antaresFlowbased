@@ -6,6 +6,7 @@
 #' @param pre_filter \code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
 #' @param strategic_reserve_de \code{character} area use to compute new margin for DE
+#' @param select \code{character}, columns to select (columns need for adqPatch are automaticaly add)
 #' 
 #' @examples
 #'
@@ -18,6 +19,8 @@
 #' #Strategic reserve
 #' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 #' 
+#' #Add a new column
+#' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 #' 
 #' }
 #' 
@@ -26,13 +29,19 @@ adqPatch <- function(mcYears = "all",
                      pre_filter = FALSE,
                      strategic_reserve_be = NULL,
                      strategic_reserve_de = NULL,
-                     opts = antaresRead::simOptions())
+                     opts = antaresRead::simOptions(),
+                     select = NULL)
 {
+ 
+  
+  
+  ##Add alias
+  setAlias("adqPatch", "Alias for adqPatch", c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN.", "areas", "links"))
   
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
-                       select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
+                       select = unique(select, "adqPatch"),
                        timeStep = "annual")
     mcYears <- unique(dta[dta$LOLD>0]$mcYear)
   }
@@ -41,7 +50,22 @@ adqPatch <- function(mcYears = "all",
   #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                     select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
+                     select = unique(select, "adqPatch"))
+  
+  
+  if(!all(strategic_reserve_be %in% getAreas())){
+    strategicNotIn <- strategic_reserve_be[!strategic_reserve_be %in% getAreas()]
+    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
+    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
+    
+  }
+  
+  if(!all(strategic_reserve_de %in% getAreas())){
+    strategicNotIn <- strategic_reserve_de[!strategic_reserve_de %in% getAreas()]
+    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
+    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
+  }
+  
   
   .applyAdq(opts = opts, dta, strategic_reserve_be = strategic_reserve_be, strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
   
@@ -89,6 +113,15 @@ adqPatch <- function(mcYears = "all",
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
   b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  
+  
+  contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
+  if(length(contraintsExcludes) > 0){
+    cat("Somes contraints are excludes because they are not in second_member and in weight")
+    cat(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
+    secondM <- secondM[!Name%in%contraintsExcludes]
+    b36p <- b36p[!name%in%contraintsExcludes]
+  }
   
   #Compute b36
   b36 <- b36p[, list(V1 = 1:.N, V2 = `be%nl`, V3 = `de%nl`, V4 = `be%fr`)]
@@ -325,7 +358,7 @@ adqPatch <- function(mcYears = "all",
   ## Add strategicMargin column
   if(nrow(strategicallData)>0)
   {
-    dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month" ,"hour"), all.x = TRUE)
+    dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
     
     setkeyv(chang, c("area", "time", "mcYear"))
     setkeyv(dta$areas, c("area", "time", "mcYear"))
@@ -342,8 +375,16 @@ adqPatch <- function(mcYears = "all",
   
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
+  if(nrow(strategicallData)>0)
+  {
+    dta$areas[, additionalSR:= `DTG MRG` - strategicMargin]
+    dta$areas$strategicMargin <- NULL
+  }
+  
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
+  
+  
   options(warn = oldw)
   dta
 }

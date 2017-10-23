@@ -6,7 +6,12 @@ shinyUI(fluidPage(
   # Show a plot of the generated distribution
   mainPanel(width = 12,
             column(4,
-
+                   sliderInput("ylim", "Ylim : ",
+                               min = -10000, max = 10000,
+                               value = c(-7000,7000), step  = 500),
+                   sliderInput("xlim", "Xlim : ",
+                               min = -10000, max = 10000,
+                               value = c(-7000,7000), step  = 500),
                    DT::dataTableOutput("tableauError"),
 
                    hr(),
