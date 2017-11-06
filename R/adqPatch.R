@@ -373,13 +373,13 @@ adqPatch <- function(mcYears = "all",
   if(!is.null(stategicDE)){
     setnames(stategicDE, "DTG MRG", "stratReserve")
     chang <- merge(chang, stategicDE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    chang[!is.na(stratReserve), additionalSR = stratReserve - strategicMarginN]
+    chang[!is.na(stratReserve), additionalSR := stratReserve - strategicMarginN]
   }
 
   if(!is.null(stategicBE)){
     setnames(stategicBE, "DTG MRG", "stratReserve")
     chang <- merge(chang, stategicBE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    chang[!is.na(stratReserve), additionalSR = stratReserve - strategicMarginN]
+    chang[!is.na(stratReserve), additionalSR := stratReserve - strategicMarginN]
   }
   
   
