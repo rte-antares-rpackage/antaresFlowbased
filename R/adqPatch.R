@@ -281,7 +281,7 @@ adqPatch <- function(mcYears = "all",
                               mcYears = mcYears,
                               select = c("DTG MRG"))
   }
-
+  
   if(nrow(stategicBE)>0)
   {
     BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
@@ -293,7 +293,7 @@ adqPatch <- function(mcYears = "all",
     
   }
   
-
+  
   
   ##For DE
   if(!is.null(strategic_reserve_de)){
@@ -356,14 +356,14 @@ adqPatch <- function(mcYears = "all",
   ## Add strategicMargin column
   if(nrow(strategicallData)>0)
   {
-  #   dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-  #   
-  #   setkeyv(chang, c("area", "time", "mcYear"))
-  #   setkeyv(dta$areas, c("area", "time", "mcYear"))
-  #   dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
+    #   dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
+    #   
+    #   setkeyv(chang, c("area", "time", "mcYear"))
+    #   setkeyv(dta$areas, c("area", "time", "mcYear"))
+    #   dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
     setnames(chang, "strategicMargin", "strategicMarginN")
-  #   dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
-  #   
+    #   dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
+    #   
   }
   
   chang$additionalSRN <- 0
@@ -389,13 +389,16 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, getIdCols(dta$areas))
   setkeyv(chang, getIdCols(chang))
   
-  dta$areas[,additionalSR:= 0]
+  
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
   dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
   dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
   dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
-  dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
-  
+  if(nrow(strategicallData)>0)
+  {
+    dta$areas[,additionalSR:= 0]
+    dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
+  }
   dta$areas[,ipn := NULL]
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
