@@ -6,31 +6,31 @@ library(antaresRead)
 
 
 
-opts <- list()
-opts$studyPath <- system.file("testdata/antaresInput/user/flowbased/ts.txt", package = "antaresFlowbased")
-opts$studyPath <- gsub("/user/flowbased/ts.txt","" , opts)
-
-
-dta <- readRDS(system.file("testdata/adq/adqReserv/adq.RDS", package = "antaresFlowbased"))
-
-
-stategicBE <- readRDS(system.file("testdata/adq/adqReserv/stategicBE.RDS", package = "antaresFlowbased"))
-stategicDE <- readRDS(system.file("testdata/adq/adqReserv/stategicDE.RDS", package = "antaresFlowbased"))
-
-dta <- .applyAdq(opts = opts, dta,
-                 stategicBE = stategicBE,
-                 stategicDE = stategicDE)
-
-# fwrite(dta$areas, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputAreas.csv", sep = ";")
-# fwrite(dta$links, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputLinks.csv", sep = ";")
-
-
-outArea <- fread(system.file("testdata/adq/adqReserv/outputAreas.csv", package = "antaresFlowbased"))
-outLink <- fread(system.file("testdata/adq/adqReserv/outputLinks.csv", package = "antaresFlowbased"))
-
-
-areaAll <- merge(outArea, dta$areas, by = c("mcYear", "timeId", "area"))
-linkAll <- merge(outLink, dta$links, by = c("mcYear", "timeId", "link"))
+# opts <- list()
+# opts$studyPath <- system.file("testdata/antaresInput/user/flowbased/ts.txt", package = "antaresFlowbased")
+# opts$studyPath <- gsub("/user/flowbased/ts.txt","" , opts)
+# 
+# 
+# dta <- readRDS(system.file("testdata/adq/adqReserv/adq.RDS", package = "antaresFlowbased"))
+# 
+# 
+# stategicBE <- readRDS(system.file("testdata/adq/adqReserv/stategicBE.RDS", package = "antaresFlowbased"))
+# stategicDE <- readRDS(system.file("testdata/adq/adqReserv/stategicDE.RDS", package = "antaresFlowbased"))
+# 
+# dta <- .applyAdq(opts = opts, dta,
+#                  stategicBE = stategicBE,
+#                  stategicDE = stategicDE)
+# 
+# # fwrite(dta$areas, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputAreas.csv", sep = ";")
+# # fwrite(dta$links, "D:/Users/titorobe/Desktop/Antares/antaresFlowbased/inst/testdata/adq/adqReserv/outputLinks.csv", sep = ";")
+# 
+# 
+# outArea <- fread(system.file("testdata/adq/adqReserv/outputAreas.csv", package = "antaresFlowbased"))
+# outLink <- fread(system.file("testdata/adq/adqReserv/outputLinks.csv", package = "antaresFlowbased"))
+# 
+# 
+# areaAll <- merge(outArea, dta$areas, by = c("mcYear", "timeId", "area"))
+# linkAll <- merge(outLink, dta$links, by = c("mcYear", "timeId", "link"))
 
 
 # expect_equal(all(all(areaAll$BALANCE.x == areaAll$BALANCE.y),
