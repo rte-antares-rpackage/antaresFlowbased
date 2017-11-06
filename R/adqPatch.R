@@ -368,19 +368,39 @@ adqPatch <- function(mcYears = "all",
     
   }
   
+  chang$additionalSR <- 0
+
+  if(!is.null(stategicDE)){
+    setnames(stategicDE, "DTG MRG", "stratReserve")
+    chang <- merge(chang, stategicDE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
+    chang[!is.na(stratReserve), additionalSR = stratReserve - strategicMarginN]
+  }
+
+  if(!is.null(stategicBE)){
+    setnames(stategicBE, "DTG MRG", "stratReserve")
+    chang <- merge(chang, stategicBE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
+    chang[!is.na(stratReserve), additionalSR = stratReserve - strategicMarginN]
+  }
+  
+  
+  
+  
+  
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
   dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
   dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
   dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
+  dta$areas[chang, `additionalSR` := as.integer(`additionalSR`)] 
   
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
-  if(nrow(strategicallData)>0)
-  {
-    dta$areas[, additionalSR:= `DTG MRG` - strategicMargin]
-    dta$areas$strategicMargin <- NULL
-  }
   
+  # if(nrow(strategicallData)>0)
+  # {
+  #   dta$areas[, additionalSR:= `DTG MRG` - strategicMargin]
+  #   dta$areas$strategicMargin <- NULL
+  # }
+  # 
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   
