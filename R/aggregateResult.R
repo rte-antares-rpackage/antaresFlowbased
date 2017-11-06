@@ -365,70 +365,80 @@ aggregateResult <- function(opts, newname, verbose = 1, filtering = FALSE){
         
         ##Details
         details <- value$clusters$sum
-        endClust <- cbind(struct$clusters, details)
-        endClust[, c("mcYear") := NULL]
         
-        detailWrite <- try(sapply(unique(endClust$area),  function(ctry){
-          #for each country prepare file
-          endClustctry <- endClust[area == ctry]
-          orderBeg <- unique(endClustctry$time)
-          endClustctry[,c("area") := NULL]
-          
-          if(tolower(opts$mode) == "economy")
+        if(!is.null(struct$clusters$day))
+        {
+          if(length(struct$clusters$day) > 0)
           {
-            nameBy <- c("production EXP", "NP Cost EXP", "NODU EXP")
-          }else{
-            nameBy <- c("production EXP")
+            endClust <- cbind(struct$clusters, details)
+            
+            
+            endClust[, c("mcYear") := NULL]
+            
+            detailWrite <- try(sapply(unique(endClust$area),  function(ctry){
+              #for each country prepare file
+              endClustctry <- endClust[area == ctry]
+              orderBeg <- unique(endClustctry$time)
+              endClustctry[,c("area") := NULL]
+              
+              if(tolower(opts$mode) == "economy")
+              {
+                nameBy <- c("production EXP", "NP Cost EXP", "NODU EXP")
+              }else{
+                nameBy <- c("production EXP")
+              }
+              nomStruct <- names(endClustctry)[!names(endClustctry)%in%
+                                                 c("cluster", nameBy)]
+              tmp_formula <- nomStruct
+              tmp_formula <- as.formula(paste0(paste0(tmp_formula, collapse = "+"), "~cluster"))
+              
+              if(tolower(opts$mode) == "economy")
+              {
+                endClustctry[, c(nameBy) := list(round(`production EXP`),
+                                                 round(`NP Cost EXP`),
+                                                 round(`NODU EXP`))]
+              }else{
+                endClustctry[, c(nameBy) := list(round(`production EXP`))]
+              }
+              endClustctry <- data.table::dcast(endClustctry, tmp_formula,
+                                                value.var = c(nameBy))
+              
+              endClustctry <- endClustctry[match(orderBeg, endClustctry$time)]
+              endClustctry[,c("time") := NULL]
+              nomStruct <- nomStruct[-which(nomStruct == "time")]
+              nomcair <- names(endClustctry)
+              nomcair <- nomcair[!nomcair%in%nomStruct]
+              nbvar <- length(nomcair)
+              unit <- rep("", length(nomcair))
+              unit[grep("production EXP_",nomcair)] <- "MWh"
+              unit[grep("NP Cost EXP_",nomcair)] <- "NP Cost - Euro"
+              unit[grep("NODU EXP_",nomcair)] <- "NODU"
+              nomcair <- gsub("production EXP_","",nomcair)
+              nomcair <- gsub("NP Cost EXP_","",nomcair)
+              nomcair <- gsub("NODU EXP_","",nomcair)
+              Stats <- rep("EXP", length(unit))
+              nameIndex <- ifelse(type == "weekly", "week", "index")
+              nomStruct[which(nomStruct == "timeId")] <- nameIndex
+              indexMin <- min(endClustctry$timeId)
+              indexMax <- max(endClustctry$timeId)
+              ncolFix <- length(nomStruct)
+              #write details txt
+              .writeFileOut(dta = endClustctry, timestep = type, fileType = "details",
+                            ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
+                            indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
+                            nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
+            }), silent = TRUE)
+            .errorTest(detailWrite, verbose, "Detail write")
           }
-          nomStruct <- names(endClustctry)[!names(endClustctry)%in%
-                                             c("cluster", nameBy)]
-          tmp_formula <- nomStruct
-          tmp_formula <- as.formula(paste0(paste0(tmp_formula, collapse = "+"), "~cluster"))
-          
-          if(tolower(opts$mode) == "economy")
-          {
-            endClustctry[, c(nameBy) := list(round(`production EXP`),
-                                             round(`NP Cost EXP`),
-                                             round(`NODU EXP`))]
-          }else{
-            endClustctry[, c(nameBy) := list(round(`production EXP`))]
-          }
-          endClustctry <- data.table::dcast(endClustctry, tmp_formula,
-                                            value.var = c(nameBy))
-          
-          endClustctry <- endClustctry[match(orderBeg, endClustctry$time)]
-          endClustctry[,c("time") := NULL]
-          nomStruct <- nomStruct[-which(nomStruct == "time")]
-          nomcair <- names(endClustctry)
-          nomcair <- nomcair[!nomcair%in%nomStruct]
-          nbvar <- length(nomcair)
-          unit <- rep("", length(nomcair))
-          unit[grep("production EXP_",nomcair)] <- "MWh"
-          unit[grep("NP Cost EXP_",nomcair)] <- "NP Cost - Euro"
-          unit[grep("NODU EXP_",nomcair)] <- "NODU"
-          nomcair <- gsub("production EXP_","",nomcair)
-          nomcair <- gsub("NP Cost EXP_","",nomcair)
-          nomcair <- gsub("NODU EXP_","",nomcair)
-          Stats <- rep("EXP", length(unit))
-          nameIndex <- ifelse(type == "weekly", "week", "index")
-          nomStruct[which(nomStruct == "timeId")] <- nameIndex
-          indexMin <- min(endClustctry$timeId)
-          indexMax <- max(endClustctry$timeId)
-          ncolFix <- length(nomStruct)
-          #write details txt
-          .writeFileOut(dta = endClustctry, timestep = type, fileType = "details",
-                        ctry = ctry, opts = opts, folderType = "areas", nbvar = nbvar,
-                        indexMin = indexMin, indexMax = indexMax, ncolFix = ncolFix,
-                        nomcair = nomcair, unit = unit, nomStruct = nomStruct,Stats = Stats)
-        }), silent = TRUE)
-        .errorTest(detailWrite, verbose, "Detail write")
-        
+        }
       }
       
     })
+    
     .addMessage(verbose, paste0("------- End Mc-all : ", type, " -------"))
     
   }, verbose = verbose)
+  
   
   if(verbose>0)
   {
