@@ -32,7 +32,7 @@ adqPatch <- function(mcYears = "all",
                      opts = antaresRead::simOptions(),
                      select = NULL)
 {
- 
+  
   
   
   ##Add alias
@@ -41,7 +41,7 @@ adqPatch <- function(mcYears = "all",
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
-                       select = unique(select, "adqPatch"),
+                       select = c(select, "adqPatch"),
                        timeStep = "annual")
     mcYears <- unique(dta[dta$LOLD>0]$mcYear)
   }
@@ -50,7 +50,7 @@ adqPatch <- function(mcYears = "all",
   #Load useful data
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                     select = unique(select, "adqPatch"))
+                     select = c(select, "adqPatch"))
   
   
   if(!all(strategic_reserve_be %in% getAreas())){
@@ -173,7 +173,7 @@ adqPatch <- function(mcYears = "all",
                      which(lole_de!=0),
                      which(lole_nl!=0))])>1)
       {run_adq_patch <- TRUE}
-        
+      
       #   if one country wasn't in shortage in the output of ANTARES while contribution to CWE
       #   unsupplied energy was not null : YES
       if(nrow(outR[c(which(lole_fr!=0 & `UNSP. ENRG_fr`==0 ),
@@ -281,19 +281,19 @@ adqPatch <- function(mcYears = "all",
                               mcYears = mcYears,
                               select = c("DTG MRG"))
   }
-  if(!is.null(stategicBE))
+
+  if(nrow(stategicBE)>0)
   {
-    if(nrow(stategicBE)>0)
-    {
-      BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
-                           stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
-      setkeyv(BEstrategic, c("area", "time", "mcYear"))
-      stategicBE$area <- "be"
-      
-      setnames(BEstrategic, "DTG MRG", "strategicMargin")
-      
-    }
+    BEstrategic <- merge(chang[area == "be",.SD, .SDcols = c("area", "mcYear", "time")],
+                         stategicBE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+    setkeyv(BEstrategic, c("area", "time", "mcYear"))
+    stategicBE$area <- "be"
+    
+    setnames(BEstrategic, "DTG MRG", "strategicMargin")
+    
   }
+  
+
   
   ##For DE
   if(!is.null(strategic_reserve_de)){
@@ -301,16 +301,14 @@ adqPatch <- function(mcYears = "all",
                               mcYears = mcYears,
                               select = c("DTG MRG"))
   }
-  if(!is.null(stategicDE))
-  {
+  
   if(nrow(stategicDE)>0)
-    {
-      DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
-                           stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
-      stategicDE$area <- "de"
-      setnames(DEstrategic, "DTG MRG", "strategicMargin")
-      
-    }
+  {
+    DEstrategic <- merge(chang[area == "de",.SD, .SDcols = c("area", "mcYear", "time")],
+                         stategicDE[, .SD, .SDcols = c("mcYear", "time", "DTG MRG")], by = c("mcYear", "time"))
+    stategicDE$area <- "de"
+    setnames(DEstrategic, "DTG MRG", "strategicMargin")
+    
   }
   
   strategicallData <- rbindlist(list(stategicBE, stategicDE))
@@ -358,40 +356,47 @@ adqPatch <- function(mcYears = "all",
   ## Add strategicMargin column
   if(nrow(strategicallData)>0)
   {
-    dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    
-    setkeyv(chang, c("area", "time", "mcYear"))
-    setkeyv(dta$areas, c("area", "time", "mcYear"))
-    dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
+  #   dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
+  #   
+  #   setkeyv(chang, c("area", "time", "mcYear"))
+  #   setkeyv(dta$areas, c("area", "time", "mcYear"))
+  #   dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
     setnames(chang, "strategicMargin", "strategicMarginN")
-    dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
-    
+  #   dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
+  #   
   }
   
-  chang$additionalSR <- 0
-
-  if(!is.null(stategicDE)){
+  chang$additionalSRN <- 0
+  
+  
+  
+  if(nrow(stategicDE) > 0){
+    
     setnames(stategicDE, "DTG MRG", "stratReserve")
     chang <- merge(chang, stategicDE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    chang[!is.na(stratReserve), additionalSR := stratReserve - strategicMarginN]
+    chang[!is.na(stratReserve), additionalSRN := stratReserve - strategicMarginN]
+    chang[,stratReserve := NULL]
   }
-
-  if(!is.null(stategicBE)){
+  
+  if(nrow(stategicBE) > 0){
+    
     setnames(stategicBE, "DTG MRG", "stratReserve")
     chang <- merge(chang, stategicBE, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    chang[!is.na(stratReserve), additionalSR := stratReserve - strategicMarginN]
+    chang[!is.na(stratReserve), additionalSRN := stratReserve - strategicMarginN]
+    chang[,stratReserve := NULL]
   }
   
+  setkeyv(dta$areas, getIdCols(dta$areas))
+  setkeyv(chang, getIdCols(chang))
   
-  
-  
-  
+  dta$areas[,additionalSR:= 0]
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
   dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
   dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
   dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
-  dta$areas[chang, `additionalSR` := as.integer(`additionalSR`)] 
+  dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
   
+  dta$areas[,ipn := NULL]
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
   
