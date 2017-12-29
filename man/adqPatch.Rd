@@ -2,7 +2,7 @@
 % Please edit documentation in R/adqPatch.R
 \name{adqPatch}
 \alias{adqPatch}
-\title{Compute adqPatch for antares study}
+\title{Run the adequacy patch}
 \usage{
 adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
   strategic_reserve_de = NULL, opts = antaresRead::simOptions(),
