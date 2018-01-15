@@ -4,8 +4,6 @@ library(ROI)
 library(data.table)
 library(antaresRead)
 
-library(testthat)
-
 # get Antares' flow-based parametes
 opts <- list()
 opts$studyPath <- system.file("testdata/adq/antaresStudy/user/flowbased/ts.txt", package = "antaresFlowbased")
@@ -29,7 +27,7 @@ area_test <- area_test[with(area_test, order(mcYear, timeId, area)), ]
 links_test <- dataNoStrat_adq$links
 links_test <- links_test[with(links_test, order(mcYear, timeId, link)), ]
 ## temporaire!
-area_test <- subset(area_test, select = -ipn)
+# area_test <- subset(area_test, select = -ipn)
 
 # expected results
 outNoStrat_exp <- readRDS(system.file("testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased"))
