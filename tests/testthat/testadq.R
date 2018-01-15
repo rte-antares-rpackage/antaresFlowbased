@@ -3,7 +3,6 @@ context("adq")
 library(ROI)
 library(data.table)
 library(antaresRead)
-library(reshape2)
 
 library(testthat)
 
@@ -276,7 +275,7 @@ test_that("All final points belong to their flow-based domains", {
     ipn <- giveIpn(links = links)
     # flow based files
     scenario <- fread(paste0(path, "/user/flowbased/scenario.txt"))
-    b36p <- readRDS(system.file("testdata/adq/antaresInput/domainesFB.RDS", package = "antaresFlowbased"))$outFlowBased[[1]]$face
+    b36p <- readRDS(system.file("testdata/adq/antaresStudy/domainesFB.RDS", package = "antaresFlowbased"))$outFlowBased[[1]]$face
     b36 <- as.matrix(b36p)[,1:3]
     dateTS <- id_file$Date
     dateTS <- substr(dateTS, 6,10)
