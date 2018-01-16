@@ -8,7 +8,7 @@ cache: packages
 before_install:
   - svn co https://projects.coin-or.org/svn/Clp/stable/1.16 coin-Clp
   - cd coin-Clp
-  - ./configure
+  - make ./configure -C
   - make
 
 
