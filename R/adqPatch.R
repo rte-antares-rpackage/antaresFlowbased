@@ -117,8 +117,8 @@ adqPatch <- function(mcYears = "all",
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){
-    cat("Somes contraints are excludes because they are not in second_member and in weight")
-    cat(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
+    message("Somes contraints are excludes because they are not in second_member and in weight ")
+    message(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]
   }
