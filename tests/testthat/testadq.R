@@ -111,8 +111,8 @@ get_PN <- function(links){
 
 
 test_that("compares test case results", {
-  # expect_true(all.equal(area_exp,area_test))
-  # expect_true(all.equal(links_exp,links_test))
+  expect_true(all.equal(area_exp,area_test))
+  expect_true(all.equal(links_exp,links_test))
 })
 
 
