@@ -6,6 +6,9 @@ cache: packages
 
 r: bioc-devel
 
+before_install: R --with-clp-include
+
+
 r_github_packages:
  - hadley/devtools#1263
  - Bioconductor-mirror/zlibbioc
