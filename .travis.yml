@@ -6,9 +6,7 @@ cache: packages
 
 
 before_install:
-  - svn co \
-  - http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8 \
-  - COIN-1.8
+  - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
   - cd COIN-1.8
   - ./get.AllThirdParty
   - mkdir build
