@@ -12,8 +12,6 @@ cache: packages
 # - make
 # - make install
 
-
-	
 before_install:
   - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
   - cd 1.8
