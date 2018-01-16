@@ -4,6 +4,16 @@ language: R
 sudo: false
 cache: packages
 
+
+before_script:
+  - svn co https://projects.coin-or.org/svn/Clp/stable/1.16 coin-Clp
+  - cd coin-Clp
+  - ./configure -C
+  - make
+  - make test
+  - make install 
+
+
 r: bioc-devel
 
 r_github_packages:
@@ -13,3 +23,6 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
+
+
+
