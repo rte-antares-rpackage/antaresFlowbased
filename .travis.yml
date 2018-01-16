@@ -8,13 +8,9 @@ before_install:
  - git clone --branch=stable/2.9 https://github.com/coin-or/Cbc Cbc-2.9
  - cd Cbc-2.9
  - git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools/
- - BuildTools/git.dependencies fetch
  - ./configure
  - make
  - make install
-
-script: make test
-
 
 r: bioc-devel
 
