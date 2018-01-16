@@ -253,7 +253,7 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 positionViz <- function(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2){
   dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
                                   links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                                  select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."))
+                                  select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
   
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
