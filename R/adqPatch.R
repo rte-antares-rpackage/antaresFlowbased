@@ -11,7 +11,7 @@
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
 #' 
 #' #No strategic reserve
 #' res <- adqPatch()
@@ -133,6 +133,7 @@ adqPatch <- function(mcYears = "all",
   out <- out[LOLD_fr!=0|LOLD_be!=0|LOLD_de!=0|LOLD_nl!=0]
   
   if(nrow(out) == 0){
+    dta <- .preReterunData(dta)
     cat("No row concern by adq patch")
     return(dta)
   }
@@ -227,6 +228,7 @@ adqPatch <- function(mcYears = "all",
   }, simplify = FALSE))
   
   if(nrow(new) == 0){
+    dta <- .preReterunData(dta)
     cat("No row concern by adq patch")
     return(dta)
   }
@@ -399,7 +401,16 @@ adqPatch <- function(mcYears = "all",
     dta$areas[,additionalSR:= 0]
     dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
   }
-  dta$areas[,ipn := NULL]
+  
+  dta <- .preReterunData(dta)
+
+  options(warn = oldw)
+  dta
+}
+
+
+.preReterunData <- function(dta){
+  dta$areas$ipn <- NULL
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
   
@@ -412,12 +423,8 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   
-  
-  options(warn = oldw)
   dta
 }
-
-
 
 
 
