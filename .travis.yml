@@ -5,10 +5,8 @@ sudo: false
 cache: packages
 
 before_install:
-  - git clone https://gist.github.com/tkralphs/13d4529b4d4e8889f3a6 scripts
-  - bash scripts/get.dependencies.sh fetch > /dev/null
-	
-install: bash scripts/get.dependencies.sh build > /dev/null
+  - git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools
+  - bash BuildTools/get.dependencies.sh fetch > /dev/null
 	
 script: make test
 
