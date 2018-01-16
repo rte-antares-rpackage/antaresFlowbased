@@ -5,14 +5,14 @@ sudo: false
 cache: packages
 
 
-before_install:
-  - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
-  - cd 1.8
-  - ./get.AllThirdParty
-  - mkdir build
-  - cd build
-  - ../configure --with-gmpl --enable-gnu-packages
-  - make install
+#before_install:
+#  - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
+#  - cd 1.8
+#  - ./get.AllThirdParty
+#  - mkdir build
+#  - cd build
+#  - ../configure --with-gmpl --enable-gnu-packages
+#  - make install
 
 
 r: bioc-devel
