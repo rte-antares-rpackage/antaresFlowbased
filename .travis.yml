@@ -21,12 +21,20 @@ cache: packages
 #   - ../configure --with-gmpl --enable-gnu-packages
 #   - make install
 
+
+
+
 before_install:
   - svn checkout https://projects.coin-or.org/svn/SYMPHONY/stable/5.6 SYMPHONY-5.6
   - cd SYMPHONY-5.6
   - ./configure
   - make
   - make install
+
+install:
+  - Rscript -e 'install.packages(c("devtools","roxygen2","testthat"));devtools::install_deps("antaresFlowbased")'
+script:
+  - Rscript -e 'devtools::check("antaresFlowbased")'
 
 r: bioc-devel
 
