@@ -12,17 +12,21 @@ cache: packages
 # - make
 # - make install
 
+# before_install:
+#   - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
+#   - cd 1.8
+#   - ./get.AllThirdParty
+#   - mkdir build
+#   - cd build
+#   - ../configure --with-gmpl --enable-gnu-packages
+#   - make install
+
 before_install:
-  - svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8
-  - cd 1.8
-  - ./get.AllThirdParty
-  - mkdir build
-  - cd build
-  - ../configure --with-gmpl --enable-gnu-packages
+  - svn checkout https://projects.coin-or.org/svn/SYMPHONY/stable/5.6 SYMPHONY-5.6
+  - cd SYMPHONY-5.6
+  - ./configure
+  - make
   - make install
-
-
-
 
 r: bioc-devel
 
