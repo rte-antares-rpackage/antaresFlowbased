@@ -5,7 +5,7 @@ sudo: false
 cache: packages
 
 
-before_script:
+before_install:
   - svn co https://projects.coin-or.org/svn/Clp/stable/1.16 coin-Clp
   - cd coin-Clp
   - ./configure -C
