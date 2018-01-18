@@ -45,4 +45,4 @@ artifacts:
     name: Bits
     
 on_success:
-  - Rscript -e 'library(covr); codecov()'
+  - Rscript -e "library(covr); codecov()"
