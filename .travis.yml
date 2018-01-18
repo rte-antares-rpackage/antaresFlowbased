@@ -30,15 +30,11 @@ before_install:
   - ./configure
   - make
   - make install
+  - cd ..
 
 install:
   - cd ..
-  - Rscript -e 'install.packages(c("devtools","roxygen2","testthat"))'
-  - R CMD INSTALL
 
-script:
-  - Rscript -e 'devtools::install("antaresFlowbased")'
-  - Rscript -e 'devtools::check("antaresFlowbased")'
 
 r: bioc-devel
 
