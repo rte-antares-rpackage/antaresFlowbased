@@ -32,10 +32,6 @@ before_install:
   - make install
   - cd ..
 
-install:
-  - cd ..
-
-
 r: bioc-devel
 
 r_github_packages:
