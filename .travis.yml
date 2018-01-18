@@ -11,6 +11,3 @@ r_github_packages:
  - Bioconductor-mirror/zlibbioc
  - Bioconductor-mirror/rhdf5
 
-after_success:
-  - Rscript -e 'library(covr); codecov()'
-
