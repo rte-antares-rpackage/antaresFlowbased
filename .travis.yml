@@ -33,6 +33,8 @@ before_install:
 
 install:
   - Rscript -e 'install.packages(c("devtools","roxygen2","testthat"));devtools::install_deps("antaresFlowbased")'
+  - R CMD INSTALL
+
 script:
   - Rscript -e 'devtools::check("antaresFlowbased")'
 
