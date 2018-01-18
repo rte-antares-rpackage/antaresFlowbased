@@ -32,6 +32,7 @@ before_install:
   - make install
 
 install:
+  - cd ..
   - Rscript -e 'install.packages(c("devtools","roxygen2","testthat"));devtools::install_deps("antaresFlowbased")'
   - R CMD INSTALL
 
