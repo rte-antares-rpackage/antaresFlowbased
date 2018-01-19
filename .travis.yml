@@ -4,10 +4,19 @@ language: R
 sudo: false
 cache: packages
 
+before_install:
+  - sudo apt-get install coinor-clp
+  - sudo apt-get install coinor-libclp-dev
+
 r: bioc-devel
 
 r_github_packages:
  - hadley/devtools#1263
  - Bioconductor-mirror/zlibbioc
  - Bioconductor-mirror/rhdf5
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
+
 
