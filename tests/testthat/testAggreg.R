@@ -1,4 +1,4 @@
-context("Function aggregateResult")
+# context("Function aggregateResult")
 # 
 # #Untar and read study
 # testStudy <- system.file("testdata/exemple_test.tgz",package = "antaresFlowbased")

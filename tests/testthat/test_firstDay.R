@@ -24,6 +24,7 @@ test_that("test .giveFstDay", {
 })
 
 
-# test_that("test identifyFirstDay", {
-#   identifyFirstDay(opts)
-# })
+test_that("test identifyFirstDay", {
+  expect_error(identifyFirstDay(opts, "mynoarea", "de"))
+  
+})

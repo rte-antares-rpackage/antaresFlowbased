@@ -1,9 +1,11 @@
-#' Find fist day of a study
+#' Find first day of a study
 #'
 #' This function give type of first day, 1 is monday, 2 is Thuesday, ..., 7 is Sunday 
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#'
+#' @param firstArea \code{character} first area(s) use to compute first day
+#' @param secondArea \code{character} second area(s) use to compute first day, it's a security when you want to
+#' be sure of first day compute
 #'
 #' @examples
 #' 
@@ -15,14 +17,20 @@
 #' }
 #' 
 #' @export
-identifyFirstDay <- function(opts)
+identifyFirstDay <- function(opts, firstArea = "FR", secondArea = c("FR", "DE", "BE", "LU", "NL"))
 {
-  meanFR <- .giveMean7("FR", opts)
-  meanCWE <- .giveMean7(c("FR", "DE", "BE", "LU", "NL" ), opts)
+  meanFR <- .giveMean7(firstArea, opts)
+  
+  if(!is.null(secondArea))meanCWE <- .giveMean7(secondArea, opts)
+ 
   fstFrMo <- .giveFstDay(meanFR)
-  fstCweMo <- .giveFstDay(meanCWE)
+  
+  if(!is.null(secondArea))fstCweMo <- .giveFstDay(meanCWE)
+  
+  if(!is.null(secondArea))
+  {
   if(fstFrMo != fstCweMo){
-    stop("Cant find first day automatically ")
+    stop("Cant find first day automatically estimate ")
   }else{
     fstFrMo <- switch(as.character(fstFrMo),
      "1" = 1,
@@ -33,8 +41,22 @@ identifyFirstDay <- function(opts)
      "6" = 3,
      "7" = 2
    )
-    fstFrMo
+    return(fstFrMo)
   }
+  }else{
+    warning("Only firstArea use to estimate first day")
+    fstFrMo <- switch(as.character(fstFrMo),
+                      "1" = 1,
+                      "2" = 7,
+                      "3" = 6,
+                      "4" = 5,
+                      "5" = 4,
+                      "6" = 3,
+                      "7" = 2
+    )
+    return(fstFrMo)
+  }
+  
 }
 
 
@@ -69,6 +91,7 @@ identifyFirstDay <- function(opts)
 .giveMean7 <- function(area, opts)
 {
   LOAD <- readInputTS(load = area, timeStep = "daily", opts = opts)
+  if(nrow(LOAD) == 0)stop(paste0("No data found for ", paste0(area, collapse = ";")))
   outTS <- dcast(LOAD, time~area+tsId, value.var = "load")
   meanByDay <- data.table(date = outTS$time, value =  rowMeans(outTS[, .SD, .SDcols = 2:ncol(outTS)]))
   meanByDay[,mod7 := 1:7]

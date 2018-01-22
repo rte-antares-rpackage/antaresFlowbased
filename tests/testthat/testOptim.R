@@ -1,7 +1,6 @@
 context("Function askProblemMat")
 
 test_that("test optim", {
-  
   PTDF <- system.file("testdata/optim/PTDF.csv",package = "antaresFlowbased")
   PTDF <- fread(PTDF)
   
@@ -28,5 +27,4 @@ test_that("test optim", {
   })
   
   expect_true(all(res))
-  
 })
