@@ -5,7 +5,7 @@
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param firstArea \code{character} first area(s) use to compute first day
 #' @param secondArea \code{character} second area(s) use to compute first day, it's a security when you want to
-#' be sure of first day compute
+#' be sure of first day compute. It can be NULL but your compute will be less sure.
 #'
 #' @examples
 #' 

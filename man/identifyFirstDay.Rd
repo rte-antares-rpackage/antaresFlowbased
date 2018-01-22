@@ -2,12 +2,18 @@
 % Please edit documentation in R/firstDay.R
 \name{identifyFirstDay}
 \alias{identifyFirstDay}
-\title{Find fist day of a study}
+\title{Find first day of a study}
 \usage{
-identifyFirstDay(opts)
+identifyFirstDay(opts, firstArea = "FR", secondArea = c("FR", "DE", "BE",
+  "LU", "NL"))
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+
+\item{firstArea}{\code{character} first area(s) use to compute first day}
+
+\item{secondArea}{\code{character} second area(s) use to compute first day, it's a security when you want to
+be sure of first day compute. It can be NULL but your compute will be less sure.}
 }
 \description{
 This function give type of first day, 1 is monday, 2 is Thuesday, ..., 7 is Sunday
