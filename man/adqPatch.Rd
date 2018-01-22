@@ -27,7 +27,7 @@ Compute adqPatch for antares study
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
 
 #No strategic reserve
 res <- adqPatch()
