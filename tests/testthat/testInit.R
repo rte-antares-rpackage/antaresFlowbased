@@ -1,12 +1,13 @@
 context("Function initFlowBased")
 
-#Untar and read study
-testStudy <- system.file("testdata/exemple_test.tgz",package = "antaresFlowbased")
-temp_dir <- tempdir()
-untar(testStudy, exdir = temp_dir)
-testStudy <- paste0(temp_dir, "/exemple_test")
-opts <- antaresRead::setSimulationPath(testStudy)
+# #Untar and read study
+# testStudy <- system.file("testdata/exemple_test.tgz",package = "antaresFlowbased")
+# temp_dir <- tempdir()
+# untar(testStudy, exdir = temp_dir)
+# testStudy <- paste0(temp_dir, "/exemple_test")
+# opts <- antaresRead::setSimulationPath(testStudy)
 
+test_that("test initFlowBased", {
 #Init study environment
 initFlowBased()
 
@@ -47,4 +48,6 @@ weight <- paste0(userpatch, "/weight.txt")
 weight <- data.table::fread(weight)
 expect_true( "name" %in% names(weight))
 
-unlink(testStudy, recursive = TRUE, force = TRUE)
+# unlink(testStudy, recursive = TRUE, force = TRUE)
+})
+

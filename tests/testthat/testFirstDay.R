@@ -22,3 +22,8 @@ test_that("test .giveFstDay", {
   expect_error(.giveFstDay(vect))
 
 })
+
+
+# test_that("test identifyFirstDay", {
+#   identifyFirstDay(opts)
+# })
