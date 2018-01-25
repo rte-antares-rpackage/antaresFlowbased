@@ -62,6 +62,30 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
                        interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017){
   
   
+  
+  ##test params
+  #multiplier file
+  if(!is.data.frame(multiplier)){
+    stop("multiplier must be a data.frame")
+  }
+  if(!all(names(multiplier)%in%c("variable", "coef"))){
+    stop("Error, names of multiplier must be : 'variable' and 'coef'")
+  }
+  
+  ##Test probabilityMatrix
+  lapply(probabilityMatrix, function(X){
+    if(!all(multiplier$variable %in% names(X))){
+      stop("All names contains in multiplier$variable must be present in probabilityMatrix")
+    }
+  })%>%invisible()
+  
+  #interSeasonBegin
+  interSeasonBegin <- as.Date(interSeasonBegin)
+  interSeasonEnd <- as.Date(interSeasonEnd)
+  #firstDay
+  if(!firstDay%in%1:7)stop("firstDay must be between 1 and 7")
+
+    
   #Seed
   set.seed(seed)
   #Name of climate variables
