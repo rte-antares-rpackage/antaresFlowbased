@@ -48,7 +48,7 @@ updateGeneralSettingIni <- function(opts = antaresRead::simOptions(), playList =
 #' @noRd
 modifyGeneralSetting <- function(generaldataIniPatch){
   # read current .ini
-  generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
+  generalSetting <- readIniFile(generaldataIniPatch)
 
   # desactivation of mc_all
   generalSetting$output$synthesis <- FALSE
@@ -77,7 +77,7 @@ modifyGeneralSetting <- function(generaldataIniPatch){
 #' @noRd
 modifyGeneralSettingPlayList <- function(generaldataIniPatch, playList){
   # read current .ini
-  generalSetting <- antaresRead:::readIniFile(generaldataIniPatch)
+  generalSetting <- readIniFile(generaldataIniPatch)
 
 
 
@@ -111,13 +111,13 @@ writeGeneralSettingIni <- function(generaldataIniPatch, generalSetting)
 }
 
 .updateOptimizationIni <- function(file){
-  ini <- antaresRead:::readIniFile(file)
+  ini <- readIniFile(file)
   ini$filtering$`filter-year-by-year` <- .giveTotalFilter(ini)
   writeIni(ini, file)
 }
 
 .updateProportiesLinksIni <- function(file){
-  ini <- antaresRead:::readIniFile(file)
+  ini <- readIniFile(file)
   if(length(ini) > 0)
   {
   for(i in 1:length(ini)){

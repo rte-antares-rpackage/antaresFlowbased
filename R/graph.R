@@ -9,6 +9,7 @@
 #' @param max \code{numeric}, maximum of axis
 #'
 #' @import rAmCharts
+#' @importFrom grDevices chull
 #'
 #' @noRd
 graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NULL, xlim = c(-7000, 7000), ylim = c(-7000, 7000))

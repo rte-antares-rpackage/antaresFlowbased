@@ -24,6 +24,9 @@
 #' 
 #' }
 #' 
+#' @importFrom stats as.formula cutree dist hclust na.omit runif
+#' @importFrom utils read.table setTxtProgressBar txtProgressBar write.table
+#' 
 #' @export
 adqPatch <- function(mcYears = "all",
                      pre_filter = FALSE,
@@ -88,10 +91,10 @@ adqPatch <- function(mcYears = "all",
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
-  links[, be := `be - de` + `be - fr` + `be - nl`]
-  links[, de := - `be - de` + `de - fr` + `de - nl`]
-  links[, fr := - `be - fr` - `de - fr`]
-  links[, nl := - `be - nl` - `de - nl`]
+  links[, "be" := `be - de` + `be - fr` + `be - nl`]
+  links[, "de" := - `be - de` + `de - fr` + `de - nl`]
+  links[, "fr" := - `be - fr` - `de - fr`]
+  links[, "nl" := - `be - nl` - `de - nl`]
   
   #Merge with data
   links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]

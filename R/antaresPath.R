@@ -8,7 +8,7 @@
 #'
 #' \dontrun{
 #'
-#' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
+#' setSolverAntares(path = "antares-solver.exe")
 #'
 #' getSolverAntares()
 #'
@@ -16,7 +16,8 @@
 #'
 #' @rdname solver-antares
 #' @export
-setSolverAntares <- function(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe") {
+setSolverAntares <- function(path = 
+                               "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe") {
   if(!file.exists(path)){
     stop("Invalid solver path")
   }

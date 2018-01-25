@@ -37,7 +37,8 @@
 #' antaresRead::setSimulationPath("D:/exemple_test", 0)
 #'
 #' # set solver path
-#' setSolverAntares(path = "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
+#' setSolverAntares(path = 
+#' "C:\\Program Files\\RTE\\Antares\\5.0.9\\bin\\antares-5.0-solver.exe")
 #'
 #' # init directory for study
 #' setFlowbasedPath(model = "model2017")
@@ -110,7 +111,7 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
   .errorTest(upGenIni, verbose, "Write of generaldata")
   
   #Check and addapt when filter : custom
-  filtering <- antaresRead:::readIniFile(generaldataIniPatch)$general$filtering
+  filtering <- readIniFile(generaldataIniPatch)$general$filtering
   if(filtering){
     .updateAllAreasIni(opts)
   }

@@ -627,7 +627,7 @@ pmax.fast <- function(k,x) (x+k + abs(x-k))/2
 {
   #Edit infos output simulation
   iniPath <- paste0(outData, "/info.antares-output")
-  infosIni <- antaresRead:::readIniFile(iniPath)
+  infosIni <- readIniFile(iniPath)
   infosIni$general$name <- substr(simulationName, 1, nchar(simulationName)-10)
   dateTim2 <- gsub("-" , ".", dateTim2)
   dateTim2 <- gsub(" " , " - ", dateTim2)
@@ -672,7 +672,7 @@ pmax.fast <- function(k,x) (x+k + abs(x-k))/2
   allAreas <- allAreas[!allAreas == ""]
   out <- sapply(allAreas, function(X){
     Ini <- paste0(inputsAreas, "/", X, "/optimization.ini")
-    gsub(" ", "", unlist(strsplit(antaresRead:::readIniFile(Ini)$filtering$`filter-synthesis`, ",")))
+    gsub(" ", "", unlist(strsplit(readIniFile(Ini)$filtering$`filter-synthesis`, ",")))
   }, simplify = FALSE)
   
   out <- lapply(out, function(X){
@@ -689,7 +689,7 @@ pmax.fast <- function(k,x) (x+k + abs(x-k))/2
   allLinks <- allLinks[!allLinks == ""]
   out <- sapply(allLinks, function(X){
     Ini <- paste0(inputsLinks, "/", X, "/properties.ini")
-    res <- lapply(antaresRead:::readIniFile(Ini), function(X){X$`filter-synthesis`})
+    res <- lapply(readIniFile(Ini), function(X){X$`filter-synthesis`})
     lapply(res, function(X)gsub(" ", "", unlist(strsplit(X, ","))))
   })
   out <- out[lapply(out, length)!=0]
