@@ -44,16 +44,3 @@ folder deigned by fb_opts contain files :
     \item{BE.DE : numeric, between -1 and 1}
   }}}
 }
-\examples{
-
-\dontrun{
-# target antares study
-path <- "D:/exemple_test"
-antaresRead::setSimulationPath(path, 0)
-
-setFlowbasedPath(model = "model2017")
-
-initFlowBased()
-}
-
-}
