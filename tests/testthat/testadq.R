@@ -1,4 +1,4 @@
-context("adq")
+context("function adqPatch")
 
 library(ROI)
 library(data.table)
