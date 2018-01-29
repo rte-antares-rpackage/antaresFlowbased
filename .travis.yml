@@ -14,6 +14,7 @@ r_github_packages:
  - hadley/devtools#1263
  - Bioconductor-mirror/zlibbioc
  - Bioconductor-mirror/rhdf5
+ - rte-antares-rpackage/antaresEditObject
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
