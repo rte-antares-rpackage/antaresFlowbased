@@ -57,6 +57,7 @@
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
 #'                  interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd, firstDay = firstDay)
 #'                  
+#' @import data.table
 #' @export
 createFBTS <- function(opts, probabilityMatrix, multiplier,
                        interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017){

@@ -44,3 +44,13 @@ folder deigned by fb_opts contain files :
     \item{BE.DE : numeric, between -1 and 1}
   }}}
 }
+\examples{
+
+\dontrun{
+
+ setSolverAntares("AntaresFolderInstall/bin/antares-6.1-solver.exe")
+ initFlowBased()
+ }
+ 
+ 
+}

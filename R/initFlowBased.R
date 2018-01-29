@@ -42,6 +42,9 @@
 #'  initFlowBased()
 #'  }
 #'  
+#'  
+#' @import data.table antaresRead plyr
+#' 
 #' @export
 initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
                           opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
