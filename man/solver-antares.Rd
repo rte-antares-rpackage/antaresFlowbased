@@ -6,7 +6,7 @@
 \title{Set the path of the antares solver executable}
 \usage{
 
-  setSolverAntares(path = "C:\\\\Program Files\\\\RTE\\\\Antares\\\\5.0.9\\\\bin\\\\antares-5.0-solver.exe")
+  setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
 
 getSolverAntares()
 }
@@ -20,7 +20,7 @@ This function set and init an options "antares_solver" with path to the solver e
 
 \dontrun{
 
-setSolverAntares(path = "C:\\\\Program Files\\\\RTE\\\\Antares\\\\5.0.9\\\\bin\\\\antares-5.0-solver.exe")
+setSolverAntares(path = "antares-solver.exe")
 
 getSolverAntares()
 

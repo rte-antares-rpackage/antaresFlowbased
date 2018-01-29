@@ -2,23 +2,23 @@
 % Please edit documentation in R/writeIni.R
 \name{writeIni}
 \alias{writeIni}
-\title{Write ini file from list obtain by antaresRead:::readIniFile and modify by user}
+\title{Write ini file from list obtain by readIniFile and modify by user}
 \usage{
 writeIni(listData, pathIni)
 }
 \arguments{
-\item{listData}{\code{list}, modified list otain by antaresRead:::readIniFile}
+\item{listData}{\code{list}, modified list otain by readIniFile}
 
 \item{pathIni}{\code{Character}, Path to ini file}
 }
 \description{
-Write ini file from list obtain by antaresRead:::readIniFile and modify by user
+Write ini file from list obtain by readIniFile and modify by user
 }
 \examples{
 
 \dontrun{
 pathIni <- "D:/exemple_test/settings/generaldata.ini"
-generalSetting <- antaresRead:::readIniFile(pathIni)
+generalSetting <- readIniFile(pathIni)
 generalSetting$output$synthesis <- FALSE
 writeIni(generalSetting, pathIni)
 }

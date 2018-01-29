@@ -3,5 +3,6 @@
 library(testthat)
 library(antaresFlowbased)
 library(antaresRead)
+library(data.table)
 
 testthat::test_check("antaresFlowbased")

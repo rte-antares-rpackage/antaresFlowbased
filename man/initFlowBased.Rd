@@ -47,13 +47,10 @@ folder deigned by fb_opts contain files :
 \examples{
 
 \dontrun{
-# target antares study
-path <- "D:/exemple_test"
-antaresRead::setSimulationPath(path, 0)
 
-setFlowbasedPath(model = "model2017")
-
-initFlowBased()
-}
-
+ setSolverAntares("AntaresFolderInstall/bin/antares-6.1-solver.exe")
+ initFlowBased()
+ }
+ 
+ 
 }

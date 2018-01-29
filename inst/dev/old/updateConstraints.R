@@ -38,7 +38,7 @@ updateBindingConstraintsIni <- function(pathWeight, opts = antaresRead::simOptio
 changeBindingConstraints <- function(pathWeight, opts = antaresRead::simOptions()){
   # reading binding constraints
   pathIni <- paste0(opts$inputPath, "/bindingconstraints/bindingconstraints.ini")
-  binding_cstr <- try(antaresRead:::readIniFile(pathIni), silent = TRUE)
+  binding_cstr <- try(readIniFile(pathIni), silent = TRUE)
   if("try-error" %in% class(binding_cstr)){
     stop("Reading binding constraints : ", binding_cstr[1])
   }

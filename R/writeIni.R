@@ -1,13 +1,13 @@
-#' Write ini file from list obtain by antaresRead:::readIniFile and modify by user
+#' Write ini file from list obtain by readIniFile and modify by user
 #'
-#' @param listData \code{list}, modified list otain by antaresRead:::readIniFile
+#' @param listData \code{list}, modified list otain by readIniFile
 #' @param pathIni \code{Character}, Path to ini file
 #'
 #' @examples
 #'
 #' \dontrun{
 #' pathIni <- "D:/exemple_test/settings/generaldata.ini"
-#' generalSetting <- antaresRead:::readIniFile(pathIni)
+#' generalSetting <- readIniFile(pathIni)
 #' generalSetting$output$synthesis <- FALSE
 #' writeIni(generalSetting, pathIni)
 #' }

@@ -11,7 +11,7 @@
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
 #' 
 #' #No strategic reserve
 #' res <- adqPatch()
@@ -23,6 +23,9 @@
 #' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 #' 
 #' }
+#' 
+#' @importFrom stats as.formula cutree dist hclust na.omit runif
+#' @importFrom utils read.table setTxtProgressBar txtProgressBar write.table
 #' 
 #' @export
 adqPatch <- function(mcYears = "all",
@@ -88,10 +91,10 @@ adqPatch <- function(mcYears = "all",
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
-  links[, be := `be - de` + `be - fr` + `be - nl`]
-  links[, de := - `be - de` + `de - fr` + `de - nl`]
-  links[, fr := - `be - fr` - `de - fr`]
-  links[, nl := - `be - nl` - `de - nl`]
+  links[, "be" := `be - de` + `be - fr` + `be - nl`]
+  links[, "de" := - `be - de` + `de - fr` + `de - nl`]
+  links[, "fr" := - `be - fr` - `de - fr`]
+  links[, "nl" := - `be - nl` - `de - nl`]
   
   #Merge with data
   links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
@@ -117,8 +120,8 @@ adqPatch <- function(mcYears = "all",
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){
-    cat("Somes contraints are excludes because they are not in second_member and in weight")
-    cat(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
+    message("Somes contraints are excludes because they are not in second_member and in weight ")
+    message(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]
   }
@@ -133,6 +136,7 @@ adqPatch <- function(mcYears = "all",
   out <- out[LOLD_fr!=0|LOLD_be!=0|LOLD_de!=0|LOLD_nl!=0]
   
   if(nrow(out) == 0){
+    dta <- .preReterunData(dta)
     cat("No row concern by adq patch")
     return(dta)
   }
@@ -143,22 +147,22 @@ adqPatch <- function(mcYears = "all",
     
     ret = 0
     if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
-      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
                  " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
       ret = 1
     }
     if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
-      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
                  " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
       ret = 1
     }
     if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
-      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
                  " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
       ret = 1
     }
     if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
-      cat(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
                  " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
       ret = 1
     }
@@ -227,6 +231,7 @@ adqPatch <- function(mcYears = "all",
   }, simplify = FALSE))
   
   if(nrow(new) == 0){
+    dta <- .preReterunData(dta)
     cat("No row concern by adq patch")
     return(dta)
   }
@@ -399,7 +404,16 @@ adqPatch <- function(mcYears = "all",
     dta$areas[,additionalSR:= 0]
     dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
   }
-  dta$areas[,ipn := NULL]
+  
+  dta <- .preReterunData(dta)
+
+  options(warn = oldw)
+  dta
+}
+
+
+.preReterunData <- function(dta){
+  dta$areas$ipn <- NULL
   dta$areas$value <- NULL
   dta$areas$lole <- NULL
   
@@ -412,12 +426,8 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, c( "mcYear", "area", "timeId"))
   setkeyv(dta$links, c( "mcYear", "link", "timeId"))
   
-  
-  options(warn = oldw)
   dta
 }
-
-
 
 
 
