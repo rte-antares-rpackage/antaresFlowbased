@@ -14,3 +14,4 @@ testStudy <- paste0(temp_dir, "/exemple_test")
 opts <- antaresRead::setSimulationPath(testStudy)
 
 
+# plotFB(1,1,"FR","NL", fb_opts = opts)

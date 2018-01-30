@@ -43,12 +43,13 @@
 #'  }
 #'  
 #'  
-#' @import data.table antaresRead plyr
+#' @import data.table antaresRead plyr antaresEditObject
 #' 
 #' @export
-initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
+initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
                           opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
   
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   #Control antaresSolver >=6.1
   .ctrlSolver()
   
@@ -78,12 +79,19 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   
   #Delete and re-create model_description_fb area
   .deleteOldAreaAndCreatNew(opts)
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   
   #Create new clusters
   .createCluster(tS, opts, W, seM)
   
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
+  
   #Create building C
   .createBindingConstraint(W, opts)
+  
+  
+  #Run antares
+  # runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
   
   
   
@@ -134,9 +142,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   
   endFile <- c("[Default Ruleset]", endFile)
   write(endFile, pathsb)
-  
-  #Run antares
-  runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
+
   
 }
 
