@@ -171,6 +171,22 @@ adqPatch <- function(mcYears = "all",
         ret = 1
       }
     }
+    if(ret == 0){
+      
+      if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+        ret = 1
+      }
+      
+    }
     
     
     if(ret == 0){

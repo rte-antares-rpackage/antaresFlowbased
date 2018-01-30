@@ -74,6 +74,16 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
     stop("scenarios must begin to 1 an all scenarios between 1 and length(unique(scenarios)) must be present")
   }
   
+  
+  
+  ##Test ready-made
+  rediM <- antaresEditObject::readIniFile(paste0(opts$studyPath, "/settings/generaldata.ini"))$general$generate
+  if(!is.na(rediM)){
+    if(grepl("thermal", rediM)){
+      stop("Flow-based modelling can only be used if thermal time-series are ready-made")
+    }
+  }
+  
   #Supress building constains "_fb"
   .supressOldBindingConstraints(opts)
   
