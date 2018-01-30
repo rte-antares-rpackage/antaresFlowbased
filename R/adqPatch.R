@@ -122,7 +122,7 @@ adqPatch <- function(mcYears = "all",
   if(length(contraintsExcludes) > 0){
     message(paste0("Ignored constraint(s): ", paste(contraintsExcludes , collapse = ", ")))
     message("They are not described in the two flow-based files second_member.txt and weight.txt.")
-  
+    
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]
   }
@@ -147,26 +147,32 @@ adqPatch <- function(mcYears = "all",
     outR <- out[X]
     
     ret = 0
-    if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
+    
+    if(!is.null(strategic_reserve_be) | !is.null(strategic_reserve_de))
+    {
+      if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
     }
-    if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
-    }
-    if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
-    }
-    if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
-    }
+    
+    
     if(ret == 0){
       ## addition Baptiste Seguinot 30/06/2017
       # should adequacy patch be run ?
@@ -407,7 +413,7 @@ adqPatch <- function(mcYears = "all",
   }
   
   dta <- .preReterunData(dta)
-
+  
   options(warn = oldw)
   dta
 }
