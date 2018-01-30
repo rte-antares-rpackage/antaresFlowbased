@@ -12,6 +12,7 @@ if (Sys.info()['sysname'] == "Windows") {
 }
 testStudy <- paste0(temp_dir, "/exemple_test")
 opts <- antaresRead::setSimulationPath(testStudy)
-
+pathArea <- file.path(opts$studyPath, "input", "areas")
+write(opts$areaList, file = paste0(pathArea, "/list.txt"))
 
 # plotFB(1,1,"FR","NL", fb_opts = opts)
