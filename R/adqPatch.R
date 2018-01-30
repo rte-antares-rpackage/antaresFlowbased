@@ -88,6 +88,14 @@ adqPatch <- function(mcYears = "all",
   oldw <- getOption("warn")
   options(warn = -1)
   
+  #Suppress note
+  `be - de` <- `de - fr` <- `de - nl` <- `de - nl` <- `be - fr` <- lole <- `UNSP. ENRG` <- `DTG MRG` <- value <- NULL
+  Name <- name <-  `be%nl`<- `de%nl` <- `be%fr`<- V4 <- V2 <- LOLD_fr <- LOLD_be <- LOLD_de <- LOLD_nl <- NULL
+  lole_fr <- lole_be <- lole_de <- lole_nl <- `UNSP. ENRG_fr` <- `UNSP. ENRG_be`<- `UNSP. ENRG_de`<- `UNSP. ENRG_nl` <- NULL
+  Id_day <- Id_hour <- BALANCEN <- BALANCE <- PN <- area <- UNSPN <- strategicMargin <- LOLDN <- NULL
+  `DTG MRGN` <- `FLOW LIN.` <- tocop <- stratReserve <- additionalSRN <- strategicMarginN <- LOLD <- additionalSR <- NULL
+  `be - nl` <- ipn <- NULL
+  
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))

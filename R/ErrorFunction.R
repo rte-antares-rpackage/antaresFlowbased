@@ -12,6 +12,8 @@
 #'
 .univ <- function(nb, bInf, bSup, seed = 123456789)
 {
+  
+  NL <- BE <- DE <- FR <- NULL
   if(!is.null(seed)){
     set.seed(seed)
   }

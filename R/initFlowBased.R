@@ -109,6 +109,9 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
 
 .createCluster <- function(tS, opts, W, seM)
 {
+  
+  Name <- scenarios <- NULL
+  
   #Prepare second member data
   allTs <- names(tS)
   allTs <- allTs[allTs!="Date"]

@@ -90,6 +90,7 @@ identifyFirstDay <- function(opts, firstArea = "FR", secondArea = c("FR", "DE", 
 
 .giveMean7 <- function(area, opts)
 {
+  mod7 <- value <- NULL
   LOAD <- readInputTS(load = area, timeStep = "daily", opts = opts)
   if(nrow(LOAD) == 0)stop(paste0("No data found for ", paste0(area, collapse = ";")))
   outTS <- dcast(LOAD, time~area+tsId, value.var = "load")

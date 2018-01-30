@@ -31,6 +31,8 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
                       dayType = "All", hour = "All", nbFaces = 36,
                       verbose = 0)
 {
+  
+  Id_day <- Period <- NULL
   pb <- txtProgressBar(style = 3)
   univ <- .univ(nb = 500000, bInf = -10000, bSup = 10000)
 
