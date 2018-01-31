@@ -17,6 +17,7 @@
 #' \dontrun{
 #' library(antaresRead)
 #' library(flowBasedClustering)
+#' library(data.table)
 #'
 #' # load climate daily time serires
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
