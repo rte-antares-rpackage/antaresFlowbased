@@ -3,6 +3,7 @@
 export(addTSFile)
 export(adqPatch)
 export(computeFB)
+export(createFBTS)
 export(fbOptions)
 export(generateReportFb)
 export(getAvailableModel)
