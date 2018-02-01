@@ -6,6 +6,7 @@
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
+#' @param controlAntares \code{boolean} for test.
 #' 
 #' @note 
 #' folder deigned by fb_opts contain files :
@@ -47,11 +48,12 @@
 #' 
 #' @export
 initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
-                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
+                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5), controlAntares = TRUE){
   
   suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   #Control antaresSolver >=6.1
-  .ctrlSolver()
+  if(controlAntares)  .ctrlSolver()
+
   
   #test fbModel
   .controlFbMod(fb_opts)
