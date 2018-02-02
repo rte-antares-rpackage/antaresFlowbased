@@ -14,7 +14,7 @@ test_that("make ts", {
   
   multiplier <- data.frame(variable = c("fr_load", "de_wind", "be_wind"),
                            coef = c(1, 352250, 246403))
-  firstDay <- identifyFirstDay(opts2, firstArea = "FR", secondArea = NULL)
+  firstDay <- identifyFirstDay(opts2, firstArea = "fr", secondArea = NULL)
   
   
   interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
