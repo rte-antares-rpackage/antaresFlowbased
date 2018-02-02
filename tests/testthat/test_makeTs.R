@@ -1,4 +1,3 @@
-
 test_that("make ts", {
   opts2 <- antaresRead::setSimulationPath(testStudy2)
   

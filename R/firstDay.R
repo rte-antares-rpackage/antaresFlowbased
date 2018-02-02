@@ -17,7 +17,7 @@
 #' }
 #' 
 #' @export
-identifyFirstDay <- function(opts, firstArea = "FR", secondArea = c("FR", "DE", "BE", "LU", "NL"))
+identifyFirstDay <- function(opts, firstArea = "fr", secondArea = c("fr", "de", "be", "lu", "nl"))
 {
   meanFR <- .giveMean7(firstArea, opts)
   
@@ -91,14 +91,14 @@ identifyFirstDay <- function(opts, firstArea = "FR", secondArea = c("FR", "DE", 
 .giveMean7 <- function(area, opts)
 {
   mod7 <- value <- NULL
-  LOAD <- readInputTS(load = tolower(area), timeStep = "daily", opts = opts)
-  print("LOOOOAD")
-  print("area")
-  print(area)
-  print("get areas")
-  print(getAreas(opts = opts ))
-  print("LOAD")
-  print(LOAD)
+  LOAD <- readInputTS(load = area, timeStep = "daily", opts = opts)
+  # print("LOOOOAD")
+  # print("area")
+  # print(area)
+  # print("get areas")
+  # print(getAreas(opts = opts ))
+  # print("LOAD")
+  # print(LOAD)
   if(nrow(LOAD) == 0)stop(paste0("No data found for ", paste0(area, collapse = ";")))
   outTS <- dcast(LOAD, time~area+tsId, value.var = "load")
   meanByDay <- data.table(date = outTS$time, value =  rowMeans(outTS[, .SD, .SDcols = 2:ncol(outTS)]))
