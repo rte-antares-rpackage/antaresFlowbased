@@ -4,7 +4,7 @@
 # testStudy <- system.file("testdata",package = "antaresFlowbased")
 # if(testStudy == "")testStudy <- system.file("inst/testdata",package = "antaresFlowbased")
 # 
-# temp_dir <- tempdir()
+ temp_dir <- tempdir()
 # if (Sys.info()['sysname'] == "Windows") {
 #   untar(file.path(testStudy, "exemple_test.tgz"), exdir = temp_dir, 
 #         extras = "--force-local")
