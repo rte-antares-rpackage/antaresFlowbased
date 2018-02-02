@@ -8,7 +8,7 @@ context("Function initFlowBased")
 # opts <- antaresRead::setSimulationPath(testStudy)
 
 test_that("test initFlowBased", {
-  
+  opts2 <- antaresRead::setSimulationPath(testStudy2)
   expect_true(identifyFirstDay(opts2) == 1)
   expect_true(suppressWarnings(identifyFirstDay(opts2, secondArea = NULL) == 1))
   expect_warning(identifyFirstDay(opts2, secondArea = NULL))
@@ -17,6 +17,8 @@ test_that("test initFlowBased", {
 
 
 test_that("test initFlowBased", {
+  opts2 <- antaresRead::setSimulationPath(testStudy2)
+  
   fb_opts <- system.file("input/model/p2017", package = "antaresFlowbased")
   if(fb_opts == "") fb_opts <- system.file("inst/input/model/p2017", package = "antaresFlowbased")
   init <- try(initFlowBased(controlAntares = FALSE, fb_opts = fb_opts, scenarios = 1:34, opts = opts2))

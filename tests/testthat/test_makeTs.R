@@ -1,5 +1,7 @@
 
 test_that("make ts", {
+  opts2 <- antaresRead::setSimulationPath(testStudy2)
+  
   matProb <- readRDS(system.file("testdata/proba.RDS", package = "antaresFlowbased"))
   
   setnames(matProb[[1]],"FR_load", "fr_load" )
