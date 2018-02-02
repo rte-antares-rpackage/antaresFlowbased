@@ -2,8 +2,6 @@
 test_that("make ts", {
   matProb <- readRDS(system.file("testdata/proba.RDS", package = "antaresFlowbased"))
   
-  opts <- antaresRead::setSimulationPath(testStudy2)
-  
   setnames(matProb[[1]],"FR_load", "fr_load" )
   setnames(matProb[[2]],"FR_load", "fr_load" )
   
@@ -15,7 +13,7 @@ test_that("make ts", {
   
   multiplier <- data.frame(variable = c("fr_load", "de_wind", "be_wind"),
                            coef = c(1, 352250, 246403))
-  firstDay <- identifyFirstDay(opts, firstArea = "FR", secondArea = NULL)
+  firstDay <- identifyFirstDay(opts2, firstArea = "FR", secondArea = NULL)
   
   
   interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
@@ -24,8 +22,9 @@ test_that("make ts", {
   firstF <- NULL
   for(k in 1:10)
   {
-    ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
-                     interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd, firstDay = firstDay, seed = k)
+    ts <- createFBTS(opts = opts2, probabilityMatrix = matProb, multiplier = multiplier,
+                     interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd,
+                     firstDay = firstDay, seed = k)
     
     
     frLoad <- readInputTS(load = "fr", timeStep = "daily")

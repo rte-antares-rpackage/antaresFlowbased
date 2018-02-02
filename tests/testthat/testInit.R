@@ -8,32 +8,30 @@ context("Function initFlowBased")
 # opts <- antaresRead::setSimulationPath(testStudy)
 
 test_that("test initFlowBased", {
-  opts1 <- setSimulationPath(testStudy2)
   
-  expect_true(identifyFirstDay(opts1) == 1)
-  expect_true(suppressWarnings(identifyFirstDay(opts1, secondArea = NULL) == 1))
-  expect_warning(identifyFirstDay(opts1, secondArea = NULL))
+  expect_true(identifyFirstDay(opts2) == 1)
+  expect_true(suppressWarnings(identifyFirstDay(opts2, secondArea = NULL) == 1))
+  expect_warning(identifyFirstDay(opts2, secondArea = NULL))
   
 })
 
 
 test_that("test initFlowBased", {
-  opts1 <- setSimulationPath(testStudy2)
   fb_opts <- system.file("input/model/p2017", package = "antaresFlowbased")
   if(fb_opts == "") fb_opts <- system.file("inst/input/model/p2017", package = "antaresFlowbased")
-  init <- try(initFlowBased(controlAntares = FALSE, fb_opts = fb_opts, scenarios = 1:34))
+  init <- try(initFlowBased(controlAntares = FALSE, fb_opts = fb_opts, scenarios = 1:34, opts = opts2))
   expect_true(class(init) == "list")
-  opts1 <- setSimulationPath(testStudy2)
+  opts2 <- setSimulationPath(testStudy2)
   
   
-  expect_true("model_description_fb" %in% getAreas(opts = opts1))
+  expect_true("model_description_fb" %in% getAreas(opts = opts2))
 
   
   ctr <- fread(paste0(fb_opts, "/weight.txt"))
-  bdc <- names(readBindingConstraints(opts1))
+  bdc <- names(readBindingConstraints(opts2))
   expect_true(all(paste0(ctr$Name, "_fb") %in% bdc))
   
-  clusters <- antaresRead::readClusterDesc(opts1)
+  clusters <- antaresRead::readClusterDesc(opts2)
   clusters <- clusters[area == "model_description_fb"]
   expect_true(all(clusters$unitcount == 1))
   
