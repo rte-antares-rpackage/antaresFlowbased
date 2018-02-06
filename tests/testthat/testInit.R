@@ -8,46 +8,36 @@ context("Function initFlowBased")
 # opts <- antaresRead::setSimulationPath(testStudy)
 
 test_that("test initFlowBased", {
-  #Init study environment
-  # initFlowBased()
-  # 
-  # #Test if folder user is ok
-  # expect_true("user"%in%list.files(testStudy))
-  # userpatch <- paste0(testStudy, "/user")
-  # 
-  # #Test if folder flowbased is ok
-  # expect_true("flowbased"%in%list.files(userpatch))
-  # userpatch <- paste0(userpatch, "/flowbased")
-  # 
-  # #Test if all files are ok
-  # files <- c("scenario.txt", "second_member.txt", "ts.txt", "weight.txt")
-  # expect_true(unique(files%in%list.files(userpatch)))
-  # 
-  # #Test scenario file
-  # scenario <- paste0(userpatch, "/scenario.txt")
-  # scenario <- data.table::fread(scenario)
-  # expect_true(names(scenario) == "simulation")
-  # expect_true(class(scenario$simulation) == "integer")
-  # 
-  # #Test second_member file
-  # second_member <- paste0(userpatch, "/second_member.txt")
-  # second_member <- data.table::fread(second_member)
-  # expect_true(unique(names(second_member) %in% c("Id_day", "Id_hour", "vect_b", "Name")))
-  # 
-  # #Test ts file
-  # ts <- paste0(userpatch, "/ts.txt")
-  # ts <- data.table::fread(ts)
-  # expect_true(("Date"%in% names(ts) ))
-  # 
-  # #Test if all scenario$simulation have corresponding ts column
-  # ammSc <- as.numeric(unique(names(ts))[!"Date"==names(ts)])
-  # expect_true(unique(unique(scenario$simulation %in%  ammSc) ))
-  # 
-  # #Test weight
-  # weight <- paste0(userpatch, "/weight.txt")
-  # weight <- data.table::fread(weight)
-  # expect_true( "name" %in% names(weight))
+  opts2 <- antaresRead::setSimulationPath(testStudy2)
+  expect_true(identifyFirstDay(opts2) == 1)
+  expect_true(suppressWarnings(identifyFirstDay(opts2, secondArea = NULL) == 1))
+  expect_warning(identifyFirstDay(opts2, secondArea = NULL))
   
-  # unlink(testStudy, recursive = TRUE, force = TRUE)
 })
 
+
+test_that("test initFlowBased", {
+  opts2 <- antaresRead::setSimulationPath(testStudy2)
+  
+  fb_opts <- system.file("input/model/p2017", package = "antaresFlowbased")
+  if(fb_opts == "") fb_opts <- system.file("inst/input/model/p2017", package = "antaresFlowbased")
+  init <- try(initFlowBased(controlAntares = FALSE, fb_opts = fb_opts, scenarios = 1:34, opts = opts2))
+  expect_true(class(init) == "list")
+  opts2 <- setSimulationPath(testStudy2)
+  
+  
+  expect_true("model_description_fb" %in% getAreas(opts = opts2))
+
+  
+  ctr <- fread(paste0(fb_opts, "/weight.txt"))
+  bdc <- names(readBindingConstraints(opts2))
+  expect_true(all(paste0(ctr$Name, "_fb") %in% bdc))
+  
+  clusters <- antaresRead::readClusterDesc(opts2)
+  clusters <- clusters[area == "model_description_fb"]
+  expect_true(all(clusters$unitcount == 1))
+  
+  clbdc <- all(clusters$cluster %in% paste0("model_description_fb_", tolower(bdc)))
+  expect_true(clbdc)
+  
+})

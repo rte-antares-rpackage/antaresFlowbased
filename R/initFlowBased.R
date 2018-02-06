@@ -6,6 +6,7 @@
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
+#' @param controlAntares \code{boolean} for test.
 #' 
 #' @note 
 #' folder deigned by fb_opts contain files :
@@ -43,14 +44,16 @@
 #'  }
 #'  
 #'  
-#' @import data.table antaresRead plyr
+#' @import data.table antaresRead plyr antaresEditObject
 #' 
 #' @export
-initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
-                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
+initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
+                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5), controlAntares = TRUE){
   
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   #Control antaresSolver >=6.1
-  .ctrlSolver()
+  if(controlAntares)  .ctrlSolver()
+
   
   #test fbModel
   .controlFbMod(fb_opts)
@@ -73,24 +76,44 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
     stop("scenarios must begin to 1 an all scenarios between 1 and length(unique(scenarios)) must be present")
   }
   
+  
+  
+  ##Test ready-made
+  rediM <- antaresEditObject::readIniFile(paste0(opts$studyPath, "/settings/generaldata.ini"))$general$generate
+  if(!is.na(rediM)){
+    if(grepl("thermal", rediM)){
+      stop("Flow-based modelling can only be used if thermal time-series are ready-made")
+    }
+  }
+  
   #Supress building constains "_fb"
   .supressOldBindingConstraints(opts)
   
   #Delete and re-create model_description_fb area
   .deleteOldAreaAndCreatNew(opts)
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   
   #Create new clusters
-  .createCluster(tS, opts, W, seM)
+  .createCluster(tS, opts, W, seM, scenarios)
+  
+  suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   
   #Create building C
   .createBindingConstraint(W, opts)
   
   
+  #Run antares
+  # runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
+  
+  
   
 }
 
-.createCluster <- function(tS, opts, W, seM)
+.createCluster <- function(tS, opts, W, seM, scenarios)
 {
+  
+  Name <- NULL
+  
   #Prepare second member data
   allTs <- names(tS)
   allTs <- allTs[allTs!="Date"]
@@ -102,9 +125,9 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
     clusterName <- paste0(tpR$name, "_fb")
     nomCap <- max(seM[Name==tpR$name]$vect_b)
     modulation <- matrix(1, ncol = 4, nrow = 8760)
-    
-    tsDta <- sapply(allTs, function(X){
-      tsT <- tS[[X]]
+    # modulation[,1] <- 0
+    tsDta <- sapply(allTs, function(ZZ){
+      tsT <- tS[[ZZ]]
       tsT <- data.table(Id_day = tsT)
       seM[Name == tpR$name][tsT, on="Id_day", allow.cartesian=TRUE]$vect_b
     })
@@ -125,18 +148,39 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions(),
   #Update senario builder
   pathsb <- file.path(opts$studyPath, "settings", "scenariobuilder.dat")
   opts <- setSimulationPath(opts$studyPath, "input")
-  firstLetter <- c("l", "s", "w")
+  
+  
+  #####ToDo
+  
+  oldFile <- read.table(pathsb, sep = "@")
+  oldFile <- oldFile[-1,]
+  allRes <- as.vector(oldFile)
+  splitRes <- strsplit(allRes, ",")
+  fl <- lapply(splitRes, function(x){x[2]})
+  fl <- unlist(fl)
+  toRm <- which(fl == "model_description_fb")
+  if(length(toRm) > 0){
+    allRes <- allRes[-toRm]
+  }
+  firstLetter <- c("t")
   areas <- getAreas(opts = opts)
+  clusterD <- readClusterDesc(opts = opts)
+  clusterD <- clusterD[clusterD$area == "model_description_fb"]
+  prim <- paste0("t,", clusterD$area)
   firstC <- 1:length(scenarios)-1
-  allValue <- expand.grid( firstC, areas, firstLetter)
-  endFile <- paste(allValue$Var3, allValue$Var2, allValue$Var1, sep=",")
-  endFile <- paste0(endFile, " = ", scenarios)
+  allValue <- expand.grid( prim, firstC)
   
-  endFile <- c("[Default Ruleset]", endFile)
+  
+  endFile <- paste(allValue$Var1, allValue$Var2, sep=",")
+  endFile <- paste0(endFile, ",", clusterD$cluster, " = ", rep(scenarios,each = length(clusterD$area)) )
+
+  
+  
+  
+  endFile <- c("[Default Ruleset]", allRes, endFile)
   write(endFile, pathsb)
-  
-  #Run antares
-  runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
+
+  ###End ToDo
   
 }
 

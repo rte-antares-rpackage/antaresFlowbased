@@ -333,6 +333,9 @@ positionViz <- function(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2){
 }
 
 .giveIpn <- function(dta){
+  be <- de <- fr <- nl <- `be - de` <- `be - fr` <- `be - nl` <- `de - fr` <- `de - nl` <- lole <- value <-NULL
+  `UNSP. ENRG` <- `DTG MRG` <- NULL
+  
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
   links[, be :=  `be - de` + `be - fr` + `be - nl`]
   links[, de := - `be - de` + `de - fr` + `de - nl`]

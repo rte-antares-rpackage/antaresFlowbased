@@ -4,8 +4,9 @@
 \alias{initFlowBased}
 \title{Generate environment for a flow-based study}
 \usage{
-initFlowBased(fb_opts = antaresFlowbased::fbOptions(),
-  opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5))
+initFlowBased(fb_opts = antaresFlowbased::fbOptions()$path,
+  opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5),
+  controlAntares = TRUE)
 }
 \arguments{
 \item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
@@ -13,6 +14,8 @@ initFlowBased(fb_opts = antaresFlowbased::fbOptions(),
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{scenarios}{\code{numeric} scenarios use for write scenario.txt.}
+
+\item{controlAntares}{\code{boolean} for test.}
 }
 \description{
 Generate environment for a flow-based study

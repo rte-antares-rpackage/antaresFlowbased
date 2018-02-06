@@ -4,8 +4,8 @@
 \alias{identifyFirstDay}
 \title{Find first day of a study}
 \usage{
-identifyFirstDay(opts, firstArea = "FR", secondArea = c("FR", "DE", "BE",
-  "LU", "NL"))
+identifyFirstDay(opts, firstArea = "fr", secondArea = c("fr", "de", "be",
+  "lu", "nl"))
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}

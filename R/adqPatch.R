@@ -88,6 +88,14 @@ adqPatch <- function(mcYears = "all",
   oldw <- getOption("warn")
   options(warn = -1)
   
+  #Suppress note
+  `be - de` <- `de - fr` <- `de - nl` <- `de - nl` <- `be - fr` <- lole <- `UNSP. ENRG` <- `DTG MRG` <- value <- NULL
+  Name <- name <-  `be%nl`<- `de%nl` <- `be%fr`<- V4 <- V2 <- LOLD_fr <- LOLD_be <- LOLD_de <- LOLD_nl <- NULL
+  lole_fr <- lole_be <- lole_de <- lole_nl <- `UNSP. ENRG_fr` <- `UNSP. ENRG_be`<- `UNSP. ENRG_de`<- `UNSP. ENRG_nl` <- NULL
+  Id_day <- Id_hour <- BALANCEN <- BALANCE <- PN <- area <- UNSPN <- strategicMargin <- LOLDN <- NULL
+  `DTG MRGN` <- `FLOW LIN.` <- tocop <- stratReserve <- additionalSRN <- strategicMarginN <- LOLD <- additionalSR <- NULL
+  `be - nl` <- ipn <- NULL
+  
   #Compute Net position from links
   dta <- data.table::copy(dta)
   links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
@@ -120,8 +128,9 @@ adqPatch <- function(mcYears = "all",
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){
-    message("Somes contraints are excludes because they are not in second_member and in weight ")
-    message(paste0("contraints exclude(s) : ", paste(contraintsExcludes , collapse = ", ")))
+    message(paste0("Ignored constraint(s): ", paste(contraintsExcludes , collapse = ", ")))
+    message("They are not described in the two flow-based files second_member.txt and weight.txt.")
+    
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]
   }
@@ -146,26 +155,48 @@ adqPatch <- function(mcYears = "all",
     outR <- out[X]
     
     ret = 0
-    if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
+    
+    if(!is.null(strategic_reserve_be) | !is.null(strategic_reserve_de))
+    {
+      if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
+      if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
+        ret = 1
+      }
     }
-    if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
+    if(ret == 0){
+      
+      if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+        ret = 1
+      }
+      if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+        ret = 1
+      }
+      
     }
-    if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
-    }
-    if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
-      warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
-                 " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
-      ret = 1
-    }
+    
+    
     if(ret == 0){
       ## addition Baptiste Seguinot 30/06/2017
       # should adequacy patch be run ?
@@ -406,7 +437,7 @@ adqPatch <- function(mcYears = "all",
   }
   
   dta <- .preReterunData(dta)
-
+  
   options(warn = oldw)
   dta
 }

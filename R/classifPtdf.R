@@ -6,6 +6,9 @@
 #' @noRd
 giveBClassif <- function(PTDF, nbClust = 36)
 {
+  BE <- DE <- FR <- NL <- NULL
+  
+  
   PTDF <- PTDF[!(DE == 0 & DE == 0 & FR == 0)]
   PTDFKm <- PTDF[,list(BE-NL, DE-NL, FR - NL)]
 
