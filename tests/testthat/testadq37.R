@@ -39,7 +39,7 @@ test_that("compares test case results", {
 })
 
 
-# test_that("checks message when unused binding constraints", {
-#   expect_message(.applyAdq(opts = opts, dataNoStrat_ini),
-#                  "Somes contraints are excludes because they are not in second_member and in weightcontraints exclude(s) : FB37")
-# })
+test_that("checks message when unused binding constraints", {
+  expect_message(.applyAdq(opts = opts, dataNoStrat_ini),
+                 "Somes contraints are excludes because they are not in second_member and in weightcontraints exclude(s) : FB37")
+})
