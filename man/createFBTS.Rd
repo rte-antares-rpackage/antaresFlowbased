@@ -10,7 +10,7 @@ createFBTS(opts, probabilityMatrix, multiplier, interSeasonBegin,
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{probabilityMatrix}{\code{list} from \link{flowBasedClustering::getProbability()}. Columns must be rename to corespond to antares names.
+\item{probabilityMatrix}{\code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
 Format used is : area_variable (Ex, fr_load, de_solar ...)}
 
 \item{multiplier}{\code{data.frame} contain 2 columns.
@@ -25,6 +25,8 @@ Format used is : area_variable (Ex, fr_load, de_solar ...)}
 
 \item{firstDay}{\code{numeric} indication of type of first day of study. If the first day of study is a
 wednesday, you must specify firstDay = 3.}
+
+\item{seed}{\code{numeric} fix random seed}
 }
 \description{
 Create time series of typical days for antares
@@ -34,6 +36,7 @@ Create time series of typical days for antares
 \dontrun{
 library(antaresRead)
 library(flowBasedClustering)
+library(data.table)
 
 # load climate daily time serires
 climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
@@ -50,7 +53,8 @@ levelsProba <- list(summerWd = list(FR_load = c(0.5), DE_wind = c(1/3, 2/3), DE_
                     interSeasonWe = list(FR_load = c(0.5, 0.6),
                                          DE_wind = c(1/3, 2/3),
                                          DE_solar = 0.3))
-matProb <- flowBasedClustering::getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
+matProb <- getProbability(climate, clusterTD,
+ levelsProba = levelsProba, extrapolationNA = TRUE)
 
 
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
@@ -72,7 +76,8 @@ interSeasonEnd <- as.Date(c("2017-10-04", "2018-05-02"))
 
 
 ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
-                 interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd, firstDay = firstDay)
+                 interSeasonBegin = interSeasonBegin,
+                 interSeasonEnd = interSeasonEnd, firstDay = firstDay)
 }
                  
 }

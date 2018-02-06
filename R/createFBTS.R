@@ -1,7 +1,7 @@
 #' Create time series of typical days for antares
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param probabilityMatrix \code{list} from \link{flowBasedClustering::getProbability()}. Columns must be rename to corespond to antares names.
+#' @param probabilityMatrix \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
 #' Format used is : area_variable (Ex, fr_load, de_solar ...)
 #' @param multiplier \code{data.frame} contain 2 columns.
 #' \itemize{
@@ -12,6 +12,8 @@
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
 #' @param firstDay \code{numeric} indication of type of first day of study. If the first day of study is a
 #' wednesday, you must specify firstDay = 3.
+#' @param seed \code{numeric} fix random seed
+#' 
 #' @examples
 #'
 #' \dontrun{
@@ -34,7 +36,8 @@
 #'                     interSeasonWe = list(FR_load = c(0.5, 0.6),
 #'                                          DE_wind = c(1/3, 2/3),
 #'                                          DE_solar = 0.3))
-#' matProb <- flowBasedClustering::getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
+#' matProb <- getProbability(climate, clusterTD,
+#'  levelsProba = levelsProba, extrapolationNA = TRUE)
 #' 
 #' 
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
@@ -56,7 +59,8 @@
 #' 
 #' 
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
-#'                  interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd, firstDay = firstDay)
+#'                  interSeasonBegin = interSeasonBegin,
+#'                  interSeasonEnd = interSeasonEnd, firstDay = firstDay)
 #' }
 #'                  
 #' @import data.table
@@ -80,7 +84,7 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
     if(!all(multiplier$variable %in% names(X))){
       stop("All names contains in multiplier$variable must be present in probabilityMatrix")
     }
-  })%>%invisible()
+  })%>>%invisible()
   
   #interSeasonBegin
   interSeasonBegin <- as.Date(interSeasonBegin)
