@@ -94,7 +94,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   
   #Create new clusters
-  .createCluster(tS, opts, W, seM)
+  .createCluster(tS, opts, W, seM, scenarios)
   
   suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   
@@ -109,10 +109,10 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
 }
 
-.createCluster <- function(tS, opts, W, seM)
+.createCluster <- function(tS, opts, W, seM, scenarios)
 {
   
-  Name <- scenarios <- NULL
+  Name <- NULL
   
   #Prepare second member data
   allTs <- names(tS)
@@ -125,9 +125,9 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
     clusterName <- paste0(tpR$name, "_fb")
     nomCap <- max(seM[Name==tpR$name]$vect_b)
     modulation <- matrix(1, ncol = 4, nrow = 8760)
-    
-    tsDta <- sapply(allTs, function(X){
-      tsT <- tS[[X]]
+    # modulation[,1] <- 0
+    tsDta <- sapply(allTs, function(ZZ){
+      tsT <- tS[[ZZ]]
       tsT <- data.table(Id_day = tsT)
       seM[Name == tpR$name][tsT, on="Id_day", allow.cartesian=TRUE]$vect_b
     })
@@ -148,16 +148,39 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   #Update senario builder
   pathsb <- file.path(opts$studyPath, "settings", "scenariobuilder.dat")
   opts <- setSimulationPath(opts$studyPath, "input")
-  firstLetter <- c("l", "s", "w")
-  areas <- getAreas(opts = opts)
-  firstC <- 1:length(scenarios)-1
-  allValue <- expand.grid( firstC, areas, firstLetter)
-  endFile <- paste(allValue$Var3, allValue$Var2, allValue$Var1, sep=",")
-  endFile <- paste0(endFile, " = ", scenarios)
   
-  endFile <- c("[Default Ruleset]", endFile)
+  
+  #####ToDo
+  
+  oldFile <- read.table(pathsb, sep = "@")
+  oldFile <- oldFile[-1,]
+  allRes <- as.vector(oldFile)
+  splitRes <- strsplit(allRes, ",")
+  fl <- lapply(splitRes, function(x){x[2]})
+  fl <- unlist(fl)
+  toRm <- which(fl == "model_description_fb")
+  if(length(toRm) > 0){
+    allRes <- allRes[-toRm]
+  }
+  firstLetter <- c("t")
+  areas <- getAreas(opts = opts)
+  clusterD <- readClusterDesc(opts = opts)
+  clusterD <- clusterD[clusterD$area == "model_description_fb"]
+  prim <- paste0("t,", clusterD$area)
+  firstC <- 1:length(scenarios)-1
+  allValue <- expand.grid( prim, firstC)
+  
+  
+  endFile <- paste(allValue$Var1, allValue$Var2, sep=",")
+  endFile <- paste0(endFile, ",", clusterD$cluster, " = ", rep(scenarios,each = length(clusterD$area)) )
+
+  
+  
+  
+  endFile <- c("[Default Ruleset]", allRes, endFile)
   write(endFile, pathsb)
 
+  ###End ToDo
   
 }
 
