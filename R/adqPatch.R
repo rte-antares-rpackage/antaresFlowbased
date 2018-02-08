@@ -156,7 +156,7 @@ adqPatch <- function(mcYears = "all",
     
     ret = 0
     
-    if(!is.null(strategic_reserve_be) | !is.null(strategic_reserve_de))
+    if(is.null(strategic_reserve_be) | is.null(strategic_reserve_de))
     {
       if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
         warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
