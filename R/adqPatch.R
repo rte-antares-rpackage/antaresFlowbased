@@ -84,7 +84,8 @@ adqPatch <- function(mcYears = "all",
 #' @param ... use for test
 #' 
 #' @noRd
-.applyAdq <- function(opts, dta, strategic_reserve_be = NULL, strategic_reserve_de = NULL, mcYears = "all", ...){
+.applyAdq <- function(opts, dta, strategic_reserve_be = NULL,
+                      strategic_reserve_de = NULL, mcYears = "all", ...){
   oldw <- getOption("warn")
   options(warn = -1)
   
