@@ -102,13 +102,6 @@ get_PN <- function(links){
 
 
 
-test_that("checks warning when strategic reserves in the country", {
-  expect_warning(.applyAdq(opts = opts, dataNoStrat_ini),
-                 "mcYear : 589 timeId : 2017-12-07 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
-  expect_warning(.applyAdq(opts = opts, dataNoStrat_ini),
-                 "mcYear : 589 timeId : 2017-12-11 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
-})
-
 
 test_that("compares test case results", {
    expect_true(all.equal(area_exp,area_test))

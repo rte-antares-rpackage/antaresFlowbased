@@ -128,8 +128,8 @@ adqPatch <- function(mcYears = "all",
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){
-    message(paste0("Ignored constraint(s): ", paste(contraintsExcludes , collapse = ", ")))
-    message("They are not described in the two flow-based files second_member.txt and weight.txt.")
+    message(paste0("Ignored constraint(s): ", paste(contraintsExcludes , collapse = ", "), "; They are not described in the two flow-based files second_member.txt and weight.txt."))
+
     
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]

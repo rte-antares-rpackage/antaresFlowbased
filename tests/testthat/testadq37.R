@@ -11,7 +11,8 @@ opts$studyPath <- gsub("/user/flowbased/ts.txt","" , opts)
 
 # launch adq patch
 dataNoStrat_ini <- readRDS(system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased"))
-dataNoStrat_adq <- .applyAdq(opts = opts, dataNoStrat_ini)
+dataNoStrat_ini2 <- copy(dataNoStrat_ini)
+dataNoStrat_adq <- .applyAdq(opts = opts, dataNoStrat_ini2)
 
 # test results
 area_test <- dataNoStrat_adq$areas
@@ -40,6 +41,6 @@ test_that("compares test case results", {
 
 
 test_that("checks message when unused binding constraints", {
-  expect_message(.applyAdq(opts = opts, dataNoStrat_ini),
-                 "Somes contraints are excludes because they are not in second_member and in weightcontraints exclude(s) : FB37")
+  dataNoStrat_ini3 <- copy(dataNoStrat_ini)
+  expect_message(.applyAdq(opts = opts, dataNoStrat_ini3))
 })
