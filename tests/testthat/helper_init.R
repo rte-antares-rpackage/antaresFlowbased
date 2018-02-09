@@ -228,7 +228,7 @@ isDTGHigher <- function(area, area_adq){
   
   temp <- merge(temp1, temp2, by=c("mcYear","timeId"),all = TRUE)
   temp[,delta:=(tot_MRG_adq - tot_MRG_ini)]
-  all(temp$delta >= -0.00000000001)
+  all(temp$delta >= 0)
 }
 
 ## function
