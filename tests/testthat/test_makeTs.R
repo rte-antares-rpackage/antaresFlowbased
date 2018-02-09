@@ -1,5 +1,9 @@
+context("createFBTS")
+
+
 test_that("make ts", {
-  opts2 <- antaresRead::setSimulationPath(testStudy2)
+
+  op5 <- antaresRead::setSimulationPath(testStudy2)
   
   matProb <- readRDS(system.file("testdata/proba.RDS", package = "antaresFlowbased"))
   
@@ -14,7 +18,7 @@ test_that("make ts", {
   
   multiplier <- data.frame(variable = c("fr_load", "de_wind", "be_wind"),
                            coef = c(1, 352250, 246403))
-  firstDay <- identifyFirstDay(opts2, firstArea = "fr", secondArea = NULL)
+  firstDay <- suppressWarnings(identifyFirstDay(op5, firstArea = "fr", secondArea = NULL))
   
   
   interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
@@ -23,14 +27,14 @@ test_that("make ts", {
   firstF <- NULL
   for(k in 1:10)
   {
-    ts <- createFBTS(opts = opts2, probabilityMatrix = matProb, multiplier = multiplier,
+    ts <- createFBTS(opts = op5, probabilityMatrix = matProb, multiplier = multiplier,
                      interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd,
-                     firstDay = firstDay, seed = k)
+                     firstDay = firstDay, seed = k, silent = TRUE)
     
     
-    frLoad <- readInputTS(load = "fr", timeStep = "daily")
-    windbe <- readInputTS(wind = c("be"), timeStep = "daily")
-    windde <- readInputTS(wind = c("de"), timeStep = "daily")
+    frLoad <- readInputTS(load = "fr", timeStep = "daily", showProgress = FALSE)
+    windbe <- readInputTS(wind = c("be"), timeStep = "daily", showProgress = FALSE)
+    windde <- readInputTS(wind = c("de"), timeStep = "daily", showProgress = FALSE)
     allDta <- data.table(frLoad, be = windbe[["wind"]],de = windde[["wind"]])
     allDta <- allDta[tsId == 1]
     
@@ -50,7 +54,6 @@ test_that("make ts", {
     prob2 <- 0.66
     
     firstF <- c(firstF, ts[ts$time == data1$time]$`1`)
-    print(k)
   }
   expect_true(2%in%firstF)
   expect_true(1%in%firstF)

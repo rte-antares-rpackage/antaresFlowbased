@@ -91,7 +91,7 @@ identifyFirstDay <- function(opts, firstArea = "fr", secondArea = c("fr", "de", 
 .giveMean7 <- function(area, opts)
 {
   mod7 <- value <- NULL
-  LOAD <- readInputTS(load = area, timeStep = "daily", opts = opts)
+  LOAD <- readInputTS(load = area, timeStep = "daily", opts = opts, showProgress = FALSE)
   # print("LOOOOAD")
   # print("area")
   # print(area)

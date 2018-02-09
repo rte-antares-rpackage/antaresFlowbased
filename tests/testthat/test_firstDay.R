@@ -25,6 +25,6 @@ test_that("test .giveFstDay", {
 
 
 test_that("test identifyFirstDay", {
-  expect_error(identifyFirstDay(opts, "mynoarea", "de"))
+  expect_error(suppressWarnings(identifyFirstDay(opts, "mynoarea", "de")))
   
 })

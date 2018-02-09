@@ -13,6 +13,7 @@
 #' @param firstDay \code{numeric} indication of type of first day of study. If the first day of study is a
 #' wednesday, you must specify firstDay = 3.
 #' @param seed \code{numeric} fix random seed
+#' @param silent \code{boolean} progress bar.
 #' 
 #' @examples
 #'
@@ -66,7 +67,7 @@
 #' @import data.table
 #' @export
 createFBTS <- function(opts, probabilityMatrix, multiplier,
-                       interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017){
+                       interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017, silent = FALSE){
   
   
   
@@ -120,6 +121,7 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
     reg <- list(X[1])
     names(reg) <- X[2]
     reg$timeStep <- "daily"
+    reg$showProgress <- !silent
     TS <- do.call("readInputTS", reg)
     TS <- .formatTs(TS)
     TS
@@ -145,15 +147,16 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   outTs <- data.table(outTs)
   #Compute typical day, first version (a bit slow) compute is done row/row
   quantiles <- data.frame(quantiles)
-  cat("Compute typical day\n")
-  pb <- txtProgressBar(char = "=", style = 3)
+  if(!silent)cat("Compute typical day\n")
+  if(!silent)pb <- txtProgressBar(char = "=", style = 3)
+  
   nN <- nrow(outTs)
   outTs$typicalDay <- sapply(1:nrow(outTs), function(R){
     # if(R%%100==0)print(R)
     #Select usefull data
     # outTs1 <- outTs[R]
     
-    setTxtProgressBar(pb, R/nN)
+    if(!silent)setTxtProgressBar(pb, R/nN)
     oo <- as.list(outTs[R])
     clAs <- oo$class
     

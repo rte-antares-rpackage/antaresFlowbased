@@ -5,7 +5,7 @@
 \title{Create time series of typical days for antares}
 \usage{
 createFBTS(opts, probabilityMatrix, multiplier, interSeasonBegin,
-  interSeasonEnd, firstDay, seed = 4052017)
+  interSeasonEnd, firstDay, seed = 4052017, silent = FALSE)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
@@ -27,6 +27,8 @@ Format used is : area_variable (Ex, fr_load, de_solar ...)}
 wednesday, you must specify firstDay = 3.}
 
 \item{seed}{\code{numeric} fix random seed}
+
+\item{silent}{\code{boolean} progress bar.}
 }
 \description{
 Create time series of typical days for antares
