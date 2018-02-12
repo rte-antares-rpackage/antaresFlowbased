@@ -43,17 +43,14 @@
 #' 
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
 #' 
-#' setnames(matProb[[1]],"FR_load", "fr_load" )
-#' setnames(matProb[[2]],"FR_load", "fr_load" )
 #' 
-#' setnames(matProb[[1]],"DE_wind", "de_wind" )
-#' setnames(matProb[[2]],"DE_wind", "de_wind" )
 #' 
-#' setnames(matProb[[1]],"DE_solar", "de_solar" )
-#' setnames(matProb[[2]],"DE_solar", "de_solar" )
+#' matProb <- setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
+#'                                    c("fr_load", "de_wind", "de_solar"))
 #' 
 #' multiplier <- data.frame(variable = c("fr_load", "de_wind", "de_solar"),
 #'                          coef = c(1, 352250, 246403))
+#'                          
 #' firstDay <- identifyFirstDay(opts)
 #' interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
 #' interSeasonEnd <- as.Date(c("2017-10-04", "2018-05-02"))
@@ -219,4 +216,17 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   tsend <- outTs[, .SD, .SDcols = c("time", "tsId", "typicalDay")]
   tsend <- dcast(tsend, time~tsId, value.var = "typicalDay")
   tsend
+}
+
+#' Change name for probabilityMatrix
+#'
+#' @param probabilityMatrix \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
+#' @param oldName \code{character} vector of old names
+#' @param newName \code{character} vector of new names
+#' 
+#' @export
+setNamesProbabilityMatrix <- function(data, oldName, newName){
+  setnames(data[[1]],oldName, newName)
+  setnames(data[[2]],oldName, newName)
+  data
 }

@@ -61,6 +61,10 @@ matProb <- getProbability(climate, clusterTD,
 
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
 
+
+
+setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
+                                   c("fr_load", "de_wind", "de_solar"))
 setnames(matProb[[1]],"FR_load", "fr_load" )
 setnames(matProb[[2]],"FR_load", "fr_load" )
 
