@@ -24,7 +24,7 @@ test_that("make ts", {
   interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
   interSeasonEnd <- as.Date(c("2017-10-04", "2018-05-02"))
   
-  firstF <- NULL
+  firstF <- secondF <-  NULL
   for(k in 1:10)
   {
     ts <- createFBTS(opts = op5, probabilityMatrix = matProb, multiplier = multiplier,
@@ -42,21 +42,22 @@ test_that("make ts", {
     calendar <- .getVirtualCalendar(dates, interSeasonBegin, interSeasonEnd, firstDay)
     
     data1 <- allDta[180]
-    whoIs <- lapply(calendar, function(X){
-      data1$time%in%X
-    })
-    saison <- names(which(unlist(whoIs)))
-    
-    quant <- matProb[[2]][class == saison]
-    prb <- matProb[[1]][class == saison]
-    prb[fr_load == "0_0.5" & de_wind == "0_0.3333" & be_wind == "0_0.5"]
-    prob1 <- 0.33
-    prob2 <- 0.66
-    
+   
     firstF <- c(firstF, ts[ts$time == data1$time]$`1`)
+    
+    data2 <- allDta[7]
+    
+    secondF <- c(secondF, ts[ts$time == data2$time]$`1`)
+    
+    
   }
   expect_true(2%in%firstF)
   expect_true(1%in%firstF)
   expect_true(all(firstF%in%c(1, 2)))
+  expect_true(all(secondF == 6))
+  
+  
+  
+  
   
 })

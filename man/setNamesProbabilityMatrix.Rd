@@ -7,11 +7,11 @@
 setNamesProbabilityMatrix(data, oldName, newName)
 }
 \arguments{
+\item{data}{\code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.}
+
 \item{oldName}{\code{character} vector of old names}
 
 \item{newName}{\code{character} vector of new names}
-
-\item{probabilityMatrix}{\code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.}
 }
 \description{
 Change name for probabilityMatrix

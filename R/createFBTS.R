@@ -220,7 +220,7 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
 
 #' Change name for probabilityMatrix
 #'
-#' @param probabilityMatrix \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
+#' @param data \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
 #' @param oldName \code{character} vector of old names
 #' @param newName \code{character} vector of new names
 #' 
