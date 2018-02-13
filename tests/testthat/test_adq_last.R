@@ -4,10 +4,10 @@ context("adq + strategic reserved")
 test_that("adq strategic reserved", {
   
   
-  aread <- system.file("ADQSTRATMRG/new_area.csv", package = "antaresFlowbased")
-  if(aread == "")aread <- system.file("inst/ADQSTRATMRG/new_area.csv", package = "antaresFlowbased")
-  linkd <- system.file("ADQSTRATMRG/new_links.csv", package = "antaresFlowbased")
-  if(linkd == "")linkd <- system.file("inst/ADQSTRATMRG/new_links.csv", package = "antaresFlowbased")
+  aread <- system.file("testdata/adq/General/new_area.csv", package = "antaresFlowbased")
+  if(aread == "")aread <- system.file("inst/testdata/adq/General/new_area.csv", package = "antaresFlowbased")
+  linkd <- system.file("testdata/adq/General/new_links.csv", package = "antaresFlowbased")
+  if(linkd == "")linkd <- system.file("inst/testdata/adq/General/new_links.csv", package = "antaresFlowbased")
   
   
   
@@ -21,8 +21,8 @@ test_that("adq strategic reserved", {
   adqWhioutStratMrg <- suppressWarnings(.applyAdq(opts = opts3, dta))
   
   
-  areaADQ <- fread(system.file("ADQSTRATMRG/adqpatch_area.csv", package = "antaresFlowbased"))
-  linkADQ <- fread(system.file("ADQSTRATMRG/adqpatch_links.csv", package = "antaresFlowbased"))
+  areaADQ <- fread(system.file("testdata/adq/General/adqpatch_area.csv", package = "antaresFlowbased"))
+  linkADQ <- fread(system.file("testdata/adq/General/adqpatch_links.csv", package = "antaresFlowbased"))
   
   areaADQ <- as.antaresDataTable(areaADQ, timeStep = "hourly", type = "area", synthesis = FALSE)
   linkADQ <- as.antaresDataTable(linkADQ, timeStep = "hourly", type = "link", synthesis = FALSE)
@@ -52,8 +52,8 @@ test_that("adq strategic reserved", {
   
   
   with_mock(readAntares = function(...){
-    beS <- system.file("ADQSTRATMRG/be_strategic.csv", package = "antaresFlowbased")
-    if(beS == "")beS <-  system.file("inst/ADQSTRATMRG/be_strategic.csv", package = "antaresFlowbased")
+    beS <- system.file("testdata/adq/General/be_strategic.csv", package = "antaresFlowbased")
+    if(beS == "")beS <-  system.file("inst/testdata/adq/General/be_strategic.csv", package = "antaresFlowbased")
     
     beStrat <- fread(beS, sep = ";")
     beStrat <- as.antaresDataTable(beStrat, timeStep = "hourly", type = "area", synthesis = FALSE)
@@ -117,8 +117,8 @@ test_that("adq strategic reserved", {
   
   
   with_mock(readAntares = function(...){
-    beS <- system.file("ADQSTRATMRG/de_strategic.csv", package = "antaresFlowbased")
-    if(beS == "")beS <-  system.file("inst/ADQSTRATMRG/de_strategic.csv", package = "antaresFlowbased")
+    beS <- system.file("testdata/adq/General/de_strategic.csv", package = "antaresFlowbased")
+    if(beS == "")beS <-  system.file("inst/testdata/adq/General/de_strategic.csv", package = "antaresFlowbased")
     
     beStrat <- fread(beS, sep = ";")
     beStrat <- as.antaresDataTable(beStrat, timeStep = "hourly", type = "area", synthesis = FALSE)
