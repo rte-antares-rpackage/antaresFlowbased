@@ -4,39 +4,39 @@
 \alias{positionViz}
 \title{Graph function}
 \usage{
-positionViz(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2)
+positionViz(opts, data, dayType, hour, ctry1, ctry2)
 }
 \arguments{
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
+\item{data}{\code{antaresDataList} import with \link{readAntares}}
 
 \item{dayType}{: day type}
 
 \item{hour}{: hour}
 
-\item{mcYears}{: mcYears}
-
 \item{ctry1}{: first country}
 
 \item{ctry2}{: second country}
+
+\item{mcYears}{: mcYears}
 }
 \description{
 Graph function
 }
 \examples{
 \dontrun{
-study <- "D:/Users/BBB/Desktop/exemple_test_BP"
-# set the typical days used in the study
-fb_opts <- setFlowbasedPath(model = "model2017")
-# select the output study
-output <- antaresRead::setSimulationPath(study, -1)
+study <- "D:/Users/titorobe/Desktop/antaresStudy"
+
+opts <- antaresRead::setSimulationPath(study, -1)
+dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+                                links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
+                                select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
 
 ## plot a domain and the matching output points 
-positionViz(opts = output, 
-         fb_opts = fb_opts, 
-         dayType = 5, hour = 19, 
-         mcYears = 1, 
+positionViz(opts = opts, 
+         data = dta,
+         dayType = 1, hour =19:20, 
          ctry1 = "BE", ctry2 = "FR")
 
 

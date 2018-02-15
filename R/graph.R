@@ -221,10 +221,49 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 
 
 
+#' Run shiny visualisation of position
+#'
+#' @param dta \code{antaresDataList} load with \code{antaresRead}
+#' @param opts \code{simOptions} load with \code{setSimulationPath}
+#'
+#' @examples
+#'
+#' \dontrun{
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", -1)
+#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
+#                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
+#                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+#' }
+#'
+#' @import shiny manipulateWidget
+#'
+#' @export
+runAppPosition <- function(dta, opts = antaresRead::simOptions()){
+  
+  
+  countTryList <- toupper(unique(dta$areas$area))
+  dayTyList <- unique(readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))$dayType)
+  rangeDate <- range(dta$areas$time)
+  rangeDate <- round(rangeDate, "day")
+  
+  G <- .GlobalEnv
+  assign("dta", dta, envir = G)
+  assign("countTryList", countTryList, envir = G)
+  assign("dayTyList", dayTyList, envir = G)
+  assign("rangeDate", rangeDate, envir = G)
+  
+  shiny::runApp(system.file("shinyPosition", package = "antaresFlowbased"),
+                launch.browser = TRUE)
+}
+
+
+
+
+
 #' Graph function
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type
 #' @param hour : hour
 #' @param mcYears : mcYears
@@ -234,102 +273,139 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #'
 #' @examples
 #' \dontrun{
-#' study <- "D:/Users/BBB/Desktop/exemple_test_BP"
-#' # set the typical days used in the study
-#' fb_opts <- setFlowbasedPath(model = "model2017")
-#' # select the output study
-#' output <- antaresRead::setSimulationPath(study, -1)
+#' study <- "D:/Users/titorobe/Desktop/antaresStudy"
+#' 
+#' opts <- antaresRead::setSimulationPath(study, -1)
+#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+#'                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
+#'                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
 #' 
 #' ## plot a domain and the matching output points 
-#' positionViz(opts = output, 
-#'          fb_opts = fb_opts, 
-#'          dayType = 5, hour = 19, 
-#'          mcYears = 1, 
+#' positionViz(opts = opts, 
+#'          data = dta,
+#'          dayType = 1, hour =19:20, 
 #'          ctry1 = "BE", ctry2 = "FR")
 #' 
 #' 
 #' }
 #'
 #' @export
-positionViz <- function(opts, fb_opts, dayType, hour, mcYears, ctry1, ctry2){
-  dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
-                                  links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                                  select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
+
   
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  domaines <- readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))
   
-  ipn <- .giveIpn(dta)
-  ipnout <- sapply(mcYears, function(mcy){
-    
-    ipntp <- ipn[which(hour(ipn$time)  == hour & ipn$mcYear == mcy)]
-    
-    dateSel <- unlist(ts[,.SD, .SDcols = as.character(mcy)] == dayType)
-    dateSel <- ts$Date[dateSel]
-    daysel <- substr(dateSel, 6, 10)
-    
-    ipntp <- ipntp[substr(ipntp$time, 6, 10) %in% daysel]
-    ipntp
+  
+
+  mcYears <- unique(data$areas$mcYear)
+  ipn <- .giveIpn(data)
+  
+  
+
+  
+ out <-  sapply(hour, function(HH){
+    sapply(dayType, function(DD){
+      ######
+      
+      ipnout <- sapply(mcYears, function(mcy){
+        
+        ipntp <- ipn[which(hour(ipn$time)  == HH  & ipn$mcYear == mcy)]
+        
+        dateSel <- unlist(ts[,.SD, .SDcols = as.character(mcy)] == DD)
+        dateSel <- ts$Date[dateSel]
+        daysel <- substr(dateSel, 6, 10)
+        
+        ipntp <- ipntp[substr(ipntp$time, 6, 10) %in% daysel]
+        ipntp
+      }, simplify = FALSE)
+      ipnO <- rbindlist(ipnout)
+      # if(HH == 0)HH <- 24
+      dSel <- domaines[which(dayType==DD & hour ==( HH  + 1))]
+      points <- dSel$outFlowBased[[1]]$pointsY
+      points$NL <-  - points$BE - points$DE - points$FR
+      
+      res <- data.frame("ctry1" = points[,ctry1],
+                        "ctry2" = points[,ctry2])
+      
+      
+      res2 <- data.frame("ctry11" = unlist(ipnO[, .SD, .SDcols = tolower(ctry1)]),
+                         "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]))
+      
+      res <- res[chull(res),]
+      res <- rbind(res, res[1,])
+      res <- round(res, 2)
+      
+      max_r <- max(nrow(res), nrow(res2))
+      if(nrow(res)<max_r){
+        res <- rbind(res, data.frame(ctry1 = rep(NA, max_r-nrow(res)),
+                                     ctry2 = rep(NA, max_r-nrow(res))))
+      }
+      if(nrow(res2)<max_r){
+        res2 <- rbind(res2, data.frame(ctry11 = rep(NA,max_r- nrow(res2)),
+                                       ctry22 = rep(NA, max_r-nrow(res2))))
+      }
+      
+      out2 <- cbind(res, res2)
+      names(out2) <- paste0(c("Model", "Model", "Position", "Position"),"_", c(ctry1, ctry2), "_H", HH, "_D", DD)
+      
+      data.frame(out2)
+      
+    }, simplify = FALSE)
   }, simplify = FALSE)
-  ipn <- rbindlist(ipnout)
   
-  hourS <- hour
-  dayTypeS <- dayType
-  demaines <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
-  
-  ######
-  dSel <- demaines[which(dayType==dayTypeS & hour ==( hourS  + 1))]
-  points <- dSel$outFlowBased[[1]]$pointsY
-  points$NL <-  - points$BE - points$DE - points$FR
-  ctry1 <- ctry1
-  ctry2 <- ctry2
-  
-  res <- data.frame("ctry1" = points[,ctry1],
-                    "ctry2" = points[,ctry2])
-  
-  
-  res2 <- data.frame("ctry11" = unlist(ipn[, .SD, .SDcols = tolower(ctry1)]),
-                     "ctry22" = unlist(ipn[, .SD, .SDcols = tolower(ctry2)]))
-  
-  res <- res[chull(res),]
-  res <- rbind(res, res[1,])
-  res <- round(res, 2)
-  
-  max_r <- max(nrow(res), nrow(res2))
-  if(nrow(res)<max_r){
-    res <- rbind(res, data.frame(ctry1 = rep(NA, max_r-nrow(res)),
-                                 ctry2 = rep(NA, max_r-nrow(res))))
-  }
-  if(nrow(res2)<max_r){
-    res2 <- rbind(res2, data.frame(ctry11 = rep(NA,max_r- nrow(res2)),
-                                   ctry22 = rep(NA, max_r-nrow(res2))))
-  }
-  
-  out <- cbind(res, res2)
+
+ out <- unlist(out, recursive = FALSE)
+ out <- Reduce(c, out)
+ Mlength <- max(unlist(lapply(out, length)))
+ out <- lapply(out, function(X){
+   if(length(X)<Mlength){
+     X <- c(X, rep(NA, Mlength-length(X)))
+   }
+   X
+ })
+ outF <- Reduce(cbind, out)
+ outF <- data.frame(outF)
+ names(outF) <- names(out)
+ out <- outF
+ oneOnFour <- which(1:ncol(out)%%4==1)
+ allGraph <- list()
+ CC <- 0
+ colors <- substr(topo.colors(length(oneOnFour)), 1,7)
+ for(X in oneOnFour){
+   CC <- CC + 1
+   allGraph <- c(allGraph,
+   amGraph(title = substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X])), balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+            bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
+            lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
+            lineThickness = 1, bulletAlpha = 0) )
+   
+   allGraph <- c(allGraph,
+   amGraph(balloonText =
+             paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+           bullet = 'circle', xField = names(out)[X+2],yField = names(out)[X+3],
+           lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
+           lineThickness = 1, visibleInLegend  = FALSE))
+   
+ }
+
   
   
   pipeR::pipeline(
     amXYChart(dataProvider = out),
-    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', hour, ', typical day : ', dayType)),
-    addGraph(title = "Model", balloonText =
-               paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-             
-             bullet = 'circle', xField = names(out)[1],yField = names(out)[2],
-             lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
-             lineThickness = 1),
-    
-    addGraph(title = "Position", balloonText =
-               paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-             bullet = 'circle', xField = names(out)[3],yField = names(out)[4],
-             lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = "#0000FF",
-             lineThickness = 1),
+    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(hour, collapse = ";"), ', typical day : ', paste0(dayType, collapse = ";"))),
+    setGraphs(allGraph),
     setChartCursor(),
     addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
     addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
+  
+  
+  
 }
 
 .giveIpn <- function(dta){

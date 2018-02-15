@@ -51,7 +51,8 @@ folder deigned by fb_opts contain files :
 
 \dontrun{
 
- setSolverAntares("AntaresFolderInstall/bin/antares-6.1-solver.exe")
+ antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+ setSolverAntares("D:/Users/titorobe/Desktop/RTAANTARES/bin/antares-6.1-solver.exe")
  initFlowBased()
  }
  

@@ -39,7 +39,8 @@
 #'
 #' \dontrun{
 #' 
-#'  setSolverAntares("AntaresFolderInstall/bin/antares-6.1-solver.exe")
+#'  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+#'  setSolverAntares("D:/Users/titorobe/Desktop/RTAANTARES/bin/antares-6.1-solver.exe")
 #'  initFlowBased()
 #'  }
 #'  
@@ -67,6 +68,28 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   #Load ts.txt
   tS <- .getDayType(paste0(fb_opts, "/ts.txt"))
+  
+  
+  #Copy files in flowbased study
+  userFolder <- paste0(opts$studyPath, "/user")
+  if(!dir.exists(userFolder)){
+    dir.create(userFolder)
+  }
+  userFolder <- paste0(userFolder, "/flowbased")
+  if(!dir.exists(userFolder)){
+    dir.create(userFolder)
+  }
+  file.copy(paste0(fb_opts, "/weight.txt"), paste0(userFolder, "/weight.txt"), overwrite = TRUE)
+  file.copy(paste0(fb_opts, "/second_member.txt"), paste0(userFolder, "/second_member.txt"), overwrite = TRUE)
+  file.copy(paste0(fb_opts, "/ts.txt"), paste0(userFolder, "/ts.txt"), overwrite = TRUE)
+  file.copy(paste0(fb_opts, "/domainesFB.RDS"), paste0(userFolder, "/domainesFB.RDS"), overwrite = TRUE)
+  
+  
+  #Write scenario
+  write.table(data.table(simulation = scenarios),  paste0(userFolder, "/scenario.txt"), row.names = FALSE)
+  
+  
+  
   
   #Controle coerancy
   if(length(unique(scenarios)) != ncol(tS) - 1){
@@ -105,7 +128,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   #Run antares
   # runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
   
-  
+  cat("Study addapt for flowbased")
   
 }
 
