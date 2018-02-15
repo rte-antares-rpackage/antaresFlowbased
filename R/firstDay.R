@@ -17,7 +17,7 @@
 #' }
 #' 
 #' @export
-identifyFirstDay <- function(opts, firstArea = "fr", secondArea = c("fr", "de", "be", "lu", "nl"))
+identifyFirstDay <- function(opts, firstArea = "fr", secondArea = c("fr", "de", "be", "nl"))
 {
   meanFR <- .giveMean7(firstArea, opts)
   
@@ -30,7 +30,7 @@ identifyFirstDay <- function(opts, firstArea = "fr", secondArea = c("fr", "de", 
   if(!is.null(secondArea))
   {
   if(fstFrMo != fstCweMo){
-    stop("Cant find first day automatically estimate ")
+    stop("cannot automatically estimate which day of the week is the first day of the Antares study")
   }else{
     fstFrMo <- switch(as.character(fstFrMo),
      "1" = 1,
