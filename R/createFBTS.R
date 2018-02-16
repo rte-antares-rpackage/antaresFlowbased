@@ -53,7 +53,7 @@
 #'                          
 #' firstDay <- identifyFirstDay(opts)
 #' interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
-#' interSeasonEnd <- as.Date(c("2017-10-04", "2018-05-02"))
+#' interSeasonEnd <- as.Date(c("2020-10-04", "2018-05-02"))
 #' 
 #' 
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
@@ -131,8 +131,7 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   
   ##Creat virtual calendar
   dates <- unique(outTs$time)
-  
-  
+
   
   calendar <- .getVirtualCalendar(dates, interSeasonBegin, interSeasonEnd, firstDay)
   calendar <- rbindlist(sapply(names(calendar), function(X){
