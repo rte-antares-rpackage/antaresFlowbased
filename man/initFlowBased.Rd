@@ -5,8 +5,7 @@
 \title{Generate environment for a flow-based study}
 \usage{
 initFlowBased(fb_opts = antaresFlowbased::fbOptions()$path,
-  opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5),
-  controlAntares = TRUE)
+  opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5))
 }
 \arguments{
 \item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
@@ -14,9 +13,6 @@ initFlowBased(fb_opts = antaresFlowbased::fbOptions()$path,
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{scenarios}{\code{numeric} scenarios use for write scenario.txt.}
-
-\item{controlAntares}{\code{boolean} control antares solver (>= 6.1), you can skip contol but you must use 
-antares >= 6.1 to run simulations after this init.}
 }
 \description{
 Generate environment for a flow-based study
@@ -53,7 +49,6 @@ folder deigned by fb_opts contain files :
 \dontrun{
 
  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
- setSolverAntares("D:/Users/titorobe/Desktop/RTAANTARES/bin/antares-6.1-solver.exe")
  initFlowBased()
  }
  

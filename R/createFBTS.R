@@ -41,7 +41,7 @@
 #'  levelsProba = levelsProba, extrapolationNA = TRUE)
 #' 
 #' 
-#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
 #' 
 #' 
 #' 
@@ -131,6 +131,9 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   
   ##Creat virtual calendar
   dates <- unique(outTs$time)
+  
+  
+  
   calendar <- .getVirtualCalendar(dates, interSeasonBegin, interSeasonEnd, firstDay)
   calendar <- rbindlist(sapply(names(calendar), function(X){
     data.table(time = calendar[[X]], class = X)

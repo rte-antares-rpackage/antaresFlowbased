@@ -60,13 +60,3 @@ plotFB(hour = 5:6, dayType = 1, country1 = c("FR", "DE"), country2 = c("DE", "NL
 #  # initialisation of flow-based study
 #  initFlowBased()
 
-## ---- eval=FALSE---------------------------------------------------------
-#  # antares solver
-#  setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-#  
-#  
-#  getSolverAntares()
-
-## ---- eval=FALSE---------------------------------------------------------
-#  res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
-

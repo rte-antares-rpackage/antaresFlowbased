@@ -82,31 +82,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>Cette fonction utilise par défaut des fichiers présents dans le packages.</p>
 <p>Avant toute chose, il est nécéssaire d’indiquer l’étude antares sur laquelle nous souhaitons travailler via la fonction <em>setSimulationPath()</em> du package <strong>antaresRead</strong> :</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">antaresRead::<span class="kw">setSimulationPath</span>(<span class="st">&quot;D:/exemple_test&quot;</span>, <span class="dv">0</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">antaresRead<span class="op">::</span><span class="kw">setSimulationPath</span>(<span class="st">&quot;D:/exemple_test&quot;</span>, <span class="dv">0</span>)
 
 <span class="co"># initialisation de l'étude flowbased</span>
 <span class="kw">initFlowBased</span>()</code></pre></div>
 </div>
 <div id="lancement-des-simulations" class="section level2">
 <h2>2 - Lancement des simulations</h2>
-<p>Préalablement, il est nécéssaire d’indiquer l’emplacement du solver antares via la fonction <em>setSolverAntares()</em> :</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># chemin du solver antares</span>
-<span class="kw">setSolverAntares</span>(<span class="dt">path =</span> <span class="st">&quot;C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe&quot;</span>)
-
-<span class="co"># affichage du solver renseigne</span>
-<span class="kw">getSolverAntares</span>()</code></pre></div>
-<p>Finalement, la fonction <em>runSimulationFB()</em> lance l’étude flowbased, en simulant les différents scénarii avant d’aggréger les résultats.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res_fb &lt;-<span class="st"> </span><span class="kw">runSimulationFB</span>(<span class="dt">simulationName =</span> <span class="st">&quot;flowBased-Tuto&quot;</span>)</code></pre></div>
-<p>Les paramètres possibles sont les suivants :</p>
-<ul>
-<li><strong>simulationName</strong> : Nom de la simulation</li>
-<li><strong>mcAll</strong> : Calcul des mcAll (TRUE ou FALSE)</li>
-<li><strong>mcInd</strong> : Conservation des mcInd (TRUE ou FALSE)</li>
-<li><strong>mcYears</strong> : mcYears à conserver, par défaut tous</li>
-<li><strong>opts</strong> : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l’environnement global</li>
-<li><strong>verbose</strong> : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.</li>
-</ul>
-<p>L’étude est alors consultable directement dans antares.</p>
+<p>Vous devez lancer les simulations directement depuis antares.</p>
 </div>
 
 
@@ -116,7 +99,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

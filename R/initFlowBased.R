@@ -6,8 +6,6 @@
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
-#' @param controlAntares \code{boolean} control antares solver (>= 6.1), you can skip contol but you must use 
-#' antares >= 6.1 to run simulations after this init.
 #' 
 #' @note 
 #' folder deigned by fb_opts contain files :
@@ -41,7 +39,6 @@
 #' \dontrun{
 #' 
 #'  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
-#'  setSolverAntares("D:/Users/titorobe/Desktop/RTAANTARES/bin/antares-6.1-solver.exe")
 #'  initFlowBased()
 #'  }
 #'  
@@ -50,11 +47,18 @@
 #' 
 #' @export
 initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
-                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5), controlAntares = TRUE){
+                          opts = antaresRead::simOptions(), scenarios = rep(1:200, times = 5)){
   
   suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   #Control antaresSolver >=6.1
-  if(controlAntares)  .ctrlSolver()
+    
+    
+  #Ctrl study version
+  if(opts$antaresVersion < 610){
+    stop("Your studie must be in version 6.1 or more")
+  }
+    
+    #.ctrlSolver()
 
   
   #test fbModel
@@ -124,10 +128,6 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   #Create building C
   .createBindingConstraint(W, opts)
-  
-  
-  #Run antares
-  # runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
   
   cat("Study ready for flow-based simulations")
   
@@ -264,17 +264,5 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   fileInFb <- list.files(fbModel)
   if(!all(c("weight.txt", "second_member.txt", "ts.txt") %in% fileInFb)){
     stop("Flow-based model does not contain all necessary input files, second_member.txt, ts.txt and weight.txt")
-  }
-}
-
-.ctrlSolver <- function()
-{
-  solver <- getSolverAntares()
-  solver <- unlist(gsub("-solver.exe", "", solver))
-  solver <- strsplit(solver, "antares-")[[1]]
-  solver <- solver[[length(solver)]]
-  versionSolver <- as.numeric(solver)
-  if(versionSolver<6.1){
-    stop("Flow-based modelling can only be used on Antares studies of version 6.1 or above.")
   }
 }

@@ -32,29 +32,4 @@ initFlowBased()
 
 ## 2 - Lancement des simulations
 
-Préalablement, il est nécéssaire d'indiquer l'emplacement du solver antares via la fonction *setSolverAntares()* :
-
-```{r, eval=FALSE}
-# chemin du solver antares
-setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-
-# affichage du solver renseigne
-getSolverAntares()
-```
-
-Finalement, la fonction *runSimulationFB()* lance l'étude flowbased, en simulant les différents scénarii avant d'aggréger les résultats.
-
-```{r, eval=FALSE}
-res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
-```
-
-Les paramètres possibles sont les suivants : 
-
-* **simulationName** : Nom de la simulation
-* **mcAll** : Calcul des mcAll (TRUE ou FALSE)
-* **mcInd** : Conservation des mcInd (TRUE ou FALSE)
-* **mcYears** : mcYears à conserver, par défaut tous
-* **opts** : Projet antares (obtenu avec la fonction setSimulationPath). Par défaut celui chargé dans l'environnement global
-* **verbose** : Niveau de logs dans la console R (0, 1 ou 2) par défaut 1.
-
-L'étude est alors consultable directement dans antares.
+Vous devez lancer les simulations directement depuis antares.

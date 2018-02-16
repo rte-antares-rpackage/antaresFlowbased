@@ -178,29 +178,4 @@ initFlowBased()
 
 ## 6 - Run simulations
 
-The path of the Antares solver can be set using the function : ``setSolverAntares()``.
-
-```{r, eval=FALSE}
-# antares solver
-setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-
-
-getSolverAntares()
-```
-
-Finally, the function ``runSimulationFB()`` runs the Antares simulation, using the flow-based model previsouly saved in */user/flowbased*. The different flow-based scenarios are handled with succesive Antares simulations before aggregating the results.
-
-```{r, eval=FALSE}
-res_fb <- runSimulationFB(simulationName = "flowBased-Tuto")
-```
-
-Possible parameters are :
-
-* ``simulationName`` : Name of the simulation
-* ``mcAll`` : Calculation of mcAll (TRUE or FALSE)
-* ``mcInd`` : Calculation of mcInd (TRUE or FALSE)
-* ``mcYears`` : McYears to simulate, default is ``"all"``
-* ``opts`` : Antares study informations (obtained with the ``setSimulationPath()`` function). By default, the function used the study loaded into the R environement
-* ``verbose`` : Log level in the R console (0, 1 or 2)  default 1.
-
-The outputs of the study can then be read directly in Antares or using ``antaresRead`` R package.
+You must run simulations directly with antares.
