@@ -59,7 +59,7 @@ matProb <- getProbability(climate, clusterTD,
  levelsProba = levelsProba, extrapolationNA = TRUE)
 
 
-opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
 
 
 

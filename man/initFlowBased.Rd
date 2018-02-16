@@ -15,7 +15,8 @@ initFlowBased(fb_opts = antaresFlowbased::fbOptions()$path,
 
 \item{scenarios}{\code{numeric} scenarios use for write scenario.txt.}
 
-\item{controlAntares}{\code{boolean} for test.}
+\item{controlAntares}{\code{boolean} control antares solver (>= 6.1), you can skip contol but you must use 
+antares >= 6.1 to run simulations after this init.}
 }
 \description{
 Generate environment for a flow-based study

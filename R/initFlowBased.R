@@ -6,7 +6,8 @@
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
-#' @param controlAntares \code{boolean} for test.
+#' @param controlAntares \code{boolean} control antares solver (>= 6.1), you can skip contol but you must use 
+#' antares >= 6.1 to run simulations after this init.
 #' 
 #' @note 
 #' folder deigned by fb_opts contain files :
