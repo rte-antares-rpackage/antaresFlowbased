@@ -128,7 +128,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   #Run antares
   # runSimulation(name = "toto22", path_solver = getSolverAntares(), parallel = TRUE)
   
-  cat("Study addapt for flowbased")
+  cat("Study ready for flow-based simulations")
   
 }
 
