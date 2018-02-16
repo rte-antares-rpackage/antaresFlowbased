@@ -1,4 +1,21 @@
 .getVirtualCalendar <- function(dates, interSeasonBegin, interSeasonEnd, firstDay){
+  
+  #Push interSeasonBegin and interSeasonEnd on virtual dates
+  allY <- unique(year(dates))
+  
+  
+  interSeasonBegin <- sort(as.Date(do.call(c, sapply(interSeasonBegin, function(X){
+    paste0(allY, substr(X, 5,10))
+  }, simplify = FALSE))))
+  
+  interSeasonBegin <- interSeasonBegin[interSeasonBegin%in%dates]
+  
+  interSeasonEnd <- sort(as.Date(do.call(c, sapply(interSeasonEnd, function(X){
+    paste0(allY, substr(X, 5,10))
+  }, simplify = FALSE))))
+  interSeasonEnd <- interSeasonEnd[interSeasonEnd%in%dates]
+  
+  
   monthSWinter <- c(1:4, 10:12)
   monthSSummer <- 5:9
   
