@@ -46,9 +46,9 @@
 #' 
 #' 
 #' matProb <- setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
-#'                                    c("fr_load", "de_wind", "de_solar"))
+#'                                    c("fr@load", "de@wind", "de@solar"))
 #' 
-#' multiplier <- data.frame(variable = c("fr_load", "de_wind", "de_solar"),
+#' multiplier <- data.frame(variable = c("fr@load", "de@wind", "de@solar"),
 #'                          coef = c(1, 352250, 246403))
 #'                          
 #' firstDay <- identifyFirstDay(opts)
@@ -58,7 +58,7 @@
 #' 
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
 #'                  interSeasonBegin = interSeasonBegin,
-#'                  interSeasonEnd = interSeasonEnd, firstDay = firstDay)
+#'                  interSeasonEnd = interSeasonEnd, firstDay = firstDay, outputPath = getwd())
 #' }
 #'                  
 #' @import data.table
@@ -108,14 +108,17 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   
   #Time series format
   .formatTs <- function(TS){
-    names(TS)[ncol(TS)] <- paste0(TS$area[1],"_", names(TS)[ncol(TS)])
+    names(TS)[ncol(TS)] <- paste0(TS$area[1],"@", names(TS)[ncol(TS)])
     TS[,"area" := NULL]
     TS
   }
   
   #Load concern TS
-  listTs <- lapply(strsplit(sdC, "_"), function(X){
+  listTs <- lapply(strsplit(sdC, "@"), function(X){
     reg <- list(X[1])
+    
+    if(! X[2] %in% c("load", "ror", "wind", "solar")) stop("Only solar, ror, wind and load are available")
+    
     names(reg) <- X[2]
     reg$timeStep <- "daily"
     reg$showProgress <- !silent
@@ -145,9 +148,24 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   #outTs <- outTs[sample(1:nrow(outTs), 3000)]
   outTs <- data.table(outTs)
   #Compute typical day, first version (a bit slow) compute is done row/row
+ 
+  names(quantiles) <- gsub("@", "__", names(quantiles))
+  names(proba) <- gsub("@", "__", names(proba))
+  
+  
+  
+  
   quantiles <- data.frame(quantiles)
+  
+  
   if(!silent)cat("Compute typical day\n")
   if(!silent)pb <- txtProgressBar(char = "=", style = 3)
+  
+  names(outTs) <- gsub("@", "__", names(outTs))
+  
+  sdC<- gsub("@", "__", sdC)
+  
+  # sdC
   
   nN <- nrow(outTs)
   outTs$typicalDay <- sapply(1:nrow(outTs), function(R){
@@ -217,6 +235,11 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   #Formating TS output
   tsend <- outTs[, .SD, .SDcols = c("time", "tsId", "typicalDay")]
   tsend <- dcast(tsend, time~tsId, value.var = "typicalDay")
+  
+  setnames(tsend, "time", "Date")
+  tsend$Date <- as.character(tsend$Date)
+  write.table(tsend, paste0(outputPath, "/ts.txt"), sep = "\t", row.names = FALSE)
+  
   tsend
 }
 

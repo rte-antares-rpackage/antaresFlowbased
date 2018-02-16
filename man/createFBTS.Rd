@@ -64,19 +64,19 @@ opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",
 
 
 matProb <- setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
-                                   c("fr_load", "de_wind", "de_solar"))
+                                   c("fr@load", "de@wind", "de@solar"))
 
-multiplier <- data.frame(variable = c("fr_load", "de_wind", "de_solar"),
+multiplier <- data.frame(variable = c("fr@load", "de@wind", "de@solar"),
                          coef = c(1, 352250, 246403))
                          
 firstDay <- identifyFirstDay(opts)
 interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
-interSeasonEnd <- as.Date(c("2017-10-04", "2018-05-02"))
+interSeasonEnd <- as.Date(c("2020-10-04", "2018-05-02"))
 
 
 ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
                  interSeasonBegin = interSeasonBegin,
-                 interSeasonEnd = interSeasonEnd, firstDay = firstDay)
+                 interSeasonEnd = interSeasonEnd, firstDay = firstDay, outputPath = getwd())
 }
                  
 }
