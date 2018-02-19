@@ -18,8 +18,6 @@ positionViz(opts, data, dayType, hour, ctry1, ctry2)
 \item{ctry1}{: first country}
 
 \item{ctry2}{: second country}
-
-\item{mcYears}{: mcYears}
 }
 \description{
 Graph function

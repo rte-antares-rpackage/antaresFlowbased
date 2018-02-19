@@ -266,7 +266,6 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type
 #' @param hour : hour
-#' @param mcYears : mcYears
 #' @param ctry1 : first country
 #' @param ctry2 : second country
 #' 
