@@ -35,7 +35,7 @@ test_that("adq strategic reserved", {
   
   
   ##Test if area table is ok
-  expect_true(identical(adqWhioutStratMrg$areas$BALANCE, areaADQ$BALANCE))
+  expect_true(identical(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))
   expect_true(identical(adqWhioutStratMrg$areas$`UNSP. ENRG`, areaADQ$`UNSP. ENRG`))
   expect_true(identical(adqWhioutStratMrg$areas$LOLD, areaADQ$LOLD))
   expect_true(identical(adqWhioutStratMrg$areas$`DTG MRG`, areaADQ$`DTG MRG`))

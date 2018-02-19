@@ -12,8 +12,8 @@ test_that("checks warning when strategic reserves in the country", {
 
 
 test_that("compares test case results", {
-   expect_true(all.equal(area_exp,area_test))
-   expect_true(all.equal(links_exp,links_test))
+   expect_true(base::all.equal(data.frame(area_exp),data.frame(area_test)))
+   expect_true(base::all.equal(data.frame(links_exp),data.frame(links_test)))
 })
 
 
