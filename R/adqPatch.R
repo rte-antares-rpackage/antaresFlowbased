@@ -151,6 +151,9 @@ adqPatch <- function(mcYears = "all",
     return(dta)
   }
   
+  print("Data in adq R1")
+  print(dta$areas[time == "2018-01-26 08:00:00"])
+  print(dta$links[time == "2018-01-26 08:00:00"])
   new <- rbindlist(sapply(1:nrow(out), function(X){
     #Filtered unconcorded line
     outR <- out[X]
@@ -294,6 +297,10 @@ adqPatch <- function(mcYears = "all",
   setnames(re, "value.x", "LOLD")
   setnames(re, "value.y", "PN")
   setnames(re, "variable", "area")
+  
+  print("RE")
+  print(re[time == "2018-01-26 08:00:00"])
+  
   chang <- merge(dta$areas, re, by = c("time" ,"mcYear", "area"))
   chang[, BALANCEN:=BALANCE - value + PN]
   
