@@ -48,6 +48,10 @@ test_that("adq strategic reserved", {
   
   print(areaADQ[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
   
+  print("sessionInfo")
+  
+  print(sessionInfo())
+  
   ##Test if area table is ok
   expect_true(identical(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))
   expect_true(identical(adqWhioutStratMrg$areas$`UNSP. ENRG`, areaADQ$`UNSP. ENRG`))
