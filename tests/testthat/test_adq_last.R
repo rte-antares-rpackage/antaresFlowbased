@@ -32,10 +32,10 @@ test_that("adq strategic reserved", {
   setkeyv(adqWhioutStratMrg$areas, getIdCols(adqWhioutStratMrg$areas))
   setkeyv(adqWhioutStratMrg$links, getIdCols(adqWhioutStratMrg$links))
   
-  
+ 
   
   print("data in")  
-  print(dta$areas[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
+  print(dta$areas[ time == "2018-01-26 08:00:00"])
 
   
   print("Balance not clean")
@@ -46,11 +46,11 @@ test_that("adq strategic reserved", {
   
   print("adqWhioutStratMrg")
   
-  print(adqWhioutStratMrg$areas[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
+  print(adqWhioutStratMrg$areas[time == "2018-01-26 08:00:00"])
   
   print("areaADQ")
   
-  print(areaADQ[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
+  print(areaADQ[time == "2018-01-26 08:00:00"])
   
   print("sessionInfo")
   
