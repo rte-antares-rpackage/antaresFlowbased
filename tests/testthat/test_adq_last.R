@@ -34,6 +34,12 @@ test_that("adq strategic reserved", {
   setkeyv(adqWhioutStratMrg$links, getIdCols(adqWhioutStratMrg$links))
   
   
+  print("Balance not clean")
+  print(adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE[(adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0])
+  
+  print("Balance not clean witch")
+  which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)
+  
   ##Test if area table is ok
   expect_true(identical(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))
   expect_true(identical(adqWhioutStratMrg$areas$`UNSP. ENRG`, areaADQ$`UNSP. ENRG`))
