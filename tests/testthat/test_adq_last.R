@@ -35,7 +35,7 @@ test_that("adq strategic reserved", {
   
   
   print("Balance not clean")
-  print(adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE[(adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0])
+  print((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
   
   print("Balance not clean witch")
   print(which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0))
