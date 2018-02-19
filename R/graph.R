@@ -291,6 +291,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' 
 #' }
 #'
+#' @importFrom grDevices topo.colors
 #' @export
 positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
 

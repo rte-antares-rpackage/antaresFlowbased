@@ -29,7 +29,7 @@ test_that("make ts", {
   {
     ts <- createFBTS(opts = op5, probabilityMatrix = matProb, multiplier = multiplier,
                      interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd,
-                     firstDay = firstDay, seed = k, silent = TRUE)
+                     firstDay = firstDay, seed = k, silent = TRUE, outputPath =  tempdir())
     
     
     frLoad <- readInputTS(load = "fr", timeStep = "daily", showProgress = FALSE)
@@ -43,11 +43,11 @@ test_that("make ts", {
     
     data1 <- allDta[180]
    
-    firstF <- c(firstF, ts[ts$time == data1$time]$`1`)
+    firstF <- c(firstF, ts[ts$Date == data1$time]$`1`)
     
     data2 <- allDta[7]
     
-    secondF <- c(secondF, ts[ts$time == data2$time]$`1`)
+    secondF <- c(secondF, ts[ts$Date == data2$time]$`1`)
     
     
   }
