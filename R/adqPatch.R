@@ -260,8 +260,8 @@ adqPatch <- function(mcYears = "all",
           print(UNSP)
           }
         
-        
-        sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn, UNSP = UNSP)
+        tempTim <- outR$time
+        sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn, UNSP = UNSP, tempTim)
         
         if(outR$time == "2018-01-26 08:00:00"){
           print("sol")
@@ -506,7 +506,7 @@ adqPatch <- function(mcYears = "all",
 #' @param UNSP \code{numeric} UNSP
 #' 
 #' @noRd
-.resolveAdq <- function(b36, lole, b, margin, ipn, UNSP){
+.resolveAdq <- function(b36, lole, b, margin, ipn, UNSP, tempTim){
   D <- as.vector(ifelse(lole == 0, 0, 1))
   res <- c(
     1, 1, 1, 1,
@@ -559,6 +559,12 @@ adqPatch <- function(mcYears = "all",
   LP <- OP(objetiv, l_constraint, maximum = FALSE,
            bounds = bounds)
   y <- ROI_solve(LP, solver = "clp",  control = list(amount = 0))
+  if(tempTim == "2018-01-26 08:00:00"){
+    print("ROI CALL")
+    print(y)
+    print(str(y))
+    print(y$solution)
+  }
   data.table(PN_be = y$solution[1],
              PN_de = y$solution[2],
              PN_fr = y$solution[3],
