@@ -12,8 +12,6 @@ test_that("compares test case results", {
   area_test <- area_test[with(area_test, order(mcYear, timeId, area)), ]
   links_test <- dataNoStrat_adq$links
   links_test <- links_test[with(links_test, order(mcYear, timeId, link)), ]
-  ## temporaire!
-  # area_test <- subset(area_test, select = -ipn)
   
   # expected results = results with right number of binding constraints
   fil <- system.file("testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
@@ -24,7 +22,10 @@ test_that("compares test case results", {
   links_exp <- outNoStrat_exp$links
   links_exp <- links_exp[with(links_exp, order(mcYear, timeId, link)), ]
   
-  
+  print("links_exp")
+  print(links_exp)
+  print("links_test")
+  print(links_test)
   
   expect_true(all.equal(area_exp,area_test))
   expect_true(all.equal(links_exp,links_test))
