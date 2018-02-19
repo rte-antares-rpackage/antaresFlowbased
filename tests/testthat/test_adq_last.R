@@ -3,7 +3,6 @@ context("adq + strategic reserved")
 
 test_that("adq strategic reserved", {
   
-  
   aread <- system.file("testdata/adq/General/new_area.csv", package = "antaresFlowbased")
   if(aread == "")aread <- system.file("inst/testdata/adq/General/new_area.csv", package = "antaresFlowbased")
   linkd <- system.file("testdata/adq/General/new_links.csv", package = "antaresFlowbased")
@@ -34,6 +33,11 @@ test_that("adq strategic reserved", {
   setkeyv(adqWhioutStratMrg$links, getIdCols(adqWhioutStratMrg$links))
   
   
+  
+  print("data in")  
+  print(dta$areas[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
+
+  
   print("Balance not clean")
   print((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
   
@@ -49,6 +53,9 @@ test_that("adq strategic reserved", {
   print(areaADQ[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
   
   print("sessionInfo")
+  
+  
+  
   
   print(sessionInfo())
   

@@ -94,11 +94,6 @@ if(id_file == "")id_file <- system.file("inst/testdata/adq/antaresStudy/user/flo
 
 id_file <- data.table::fread(id_file)
 case <- data.table::data.table(unique(cbind(mcYear = area_exp$mcYear, timeId = area_exp$timeId)))
-caseNoWarning <- case[mcYear!=589]
-
-
-
-
 
 
 
