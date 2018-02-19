@@ -58,8 +58,6 @@ area_test$area <- as.character(area_test$area)
 area_test <- area_test[with(area_test, order(mcYear, timeId, area)), ]
 links_test <- dataNoStrat_adq$links
 links_test <- links_test[with(links_test, order(mcYear, timeId, link)), ]
-## temporaire!
-# area_test <- subset(area_test, select = -ipn)
 
 # expected results
 fid <- system.file("testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
