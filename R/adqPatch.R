@@ -265,7 +265,7 @@ adqPatch <- function(mcYears = "all",
         
         if(outR$time == "2018-01-26 08:00:00"){
           print("sol")
-          print(sol)sol
+          print(sol)
         }
         
         sol <- round(sol, 0)
