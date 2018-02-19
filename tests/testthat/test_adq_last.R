@@ -42,7 +42,7 @@ test_that("adq strategic reserved", {
   
   print("adqWhioutStratMrg")
   
-  print(adqWhioutStratMrg$BALANCE[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
+  print(adqWhioutStratMrg$areas[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
   
   print("areaADQ")
   
