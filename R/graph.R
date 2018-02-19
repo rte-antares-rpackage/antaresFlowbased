@@ -276,8 +276,11 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' 
 #' opts <- antaresRead::setSimulationPath(study, -1)
 #' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
-#'                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
-#'                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+#'                                 links = c("be - de","be - fr","be - nl",
+#'                                 "de - fr","de - nl"), mcYears = 1:10,
+#'                                 select = c("LOLD", "UNSP. ENRG", 
+#'                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
+#'                                  opts = opts)
 #' 
 #' ## plot a domain and the matching output points 
 #' positionViz(opts = opts, 

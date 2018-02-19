@@ -14,6 +14,7 @@
 #' wednesday, you must specify firstDay = 3.
 #' @param seed \code{numeric} fix random seed
 #' @param silent \code{boolean} progress bar.
+#' @param outputPath \code{character} folder where ts.txt will be write.
 #' 
 #' @examples
 #'
@@ -64,7 +65,7 @@
 #' @import data.table
 #' @export
 createFBTS <- function(opts, probabilityMatrix, multiplier,
-                       interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017, silent = FALSE){
+                       interSeasonBegin, interSeasonEnd, firstDay, seed = 04052017, silent = FALSE, outputPath = getwd()){
   
   
   

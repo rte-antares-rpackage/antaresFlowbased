@@ -7,16 +7,16 @@ test_that("make ts", {
   
   matProb <- readRDS(system.file("testdata/proba.RDS", package = "antaresFlowbased"))
   
-  setnames(matProb[[1]],"FR_load", "fr_load" )
-  setnames(matProb[[2]],"FR_load", "fr_load" )
+  setnames(matProb[[1]],"FR_load", "fr@load" )
+  setnames(matProb[[2]],"FR_load", "fr@load" )
   
-  setnames(matProb[[1]],"DE_wind", "de_wind" )
-  setnames(matProb[[2]],"DE_wind", "de_wind" )
+  setnames(matProb[[1]],"DE_wind", "de@wind" )
+  setnames(matProb[[2]],"DE_wind", "de@wind" )
   
-  setnames(matProb[[1]],"DE_solar", "be_wind" )
-  setnames(matProb[[2]],"DE_solar", "be_wind" )
+  setnames(matProb[[1]],"DE_solar", "be@wind" )
+  setnames(matProb[[2]],"DE_solar", "be@wind" )
   
-  multiplier <- data.frame(variable = c("fr_load", "de_wind", "be_wind"),
+  multiplier <- data.frame(variable = c("fr@load", "de@wind", "be@wind"),
                            coef = c(1, 352250, 246403))
   firstDay <- suppressWarnings(identifyFirstDay(op5, firstArea = "fr", secondArea = NULL))
   
