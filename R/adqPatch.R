@@ -245,7 +245,29 @@ adqPatch <- function(mcYears = "all",
         UNSP <-  outR[, .SD, .SDcols = c("UNSP. ENRG_be", "UNSP. ENRG_de", "UNSP. ENRG_fr", "UNSP. ENRG_nl")]
         UNSP <- unlist(UNSP)
         #Apply adq patch
+        if(outR$time == "2018-01-26 08:00:00"){
+          print("b36Prim")
+          print(b36Prim)
+          print("lole")
+          print(lole)
+          print("b")
+          print(b)
+          print("mrg")
+          print(mrg)
+          print("ipn")
+          print(ipn)
+          print("UNSP")
+          print(UNSP)
+          }
+        
+        
         sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn, UNSP = UNSP)
+        
+        if(outR$time == "2018-01-26 08:00:00"){
+          print("sol")
+          print(sol)sol
+        }
+        
         sol <- round(sol, 0)
         sol <- data.frame(sol)
         if(sum(sol)>0){
