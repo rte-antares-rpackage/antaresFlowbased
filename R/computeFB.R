@@ -139,13 +139,4 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
   PTDF
 }
 
-#' Time Series file to optimisation output
-#'
-#' @param outputName \code{character}, name of output directory
-#' @export
-addTSFile <- function(outputName){
-  Chroniques <- system.file("/input/ts.txt", package
-                            = "antaresFlowbased")
-  Chroniques <- fread(Chroniques)
-  write.table(Chroniques,paste0(outputName, "/ts.txt"), row.names = FALSE, sep = "\t")
-}
+
