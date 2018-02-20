@@ -126,6 +126,25 @@ adqPatch <- function(mcYears = "all",
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
   b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
   
+  if("Name"%in%names(b36p))data.table::setnames(b36p, "Name", "name")
+  
+  if("BE.FR" %in% names(b36p))data.table::setnames(b36p, "BE.FR", "be%fr")
+  
+  
+  if("DE.FR" %in% names(b36p))data.table::setnames(b36p, "DE.FR", "de%fr")
+  
+  
+  if("DE.NL" %in% names(b36p))data.table::setnames(b36p, "DE.NL", "de%nl")
+  
+  
+  
+  if("BE.NL" %in% names(b36p))data.table::setnames(b36p, "BE.NL", "be%nl")
+  
+  
+  
+  if("BE.DE" %in% names(b36p))data.table::setnames(b36p, "BE.DE", "be%de")
+  
+  
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){

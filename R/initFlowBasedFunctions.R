@@ -26,18 +26,6 @@
   weigth
 }
 
-#' Write weigth file
-#'
-#' @param path \code{character} path
-#' @param weightData \code{data.frame} data
-#'
-#'
-#' @noRd
-.setWeight <- function(path, weightData){
-  tmpfile <- file(description=path, "w")
-  write.table(weightData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
-  close(tmpfile)
-}
 
 #' Load second member file
 #'
@@ -63,17 +51,6 @@
   secondMember[,.SD, .SDcols = c("Id_day", "Id_hour", "vect_b", "Name")]
 }
 
-#' Write second member file
-#'
-#' @param path \code{character} path
-#' @param secondMemberData \code{data.frame} data
-#'
-#' @noRd
-.setSecondMember <- function(path, secondMemberData){
-  tmpfile <- file(description=path, "w")
-  write.table(secondMemberData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
-  close(tmpfile)
-}
 
 #' Load daytype file
 #'
@@ -108,17 +85,6 @@
   daytype
 }
 
-#' Write daytype file
-#'
-#' @param path \code{character} path
-#' @param dayTypeData \code{data.frame} data
-#'
-#' @noRd
-.setDayType <- function(path, dayTypeData){
-  tmpfile <- file(description=path, "w")
-  write.table(dayTypeData, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
-  close(tmpfile)
-}
 
 #' generate scenario
 #'
@@ -129,14 +95,3 @@
   data.frame(simulation = rep(1:200, 5))
 }
 
-#' Write scenario file
-#'
-#' @param path \code{character} path
-#' @param scenario \code{data.frame} data
-#'
-#' @noRd
-.setScenario <- function(path, scenario){
-  tmpfile <- file(description=path, "w")
-  write.table(scenario, tmpfile, sep = "\t", dec = ".", row.names = FALSE)
-  close(tmpfile)
-}
