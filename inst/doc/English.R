@@ -7,8 +7,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #  computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
 #            outputName = "D:/Users/titorobe/Desktop/model1", verbose = 0, nbFaces = 36)
 #  
-#  #Add time series file to directory "model1"
-#  addTSFile("D:/Users/titorobe/Desktop/model1")
+#  
 #  
 #  #Set setFlowbased directory path
 #  setFlowbasedPath(path = "D:/Users/titorobe/Desktop/model1")

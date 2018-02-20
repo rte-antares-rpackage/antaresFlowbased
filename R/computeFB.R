@@ -131,13 +131,10 @@ computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
 #'
 .readPTDF <- function(PTDF){
   PTDF <- try(fread(PTDF))
-  if("RAM_0" %in% names(PTDF)){
-    setnames(PTDF, "RAM_0", "RAM")
-  }
+  if("RAM_0" %in% names(PTDF))setnames(PTDF, "RAM_0", "RAM")
   
-  if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM"))){
-    stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM in this order")
-  }
+  if(any(names(PTDF) != c("Id_day", "Period", "BE", "DE", "FR", "NL", "RAM")))stop("Names of PTDF must be : Id_day, Period, BE, DE, FR, NL, RAM in this order")
+  
 
   PTDF
 }
