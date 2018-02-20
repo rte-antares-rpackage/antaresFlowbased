@@ -54,9 +54,8 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
     
     
   #Ctrl study version
-  if(opts$antaresVersion < 610){
-    stop("Your studie must be in version 6.1 or more")
-  }
+  if(opts$antaresVersion < 610)stop("Your studie must be in version 6.1 or more")
+  
     
     #.ctrlSolver()
 
@@ -77,9 +76,8 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   #Copy files in flowbased study
   userFolder <- paste0(opts$studyPath, "/user")
-  if(!dir.exists(userFolder)){
-    dir.create(userFolder)
-  }
+  if(!dir.exists(userFolder))dir.create(userFolder)
+  
   userFolder <- paste0(userFolder, "/flowbased")
   if(!dir.exists(userFolder)){
     dir.create(userFolder)
@@ -97,21 +95,18 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   
   #Controle coerancy
-  if(length(unique(scenarios)) != ncol(tS) - 1){
-    stop("length(unique(scenarios)) must by equal to number of timeseries")
-  }
-  if(!all(sort(unique(scenarios)) %in% 1:max(scenarios))){
-    stop("scenarios must begin to 1 an all scenarios between 1 and length(unique(scenarios)) must be present")
-  }
+  if(length(unique(scenarios)) != ncol(tS) - 1)stop("length(unique(scenarios)) must by equal to number of timeseries")
+  
+  if(!all(sort(unique(scenarios)) %in% 1:max(scenarios)))stop("scenarios must begin to 1 an all scenarios between 1 and length(unique(scenarios)) must be present")
+  
   
   
   
   ##Test ready-made
   rediM <- antaresEditObject::readIniFile(paste0(opts$studyPath, "/settings/generaldata.ini"))$general$generate
   if(!is.na(rediM)){
-    if(grepl("thermal", rediM)){
-      stop("Flow-based modelling can only be used if thermal time-series are ready-made")
-    }
+    if(grepl("thermal", rediM))stop("Flow-based modelling can only be used if thermal time-series are ready-made")
+    
   }
   
   #Supress building constains "_fb"
@@ -174,7 +169,6 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   opts <- setSimulationPath(opts$studyPath, "input")
   
   
-  #####ToDo
   
   oldFile <- read.table(pathsb, sep = "@")
   oldFile <- oldFile[-1,]
@@ -183,9 +177,8 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   fl <- lapply(splitRes, function(x){x[2]})
   fl <- unlist(fl)
   toRm <- which(fl == "model_description_fb")
-  if(length(toRm) > 0){
-    allRes <- allRes[-toRm]
-  }
+  if(length(toRm) > 0)allRes <- allRes[-toRm]
+  
   firstLetter <- c("t")
   areas <- getAreas(opts = opts)
   clusterD <- readClusterDesc(opts = opts)
@@ -204,7 +197,6 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   endFile <- c("[Default Ruleset]", allRes, endFile)
   write(endFile, pathsb)
 
-  ###End ToDo
   
 }
 
@@ -251,9 +243,8 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
 
 .deleteOldAreaAndCreatNew <- function(opts, area = "model_description_fb")
 {
-  if("model_description_fb" %in% getAreas(opts = opts)){
-    opts <- removeArea(area, opts = opts)
-  }
+  if("model_description_fb" %in% getAreas(opts = opts))opts <- removeArea(area, opts = opts)
+  
   opts <- createArea(area, opts = opts)
   opts
   NULL
@@ -262,7 +253,6 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
 .controlFbMod <- function(fbModel)
 {
   fileInFb <- list.files(fbModel)
-  if(!all(c("weight.txt", "second_member.txt", "ts.txt") %in% fileInFb)){
-    stop("Flow-based model does not contain all necessary input files, second_member.txt, ts.txt and weight.txt")
-  }
+  if(!all(c("weight.txt", "second_member.txt", "ts.txt") %in% fileInFb))stop("Flow-based model does not contain all necessary input files, second_member.txt, ts.txt and weight.txt")
+  
 }
