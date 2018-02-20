@@ -115,23 +115,18 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 
   dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
 
-  if(!all(hour%in%dta$hour)){
-    stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%dta$hour])))
-  }
+  if(!all(hour%in%dta$hour))stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%dta$hour])))
+  
 
-  if(!all(dayType%in%dta$dayType)){
-    stop(paste0("Some typical day are not in data : ",paste0(dayType[!dayType%in%dta$dayType])))
-  }
+  if(!all(dayType%in%dta$dayType))stop(paste0("Some typical day are not in data : ",paste0(dayType[!dayType%in%dta$dayType])))
+  
 
-  if(!all(country1 %in% c("DE","BE","FR","NL"))){
-    stop("All country1 must be in : DE, BE, FR, NL")
-  }
-  if(!all(country2 %in% c("DE","BE","FR","NL"))){
-    stop("All country2 must be in : DE, BE, FR, NL")
-  }
-  if(length(country1) != length(country2)){
-    stop("country1 must be same length to country2")
-  }
+  if(!all(country1 %in% c("DE","BE","FR","NL")))stop("All country1 must be in : DE, BE, FR, NL")
+  
+  if(!all(country2 %in% c("DE","BE","FR","NL")))stop("All country2 must be in : DE, BE, FR, NL")
+  
+  if(length(country1) != length(country2))stop("country1 must be same length to country2")
+  
 
   allCtry <- data.frame(country1 = country1, country2 = country2)
   graphList <- sapply(hour, function(hoursel){
@@ -139,10 +134,8 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
       apply(allCtry, 1, function(countsel){
         ctsel <- data.frame(t(countsel))
         tempData <- dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]]
-        if(length(tempData)==0)
-        {
-          stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
-        }
+        if(length(tempData)==0)stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
+        
         graphFlowBased2D(tempData,
                          as.character(ctsel$country1), as.character(ctsel$country2)
                          , dayType = dayTypesel, hour = hoursel) %>>% plot()
