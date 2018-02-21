@@ -166,7 +166,7 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(out) == 0){
     dta <- .preReterunData(dta)
-    cat("No row concern by adq patch")
+    cat("No loss of load in this simulation, the adequacy patch is not used")
     return(dta)
   }
   
@@ -179,7 +179,7 @@ adqPatch <- function(mcYears = "all",
     
     ret = 0
     
-    if(is.null(strategic_reserve_be) | is.null(strategic_reserve_de))
+    if(is.null(strategic_reserve_be) & is.null(strategic_reserve_de))
     {
       if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
         warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
@@ -205,15 +205,23 @@ adqPatch <- function(mcYears = "all",
     if(ret == 0){
       
       if(outR$`DTG MRG_be` > 0 & outR$LOLD_be == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " be has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
         ret = 1
       }
       if(outR$`DTG MRG_de` > 0 & outR$LOLD_de == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " de has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
         ret = 1
       }
       if(outR$`DTG MRG_fr` > 0 & outR$LOLD_fr == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " fr has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
         ret = 1
       }
       if(outR$`DTG MRG_nl` > 0 & outR$LOLD_nl == 1){
+        warning(paste0("mcYear : ",outR$mcYear," timeId : " , outR$time,
+                       " nl has LOLD = 1 but DTG MRG>0, adequacy patch not applied \n"))
         ret = 1
       }
       
@@ -308,7 +316,7 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(new) == 0){
     dta <- .preReterunData(dta)
-    cat("No row concern by adq patch")
+    cat("No row concerned by adq patch")
     return(dta)
   }
   
