@@ -10,13 +10,15 @@ shinyUI(fluidPage(
   titlePanel(div("Presentation of position", align = "center"), windowTitle = "Presentation of position "),
   # Show a plot of the generated distribution
   column(12, align="center",
-    column(2),
+    column(1),
     column(2,selectInput("h", "hours", 0:23, multiple = TRUE, selected = 19)),
     column(2,selectInput("d", "dayType", dayTyList, multiple = TRUE, selected = 1)),
     
     column(3,dateRangeInput("dateR", "Range dates", start = rangeDate[1], end = rangeDate[2],
-                   min = rangeDate[1], max = rangeDate[2]))
-    
+                   min = rangeDate[1], max = rangeDate[2])),
+    column(2, 
+           checkboxInput("filteringEmptyDomains", "filtering Empty Domains", FALSE)
+           )
 
    
   ),

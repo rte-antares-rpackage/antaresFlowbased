@@ -257,10 +257,12 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param data \code{antaresDataList} import with \link{readAntares}
-#' @param dayType : day type
-#' @param hour : hour
+#' @param dayType : day type, can be numeric or 'all'
+#' @param hour : hour, can be numeric or 'all'
 #' @param ctry1 : first country
 #' @param ctry2 : second country
+#' @param filteringEmptyDomains \code{boolean} filtering empty domains
+#' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
 #' 
 #'
 #' @examples
@@ -278,24 +280,38 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' ## plot a domain and the matching output points 
 #' positionViz(opts = opts, 
 #'          data = dta,
-#'          dayType = 1, hour =19:20, 
+#'          dayType = 1, hour = 19:20, 
 #'          ctry1 = "BE", ctry2 = "FR")
+#'          
+#' dta$areas <- dta$areas[timeId == 1]
+#' ## plot a sigle idTime with all domains 
+#' positionViz(opts = opts, 
+#'          data = dta,
+#'          dayType = "all", hour = 0, 
+#'          ctry1 = "BE", ctry2 = "FR")
+#'          
+#' ##Filtering empty domains
 #' 
-#' 
+#' positionViz(opts = opts, 
+#'          data = dta,
+#'          dayType = "all", hour = 0, 
+#'          ctry1 = "BE", ctry2 = "FR", filteringEmptyDomains = TRUE)
 #' }
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
+positionViz <- function(opts, data, dayType, hour, ctry1, ctry2, filteringEmptyDomains = FALSE, nbMaxPt = 10000){
 
-  
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
   domaines <- readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))
   
+  if(dayType[1] == "all")dayType <- unique(domaines$dayType)
+  if(hour[1] == "all")hour <- 0:23
   
-
+  
+  
   mcYears <- unique(data$areas$mcYear)
   ipn <- .giveIpn(data)
   
@@ -354,7 +370,24 @@ positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
   
 
  out <- unlist(out, recursive = FALSE)
+ 
+ if(filteringEmptyDomains){
+   out <- lapply(out, function(X){
+     if(sum(is.na(X[,3]))==nrow(X)){
+       return(NULL)
+     }else{
+       return(X)
+     }
+   })
+ }
  out <- Reduce(c, out)
+ 
+ nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
+ if(nbpt > nbMaxPt){
+   stop(paste0("You try to draw ", nbpt, " points but you can't draw more than ", nbMaxPt, " points. You can change this limit with nbMaxPt argument but be carefull, your graph can be impossible to draw if you have soo much points."))
+ }
+ 
+ 
  Mlength <- max(unlist(lapply(out, length)))
  out <- lapply(out, function(X){
    if(length(X)<Mlength){
@@ -362,6 +395,22 @@ positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
    }
    X
  })
+ 
+ 
+ stayH <- sapply(names(out), function(X){
+   strsplit(X, "_")[[1]][3]
+ })
+ 
+ stayH <- unique(gsub("H", "", stayH))
+ 
+ 
+ stayD <- sapply(names(out), function(X){
+   strsplit(X, "_")[[1]][4]
+ })
+ 
+ stayD <- unique(gsub("D", "", stayD))
+ 
+ 
  outF <- Reduce(cbind, out)
  outF <- data.frame(outF)
  names(outF) <- names(out)
@@ -391,7 +440,7 @@ positionViz <- function(opts, data, dayType, hour, ctry1, ctry2){
   
   pipeR::pipeline(
     amXYChart(dataProvider = out),
-    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(hour, collapse = ";"), ', typical day : ', paste0(dayType, collapse = ";"))),
+    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
     setGraphs(allGraph),
     setChartCursor(),
     addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),

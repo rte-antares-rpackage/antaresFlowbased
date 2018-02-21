@@ -51,7 +51,7 @@ shinyServer(function(input, output, session) {
   positionViz(opts = opts,
               data = selectData(),
               dayType = convertD(), hour = convertH(),
-              ctry1 = input$ctry1G1, ctry2 = input$ctry2G1)
+              ctry1 = input$ctry1G1, ctry2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains)
   
   })
   
@@ -59,7 +59,7 @@ shinyServer(function(input, output, session) {
     positionViz(opts = opts,
                 data = selectData(),
                 dayType = convertD(), hour = convertH(),
-                ctry1 = input$ctry1G2, ctry2 = input$ctry2G2)
+                ctry1 = input$ctry1G2, ctry2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains)
     
   })
 
