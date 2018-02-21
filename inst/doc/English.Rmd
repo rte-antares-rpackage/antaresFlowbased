@@ -42,11 +42,6 @@ antaresRead::setSimulationPath("D:/exemple_test", 0)
 #Initialize the Antares study
 initFlowBased()
 
-#Set Antares solver path
-setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-
-#Run Antares simulation
-runSimulationFB()
 ```
 
 ## 2 - Projection of domains

@@ -21,11 +21,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #  #Initialize the Antares study
 #  initFlowBased()
 #  
-#  #Set Antares solver path
-#  setSolverAntares(path = "C:/Program Files/RTE/Antares/5.0.9/bin/antares-5.0-solver.exe")
-#  
-#  #Run Antares simulation
-#  runSimulationFB()
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  # Specify a repository
