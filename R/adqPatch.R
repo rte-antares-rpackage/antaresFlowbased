@@ -46,7 +46,13 @@ adqPatch <- function(mcYears = "all",
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
                        select = c(select, "adqPatch"),
                        timeStep = "annual")
-    mcYears <- unique(dta[dta$LOLD>0]$mcYear)
+    mcYears <- unique(dta$areas[dta$areas$LOLD>0]$mcYear)
+    
+    if(is.null(mcYears)){
+      stop("No loss of load in this simulation, the adequacy patch is not used")
+    }
+    
+    
   }
   
   
@@ -316,7 +322,7 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(new) == 0){
     dta <- .preReterunData(dta)
-    cat("No row concerned by adq patch")
+    cat("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
     return(dta)
   }
   
