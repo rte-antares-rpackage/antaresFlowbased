@@ -22,7 +22,7 @@
 #' @export
 addColumnTypicalDay <- function(data, opts = antaresRead::simOptions()){
   
-  
+  .ctrlUserHour(opts)
   if(class(opts)!="simOptions")stop("opts must be a simOptions object")
   
   

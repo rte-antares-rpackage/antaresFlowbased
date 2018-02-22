@@ -233,7 +233,7 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' @export
 runAppPosition <- function(dta, opts = antaresRead::simOptions()){
   
-  
+  .ctrlUserHour(opts)
   countTryList <- toupper(unique(dta$areas$area))
   dayTyList <- unique(readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))$dayType)
   rangeDate <- range(dta$areas$time)
@@ -302,6 +302,8 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' @export
 positionViz <- function(opts, data, dayType, hour, ctry1, ctry2, filteringEmptyDomains = FALSE, nbMaxPt = 10000){
 
+  .ctrlUserHour(opts)
+  
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
   scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
   ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
