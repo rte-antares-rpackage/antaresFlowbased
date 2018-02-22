@@ -488,7 +488,7 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, getIdCols(dta$areas))
   setkeyv(chang, getIdCols(chang))
   
-  
+  options(warn = -1)
   dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
   dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
   dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
