@@ -124,6 +124,14 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   #Create building C
   .createBindingConstraint(W, opts)
   
+  daT <- substr(as.character(Sys.time()), 1, 16)
+  
+  paramS <- list(general = list(date = daT))
+  
+  ##Write param of user folder
+  antaresEditObject::writeIni(paramS, paste0(userFolder, "/infos.ini"), overwrite = TRUE)
+  
+  
   cat("Study ready for flow-based simulations")
   
 }
