@@ -93,7 +93,7 @@ adqPatch <- function(mcYears = "all",
 .applyAdq <- function(opts, dta, strategic_reserve_be = NULL,
                       strategic_reserve_de = NULL, mcYears = "all", ...){
   oldw <- getOption("warn")
-  options(warn = -1)
+  #  options(warn = -1)
   
   #Suppress note
   `be - de` <- `de - fr` <- `de - nl` <- `de - nl` <- `be - fr` <- lole <- `UNSP. ENRG` <- `DTG MRG` <- value <- NULL
