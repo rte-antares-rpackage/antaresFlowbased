@@ -498,10 +498,10 @@ adqPatch <- function(mcYears = "all",
     dta$areas[,additionalSR:= 0]
     dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
   }
-  
+  options(warn = oldw)
   dta <- .preReterunData(dta)
   
-  options(warn = oldw)
+
   dta
 }
 
