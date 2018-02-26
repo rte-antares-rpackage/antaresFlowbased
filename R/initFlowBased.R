@@ -79,9 +79,8 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   if(!dir.exists(userFolder))dir.create(userFolder)
   
   userFolder <- paste0(userFolder, "/flowbased")
-  if(!dir.exists(userFolder)){
-    dir.create(userFolder)
-  }
+  if(!dir.exists(userFolder))dir.create(userFolder)
+  
   file.copy(paste0(fb_opts, "/weight.txt"), paste0(userFolder, "/weight.txt"), overwrite = TRUE)
   file.copy(paste0(fb_opts, "/second_member.txt"), paste0(userFolder, "/second_member.txt"), overwrite = TRUE)
   file.copy(paste0(fb_opts, "/ts.txt"), paste0(userFolder, "/ts.txt"), overwrite = TRUE)
@@ -182,7 +181,9 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   oldFile <- oldFile[-1,]
   allRes <- as.vector(oldFile)
   splitRes <- strsplit(allRes, ",")
-  fl <- lapply(splitRes, function(x){x[2]})
+  fl <- lapply(splitRes, function(x){
+    x[2]
+    })
   fl <- unlist(fl)
   toRm <- which(fl == "model_description_fb")
   if(length(toRm) > 0)allRes <- allRes[-toRm]

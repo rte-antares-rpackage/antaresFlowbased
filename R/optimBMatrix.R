@@ -55,9 +55,8 @@ searchAlpha <- function(face, pointX, faceY, problem, PTDF, univ, verbose = 0){
   )
   names(FY) <- c("BE", "DE", "FR", "B")
   FY <- data.frame(FY)
-  if(verbose>0){
-    cat(paste0( "\n", "Objective out :" ,tt$objval, "\n"))
-  }
+  if(verbose>0)cat(paste0( "\n", "Objective out :" ,tt$objval, "\n"))
+  
   return(list(alpha = alpha, error = error, face = FY, pointsY = pointsY))
 }
 
