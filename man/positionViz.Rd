@@ -4,12 +4,11 @@
 \alias{positionViz}
 \title{Graph function}
 \usage{
-positionViz(opts, data, dayType, hour, ctry1, ctry2,
-  filteringEmptyDomains = FALSE, nbMaxPt = 10000)
+positionViz(data, dayType, hour, ctry1, ctry2,
+  opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
+  nbMaxPt = 10000)
 }
 \arguments{
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
-
 \item{data}{\code{antaresDataList} import with \link{readAntares}}
 
 \item{dayType}{: day type, can be numeric or 'all'}
@@ -19,6 +18,8 @@ positionViz(opts, data, dayType, hour, ctry1, ctry2,
 \item{ctry1}{: first country}
 
 \item{ctry2}{: second country}
+
+\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{filteringEmptyDomains}{\code{boolean} filtering empty domains}
 
