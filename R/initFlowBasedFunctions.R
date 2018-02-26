@@ -85,13 +85,3 @@
   daytype
 }
 
-
-#' generate scenario
-#'
-#' @return scenario \code{data.frame} scenario file
-#'
-#' @noRd
-.generateScenario <- function(){
-  data.frame(simulation = rep(1:200, 5))
-}
-
