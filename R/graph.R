@@ -300,7 +300,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function(opts, data, dayType, hour, ctry1, ctry2, filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+positionViz <- function( data, dayType, hour, ctry1, ctry2, opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
 
   .ctrlUserHour(opts)
   
