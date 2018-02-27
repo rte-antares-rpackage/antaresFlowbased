@@ -280,7 +280,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' ## plot a domain and the matching output points 
 #' positionViz(opts = opts, 
 #'          data = dta,
-#'          dayType = 1, hour = 19:20, 
+#'          dayType = 1, hour = c(9, 19), 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' dta$areas <- dta$areas[timeId == 1]
@@ -425,8 +425,10 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
  colors <- substr(topo.colors(length(oneOnFour)), 1,7)
  for(X in oneOnFour){
    CC <- CC + 1
+   titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
+   titleS <- gsub( "H", "0",titleS)
    allGraph <- c(allGraph,
-   amGraph(title = substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X])), balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
             bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
             lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
             lineThickness = 1, bulletAlpha = 0) )
