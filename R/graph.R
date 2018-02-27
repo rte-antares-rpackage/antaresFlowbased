@@ -259,8 +259,8 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type, can be numeric or 'all'
 #' @param hour : hour, can be numeric or 'all'
-#' @param ctry1 : first country
-#' @param ctry2 : second country
+#' @param country1 : first country
+#' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
 #' 
@@ -281,27 +281,29 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' positionViz(opts = opts, 
 #'          data = dta,
 #'          dayType = 1, hour = 19:20, 
-#'          ctry1 = "BE", ctry2 = "FR")
+#'          country1 = "BE", country2 = "FR")
 #'          
 #' dta$areas <- dta$areas[timeId == 1]
 #' ## plot a sigle idTime with all domains 
 #' positionViz(opts = opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
-#'          ctry1 = "BE", ctry2 = "FR")
+#'          country1 = "BE", country2 = "FR")
 #'          
 #' ##Filtering empty domains
 #' 
 #' positionViz(opts = opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
-#'          ctry1 = "BE", ctry2 = "FR", filteringEmptyDomains = TRUE)
+#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 #' }
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function( data, dayType, hour, ctry1, ctry2, opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
-
+positionViz <- function( data, dayType, hour, country1, country2, opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+  
+  ctry1 = country1
+  ctry2 = country2
   .ctrlUserHour(opts)
   
   secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
@@ -440,19 +442,18 @@ positionViz <- function( data, dayType, hour, ctry1, ctry2, opts = antaresRead::
 
   
   
-  pipeR::pipeline(
-    amXYChart(dataProvider = out),
-    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
-    setGraphs(allGraph),
-    setChartCursor(),
-    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
-    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
-    setExport(enabled = TRUE),
-    setLegend(enabled = TRUE)
-  )
-  
-  
-  
+ 
+ g <- pipeR::pipeline(
+   amXYChart(dataProvider = out),
+   addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
+   setGraphs(allGraph),
+   setChartCursor(),
+   addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+   addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
+   setExport(enabled = TRUE),
+   setLegend(enabled = TRUE)
+ )
+ combineWidgets(list = list(g%>%plot()))
 }
 
 .giveIpn <- function(dta){
