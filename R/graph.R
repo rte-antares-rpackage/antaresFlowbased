@@ -427,6 +427,7 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
    CC <- CC + 1
    titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
    titleS <- gsub( "H", "0",titleS)
+   titleS <- paste0("H", titleS)
    allGraph <- c(allGraph,
    amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
             bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],

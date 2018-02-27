@@ -4,7 +4,7 @@
 \alias{positionViz}
 \title{Graph function}
 \usage{
-positionViz(data, dayType, hour, ctry1, ctry2,
+positionViz(data, dayType, hour, country1, country2,
   opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
   nbMaxPt = 10000)
 }
@@ -15,9 +15,9 @@ positionViz(data, dayType, hour, ctry1, ctry2,
 
 \item{hour}{: hour, can be numeric or 'all'}
 
-\item{ctry1}{: first country}
+\item{country1}{: first country}
 
-\item{ctry2}{: second country}
+\item{country2}{: second country}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
@@ -43,22 +43,22 @@ dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
 ## plot a domain and the matching output points 
 positionViz(opts = opts, 
          data = dta,
-         dayType = 1, hour = 19:20, 
-         ctry1 = "BE", ctry2 = "FR")
+         dayType = 1, hour = c(9, 19), 
+         country1 = "BE", country2 = "FR")
          
 dta$areas <- dta$areas[timeId == 1]
 ## plot a sigle idTime with all domains 
 positionViz(opts = opts, 
          data = dta,
          dayType = "all", hour = 0, 
-         ctry1 = "BE", ctry2 = "FR")
+         country1 = "BE", country2 = "FR")
          
 ##Filtering empty domains
 
 positionViz(opts = opts, 
          data = dta,
          dayType = "all", hour = 0, 
-         ctry1 = "BE", ctry2 = "FR", filteringEmptyDomains = TRUE)
+         country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 }
 
 }
