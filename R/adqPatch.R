@@ -41,6 +41,14 @@ adqPatch <- function(mcYears = "all",
   ##Add alias
   setAlias("adqPatch", "Alias for adqPatch", c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN.", "areas", "links"))
   
+  
+  if(!is.null(strategic_reserve_de) & !is.null(strategic_reserve_be)){
+    if(identical(strategic_reserve_de, strategic_reserve_be)){
+      stop("strategic_reserve_be and strategic_reserve_de must have different names")
+    }
+  }
+  
+  
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
