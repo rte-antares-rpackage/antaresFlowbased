@@ -450,7 +450,7 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
    setChartCursor(),
    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
-   setExport(enabled = TRUE),
+   setExport(enabled = TRUE, switchable = FALSE),
    setLegend(enabled = TRUE)
  )
  combineWidgets(list = list(g%>%plot()))
