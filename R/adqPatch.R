@@ -57,7 +57,7 @@ adqPatch <- function(mcYears = "all",
     mcYears <- unique(dta$areas[dta$areas$LOLD>0]$mcYear)
     
     if(length(mcYears) == 0){
-      stop("No loss of load in this simulation, the adequacy patch is not used")
+      stop("No loss of load in this selection of mcYear : the adequacy patch is not used")
     }
     
     
