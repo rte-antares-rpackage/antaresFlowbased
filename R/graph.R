@@ -115,7 +115,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 
   dta <- readRDS(paste0(fb_opts$path, "/domainesFB.RDS"))
 
-  if(!all(hour%in%dta$hour))stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%dta$hour])))
+  if(!all(hour%in%(dta$hour - 1)))stop(paste0("Some hour are not in data : ",paste0(hour[!hour%in%(dta$hour - 1)])))
   
 
   if(!all(dayType%in%dta$dayType))stop(paste0("Some typical day are not in data : ",paste0(dayType[!dayType%in%dta$dayType])))
@@ -133,7 +133,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
     sapply(dayType, function(dayTypesel){
       apply(allCtry, 1, function(countsel){
         ctsel <- data.frame(t(countsel))
-        tempData <- dta[hour == hoursel & dayType == dayTypesel]$outFlowBased[[1]]
+        tempData <- dta[hour == (hoursel + 1) & dayType == dayTypesel]$outFlowBased[[1]]
         if(length(tempData)==0)stop(paste0("Not available data for typical day ", dayTypesel, " hour ", hoursel))
         
         graphFlowBased2D(tempData,
