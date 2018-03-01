@@ -34,6 +34,6 @@ shinyUI(fluidPage(
   
   
   mainPanel(
-    column(6,amChartsOutput("poVi",  height = "600px")),
-    column(6,amChartsOutput("poVi2",  height = "600px")) , width = 12 )
+    column(6,combineWidgetsOutput("poVi",  height = "600px")),
+    column(6,combineWidgetsOutput("poVi2",  height = "600px")) , width = 12 )
 ))

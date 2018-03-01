@@ -47,19 +47,19 @@ shinyServer(function(input, output, session) {
   convertH <- reactive({
     as.numeric(input$h)
   })
-  output$poVi <- renderAmCharts({
+  output$poVi <- renderCombineWidgets({
   positionViz(opts = opts,
               data = selectData(),
               dayType = convertD(), hour = convertH(),
-              ctry1 = input$ctry1G1, ctry2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains)
+              country1 = input$ctry1G1, country2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains)
   
   })
   
-  output$poVi2 <- renderAmCharts({
+  output$poVi2 <- renderCombineWidgets({
     positionViz(opts = opts,
                 data = selectData(),
                 dayType = convertD(), hour = convertH(),
-                ctry1 = input$ctry1G2, ctry2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains)
+                country1 = input$ctry1G2, country2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains)
     
   })
 

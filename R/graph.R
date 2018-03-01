@@ -224,8 +224,9 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' \dontrun{
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", -1)
 #' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
-#                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
-#                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+#'                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
+#'                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+#' runAppPosition(dta)
 #' }
 #'
 #' @import shiny manipulateWidget
