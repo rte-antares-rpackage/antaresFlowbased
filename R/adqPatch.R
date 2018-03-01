@@ -35,7 +35,7 @@ adqPatch <- function(mcYears = "all",
                      strategic_reserve_de = NULL,
                      opts = antaresRead::simOptions(),
                      fb_opts = opts,
-                     select = NULL)
+                     select = NULL, keepOldColumns = TRUE)
 {
   
   
@@ -57,7 +57,6 @@ adqPatch <- function(mcYears = "all",
                        select = c(select, "adqPatch"),
                        timeStep = "annual")
     mcYears <- unique(dta$areas[dta$areas$LOLD>0]$mcYear)
-    
     if(length(mcYears) == 0){
       stop("No loss of load in this selection of mcYears : the adequacy patch is not used")
     }
@@ -70,7 +69,9 @@ adqPatch <- function(mcYears = "all",
   dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
                      links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
                      select = c(select, "adqPatch"))
-  
+  if(is.null(dta$areas$mcYear)){
+    stop("No data found for this selection")
+  }
   
   if(!all(strategic_reserve_be %in% getAreas())){
     strategicNotIn <- strategic_reserve_be[!strategic_reserve_be %in% getAreas()]
@@ -88,7 +89,7 @@ adqPatch <- function(mcYears = "all",
   
   .applyAdq(opts = opts, dta = dta,
             fb_opts = fb_opts, strategic_reserve_be = strategic_reserve_be,
-            strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
+            strategic_reserve_de = strategic_reserve_de, mcYears = mcYears, keepOldColumns = keepOldColumns)
   
 }
 
@@ -103,7 +104,7 @@ adqPatch <- function(mcYears = "all",
 #' 
 #' @noRd
 .applyAdq <- function(opts, dta, fb_opts, strategic_reserve_be = NULL,
-                      strategic_reserve_de = NULL, mcYears = "all", ...){
+                      strategic_reserve_de = NULL, mcYears = "all", keepOldColumns = TRUE, ...){
   oldw <- getOption("warn")
   #  options(warn = -1)
   
@@ -439,8 +440,16 @@ adqPatch <- function(mcYears = "all",
   chang_link$value <- NULL
   setkeyv(chang_link, c("link", "time", "mcYear"))
   setnames(chang_link, "FLOW LIN.", "tocop")
-  setkeyv(dta$links, c("link", "time", "mcYear"))
-  dta$links[chang_link, `FLOW LIN.` := as.integer(tocop)] 
+  setkeyv(dta$links, c(getIdCols(chang_link)))
+  
+  
+  toKeep <- c("link", "time", "mcYear", "tocop")
+  dta$links <- merge(dta$links, chang_link[, .SD, .SDcols = toKeep], all.x = TRUE)
+  
+  dta$links[is.na(tocop)]$tocop <- dta$links[is.na(tocop)]$`FLOW LIN.`
+  setnames( dta$links, "tocop", "FLOW LIN._ADQPatch")
+  
+  # dta$links[chang_link, `FLOW LIN.` := as.integer(tocop)] 
   
   
   ##Update areas
@@ -484,15 +493,45 @@ adqPatch <- function(mcYears = "all",
   setkeyv(chang, getIdCols(chang))
   
   options(warn = -1)
-  dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
-  dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
-  dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
-  dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
-  if(nrow(strategicallData)>0)
-  {
-    dta$areas[,additionalSR:= 0]
-    dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
+  
+  
+  
+  toKeep <- c(getIdCols(chang), "BALANCEN", "UNSPN", "LOLDN", "DTG MRGN")
+  
+  if(nrow(strategicallData)>0){
+    toKeep <- c(toKeep, "additionalSRN")
   }
+  
+  dta$areas <- merge(dta$areas, chang[, .SD, .SDcols = toKeep], all.x = TRUE)
+  setnames(dta$areas , "BALANCEN", "BALANCE_ADQPatch")
+  setnames(dta$areas , "UNSPN", "UNSP. ENRG_ADQPatch")
+  setnames(dta$areas , "LOLDN", "LOLD_ADQPatch")
+  setnames(dta$areas , "DTG MRGN", "DTG MRG_ADQPatch")
+  
+  dta$areas[is.na(BALANCE_ADQPatch)]$BALANCE_ADQPatch <- dta$areas[is.na(BALANCE_ADQPatch)]$BALANCE
+  dta$areas[is.na(`UNSP. ENRG_ADQPatch`)]$`UNSP. ENRG_ADQPatch` <- dta$areas[is.na(`UNSP. ENRG_ADQPatch`)]$`UNSP. ENRG`
+  dta$areas[is.na(LOLD_ADQPatch)]$LOLD_ADQPatch <- dta$areas[is.na(LOLD_ADQPatch)]$LOLD
+  dta$areas[is.na(`DTG MRG_ADQPatch`)]$`DTG MRG_ADQPatch` <- dta$areas[is.na(`DTG MRG_ADQPatch`)]$`DTG MRG`
+  
+  if(!keepOldColumns){
+    dta$areas$BALANCE <- NULL
+    dta$areas$`UNSP. ENRG` <- NULL
+    dta$areas$LOLD <- NULL
+    dta$areas$`DTG MRG` <- NULL
+    dta$links$`FLOW LIN.` <- NULL
+  }
+  
+  
+  # dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
+  # dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
+  # dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
+  # dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
+   if(nrow(strategicallData)>0)
+   {
+     setnames(dta$areas , "additionalSRN", "additionalSR_ADQPatch")
+     dta$areas[is.na(additionalSR_ADQPatch)]$additionalSR_ADQPatch <- 0
+     
+   }
   options(warn = oldw)
   dta <- .preReterunData(dta)
   

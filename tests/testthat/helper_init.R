@@ -6,6 +6,13 @@ library(antaresRead)
 library(data.table)
 library(ROI)
 
+restaureOldName <- function(data){
+  names(data$areas) <- gsub("_ADQPatch", "", names(data$areas))
+  names(data$links) <- gsub("_ADQPatch", "", names(data$links))
+  data
+}
+
+
 #Untar and read study
 testStudy2 <- system.file("testdata",package = "antaresFlowbased")
 if(testStudy2 == "")testStudy2 <- system.file("inst/testdata",package = "antaresFlowbased")
@@ -57,8 +64,8 @@ rdP <- system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antar
 if(rdP == "")rdP <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
 dataNoStrat_ini <- readRDS(rdP)
 dataNoStrat_ini2 <- data.table::copy(dataNoStrat_ini)
-dataNoStrat_adq <- suppressWarnings(.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP))
-
+dataNoStrat_adq <- suppressWarnings(.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP, keepOldColumns = FALSE))
+dataNoStrat_adq <- restaureOldName(dataNoStrat_adq)
 
 
 # initial outputs

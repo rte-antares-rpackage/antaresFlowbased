@@ -17,7 +17,8 @@ test_that("adq strategic reserved", {
   dta$areas <- as.antaresDataTable(dta$areas, timeStep = "hourly", type = "area", synthesis = FALSE)
   dta$links <- as.antaresDataTable(dta$links, timeStep = "hourly", type = "link", synthesis = FALSE)
   
-  adqWhioutStratMrg <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
+  adqWhioutStratMrg <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP, keepOldColumns = FALSE))
+  adqWhioutStratMrg <- restaureOldName(adqWhioutStratMrg)
   
   
   areaADQ <- fread(system.file("testdata/adq/General/adqpatch_area.csv", package = "antaresFlowbased"))
@@ -34,13 +35,13 @@ test_that("adq strategic reserved", {
 
   
   ##Test if area table is ok
-  expect_true(identical(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))
-  expect_true(identical(adqWhioutStratMrg$areas$`UNSP. ENRG`, areaADQ$`UNSP. ENRG`))
-  expect_true(identical(adqWhioutStratMrg$areas$LOLD, areaADQ$LOLD))
-  expect_true(identical(adqWhioutStratMrg$areas$`DTG MRG`, areaADQ$`DTG MRG`))
+  expect_true(all.equal(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))
+  expect_true(all.equal(adqWhioutStratMrg$areas$`UNSP. ENRG`, areaADQ$`UNSP. ENRG`))
+  expect_true(all.equal(adqWhioutStratMrg$areas$LOLD, areaADQ$LOLD))
+  expect_true(all.equal(adqWhioutStratMrg$areas$`DTG MRG`, areaADQ$`DTG MRG`))
   
   ##Test link table
-  expect_true(identical(adqWhioutStratMrg$links$`FLOW LIN.`, linkADQ$`FLOW LIN.`))
+  expect_true(all.equal(adqWhioutStratMrg$links$`FLOW LIN.`, linkADQ$`FLOW LIN.`))
   
   
   
@@ -67,8 +68,14 @@ test_that("adq strategic reserved", {
     beStrat
   },
   {
-    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_be = "toto", fb_opts = optsTMP))
-    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
+    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_be = "toto", fb_opts = optsTMP, keepOldColumns = FALSE))
+    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP, keepOldColumns = FALSE))
+    
+    
+    adqStratBe <- restaureOldName(adqStratBe)
+    nostrat <- restaureOldName(nostrat)
+    
+    
     
     stratMrgBe <- readAntares()
     
@@ -132,8 +139,13 @@ test_that("adq strategic reserved", {
     beStrat
   },
   {
-    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_de = "toto", fb_opts = optsTMP))
-    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
+    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_de = "toto", fb_opts = optsTMP, keepOldColumns = FALSE))
+    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP, keepOldColumns = FALSE))
+    
+    adqStratBe <- restaureOldName(adqStratBe)
+    nostrat <- restaureOldName(nostrat)
+    
+    
     
     stratMrgBe <- readAntares()
     

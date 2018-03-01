@@ -6,7 +6,7 @@
 \usage{
 adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
   strategic_reserve_de = NULL, opts = antaresRead::simOptions(),
-  fb_opts = opts, select = NULL)
+  fb_opts = opts, select = NULL, keepOldColumns = TRUE)
 }
 \arguments{
 \item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}

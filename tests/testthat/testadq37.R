@@ -23,8 +23,8 @@ test_that("compares test case results", {
   links_exp <- links_exp[with(links_exp, order(mcYear, timeId, link)), ]
   
   
-  expect_true(base::all.equal(data.frame(area_exp),data.frame(area_test)))
-  expect_true(base::all.equal(data.frame(links_exp),data.frame(links_test)))
+  expect_true(all(data.frame(area_exp) == data.frame(area_test)))
+  expect_true(all(data.frame(links_exp) == data.frame(links_test)))
 })
 
 
