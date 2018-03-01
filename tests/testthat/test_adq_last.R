@@ -31,33 +31,7 @@ test_that("adq strategic reserved", {
   
   setkeyv(adqWhioutStratMrg$areas, getIdCols(adqWhioutStratMrg$areas))
   setkeyv(adqWhioutStratMrg$links, getIdCols(adqWhioutStratMrg$links))
-  
- 
-  
-  print("data in")  
-  print(dta$areas[ time == "2018-01-26 08:00:00"])
 
-  
-  print("Balance not clean")
-  print((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)[which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0)])
-  
-  print("Balance not clean witch")
-  print(which((adqWhioutStratMrg$areas$BALANCE - areaADQ$BALANCE)!=0))
-  
-  print("adqWhioutStratMrg")
-  
-  print(adqWhioutStratMrg$areas[time == "2018-01-26 08:00:00"])
-  
-  print("areaADQ")
-  
-  print(areaADQ[time == "2018-01-26 08:00:00"])
-  
-  print("sessionInfo")
-  
-  
-  
-  
-  print(sessionInfo())
   
   ##Test if area table is ok
   expect_true(identical(round(adqWhioutStratMrg$areas$BALANCE, 4), round(areaADQ$BALANCE, 4)))

@@ -25,10 +25,10 @@ test_that("test positionViz", {
  res <- positionViz(opts = testSt, 
               data = dta,
               dayType = 1, hour =19:20, 
-              ctry1 = "BE", ctry2 = "FR")
+              country1 = "BE", country2 = "FR")
   
   
-  expect_true("AmChart" %in% class(res))
+  expect_true("combineWidgets" %in% class(res))
 })
 
 
