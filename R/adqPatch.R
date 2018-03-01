@@ -184,9 +184,6 @@ adqPatch <- function(mcYears = "all",
     return(dta)
   }
   
-  print("Data in adq R1")
-  print(dta$areas[time == "2018-01-26 08:00:00"])
-  print(dta$links[time == "2018-01-26 08:00:00"])
   new <- rbindlist(sapply(1:nrow(out), function(X){
     #Filtered unconcorded line
     outR <- out[X]
@@ -286,28 +283,9 @@ adqPatch <- function(mcYears = "all",
         UNSP <-  outR[, .SD, .SDcols = c("UNSP. ENRG_be", "UNSP. ENRG_de", "UNSP. ENRG_fr", "UNSP. ENRG_nl")]
         UNSP <- unlist(UNSP)
         #Apply adq patch
-        if(outR$time == "2018-01-26 08:00:00"){
-          print("b36Prim")
-          print(b36Prim)
-          print("lole")
-          print(lole)
-          print("b")
-          print(b)
-          print("mrg")
-          print(mrg)
-          print("ipn")
-          print(ipn)
-          print("UNSP")
-          print(UNSP)
-          }
         
         tempTim <- outR$time
         sol <- .resolveAdq(b36 = b36Prim, lole = lole, b = b,margin = mrg , ipn = ipn, UNSP = UNSP, tempTim)
-        
-        if(outR$time == "2018-01-26 08:00:00"){
-          print("sol")
-          print(sol)
-        }
         
         sol <- round(sol, 0)
         sol <- data.frame(sol)
@@ -360,9 +338,6 @@ adqPatch <- function(mcYears = "all",
   setnames(re, "value.x", "LOLD")
   setnames(re, "value.y", "PN")
   setnames(re, "variable", "area")
-  
-  print("RE")
-  print(re[time == "2018-01-26 08:00:00"])
   
   chang <- merge(dta$areas, re, by = c("time" ,"mcYear", "area"))
   chang[, BALANCEN:=BALANCE - value + PN]
@@ -600,12 +575,7 @@ adqPatch <- function(mcYears = "all",
   LP <- OP(objetiv, l_constraint, maximum = FALSE,
            bounds = bounds)
   y <- ROI_solve(LP, solver = "clp",  control = list(amount = 0))
-  if(tempTim == "2018-01-26 08:00:00"){
-    print("ROI CALL")
-    print(y)
-    print(str(y))
-    print(y$solution)
-  }
+
   data.table(PN_be = y$solution[1],
              PN_de = y$solution[2],
              PN_fr = y$solution[3],
