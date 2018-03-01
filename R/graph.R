@@ -305,7 +305,10 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function( data, dayType, hour, country1, country2, fb_opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+positionViz <- function( data, dayType,
+                         hour, country1, country2,
+                         fb_opts = antaresRead::simOptions(),
+                         filteringEmptyDomains = FALSE, nbMaxPt = 10000){
   
 
   ctry1 = country1
