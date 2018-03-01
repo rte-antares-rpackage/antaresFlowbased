@@ -48,7 +48,7 @@ shinyServer(function(input, output, session) {
     as.numeric(input$h)
   })
   output$poVi <- renderCombineWidgets({
-  positionViz(opts = opts,
+  positionViz(fb_opts = fb_opts,
               data = selectData(),
               dayType = convertD(), hour = convertH(),
               country1 = input$ctry1G1, country2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains)
@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$poVi2 <- renderCombineWidgets({
-    positionViz(opts = opts,
+    positionViz(fb_opts = fb_opts,
                 data = selectData(),
                 dayType = convertD(), hour = convertH(),
                 country1 = input$ctry1G2, country2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains)

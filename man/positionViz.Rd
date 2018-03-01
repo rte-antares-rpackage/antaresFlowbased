@@ -5,7 +5,7 @@
 \title{Graph function}
 \usage{
 positionViz(data, dayType, hour, country1, country2,
-  opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
+  fb_opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
   nbMaxPt = 10000)
 }
 \arguments{
@@ -19,7 +19,7 @@ positionViz(data, dayType, hour, country1, country2,
 
 \item{country2}{: second country}
 
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{filteringEmptyDomains}{\code{boolean} filtering empty domains}
 
@@ -32,7 +32,7 @@ Graph function
 \dontrun{
 study <- "D:/Users/titorobe/Desktop/antaresStudy"
 
-opts <- antaresRead::setSimulationPath(study, -1)
+fb_opts <- antaresRead::setSimulationPath(study, -1)
 dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
                                 links = c("be - de","be - fr","be - nl",
                                 "de - fr","de - nl"), mcYears = 1:10,
@@ -41,21 +41,21 @@ dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
                                  opts = opts)
 
 ## plot a domain and the matching output points 
-positionViz(opts = opts, 
+positionViz(fb_opts = fb_opts, 
          data = dta,
          dayType = 1, hour = c(9, 19), 
          country1 = "BE", country2 = "FR")
          
 dta$areas <- dta$areas[timeId == 1]
 ## plot a sigle idTime with all domains 
-positionViz(opts = opts, 
+positionViz(fb_opts = fb_opts, 
          data = dta,
          dayType = "all", hour = 0, 
          country1 = "BE", country2 = "FR")
          
 ##Filtering empty domains
 
-positionViz(opts = opts, 
+positionViz(fb_opts = fb_opts, 
          data = dta,
          dayType = "all", hour = 0, 
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)

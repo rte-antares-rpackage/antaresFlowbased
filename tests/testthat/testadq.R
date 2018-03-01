@@ -12,12 +12,12 @@ test_that("checks warning when strategic reserves in the country", {
   
   # dataNoStrat_ini2$areas$`DTG MRG`<- 1
   
-  expect_warning(.applyAdq(opts = opts3, dataNoStrat_ini2),
-                 "mcYear : 589 timeId : 2017-12-07 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
+  expect_warning(.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP),
+                 "mcYear : 589 time : 2017-12-07 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
   
   
-  expect_warning(.applyAdq(opts = opts3, dataNoStrat_ini),
-                 "mcYear : 589 timeId : 2017-12-11 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
+  expect_warning(.applyAdq(opts = opts3, dataNoStrat_ini, fb_opts = optsTMP),
+                 "mcYear : 589 time : 2017-12-11 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
 
   })
 

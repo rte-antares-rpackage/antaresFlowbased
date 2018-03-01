@@ -6,7 +6,7 @@
 \usage{
 adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
   strategic_reserve_de = NULL, opts = antaresRead::simOptions(),
-  select = NULL)
+  fb_opts = opts, select = NULL)
 }
 \arguments{
 \item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}
@@ -18,6 +18,8 @@ adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
 \item{strategic_reserve_de}{\code{character} area use to compute new margin for DE}
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{select}{\code{character}, columns to select (columns need for adqPatch are automaticaly add)}
 }

@@ -35,10 +35,13 @@ test_that("checks message when unused binding constraints", {
   if(opts$studyPath == "") opts$studyPath <- system.file("inst/testdata/adq/antaresStudy37/user/flowbased/ts.txt", package = "antaresFlowbased")
   opts$studyPath <- gsub("/user/flowbased/ts.txt","" , opts)
   
+  
+  optsTMP2 <- opts
+  class(optsTMP2) <- "simOptions"
   # launch adq patch
   tf <- system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
   if(tf == "")  tf <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
   dataNoStrat_ini <- readRDS(tf)
   dataNoStrat_ini3 <- copy(dataNoStrat_ini)
-  expect_message(suppressWarnings(.applyAdq(opts = opts, dataNoStrat_ini3)))
+  expect_message(suppressWarnings(.applyAdq(opts = opts, dataNoStrat_ini3, fb_opts = optsTMP2)))
 })

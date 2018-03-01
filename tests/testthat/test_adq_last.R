@@ -17,7 +17,7 @@ test_that("adq strategic reserved", {
   dta$areas <- as.antaresDataTable(dta$areas, timeStep = "hourly", type = "area", synthesis = FALSE)
   dta$links <- as.antaresDataTable(dta$links, timeStep = "hourly", type = "link", synthesis = FALSE)
   
-  adqWhioutStratMrg <- suppressWarnings(.applyAdq(opts = opts3, dta))
+  adqWhioutStratMrg <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
   
   
   areaADQ <- fread(system.file("testdata/adq/General/adqpatch_area.csv", package = "antaresFlowbased"))
@@ -67,8 +67,8 @@ test_that("adq strategic reserved", {
     beStrat
   },
   {
-    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_be = "toto"))
-    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta))
+    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_be = "toto", fb_opts = optsTMP))
+    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
     
     stratMrgBe <- readAntares()
     
@@ -132,8 +132,8 @@ test_that("adq strategic reserved", {
     beStrat
   },
   {
-    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_de = "toto"))
-    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta))
+    adqStratBe <- suppressWarnings(.applyAdq(opts = opts3, dta, strategic_reserve_de = "toto", fb_opts = optsTMP))
+    nostrat <- suppressWarnings(.applyAdq(opts = opts3, dta, fb_opts = optsTMP))
     
     stratMrgBe <- readAntares()
     

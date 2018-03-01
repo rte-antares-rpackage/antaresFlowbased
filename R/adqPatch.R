@@ -2,6 +2,7 @@
 #' @title Run the adequacy patch
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
 #' @param pre_filter \code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
@@ -33,6 +34,7 @@ adqPatch <- function(mcYears = "all",
                      strategic_reserve_be = NULL,
                      strategic_reserve_de = NULL,
                      opts = antaresRead::simOptions(),
+                     fb_opts = opts,
                      select = NULL)
 {
   
@@ -84,7 +86,9 @@ adqPatch <- function(mcYears = "all",
   }
   
   
-  .applyAdq(opts = opts, dta, strategic_reserve_be = strategic_reserve_be, strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
+  .applyAdq(opts = opts, dta = dta,
+            fb_opts = fb_opts, strategic_reserve_be = strategic_reserve_be,
+            strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
   
 }
 
@@ -98,7 +102,7 @@ adqPatch <- function(mcYears = "all",
 #' @param ... use for test
 #' 
 #' @noRd
-.applyAdq <- function(opts, dta, strategic_reserve_be = NULL,
+.applyAdq <- function(opts, dta, fb_opts, strategic_reserve_be = NULL,
                       strategic_reserve_de = NULL, mcYears = "all", ...){
   oldw <- getOption("warn")
   #  options(warn = -1)
@@ -134,12 +138,20 @@ adqPatch <- function(mcYears = "all",
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG")]
   out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG"))
   
-  #Load from study
-  secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
-  b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  foldPath <- .mergeFlowBasedPath(fb_opts)
   
+  secondM <- fread(paste0(foldPath, "second_member.txt"))
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+  b36p <-  fread(paste0(foldPath, "weight.txt"))
+  
+  
+  #Load from study
+  # secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
+  # scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
+  # ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  # b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  # 
   if("Name"%in%names(b36p))data.table::setnames(b36p, "Name", "name")
   
   if("BE.FR" %in% names(b36p))data.table::setnames(b36p, "BE.FR", "be%fr")

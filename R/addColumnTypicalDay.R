@@ -2,7 +2,7 @@
 #' @title Add typical day columns
 #' 
 #' @param data \code{antaresdata} data load by \link{readAntares}
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' 
 #' 
 #' @examples
@@ -20,11 +20,10 @@
 #' }
 #' 
 #' @export
-addTypicalDayId <- function(data, opts = antaresRead::simOptions()){
+addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
   
-  .ctrlUserHour(opts)
-  if(class(opts)!="simOptions")stop("opts must be a simOptions object")
-  
+  # .ctrlUserHour(opts)
+
   
   
   if(!"antaresData" %in%class(data)){
@@ -39,9 +38,11 @@ addTypicalDayId <- function(data, opts = antaresRead::simOptions()){
     stop("You can merge typical day with mcAll")
   }
   
+  foldPath <- .mergeFlowBasedPath(fb_opts)
   
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+
   
   tsTransform <- rbindlist(sapply(2:ncol(ts), function(X){
     oo <- ts[, .SD, .SDcols = c(1, X)]

@@ -217,7 +217,7 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' Run shiny visualisation of position
 #'
 #' @param dta \code{antaresDataList} load with \code{antaresRead}
-#' @param opts \code{simOptions} load with \code{setSimulationPath}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #'
 #' @examples
 #'
@@ -232,11 +232,14 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' @import shiny manipulateWidget
 #'
 #' @export
-runAppPosition <- function(dta, opts = antaresRead::simOptions()){
+runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
   
-  .ctrlUserHour(opts)
+  #.ctrlUserHour(opts)
+  
+  foldPath <- .mergeFlowBasedPath(fb_opts)
+  
   countTryList <- toupper(unique(dta$areas$area))
-  dayTyList <- unique(readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))$dayType)
+  dayTyList <- unique(readRDS(paste0(foldPath,"domainesFB.RDS"))$dayType)
   rangeDate <- range(dta$areas$time)
   rangeDate <- round(rangeDate, "day")
   
@@ -245,7 +248,8 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
   assign("countTryList", countTryList, envir = G)
   assign("dayTyList", dayTyList, envir = G)
   assign("rangeDate", rangeDate, envir = G)
-  
+  assign("fb_opts", fb_opts, envir = G)
+
   shiny::runApp(system.file("shinyPosition", package = "antaresFlowbased"),
                 launch.browser = TRUE)
 }
@@ -256,7 +260,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 
 #' Graph function
 #' 
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type, can be numeric or 'all'
 #' @param hour : hour, can be numeric or 'all'
@@ -270,7 +274,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' \dontrun{
 #' study <- "D:/Users/titorobe/Desktop/antaresStudy"
 #' 
-#' opts <- antaresRead::setSimulationPath(study, -1)
+#' fb_opts <- antaresRead::setSimulationPath(study, -1)
 #' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
 #'                                 links = c("be - de","be - fr","be - nl",
 #'                                 "de - fr","de - nl"), mcYears = 1:10,
@@ -279,21 +283,21 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #'                                  opts = opts)
 #' 
 #' ## plot a domain and the matching output points 
-#' positionViz(opts = opts, 
+#' positionViz(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = 1, hour = c(9, 19), 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' dta$areas <- dta$areas[timeId == 1]
 #' ## plot a sigle idTime with all domains 
-#' positionViz(opts = opts, 
+#' positionViz(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' ##Filtering empty domains
 #' 
-#' positionViz(opts = opts, 
+#' positionViz(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
@@ -301,16 +305,20 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function( data, dayType, hour, country1, country2, opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+positionViz <- function( data, dayType, hour, country1, country2, fb_opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
   
+
   ctry1 = country1
   ctry2 = country2
-  .ctrlUserHour(opts)
+  #.ctrlUserHour(opts)
   
-  secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
-  domaines <- readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))
+  
+  foldPath <- .mergeFlowBasedPath(fb_opts)
+  
+  secondM <- fread(paste0(foldPath, "second_member.txt"))
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+  domaines <- readRDS(paste0(foldPath, "domainesFB.RDS"))
   
   if(dayType[1] == "all")dayType <- unique(domaines$dayType)
   if(hour[1] == "all")hour <- 0:23
@@ -479,4 +487,22 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
   
   ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
   ipn
+}
+
+
+
+.mergeFlowBasedPath <- function(fb_opts){
+  
+  if("simOptions" %in% class(fb_opts)){
+    foldPath <- paste0(fb_opts$studyPath, "/user/flowbased/")
+  }else if("flowBasedPath" %in% class(fb_opts)){
+    foldPath <- paste0(fb_opts$path, "/")
+  }else{
+    stop("fb_opts must be obtain with setSimulationPath or setFlowbasedPath function")
+  }
+  if(!file.exists(paste0(foldPath, "second_member.txt"))){
+    stop("Impossible to found second_member.txt file, you can specify fb_opts with setSimulationPath or setFlowbasedPath function")
+  }
+  
+  foldPath
 }

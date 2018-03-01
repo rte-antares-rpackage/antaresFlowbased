@@ -22,7 +22,7 @@ test_that("test positionViz", {
                                   opts = testSt )
   
   ## plot a domain and the matching output points 
- res <- positionViz(opts = testSt, 
+ res <- positionViz(fb_opts = testSt, 
               data = dta,
               dayType = 1, hour =19:20, 
               country1 = "BE", country2 = "FR")

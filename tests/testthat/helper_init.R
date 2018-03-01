@@ -47,14 +47,17 @@ testSt <- antaresRead::setSimulationPath(testSt, 1)
 ###Init adq
 opts3 <- list()
 opts3$studyPath <- system.file("testdata/adq/antaresStudy37", package = "antaresFlowbased")
+
 if(opts3$studyPath== "") opts3$studyPath <- system.file("inst/testdata/adq/antaresStudy37", package = "antaresFlowbased")
 
+optsTMP <- opts3
+class(optsTMP) <- "simOptions"
 # launch adq patch
 rdP <- system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
 if(rdP == "")rdP <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
 dataNoStrat_ini <- readRDS(rdP)
 dataNoStrat_ini2 <- data.table::copy(dataNoStrat_ini)
-dataNoStrat_adq <- suppressWarnings(.applyAdq(opts = opts3, dataNoStrat_ini2))
+dataNoStrat_adq <- suppressWarnings(.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP))
 
 
 
