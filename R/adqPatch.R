@@ -194,9 +194,9 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(out) == 0){
     dta <- .preReterunData(dta)
-    dta <- .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
     
-    cat("No loss of load in this simulation, the adequacy patch is not used")
+    message("No loss of load in this simulation, the adequacy patch is not used")
     return(dta)
   }
   
@@ -324,9 +324,9 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(new) == 0){
     dta <- .preReterunData(dta)
-    dta <- .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
     
-    cat("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
+    message("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
     return(dta)
   }
   
@@ -572,17 +572,17 @@ adqPatch <- function(mcYears = "all",
   dta$links[, `FLOW LIN._ADQPatch` := `FLOW LIN.`]
   
   if(!keepOldColumns){
-    dta$areas$BALANCE <- NULL
-    dta$areas$`UNSP. ENRG` <- NULL
-    dta$areas$LOLD <- NULL
-    dta$areas$`DTG MRG` <- NULL
-    dta$links$`FLOW LIN.` <- NULL
+    dta$areas[,BALANCE := NULL]
+    dta$areas[,`UNSP. ENRG` := NULL]
+    dta$areas[,LOLD := NULL]
+    dta$areas[,`DTG MRG` := NULL]
+    dta$links[,`FLOW LIN.` := NULL]
   }
   
   if((!is.null(strategic_reserve_be)) | (!is.null(strategic_reserve_de))){
-    dta$areas$additionalSR_ADQPatch = 0
+    dta$areas[,additionalSR_ADQPatch := 0]
   }
-  dta
+  
   
 }
 
