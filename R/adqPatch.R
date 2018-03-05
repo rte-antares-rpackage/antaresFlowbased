@@ -51,6 +51,20 @@ adqPatch <- function(mcYears = "all",
   }
   
   
+  if(!all(strategic_reserve_be %in% getAreas())){
+    strategicNotIn <- strategic_reserve_be[!strategic_reserve_be %in% getAreas()]
+    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
+    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
+    
+  }
+  
+  if(!all(strategic_reserve_de %in% getAreas())){
+    strategicNotIn <- strategic_reserve_de[!strategic_reserve_de %in% getAreas()]
+    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
+    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
+  }
+  
+  
   if(pre_filter){
     #Load useful data
     dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
@@ -71,19 +85,6 @@ adqPatch <- function(mcYears = "all",
                      select = c(select, "adqPatch"))
   if(is.null(dta$areas$mcYear)){
     stop("No data found for this selection")
-  }
-  
-  if(!all(strategic_reserve_be %in% getAreas())){
-    strategicNotIn <- strategic_reserve_be[!strategic_reserve_be %in% getAreas()]
-    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
-    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
-    
-  }
-  
-  if(!all(strategic_reserve_de %in% getAreas())){
-    strategicNotIn <- strategic_reserve_de[!strategic_reserve_de %in% getAreas()]
-    strategicNotIn <- paste(strategicNotIn, sep = "", collapse = ",")
-    stop(paste0("area(s) : '", strategicNotIn, "' does not exist"))
   }
   
   
@@ -193,6 +194,8 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(out) == 0){
     dta <- .preReterunData(dta)
+    dta <- .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    
     cat("No loss of load in this simulation, the adequacy patch is not used")
     return(dta)
   }
@@ -321,6 +324,8 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(new) == 0){
     dta <- .preReterunData(dta)
+    dta <- .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    
     cat("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
     return(dta)
   }
@@ -558,8 +563,28 @@ adqPatch <- function(mcYears = "all",
 }
 
 
-
-
+.giveNewName <- function(dta, keepOldColumns = TRUE, strategic_reserve_be, strategic_reserve_de){
+  
+  dta$areas[, BALANCE_ADQPatch := BALANCE]
+  dta$areas[, `UNSP. ENRG_ADQPatch` := `UNSP. ENRG`]
+  dta$areas[, `LOLD_ADQPatch` := `LOLD`]
+  dta$areas[, `DTG MRG_ADQPatch` := `DTG MRG`]
+  dta$links[, `FLOW LIN._ADQPatch` := `FLOW LIN.`]
+  
+  if(!keepOldColumns){
+    dta$areas$BALANCE <- NULL
+    dta$areas$`UNSP. ENRG` <- NULL
+    dta$areas$LOLD <- NULL
+    dta$areas$`DTG MRG` <- NULL
+    dta$links$`FLOW LIN.` <- NULL
+  }
+  
+  if((!is.null(strategic_reserve_be)) | (!is.null(strategic_reserve_de))){
+    dta$areas$additionalSR_ADQPatch = 0
+  }
+  dta
+  
+}
 
 
 
