@@ -14,17 +14,12 @@ test_that("compares test case results", {
   links_test <- links_test[with(links_test, order(mcYear, timeId, link)), ]
   
   # expected results = results with right number of binding constraints
-  fil <- system.file("testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
-  if(fil == "") fil <- system.file("inst/testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
-  outNoStrat_exp <- readRDS(fil)
-  area_exp <- outNoStrat_exp$areas
-  area_exp <- area_exp[with(area_exp, order(mcYear, timeId, area)), ]
-  links_exp <- outNoStrat_exp$links
-  links_exp <- links_exp[with(links_exp, order(mcYear, timeId, link)), ]
-  
-  
-  expect_true(all(data.frame(area_exp) == data.frame(area_test)))
-  expect_true(all(data.frame(links_exp) == data.frame(links_test)))
+  if(clpAPI::versionCLP() %in% "1.16.9"){
+    expect_true(all(data.frame(area_exp_64b) == data.frame(area_test)) | 
+                                 all(data.frame(area_exp_32b) == data.frame(area_test)))
+    expect_true(all(data.frame(links_exp_64b) == data.frame(links_test))| 
+                                 all(data.frame(links_exp_32b) == data.frame(links_test)))
+  }
 })
 
 

@@ -64,7 +64,7 @@ rdP <- system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antar
 if(rdP == "")rdP <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
 dataNoStrat_ini <- readRDS(rdP)
 dataNoStrat_ini2 <- data.table::copy(dataNoStrat_ini)
-dataNoStrat_adq <- suppressWarnings(.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP, keepOldColumns = FALSE))
+dataNoStrat_adq <- suppressWarnings(antaresFlowbased:::.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP, keepOldColumns = FALSE))
 dataNoStrat_adq <- restaureOldName(dataNoStrat_adq)
 
 
@@ -82,14 +82,21 @@ links_test <- dataNoStrat_adq$links
 links_test <- links_test[with(links_test, order(mcYear, timeId, link)), ]
 
 # expected results
-fid <- system.file("testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
-if(fid == "")fid <-  system.file("inst/testdata/adq/General/studyNoStrat_adq.RDS", package = "antaresFlowbased")
-outNoStrat_exp <- readRDS(fid)
-area_exp <- outNoStrat_exp$areas
-area_exp <- area_exp[with(area_exp, order(mcYear, timeId, area)), ]
-links_exp <- outNoStrat_exp$links
-links_exp <- links_exp[with(links_exp, order(mcYear, timeId, link)), ]
+fid_64b <- system.file("testdata/adq/General/studyNoStrat_adq_64b.RDS", package = "antaresFlowbased")
+if(fid_64b == "") fid_64b <-  system.file("inst/testdata/adq/General/studyNoStrat_adq_64b.RDS", package = "antaresFlowbased")
+outNoStrat_exp_64b <- readRDS(fid_64b)
+area_exp_64b <- outNoStrat_exp_64b$areas
+area_exp_64b <- area_exp_64b[with(area_exp_64b, order(mcYear, timeId, area)), ]
+links_exp_64b <- outNoStrat_exp_64b$links
+links_exp_64b <- links_exp_64b[with(links_exp_64b, order(mcYear, timeId, link)), ]
 
+fid_32b <- system.file("testdata/adq/General/studyNoStrat_adq_32b.RDS", package = "antaresFlowbased")
+if(fid_32b == "") fid_32b <-  system.file("inst/testdata/adq/General/studyNoStrat_adq_32b.RDS", package = "antaresFlowbased")
+outNoStrat_exp_32b <- readRDS(fid_32b)
+area_exp_32b <- outNoStrat_exp_32b$areas
+area_exp_32b <- area_exp_32b[with(area_exp_32b, order(mcYear, timeId, area)), ]
+links_exp_32b <- outNoStrat_exp_32b$links
+links_exp_32b <- links_exp_32b[with(links_exp_32b, order(mcYear, timeId, link)), ]
 
 # parameters
 
@@ -103,7 +110,7 @@ if(id_file == "")id_file <- system.file("inst/testdata/adq/antaresStudy/user/flo
 
 
 id_file <- data.table::fread(id_file)
-case <- data.table::data.table(unique(cbind(mcYear = area_exp$mcYear, timeId = area_exp$timeId)))
+case <- data.table::data.table(unique(cbind(mcYear = area_exp_64b$mcYear, timeId = area_exp_64b$timeId)))
 
 
 
@@ -273,7 +280,6 @@ isUnsuppliedHigher <- function(area, area_adq){
   all(temp$delta >= 0)
 }
 
-
-print("HEEEEEEEEEERE")
-print(sessionInfo())
-print(clpAPI::versionCLP())
+# print("HEEEEEEEEEERE")
+# print(sessionInfo())
+# print(clpAPI::versionCLP())
