@@ -116,7 +116,10 @@ adqPatch <- function(mcYears = "all",
   lole_fr <- lole_be <- lole_de <- lole_nl <- `UNSP. ENRG_fr` <- `UNSP. ENRG_be`<- `UNSP. ENRG_de`<- `UNSP. ENRG_nl` <- NULL
   Id_day <- Id_hour <- BALANCEN <- BALANCE <- PN <- area <- UNSPN <- strategicMargin <- LOLDN <- NULL
   `DTG MRGN` <- `FLOW LIN.` <- tocop <- stratReserve <- additionalSRN <- strategicMarginN <- LOLD <- additionalSR <- NULL
-  `be - nl` <- ipn <- NULL
+  `be - nl` <- ipn <- additionalSR_ADQPatch <- NULL
+  
+  BALANCE_ADQPatch <- `UNSP. ENRG_ADQPatch` <- LOLD_ADQPatch <- `DTG MRG_ADQPatch` <- NULL
+  
   
   #Compute Net position from links
   dta <- data.table::copy(dta)
@@ -569,6 +572,9 @@ adqPatch <- function(mcYears = "all",
 
 
 .giveNewName <- function(dta, keepOldColumns = TRUE, strategic_reserve_be, strategic_reserve_de){
+  BALANCE_ADQPatch <- `UNSP. ENRG_ADQPatch` <- LOLD_ADQPatch <- `DTG MRG_ADQPatch` <- `LIN._ADQPatch` <- NULL
+  BALANCE <- `UNSP. ENRG` <- LOLD <- `DTG MRG` <- additionalSR_ADQPatch <- NULL
+  `FLOW LIN._ADQPatch` <- `FLOW LIN.` <- NULL
   
   dta$areas[, BALANCE_ADQPatch := BALANCE]
   dta$areas[, `UNSP. ENRG_ADQPatch` := `UNSP. ENRG`]

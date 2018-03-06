@@ -470,9 +470,10 @@ plotNetPositionFB <- function( data, dayType,
    addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
    addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
    setExport(enabled = TRUE, switchable = FALSE),
-   setLegend(enabled = TRUE)
+   setLegend(enabled = TRUE),
+   plot()
  )
- combineWidgets(list = list(g%>%plot()))
+ combineWidgets(list = list(g))
 }
 
 .giveIpn <- function(dta){

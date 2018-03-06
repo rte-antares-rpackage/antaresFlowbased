@@ -19,8 +19,10 @@
 #' adqH5(opts, fb_opts)
 #' 
 #' 
-#' setAlias("adqPatch", "Alias for adqPatch", c("LOLD_ADQPatch", "UNSP. ENRG_ADQPatch", "DTG MRG_ADQPatch",
-#'                                              "UNSP. ENRG_ADQPatch", "BALANCE_ADQPatch", "FLOW LIN._ADQPatch",
+#' setAlias("adqPatch", "Alias for adqPatch", c("LOLD_ADQPatch",
+#'                                              "UNSP. ENRG_ADQPatch", "DTG MRG_ADQPatch",
+#'                                              "UNSP. ENRG_ADQPatch", "BALANCE_ADQPatch",
+#'                                              "FLOW LIN._ADQPatch",
 #'                                              "areas", "links"))
 #' 
 #' readAntares(select = "adqPatch", opts = opts, mcYears = 1)

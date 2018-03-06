@@ -25,7 +25,7 @@ addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
   # .ctrlUserHour(opts)
 
   
-  
+  simulation <- Date <- time <- NULL
   if(!"antaresData" %in%class(data)){
     warning(paste0("Your data are not antaresData object, antaresData objetc are object load by readAntares. If you have 
                    write your data in a csv file and you reload them after this is break the sytem of antaresData class.
