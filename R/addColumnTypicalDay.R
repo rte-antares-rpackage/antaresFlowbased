@@ -39,7 +39,10 @@ addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
   }
   
   foldPath <- .mergeFlowBasedPath(fb_opts)
-  
+  if(!file.exists(paste0(foldPath, "scenario.txt"))){
+    stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
+                use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
+  }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
   ts <- fread(paste0(foldPath, "ts.txt"))
 

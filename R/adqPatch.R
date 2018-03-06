@@ -144,6 +144,10 @@ adqPatch <- function(mcYears = "all",
   foldPath <- .mergeFlowBasedPath(fb_opts)
   
   secondM <- fread(paste0(foldPath, "second_member.txt"))
+  if(!file.exists(paste0(foldPath, "scenario.txt"))){
+    stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
+                use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
+  }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
   ts <- fread(paste0(foldPath, "ts.txt"))
   b36p <-  fread(paste0(foldPath, "weight.txt"))
