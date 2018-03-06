@@ -9,3 +9,10 @@
 
 readIniFile <- antaresRead:::readIniFile
 
+
+
+###Import antaresProcessing usefull funciton
+.writeAllTables <- antaresProcessing:::.writeAllTables
+.writeNewColumns <- antaresProcessing:::.writeNewColumns
+.getDim <- antaresProcessing:::.getDim
+.getIndexToWrite <- antaresProcessing:::.getIndexToWrite
