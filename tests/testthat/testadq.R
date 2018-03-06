@@ -18,31 +18,30 @@ test_that("checks warning when strategic reserves in the country", {
   
   expect_warning(.applyAdq(opts = opts3, dataNoStrat_ini, fb_opts = optsTMP),
                  "mcYear : 589 time : 2017-12-11 17:00:00 de has LOLD = 1 but DTG MRG>0, adequacy patch not applied")
-
-  })
+  
+})
 
 
 test_that("compares test case results", {
-   expect_true(all(area_exp == area_test))
-   expect_true(all(links_exp == links_test))
+  if(clpAPI::versionCLP() %in% "1.16.9"){
+    expect_true(all(area_exp_64b == area_test) | all(area_exp_32b == area_test))
+    expect_true(all(links_exp_64b == links_test) | all(links_exp_32b == links_test))
+  }
 })
 
 
 test_that("checks UNSP ENRG is higher after adequacy patch is applied", {
-
-  
   expect_true(isUnsuppliedHigher(area = area_ini, area_adq = area_test))
 })
 
 
 test_that("checks the balance of power before and after adq patch", {
-
   expect_true(isEquivalentSolution(area = area_ini, area_ad = area_test))
 })
 
 
 test_that("checks DTG MRG higher after adq patch", {
-
+  
   
   expect_true(isDTGHigher(area = area_ini, area_adq = area_test))
   
@@ -110,8 +109,9 @@ test_that("checks no export while unsupplied energy in the country", {
 
 
 test_that("All final points belong to their flow-based domains", {
-
-  expect_true(belongToDomain(links = links_exp, path = opts3$studyPath))
+  
+  expect_true(belongToDomain(links = links_exp_64b, path = opts3$studyPath) | 
+                belongToDomain(links = links_exp_32b, path = opts3$studyPath))
   
 })
 
