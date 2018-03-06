@@ -22,6 +22,8 @@ adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
 \item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{select}{\code{character}, columns to select (columns need for adqPatch are automaticaly add)}
+
+\item{keepOldColumns}{\code{boolean}, keep columns before adqPatch was apply.}
 }
 \description{
 Compute adqPatch for antares study

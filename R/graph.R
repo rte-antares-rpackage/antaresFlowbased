@@ -283,21 +283,21 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'                                  opts = opts)
 #' 
 #' ## plot a domain and the matching output points 
-#' positionViz(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = 1, hour = c(9, 19), 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' dta$areas <- dta$areas[timeId == 1]
 #' ## plot a sigle idTime with all domains 
-#' positionViz(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' ##Filtering empty domains
 #' 
-#' positionViz(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = fb_opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
@@ -305,7 +305,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function( data, dayType,
+plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
                          filteringEmptyDomains = FALSE, nbMaxPt = 10000){

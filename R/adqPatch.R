@@ -8,6 +8,7 @@
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
 #' @param strategic_reserve_de \code{character} area use to compute new margin for DE
 #' @param select \code{character}, columns to select (columns need for adqPatch are automaticaly add)
+#' @param keepOldColumns \code{boolean}, keep columns before adqPatch was apply.
 #' 
 #' @examples
 #'
