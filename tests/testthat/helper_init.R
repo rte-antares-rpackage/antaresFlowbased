@@ -272,8 +272,3 @@ isUnsuppliedHigher <- function(area, area_adq){
   temp[,delta:=(tot_ENS_adq - tot_ENS_ini)]
   all(temp$delta >= 0)
 }
-
-
-print("HEEEEEEEEEERE")
-print(sessionInfo())
-print(clpAPI::versionCLP())

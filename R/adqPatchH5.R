@@ -28,6 +28,8 @@
 #' 
 #' }
 #' 
+#' @import antaresProcessing
+#' 
 #' @export
 adqH5 <- function(opts, fb_opts, strategic_reserve_be = NULL, strategic_reserve_de = NULL){
   
@@ -74,7 +76,7 @@ adqH5 <- function(opts, fb_opts, strategic_reserve_be = NULL, strategic_reserve_
                                                             "DTG MRG_ADQPatch")])
     outToWrite$links = as.matrix(linkEnd[, .SD, .SDcols = c("FLOW LIN._ADQPatch")])
     
-    antaresProcessing:::.writeAllTables(timeStep = "hourly",
+    .writeAllTables(timeStep = "hourly",
                                         mcY = "mcInd",
                                         path = opts$h5path,
                                         outToWrite = outToWrite ,
