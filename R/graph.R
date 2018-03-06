@@ -308,16 +308,39 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
-                         filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+                         filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNormalPoints = TRUE, drawAdqPoints = TRUE){
   
-
+  idS <- getIdCols(data$areas)
+  ##Test if no-adq are present
+  namesToTest <- names(data$areas)[!names(data$areas)%in%idS]
+  AdqData <- noAdqData <- FALSE
+  if(all(c("BALANCE_ADQPatch", "UNSP. ENRG_ADQPatch", "LOLD_ADQPatch", "DTG MRG_ADQPatch") %in%namesToTest)){
+    AdqData <- TRUE
+  }
+  
+  
+  if(all(c("BALANCE", "UNSP. ENRG", "LOLD", "DTG MRG") %in%namesToTest)){
+    noAdqData <- TRUE
+  }
+  
+  if(noAdqData & drawNormalPoints){
+    drawNormalPoints <- TRUE
+  }else{
+    drawNormalPoints <- FALSE
+    }
+  
+  if(AdqData & drawAdqPoints){
+    drawAdqPoints <- TRUE
+  }else{
+    drawAdqPoints <- FALSE
+  }
+  
+  
   ctry1 = country1
   ctry2 = country2
   #.ctrlUserHour(opts)
   
-  
   foldPath <- .mergeFlowBasedPath(fb_opts)
-  
   secondM <- fread(paste0(foldPath, "second_member.txt"))
   if(!file.exists(paste0(foldPath, "scenario.txt"))){
     stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
@@ -330,15 +353,199 @@ plotNetPositionFB <- function( data, dayType,
   if(dayType[1] == "all")dayType <- unique(domaines$dayType)
   if(hour[1] == "all")hour <- 0:23
   
-  
-  
   mcYears <- unique(data$areas$mcYear)
+  out <- out2 <- NULL
+  if(drawNormalPoints)
+  {
   ipn <- .giveIpn(data)
+  out <- .constructDataForGraph(hour = hour,
+                                dayType = dayType,
+                                mcYears = mcYears,
+                                ipn = ipn,
+                                ctry1 = ctry1,
+                                ctry2 = ctry2,
+                                ts = ts, 
+                                domaines = domaines)
+    
+  }
   
+  if(drawAdqPoints)
+  {
+  ipnADQ <- .giveIpn(data, ADQ = TRUE)
+  print(ipnADQ)
+  out2 <- .constructDataForGraph(hour = hour,
+                                dayType = dayType,
+                                mcYears = mcYears,
+                                ipn = ipnADQ,
+                                ctry1 = ctry1,
+                                ctry2 = ctry2,
+                                ts = ts, 
+                                domaines = domaines)
   
+  out2 <- lapply(out2, function(WW){
+    names(WW) <- gsub("Position", "Position_ADQ", names(WW))
+    
+    WW
+    
+  })
+  
+  }
+  
+  ##Remove domains on out
+ 
+  if((!is.null(out)) & (!is.null(out2)))
+  {
+  out <- sapply(1:length(out), function(inc){
+    cbind(out[[inc]], out2[[inc]][,3:4])
+  }, simplify = FALSE, USE.NAMES = FALSE)
+  }else{
+    if(is.null(out)){
+      out <- out2
+    }
+  }
+  
+ if(filteringEmptyDomains){
+   out <- lapply(out, function(X){
+     if(sum(is.na(X[,3]))==nrow(X)){
+       return(NULL)
+     }else{
+       return(X)
+     }
+   })
+ }
+  
+ nCurvByTyD <- ncol(out[[1]])
+ out <- Reduce(c, out)
+ 
+ nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
+ if(nbpt > nbMaxPt){
+   stop(paste0("You try to draw ", nbpt, " points but you can't draw more than ", nbMaxPt, " points. You can change this limit with nbMaxPt argument but be carefull, your graph can be impossible to draw if you have soo much points."))
+ }
+ 
+ 
+ Mlength <- max(unlist(lapply(out, length)))
+ out <- lapply(out, function(X){
+   if(length(X)<Mlength){
+     X <- c(X, rep(NA, Mlength-length(X)))
+   }
+   X
+ })
+ 
+ 
+ stayH <- sapply(names(out), function(X){
+   strsplit(X, "_")[[1]][3]
+ })
+ 
+ stayH <- unique(gsub("H", "", stayH))
+ 
+ stayD <- sapply(names(out), function(X){
+   strsplit(X, "_")[[1]][4]
+ })
+ 
+ stayD <- unique(gsub("D", "", stayD))
+ 
+ outF <- Reduce(cbind, out)
+ outF <- data.frame(outF)
+ names(outF) <- names(out)
+ out <- outF
+ print(out)
+ 
+ 
+ oneOnNbC <- which(1:ncol(out)%%nCurvByTyD==1)
+ allGraph <- list()
+ CC <- 0
+ colors <- substr(topo.colors(length(oneOnNbC)), 1,7)
+ for(X in oneOnNbC){
+   curvInThisLoop <- X:(X+nCurvByTyD-1)
+   curvInThisLoopnoModel <- curvInThisLoop[3:length(curvInThisLoop)]
+   
+   CC <- CC + 1
+   titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
+   titleS <- gsub( "H", "0",titleS)
+   titleS <- paste0("H", titleS)
+   allGraph <- c(allGraph,
+   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+            bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
+            lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
+            lineThickness = 1, bulletAlpha = 0) )
+   
+   nameCurve <- names(out)[curvInThisLoopnoModel]
+   adqc <- curvInThisLoopnoModel[grep("Position_ADQ", nameCurve)]
+   noadqc <- curvInThisLoopnoModel[!curvInThisLoopnoModel%in%adqc]
+   if(length(noadqc)>0)
+   {
+   allGraph <- c(allGraph,
+   amGraph(balloonText =
+             paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+           xField = names(out)[noadqc[1]],yField = names(out)[noadqc[2]],
+           lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
+           lineThickness = 1, visibleInLegend  = FALSE))
+   }
+   if(length(adqc)>0)
+   {
+   allGraph <- c(allGraph,
+                 amGraph(balloonText =
+                           paste0('<b>Position_ADQ<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+                         bullet = 'triangleDown', xField = names(out)[adqc[1]],yField = names(out)[adqc[2]],
+                         lineAlpha = 0, bulletSize = 4, lineColor = colors[CC],
+                         lineThickness = 1, visibleInLegend  = FALSE))
+   
+   }
+   
+   
+ }
 
+ g <- pipeR::pipeline(
+   amXYChart(dataProvider = out),
+   addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
+   setGraphs(allGraph),
+   setChartCursor(),
+   addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+   addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
+   setExport(enabled = TRUE),
+   setLegend(enabled = TRUE, switchable = FALSE),
+   plot()
+ )
+ combineWidgets(list = list(g))
+}
+
+.giveIpn <- function(dta, ADQ = FALSE){
+  if(!ADQ){
+    fl <- "FLOW LIN."
+  }else{
+    fl <- "FLOW LIN._ADQPatch"
+  }
+  be <- de <- fr <- nl <- `be - de` <- `be - fr` <- `be - nl` <- `de - fr` <- `de - nl` <- lole <- value <-NULL
+  `UNSP. ENRG` <- `DTG MRG` <- NULL
   
- out <-  sapply(hour, function(HH){
+  links <- dcast(dta$links, time + mcYear~link, value.var = c(fl))
+  links[, be :=  `be - de` + `be - fr` + `be - nl`]
+  links[, de := - `be - de` + `de - fr` + `de - nl`]
+  links[, fr :=  -`be - fr` - `de - fr`]
+  links[, nl :=  -`be - nl` - `de - nl`]
+  links
+  links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
+  links <- melt(links, id = 1:2)
+  setnames(links, "variable", "area")
+  dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
+  if(!ADQ){
+  dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
+  }else{
+    dta$areas[, lole :=`UNSP. ENRG_ADQPatch` - `DTG MRG_ADQPatch` - value]
+  }
+  dta$areas[, ipn := value]
+  
+  ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
+  
+  
+  
+  
+  
+  ipn
+}
+
+.constructDataForGraph <- function(hour, dayType, mcYears, ipn, ctry1, ctry2, ts, domaines){
+  out <-  sapply(hour, function(HH){
     sapply(dayType, function(DD){
       ######
       
@@ -388,116 +595,10 @@ plotNetPositionFB <- function( data, dayType,
     }, simplify = FALSE)
   }, simplify = FALSE)
   
-
- out <- unlist(out, recursive = FALSE)
- 
- if(filteringEmptyDomains){
-   out <- lapply(out, function(X){
-     if(sum(is.na(X[,3]))==nrow(X)){
-       return(NULL)
-     }else{
-       return(X)
-     }
-   })
- }
- out <- Reduce(c, out)
- 
- nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
- if(nbpt > nbMaxPt){
-   stop(paste0("You try to draw ", nbpt, " points but you can't draw more than ", nbMaxPt, " points. You can change this limit with nbMaxPt argument but be carefull, your graph can be impossible to draw if you have soo much points."))
- }
- 
- 
- Mlength <- max(unlist(lapply(out, length)))
- out <- lapply(out, function(X){
-   if(length(X)<Mlength){
-     X <- c(X, rep(NA, Mlength-length(X)))
-   }
-   X
- })
- 
- 
- stayH <- sapply(names(out), function(X){
-   strsplit(X, "_")[[1]][3]
- })
- 
- stayH <- unique(gsub("H", "", stayH))
- 
- 
- stayD <- sapply(names(out), function(X){
-   strsplit(X, "_")[[1]][4]
- })
- 
- stayD <- unique(gsub("D", "", stayD))
- 
- 
- outF <- Reduce(cbind, out)
- outF <- data.frame(outF)
- names(outF) <- names(out)
- out <- outF
- oneOnFour <- which(1:ncol(out)%%4==1)
- allGraph <- list()
- CC <- 0
- colors <- substr(topo.colors(length(oneOnFour)), 1,7)
- for(X in oneOnFour){
-   CC <- CC + 1
-   titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
-   titleS <- gsub( "H", "0",titleS)
-   titleS <- paste0("H", titleS)
-   allGraph <- c(allGraph,
-   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-            bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
-            lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
-            lineThickness = 1, bulletAlpha = 0) )
-   
-   allGraph <- c(allGraph,
-   amGraph(balloonText =
-             paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-           bullet = 'circle', xField = names(out)[X+2],yField = names(out)[X+3],
-           lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
-           lineThickness = 1, visibleInLegend  = FALSE))
-   
- }
-
   
-  
- 
- g <- pipeR::pipeline(
-   amXYChart(dataProvider = out),
-   addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
-   setGraphs(allGraph),
-   setChartCursor(),
-   addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
-   addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
-   setExport(enabled = TRUE, switchable = FALSE),
-   setLegend(enabled = TRUE),
-   plot()
- )
- combineWidgets(list = list(g))
+  out <- unlist(out, recursive = FALSE)
+  out
 }
-
-.giveIpn <- function(dta){
-  be <- de <- fr <- nl <- `be - de` <- `be - fr` <- `be - nl` <- `de - fr` <- `de - nl` <- lole <- value <-NULL
-  `UNSP. ENRG` <- `DTG MRG` <- NULL
-  
-  links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
-  links[, be :=  `be - de` + `be - fr` + `be - nl`]
-  links[, de := - `be - de` + `de - fr` + `de - nl`]
-  links[, fr :=  -`be - fr` - `de - fr`]
-  links[, nl :=  -`be - nl` - `de - nl`]
-  links
-  links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
-  links <- melt(links, id = 1:2)
-  setnames(links, "variable", "area")
-  dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
-  dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
-  dta$areas[, ipn := value]
-  
-  ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
-  ipn
-}
-
-
 
 .mergeFlowBasedPath <- function(fb_opts){
   
