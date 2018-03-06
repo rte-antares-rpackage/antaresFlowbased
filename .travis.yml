@@ -15,6 +15,7 @@ r_github_packages:
  - Bioconductor-mirror/zlibbioc
  - Bioconductor-mirror/rhdf5
  - rte-antares-rpackage/antaresEditObject
+ - rte-antares-rpackage/antaresProcessing
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
