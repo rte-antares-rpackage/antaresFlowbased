@@ -259,7 +259,7 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type, can be numeric or 'all'
-#' @param hour : hour, can be numeric or 'all'
+#' @param hour : hour, can be numeric or 'all' (format : 0:23)
 #' @param country1 : first country
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
