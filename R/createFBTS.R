@@ -97,9 +97,29 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   #Name of climate variables
   sdC <- multiplier$variable
   sdC <- as.character(sdC)
+
+  
   #Copy proba data
   quantiles <- copy(probabilityMatrix[[2]])
   proba <- copy(probabilityMatrix[[1]])
+  
+  
+  
+  
+  ##Test data cohérency between multiplier and names of probabilityMatrix
+  if(!all(sdC%in%names(quantiles))){
+    stop("all multiplier variables must be contain in probabilityMatrix columns names")
+  }
+  
+  if(!all(sdC%in%names(proba))){
+    stop("all multiplier variables must be contain in probabilityMatrix columns names")
+  }
+  
+  if(!all(grepl("@", sdC))){
+    stop("probability matrix names must be changes using
+         the syntax area@variable (e.g. fr@load). See function setNamesProbabilityMatrix().")
+  }
+  
   
   for(i in sdC){
     quantiles[, c(i) := lapply(.SD, function(X){
