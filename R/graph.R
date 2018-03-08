@@ -274,7 +274,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' \dontrun{
 #' study <- "D:/Users/titorobe/Desktop/antaresStudy"
 #' 
-#' fb_opts <- antaresRead::setSimulationPath(study, -1)
+#' opts <- antaresRead::setSimulationPath(study, 2)
 #' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
 #'                                 links = c("be - de","be - fr","be - nl",
 #'                                 "de - fr","de - nl"), mcYears = 1:10,
@@ -283,24 +283,51 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'                                  opts = opts)
 #' 
 #' ## plot a domain and the matching output points 
-#' plotNetPositionFB(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = opts, 
 #'          data = dta,
 #'          dayType = 1, hour = c(9, 19), 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' dta$areas <- dta$areas[timeId == 1]
 #' ## plot a sigle idTime with all domains 
-#' plotNetPositionFB(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR")
 #'          
 #' ##Filtering empty domains
 #' 
-#' plotNetPositionFB(fb_opts = fb_opts, 
+#' plotNetPositionFB(fb_opts = opts, 
 #'          data = dta,
 #'          dayType = "all", hour = 0, 
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#'          
+#'          
+#'          
+#' ##See adq position
+#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+#'                                 links = c("be - de","be - fr","be - nl",
+#'                                 "de - fr","de - nl"), mcYears = 1:10,
+#'                                 select = c("LOLD", "UNSP. ENRG", 
+#'                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
+#'                                  opts = opts)
+#'                                  
+#'  dta <- adqPatch(fb_opts = opts)
+#'  
+#'  dta$areas <- dta$areas[LOLD != 0]
+#'  plotNetPositionFB(fb_opts = opts, 
+#'          data = dta,
+#'          dayType = 6, hour = 17, 
+#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#'          
+#'          
+#' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)   
+#' 
+#'  plotNetPositionFB(fb_opts = opts, 
+#'          data = dta,
+#'          dayType = 6, hour = 17, 
+#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#' 
 #' }
 #'
 #' @importFrom grDevices topo.colors
@@ -372,7 +399,6 @@ plotNetPositionFB <- function( data, dayType,
   if(drawAdqPoints)
   {
   ipnADQ <- .giveIpn(data, ADQ = TRUE)
-  print(ipnADQ)
   out2 <- .constructDataForGraph(hour = hour,
                                 dayType = dayType,
                                 mcYears = mcYears,
@@ -414,7 +440,8 @@ plotNetPositionFB <- function( data, dayType,
    })
  }
   
- nCurvByTyD <- ncol(out[[1]])
+ nCurvByTyD <- max(unlist(lapply(out, function(X){ncol(X)})))
+ 
  out <- Reduce(c, out)
  
  nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
@@ -448,7 +475,6 @@ plotNetPositionFB <- function( data, dayType,
  outF <- data.frame(outF)
  names(outF) <- names(out)
  out <- outF
- print(out)
  
  
  oneOnNbC <- which(1:ncol(out)%%nCurvByTyD==1)
