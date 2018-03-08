@@ -238,7 +238,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
   
   foldPath <- .mergeFlowBasedPath(fb_opts)
   
-  countTryList <- toupper(unique(dta$areas$area))
+  countTryList <- toupper(c("fr", "be", "de", "nl"))
   dayTyList <- unique(readRDS(paste0(foldPath,"domainesFB.RDS"))$dayType)
   rangeDate <- range(dta$areas$time)
   rangeDate <- round(rangeDate, "day")
@@ -259,86 +259,100 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 
 
 #' Graph function
-#' 
-#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
+#'
+#' @param fb_opts \code{list} of simulation parameters returned by the function
+#'   \link{setSimulationPath} or fb model localisation obtain with
+#'   \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type, can be numeric or 'all'
 #' @param hour : hour, can be numeric or 'all'
 #' @param country1 : first country
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
-#' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
-#' 
+#' @param nbMaxPt \code{numeric} number of point maximum on graph. Default
+#'   10000.
+#'
 #'
 #' @examples
 #' \dontrun{
 #' study <- "D:/Users/titorobe/Desktop/antaresStudy"
-#' 
+#'
 #' opts <- antaresRead::setSimulationPath(study, 2)
-#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
 #'                                 links = c("be - de","be - fr","be - nl",
 #'                                 "de - fr","de - nl"), mcYears = 1:10,
-#'                                 select = c("LOLD", "UNSP. ENRG", 
+#'                                 select = c("LOLD", "UNSP. ENRG",
 #'                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
 #'                                  opts = opts)
-#' 
-#' ## plot a domain and the matching output points 
-#' plotNetPositionFB(fb_opts = opts, 
+#'
+#' ## plot a domain and the matching output points
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 1, hour = c(9, 19), 
+#'          dayType = 1, hour = c(9, 19),
 #'          country1 = "BE", country2 = "FR")
-#'          
+#'
 #' dta$areas <- dta$areas[timeId == 1]
-#' ## plot a sigle idTime with all domains 
-#' plotNetPositionFB(fb_opts = opts, 
+#' ## plot a sigle idTime with all domains
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = "all", hour = 0, 
+#'          dayType = "all", hour = 0,
 #'          country1 = "BE", country2 = "FR")
-#'          
+#'
 #' ##Filtering empty domains
-#' 
-#' plotNetPositionFB(fb_opts = opts, 
+#'
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = "all", hour = 0, 
+#'          dayType = "all", hour = 0,
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
-#'          
-#'          
-#'          
+#'
+#'
+#'
 #' ##See adq position
-#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
-#'                                 links = c("be - de","be - fr","be - nl",
-#'                                 "de - fr","de - nl"), mcYears = 1:10,
-#'                                 select = c("LOLD", "UNSP. ENRG", 
-#'                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
-#'                                  opts = opts)
-#'                                  
+#'
 #'  dta <- adqPatch(fb_opts = opts)
+#'
+#'
+#'  ##If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0]
+#'  ##You must keep all areas for a given timestep. When you keep only raw with LOLD!=0, for a given timestep 
+#'  ##you can keep only somes areas. 
 #'  
-#'  dta$areas <- dta$areas[LOLD != 0]
-#'  plotNetPositionFB(fb_opts = opts, 
+#'  ##An exemple of authorized filter :
+#'  idC <- c(antaresRead::getIdCols(dta$areas))
+#'  idC <- idC[idC!="area"]
+#'  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
+#'  LOLD <- LOLD[LOLD!=0]
+#'  LOLD[,LOLD := NULL]
+#'  dta$areas <- merge(dta$areas, LOLD, by =  idC)
+#'  ##And filter
+#'  
+#'  
+#'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 6, hour = 17, 
+#'          dayType = 6, hour = 17,
 #'          country1 = "BE", country2 = "FR")
-#'          
-#'          
-#'  
-#'  plotNetPositionFB(fb_opts = opts, 
+#'
+#'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 6, hour = 17, 
-#'          country1 = "BE", country2 = "FR", drawNormalPoints = FALSE)      
-#'  
-#'  plotNetPositionFB(fb_opts = opts, 
+#'          dayType = 6, hour = 17,
+#'          country1 = "DE", country2 = "FR")
+#'
+#'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 6, hour = 17, 
-#'          country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)     
-#'          
-#' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)   
-#' 
-#'  plotNetPositionFB(fb_opts = opts, 
+#'          dayType = 6, hour = 17,
+#'          country1 = "BE", country2 = "FR", drawNormalPoints = FALSE)
+#'
+#'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 6, hour = 17, 
+#'          dayType = 6, hour = 17,
+#'          country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)
+#'
+#' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
+#'
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = 6, hour = 17,
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
-#' 
+#'
 #' }
 #'
 #' @importFrom grDevices topo.colors
@@ -503,13 +517,15 @@ plotNetPositionFB <- function( data, dayType,
  })
  
  
- stayH <- sapply(names(out), function(X){
+ cleanNam <- gsub("_ADQ","", names(out))
+ 
+ stayH <- sapply(cleanNam, function(X){
    strsplit(X, "_")[[1]][3]
  })
  
  stayH <- unique(gsub("H", "", stayH))
  
- stayD <- sapply(names(out), function(X){
+ stayD <- sapply(cleanNam, function(X){
    strsplit(X, "_")[[1]][4]
  })
  
@@ -558,7 +574,8 @@ plotNetPositionFB <- function( data, dayType,
                            paste0('<b>Position_ADQ<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
                          bullet = 'triangleDown', xField = names(out)[adqc[1]],yField = names(out)[adqc[2]],
                          lineAlpha = 0, bulletSize = 4, lineColor = colors[CC],
-                         lineThickness = 1, visibleInLegend  = FALSE))
+                         lineThickness = 1, visibleInLegend  = FALSE,
+                         bulletBorderColor = colors[CC], bulletAlpha = 0, bulletBorderAlpha = 1))
    
    }
    
