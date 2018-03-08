@@ -271,6 +271,8 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default
 #'   10000.
+#' @param drawNoAdqPoints \code{boolean} draw no-adq points default TRUE.
+#' @param drawAdqPoints \code{boolean} draw adq points default TRUE.
 #'
 #'
 #' @examples
@@ -339,7 +341,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
 #'          dayType = 6, hour = 17,
-#'          country1 = "BE", country2 = "FR", drawNormalPoints = FALSE)
+#'          country1 = "BE", country2 = "FR", drawNoAdqPoints = FALSE)
 #'
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
@@ -360,7 +362,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
-                         filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNormalPoints = TRUE, drawAdqPoints = TRUE){
+                         filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE){
   
   
   
@@ -372,9 +374,9 @@ plotNetPositionFB <- function( data, dayType,
     warning("data object should be an antaresDataList, the best way to load data it's to use antaresRead. If straitment bug it's probably due to your data object")
   }
   
-  ##Controle on drawNormalPoints & drawAdqPoints
-  if((!drawNormalPoints) & ! (drawAdqPoints)){
-    stop("You can specify drawNormalPoints & drawAdqPoints to FALSE together")
+  ##Controle on drawNoAdqPoints & drawAdqPoints
+  if((!drawNoAdqPoints) & ! (drawAdqPoints)){
+    stop("You can specify drawNoAdqPoints & drawAdqPoints to FALSE together")
   }
   
   if(!country1%in%c("DE", "BE", "FR", "NL")){
@@ -398,10 +400,10 @@ plotNetPositionFB <- function( data, dayType,
     noAdqData <- TRUE
   }
   
-  if(noAdqData & drawNormalPoints){
-    drawNormalPoints <- TRUE
+  if(noAdqData & drawNoAdqPoints){
+    drawNoAdqPoints <- TRUE
   }else{
-    drawNormalPoints <- FALSE
+    drawNoAdqPoints <- FALSE
     }
   
   if(AdqData & drawAdqPoints){
@@ -440,7 +442,7 @@ plotNetPositionFB <- function( data, dayType,
   
   mcYears <- unique(data$areas$mcYear)
   out <- out2 <- NULL
-  if(drawNormalPoints)
+  if(drawNoAdqPoints)
   {
   ipn <- .giveIpn(data)
   out <- .constructDataForGraph(hour = hour,
