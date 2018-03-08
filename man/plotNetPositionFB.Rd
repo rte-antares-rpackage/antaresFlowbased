@@ -6,7 +6,7 @@
 \usage{
 plotNetPositionFB(data, dayType, hour, country1, country2,
   fb_opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
-  nbMaxPt = 10000)
+  nbMaxPt = 10000, drawNormalPoints = TRUE, drawAdqPoints = TRUE)
 }
 \arguments{
 \item{data}{\code{antaresDataList} import with \link{readAntares}}
@@ -19,11 +19,14 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 
 \item{country2}{: second country}
 
-\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function
+\link{setSimulationPath} or fb model localisation obtain with
+\link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 
 \item{filteringEmptyDomains}{\code{boolean} filtering empty domains}
 
-\item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default 10000.}
+\item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default
+10000.}
 }
 \description{
 Graph function
@@ -32,33 +35,82 @@ Graph function
 \dontrun{
 study <- "D:/Users/titorobe/Desktop/antaresStudy"
 
-fb_opts <- antaresRead::setSimulationPath(study, -1)
-dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+opts <- antaresRead::setSimulationPath(study, 2)
+dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
                                 links = c("be - de","be - fr","be - nl",
                                 "de - fr","de - nl"), mcYears = 1:10,
-                                select = c("LOLD", "UNSP. ENRG", 
+                                select = c("LOLD", "UNSP. ENRG",
                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
                                  opts = opts)
 
-## plot a domain and the matching output points 
-plotNetPositionFB(fb_opts = fb_opts, 
+## plot a domain and the matching output points
+plotNetPositionFB(fb_opts = opts,
          data = dta,
-         dayType = 1, hour = c(9, 19), 
+         dayType = 1, hour = c(9, 19),
          country1 = "BE", country2 = "FR")
-         
+
 dta$areas <- dta$areas[timeId == 1]
-## plot a sigle idTime with all domains 
-plotNetPositionFB(fb_opts = fb_opts, 
+## plot a sigle idTime with all domains
+plotNetPositionFB(fb_opts = opts,
          data = dta,
-         dayType = "all", hour = 0, 
+         dayType = "all", hour = 0,
          country1 = "BE", country2 = "FR")
-         
+
 ##Filtering empty domains
 
-plotNetPositionFB(fb_opts = fb_opts, 
+plotNetPositionFB(fb_opts = opts,
          data = dta,
-         dayType = "all", hour = 0, 
+         dayType = "all", hour = 0,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+
+
+
+##See adq position
+
+ dta <- adqPatch(fb_opts = opts)
+
+
+ ##If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0]
+ ##You must keep all areas for a given timestep. When you keep only raw with LOLD!=0, for a given timestep 
+ ##you can keep only somes areas. 
+ 
+ ##An exemple of authorized filter :
+ idC <- c(antaresRead::getIdCols(dta$areas))
+ idC <- idC[idC!="area"]
+ LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
+ LOLD <- LOLD[LOLD!=0]
+ LOLD[,LOLD := NULL]
+ dta$areas <- merge(dta$areas, LOLD, by =  idC)
+ ##And filter
+ 
+ 
+ plotNetPositionFB(fb_opts = opts,
+         data = dta,
+         dayType = 6, hour = 17,
+         country1 = "BE", country2 = "FR")
+
+ plotNetPositionFB(fb_opts = opts,
+         data = dta,
+         dayType = 6, hour = 17,
+         country1 = "DE", country2 = "FR")
+
+ plotNetPositionFB(fb_opts = opts,
+         data = dta,
+         dayType = 6, hour = 17,
+         country1 = "BE", country2 = "FR", drawNormalPoints = FALSE)
+
+ plotNetPositionFB(fb_opts = opts,
+         data = dta,
+         dayType = 6, hour = 17,
+         country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)
+
+dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
+
+ plotNetPositionFB(fb_opts = opts,
+         data = dta,
+         dayType = 6, hour = 17,
+         country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+
 }
 
 }

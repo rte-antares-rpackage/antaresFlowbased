@@ -12,10 +12,18 @@
 #'
 #' \dontrun{
 #' 
+#' 
+#' ##Opts defind on txt files
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",2)
+#' 
+#' ##Write h5 stud
+#' antaresRead::writeAntaresH5()
+#' 
+#' ##Do a setSimulationPath on h5 file
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/Antares/antaresFlowbased",1)
 #' fb_opts = antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
-#' strategic_reserve_be <- NULL
-#' strategic_reserve_de <- NULL
+#' 
+#' ##Compute adq on H5 file
 #' adqH5(opts, fb_opts)
 #' 
 #' 
