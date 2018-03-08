@@ -446,7 +446,7 @@ adqPatch <- function(mcYears = "all",
                               ifelse((`DTG MRG` + value - PN - `UNSP. ENRG`)>0, `DTG MRG` + value - PN - `UNSP. ENRG`,0)
                               , 0)]
   
-  
+  options(warn = -1)
   ##Update links
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
   chang_link$`FLOW LIN.` <- chang_link$value
@@ -505,7 +505,7 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, getIdCols(dta$areas))
   setkeyv(chang, getIdCols(chang))
   
-  options(warn = -1)
+
   
   
   
