@@ -318,8 +318,19 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  plotNetPositionFB(fb_opts = opts, 
 #'          data = dta,
 #'          dayType = 6, hour = 17, 
-#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#'          country1 = "BE", country2 = "FR")
 #'          
+#'          
+#'  
+#'  plotNetPositionFB(fb_opts = opts, 
+#'          data = dta,
+#'          dayType = 6, hour = 17, 
+#'          country1 = "BE", country2 = "FR", drawNormalPoints = FALSE)      
+#'  
+#'  plotNetPositionFB(fb_opts = opts, 
+#'          data = dta,
+#'          dayType = 6, hour = 17, 
+#'          country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)     
 #'          
 #' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)   
 #' 
@@ -336,6 +347,29 @@ plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
                          filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNormalPoints = TRUE, drawAdqPoints = TRUE){
+  
+  
+  
+  if(!all(c("areas", "links") %in% names(data))){
+    stop("your data object must contain areas and links tables")
+  }
+  
+  if(!"antaresDataList"%in%class(data)){
+    warning("data object should be an antaresDataList, the best way to load data it's to use antaresRead. If straitment bug it's probably due to your data object")
+  }
+  
+  ##Controle on drawNormalPoints & drawAdqPoints
+  if((!drawNormalPoints) & ! (drawAdqPoints)){
+    stop("You can specify drawNormalPoints & drawAdqPoints to FALSE together")
+  }
+  
+  if(!country1%in%c("DE", "BE", "FR", "NL")){
+    stop("country1 must be DE, BE, FR or NL")
+  }
+  if(!country2%in%c("DE", "BE", "FR", "NL")){
+    stop("country2 must be DE, BE, FR or NL")
+  }
+  
   
   idS <- getIdCols(data$areas)
   ##Test if no-adq are present
@@ -379,6 +413,16 @@ plotNetPositionFB <- function( data, dayType,
   
   if(dayType[1] == "all")dayType <- unique(domaines$dayType)
   if(hour[1] == "all")hour <- 0:23
+  
+  if(!all(hour%in%0:23)){
+    stop("All hour elements must be between 0 and 23 (included)")
+  }
+  
+  if(!all(dayType %in% unique(domaines$dayType))){
+    stop("Somes elements specify in dayType are not included in domainesFB.RDS file")
+  }
+  
+  
   
   mcYears <- unique(data$areas$mcYear)
   out <- out2 <- NULL
