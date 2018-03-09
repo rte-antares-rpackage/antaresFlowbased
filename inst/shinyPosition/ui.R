@@ -8,12 +8,14 @@ library(shinyWidgets)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel(div("Presentation of position", align = "center"), windowTitle = "Presentation of position "),
+  titlePanel(div("Presentation of position", align = "center"), windowTitle = "Flow-Based domains and CWE Net Positions"),
   # Show a plot of the generated distribution
   column(12, align="center",
     column(1,
            dropdownButton(label ="Hours", status = "info",circle = FALSE,
+                          h4("Hour h equals time step [h ; h+1]"),
     checkboxInput("hAll", "All",FALSE),
+
     conditionalPanel("!input.hAll", {
     selectInput("h", "Somes", 0:23, multiple = TRUE, selected = 19)
     }))
@@ -30,8 +32,8 @@ shinyUI(fluidPage(
     ),
     
     
-    column(2,checkboxInput("nrm", "See no ADQpatch points",TRUE)),
-    column(2,checkboxInput("adq", "See ADQpatch points",TRUE)),
+    column(2,checkboxInput("nrm", "Net positions before adequacy patch",TRUE)),
+    column(2,checkboxInput("adq", "Net positions after adequacy patch",TRUE)),
     column(3,dateRangeInput("dateR", "Range dates", start = rangeDate[1], end = rangeDate[2],
                    min = rangeDate[1], max = rangeDate[2])),
     column(2, 
