@@ -1,9 +1,6 @@
 context("addNetPosition")
 
-
-
 test_that("computeFB",{
-  
 
   data <- readAntares(area = "all", links = "all", mcYears = 2)
   data <- addNetPosition(data, antaresRead::simOptions(), ADQ = FALSE)
