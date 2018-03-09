@@ -365,7 +365,6 @@ plotNetPositionFB <- function( data, dayType,
                          filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE){
   
   
-  
   if(!all(c("areas", "links") %in% names(data))){
     stop("your data object must contain areas and links tables")
   }
@@ -533,7 +532,7 @@ plotNetPositionFB <- function( data, dayType,
  
  stayD <- unique(gsub("D", "", stayD))
  
- outF <- Reduce(cbind, out)
+ outF <- Reduce(cbind.data.frame, out)
  outF <- data.frame(outF)
  names(outF) <- names(out)
  out <- outF
@@ -552,7 +551,7 @@ plotNetPositionFB <- function( data, dayType,
    titleS <- gsub( "H", "0",titleS)
    titleS <- paste0("H", titleS)
    allGraph <- c(allGraph,
-   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> : [[x]] <br><b>',ctry2, '</b> : [[y]]'),
             bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
             lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
             lineThickness = 1, bulletAlpha = 0) )
@@ -560,11 +559,22 @@ plotNetPositionFB <- function( data, dayType,
    nameCurve <- names(out)[curvInThisLoopnoModel]
    adqc <- curvInThisLoopnoModel[grep("Position_ADQ", nameCurve)]
    noadqc <- curvInThisLoopnoModel[!curvInThisLoopnoModel%in%adqc]
+   
+   
+   witchTipe <- nameCurve[grep("time_", nameCurve)]
+   witchMc <- nameCurve[grep("mcYear_", nameCurve)]
+   
    if(length(noadqc)>0)
    {
+     
+    
+     
    allGraph <- c(allGraph,
    amGraph(balloonText =
-             paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+             paste0('<b>Position<br>', ctry1, '</b> : [[x]] <br><b>',ctry2, '</b> : [[y]]
+                                               <b>time : </b>[[', witchTipe, ']]
+                    <b>mcYear : </b>[[',witchMc, ']]
+                    '),
            xField = names(out)[noadqc[1]],yField = names(out)[noadqc[2]],
            lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
            lineThickness = 1, visibleInLegend  = FALSE))
@@ -573,7 +583,10 @@ plotNetPositionFB <- function( data, dayType,
    {
    allGraph <- c(allGraph,
                  amGraph(balloonText =
-                           paste0('<b>Position_ADQ<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
+                           paste0('<b>Position_ADQ<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]
+                                               <b>time : </b>[[', witchTipe, ']]
+                    <b>mcYear : </b>[[',witchMc, ']]
+                                  '),
                          bullet = 'triangleDown', xField = names(out)[adqc[1]],yField = names(out)[adqc[2]],
                          lineAlpha = 0, bulletSize = 4, lineColor = colors[CC],
                          lineThickness = 1, visibleInLegend  = FALSE,
@@ -660,7 +673,13 @@ plotNetPositionFB <- function( data, dayType,
       
       
       res2 <- data.frame("ctry11" = unlist(ipnO[, .SD, .SDcols = tolower(ctry1)]),
-                         "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]))
+                         "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]),
+                         "time" = c(ipnO[, .SD, .SDcols = "time"]),
+                         "mcYear" = c(ipnO[, .SD, .SDcols = "mcYear"]))
+      res2$time <- as.character(res2$time )
+      # primaryKey <-  data.frame("time" = unlist(ipnO[, .SD, .SDcols = "time"]),
+      #                           "mcYear" = unlist(ipnO[, .SD, .SDcols = "mcYear"]))
+      
       
       res <- res[chull(res),]
       res <- rbind(res, res[1,])
@@ -673,11 +692,13 @@ plotNetPositionFB <- function( data, dayType,
       }
       if(nrow(res2)<max_r){
         res2 <- rbind(res2, data.frame(ctry11 = rep(NA,max_r- nrow(res2)),
-                                       ctry22 = rep(NA, max_r-nrow(res2))))
+                                       ctry22 = rep(NA, max_r-nrow(res2)),
+                                       time = rep(NA, max_r-nrow(res2)),
+                                       mcYear = rep(NA, max_r-nrow(res2))))
       }
       
       out2 <- cbind(res, res2)
-      names(out2) <- paste0(c("Model", "Model", "Position", "Position"),"_", c(ctry1, ctry2), "_H", HH, "_D", DD)
+      names(out2) <- c(paste0(c("Model", "Model", "Position", "Position"),"_", c(ctry1, ctry2), "_H", HH, "_D", DD), paste0('time',  "_H", HH, "_D", DD), paste0('mcYear',  "_H", HH, "_D", DD))
       
       data.frame(out2)
       
