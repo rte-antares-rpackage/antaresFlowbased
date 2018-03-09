@@ -29,9 +29,11 @@ shinyServer(function(input, output, session) {
 
     out <- dta
     
-    out$areas <- dta$areas[time %between% input$dateR]
+    dateS <- input$dateR
+    dateS[2] <-   dateS[2] + 1
     
-    out$links <- dta$links[time %between% input$dateR]
+    out$areas <- dta$areas[time >= dateS[1] & time < dateS[2]]
+    out$links <- dta$links[time >= dateS[1] & time < dateS[2]]
     
     }else{
       out <- dta
@@ -42,10 +44,20 @@ shinyServer(function(input, output, session) {
   })
   
   convertD <- reactive({
-    as.numeric(input$d)
+    
+    d <- as.numeric(input$d)
+    if(input$dAll){
+      d <- "all"
+    }
+    d
   })
   convertH <- reactive({
-    as.numeric(input$h)
+    h <- as.numeric(input$h)
+    
+    if(input$hAll){
+      h <- "all"
+    }
+    h
   })
   output$poVi <- renderCombineWidgets({
     input$go

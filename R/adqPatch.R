@@ -462,9 +462,7 @@ adqPatch <- function(mcYears = "all",
   dta$links[is.na(tocop)]$tocop <- dta$links[is.na(tocop)]$`FLOW LIN.`
   setnames( dta$links, "tocop", "FLOW LIN._ADQPatch")
   
-  # dta$links[chang_link, `FLOW LIN.` := as.integer(tocop)] 
-  
-  
+
   ##Update areas
   setkeyv(chang, c("area", "time", "mcYear"))
   setkeyv(dta$areas, c("area", "time", "mcYear"))
@@ -472,14 +470,8 @@ adqPatch <- function(mcYears = "all",
   ## Add strategicMargin column
   if(nrow(strategicallData)>0)
   {
-    #   dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    #   
-    #   setkeyv(chang, c("area", "time", "mcYear"))
-    #   setkeyv(dta$areas, c("area", "time", "mcYear"))
-    #   dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
     setnames(chang, "strategicMargin", "strategicMarginN")
-    #   dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
-    #   
+ 
   }
   
   chang$additionalSRN <- 0

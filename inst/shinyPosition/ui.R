@@ -4,14 +4,32 @@ library(DT)
 library(data.table)
 library(rAmCharts)
 library(manipulateWidget)
+library(shinyWidgets)
 shinyUI(fluidPage(
 
   # Application title
   titlePanel(div("Presentation of position", align = "center"), windowTitle = "Presentation of position "),
   # Show a plot of the generated distribution
   column(12, align="center",
-    column(1,selectInput("h", "hours", 0:23, multiple = TRUE, selected = 19)),
-    column(1,selectInput("d", "dayType", dayTyList, multiple = TRUE, selected = 1)),
+    column(1,
+           dropdownButton(label ="Hours", status = "info",circle = FALSE,
+    checkboxInput("hAll", "All",FALSE),
+    conditionalPanel("!input.hAll", {
+    selectInput("h", "Somes", 0:23, multiple = TRUE, selected = 19)
+    }))
+    ),
+    
+    
+    column(1,
+           dropdownButton(label ="dayTypes", status = "info",circle = FALSE,
+                          checkboxInput("dAll", "All",FALSE),
+                          conditionalPanel("!input.dAll", {
+                            selectInput("d", "dayType", dayTyList, multiple = TRUE, selected = 1)
+                          
+                          }))
+    ),
+    
+    
     column(2,checkboxInput("nrm", "See no ADQpatch points",TRUE)),
     column(2,checkboxInput("adq", "See ADQpatch points",TRUE)),
     column(3,dateRangeInput("dateR", "Range dates", start = rangeDate[1], end = rangeDate[2],
