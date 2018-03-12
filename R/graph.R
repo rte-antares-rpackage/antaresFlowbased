@@ -375,7 +375,7 @@ plotNetPositionFB <- function( data, dayType,
   
   ##Controle on drawNoAdqPoints & drawAdqPoints
   if((!drawNoAdqPoints) & ! (drawAdqPoints)){
-    stop("You can specify drawNoAdqPoints & drawAdqPoints to FALSE together")
+    stop("You have to select at least one type of positions to visualise")
   }
   
   if(!country1%in%c("DE", "BE", "FR", "NL")){
@@ -519,6 +519,8 @@ plotNetPositionFB <- function( data, dayType,
  
  
  cleanNam <- gsub("_ADQ","", names(out))
+ cleanNam <- cleanNam[!grepl("mcYear", cleanNam)]
+ cleanNam <- cleanNam[!grepl("time", cleanNam)]
  
  stayH <- sapply(cleanNam, function(X){
    strsplit(X, "_")[[1]][3]
@@ -596,7 +598,8 @@ plotNetPositionFB <- function( data, dayType,
    
    
  }
-
+ 
+ 
  g <- pipeR::pipeline(
    amXYChart(dataProvider = out),
    addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),

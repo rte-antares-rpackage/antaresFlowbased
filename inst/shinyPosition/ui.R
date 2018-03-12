@@ -8,7 +8,7 @@ library(shinyWidgets)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel(div("Presentation of position", align = "center"), windowTitle = "Flow-Based domains and CWE Net Positions"),
+  titlePanel(div("Flow-Based domains and CWE Net Positions", align = "center"), windowTitle = "Flow-Based domains and CWE Net Positions"),
   # Show a plot of the generated distribution
   column(12, align="center",
     column(1,
