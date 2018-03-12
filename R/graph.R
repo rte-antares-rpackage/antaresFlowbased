@@ -290,7 +290,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' ## plot a domain and the matching output points
 #' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 1, hour = c(9, 19),
+#'          dayType = 1, hour = c(0, 19),
 #'          country1 = "BE", country2 = "FR")
 #'
 #' dta$areas <- dta$areas[timeId == 1]
@@ -680,7 +680,11 @@ plotNetPositionFB <- function( data, dayType,
                          "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]),
                          "time" = c(ipnO[, .SD, .SDcols = "time"]),
                          "mcYear" = c(ipnO[, .SD, .SDcols = "mcYear"]))
-      res2$time <- as.character(res2$time )
+      res2$time <- as.character(res2$time +1)
+      
+      ##Supress year :
+      res2$time <- substr(res2$time, 6,nchar(res2$time ) -3)
+      
       # primaryKey <-  data.frame("time" = unlist(ipnO[, .SD, .SDcols = "time"]),
       #                           "mcYear" = unlist(ipnO[, .SD, .SDcols = "mcYear"]))
       

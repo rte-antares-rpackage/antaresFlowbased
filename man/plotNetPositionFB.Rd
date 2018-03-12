@@ -50,7 +50,7 @@ dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
 ## plot a domain and the matching output points
 plotNetPositionFB(fb_opts = opts,
          data = dta,
-         dayType = 1, hour = c(9, 19),
+         dayType = 1, hour = c(0, 19),
          country1 = "BE", country2 = "FR")
 
 dta$areas <- dta$areas[timeId == 1]

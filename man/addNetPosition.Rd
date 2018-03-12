@@ -4,8 +4,8 @@
 \alias{addNetPosition}
 \title{Add net position}
 \usage{
-addNetPosition(data, opts, inAreas = c("be", "de", "fr", "nl"), ADQ = FALSE,
-  newName = "_CWE")
+addNetPosition(data, opts = antaresRead::simOptions(), inAreas = c("be",
+  "de", "fr", "nl"), ADQ = FALSE, newName = "_CWE")
 }
 \arguments{
 \item{data}{\code{antaresDataList} read with readAntares and with areas and links tables}
