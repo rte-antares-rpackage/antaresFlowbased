@@ -551,7 +551,8 @@ plotNetPositionFB <- function( data, dayType,
    CC <- CC + 1
    titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
    titleS <- gsub( "H", "0",titleS)
-   titleS <- paste0("H", titleS)
+   titleS <- paste0("Hour ", titleS)
+   titleS <- gsub( "_D", " Day ",titleS)
    allGraph <- c(allGraph,
    amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> : [[x]] <br><b>',ctry2, '</b> : [[y]]'),
             bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
