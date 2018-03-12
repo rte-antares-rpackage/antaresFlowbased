@@ -13,7 +13,7 @@ shinyUI(fluidPage(
   column(12, align="center",
     column(1,
            dropdownButton(label ="Hours", status = "info",circle = FALSE,
-                          h4("Hour h equals time step [h ; h+1]"),
+                          h4("Hour h = time step [h ; h+1]"),
     checkboxInput("hAll", "All",FALSE),
 
     conditionalPanel("!input.hAll", {
