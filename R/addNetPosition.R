@@ -2,7 +2,7 @@
 #'
 #' @param data \code{antaresDataList} read with readAntares and with areas and links tables
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param opts \code{character} areas who will included in IPN compute
+#' @param inAreas \code{character} areas who will included in IPN compute
 #' @param ADQ \code{boolan} apply straitemùent on ADQ columns
 #' @param newName \code{character} end of new columns name. Default "_CWE".
 #' 

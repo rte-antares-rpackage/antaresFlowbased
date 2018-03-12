@@ -12,11 +12,11 @@ addNetPosition(data, opts = antaresRead::simOptions(), inAreas = c("be",
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
+\item{inAreas}{\code{character} areas who will included in IPN compute}
+
 \item{ADQ}{\code{boolan} apply straitemùent on ADQ columns}
 
 \item{newName}{\code{character} end of new columns name. Default "_CWE".}
-
-\item{opts}{\code{character} areas who will included in IPN compute}
 }
 \description{
 Add net position
