@@ -6,7 +6,8 @@
 \usage{
 plotNetPositionFB(data, dayType, hour, country1, country2,
   fb_opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
-  nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE)
+  nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE,
+  palette = "rainbow")
 }
 \arguments{
 \item{data}{\code{antaresDataList} import with \link{readAntares}}
@@ -30,6 +31,9 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 \item{drawNoAdqPoints}{\code{boolean} draw no-adq points default TRUE.}
 
 \item{drawAdqPoints}{\code{boolean} draw adq points default TRUE.}
+
+\item{palette}{\code{character} palette for colors, default rainbow. Available : 
+"cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"}
 }
 \description{
 Graph function
@@ -51,6 +55,12 @@ plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = 1, hour = c(0, 19),
          country1 = "BE", country2 = "FR")
+         
+#Change color palette
+plotNetPositionFB(fb_opts = opts,
+                 data = dta,
+                 dayType = 1, hour = c(0, 19),
+                 country1 = "BE", country2 = "FR", palette = "topo.colors")
 
 dta$areas <- dta$areas[timeId == 1]
 ## plot a sigle idTime with all domains

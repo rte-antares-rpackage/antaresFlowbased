@@ -166,7 +166,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #'
 #' \dontrun{
 #' allFB <- computeFB(dayType = 7)
-#' generateReportFb(allFB = allFB, dayType = 7)
+#' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
 #' }
 #' @export
 generateReportFb <- function(dayType, output_file = NULL,
@@ -282,6 +282,8 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
 #' @param drawNoAdqPoints \code{boolean} draw no-adq points default TRUE.
 #' @param drawAdqPoints \code{boolean} draw adq points default TRUE.
+#' @param palette \code{character} palette for colors, default rainbow. Available : 
+#' "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"
 #'
 #'
 #' @examples
@@ -301,6 +303,12 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'          data = dta,
 #'          dayType = 1, hour = c(0, 19),
 #'          country1 = "BE", country2 = "FR")
+#'          
+#' #Change color palette
+#' plotNetPositionFB(fb_opts = opts,
+#'                  data = dta,
+#'                  dayType = 1, hour = c(0, 19),
+#'                  country1 = "BE", country2 = "FR", palette = "topo.colors")
 #'
 #' dta$areas <- dta$areas[timeId == 1]
 #' ## plot a sigle idTime with all domains
@@ -372,7 +380,15 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
-                         filteringEmptyDomains = FALSE, nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE){
+                         filteringEmptyDomains = FALSE,
+                         nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE,
+                         palette = "rainbow"){
+  
+  
+  
+  if(!palette[1]%in%c("cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow")){
+    stop('Palette must be in : "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"')
+  }
   
   
   if(!all(c("areas", "links") %in% names(data))){
@@ -553,7 +569,7 @@ plotNetPositionFB <- function( data, dayType,
  oneOnNbC <- which(1:ncol(out)%%nCurvByTyD==1)
  allGraph <- list()
  CC <- 0
- colors <- substr(topo.colors(length(oneOnNbC)), 1,7)
+ colors <- substr(do.call(palette, args = list(n = length(oneOnNbC))), 1,7)
  for(X in oneOnNbC){
    curvInThisLoop <- X:(X+nCurvByTyD-1)
    curvInThisLoopnoModel <- curvInThisLoop[3:length(curvInThisLoop)]

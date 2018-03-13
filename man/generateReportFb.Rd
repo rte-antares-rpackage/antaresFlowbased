@@ -23,6 +23,6 @@ Generate html report
 
 \dontrun{
 allFB <- computeFB(dayType = 7)
-generateReportFb(allFB = allFB, dayType = 7)
+generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
 }
 }
