@@ -6,6 +6,7 @@ test_that("computeFB",{
   data <- addNetPosition(data, opts = testSt, ADQ = FALSE)
   ipn1 <- data$areas[!is.na(Balance_CWE)]
   ipn12 <- melt(giveIpn( data$links), id = 1:2)
-  expect_true(identical(ipn1$Balance_CWE,ipn12$value))
+  ipn1 <- ipn1[ipn1$area%in%c("be", "de", "fr","nl")]
+  expect_true(all(ipn1$Balance_CWE==ipn12$value))
   
 })
