@@ -85,13 +85,13 @@ plotNetPositionFB(fb_opts = opts,
  LOLD <- LOLD[LOLD!=0]
  LOLD[,LOLD := NULL]
  dta$areas <- merge(dta$areas, LOLD, by =  idC)
- ##And filter
+ ##End filter
  
  
  plotNetPositionFB(fb_opts = opts,
          data = dta,
-         dayType = 6, hour = 17,
-         country1 = "BE", country2 = "FR")
+         dayType = "all", hour = 19,
+         country1 = "BE", country2 = "FR", , filteringEmptyDomains = TRUE)
 
  plotNetPositionFB(fb_opts = opts,
          data = dta,
