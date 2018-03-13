@@ -1,5 +1,8 @@
 #' Get vertices from faces
-#'
+#' 
+#' You have plan equation end distance between plan and origine in input You have vertices who are
+#' include on convex polyhedron in output. 
+#' 
 #' @param face \code{data.table}, face for 3 country, BE, DE anf FR
 #' @param b \code{numeric}, extreme points b
 #'

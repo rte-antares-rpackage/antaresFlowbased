@@ -31,7 +31,7 @@ Compute adqPatch for antares study
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
+antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 
 #No strategic reserve
 res <- adqPatch()
@@ -42,6 +42,8 @@ res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 #Add a new column
 res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 
+#Remove old columns
+res <- adqPatch(keepOldColumns = FALSE)
 }
 
 }

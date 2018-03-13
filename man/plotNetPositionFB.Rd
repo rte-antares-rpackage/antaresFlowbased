@@ -25,8 +25,7 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 
 \item{filteringEmptyDomains}{\code{boolean} filtering empty domains}
 
-\item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default
-10000.}
+\item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default 10000.}
 
 \item{drawNoAdqPoints}{\code{boolean} draw no-adq points default TRUE.}
 
@@ -84,6 +83,7 @@ plotNetPositionFB(fb_opts = opts,
  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
  LOLD <- LOLD[LOLD!=0]
  LOLD[,LOLD := NULL]
+ #Here merge is used for filter data
  dta$areas <- merge(dta$areas, LOLD, by =  idC)
  ##End filter
  

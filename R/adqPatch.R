@@ -13,7 +13,7 @@
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 #' 
 #' #No strategic reserve
 #' res <- adqPatch()
@@ -24,6 +24,8 @@
 #' #Add a new column
 #' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 #' 
+#' #Remove old columns
+#' res <- adqPatch(keepOldColumns = FALSE)
 #' }
 #' 
 #' @importFrom stats as.formula cutree dist hclust na.omit runif

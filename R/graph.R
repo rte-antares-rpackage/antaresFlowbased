@@ -101,10 +101,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' @examples
 #'
 #' \dontrun{
-#' plotFB(1,1,"FR","NL")
-#' plotFB(1:2,1,"FR","NL")
-#' plotFB(1:2,1:2,"FR","NL")
-#' plotFB(1,1,c("FR", "DE"),c("NL", "FR"))
+#'  fb_opts = antaresFlowbased::fbOptions()
+#'  plotFB(dayType = 1, hour = 1, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1:2, hour = 1,country1 = "FR",country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1:2, hour = 1:2, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), country2 = c("NL", "FR"), fb_opts = fb_opts)
 #' }
 #'
 #'
@@ -165,7 +166,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #'
 #' \dontrun{
 #' allFB <- computeFB(dayType = 7)
-#' generateReportFb(allFB, dayType = 7)
+#' generateReportFb(allFB = allFB, dayType = 7)
 #' }
 #' @export
 generateReportFb <- function(dayType, output_file = NULL,
@@ -196,10 +197,19 @@ generateReportFb <- function(dayType, output_file = NULL,
 
 #' Run shiny visualisation of error
 #'
+#' Click on raw of table to see graphs. You can also export reports for a typical day.
+#' 
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #'
 #' @import shiny manipulateWidget
 #'
+#'
+#' @examples
+#'
+#' \dontrun{
+#'  fb_opts = antaresFlowbased::fbOptions()
+#'  runAppError(fb_opts)
+#' }
 #' @export
 runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 
@@ -269,8 +279,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' @param country1 : first country
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
-#' @param nbMaxPt \code{numeric} number of point maximum on graph. Default
-#'   10000.
+#' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
 #' @param drawNoAdqPoints \code{boolean} draw no-adq points default TRUE.
 #' @param drawAdqPoints \code{boolean} draw adq points default TRUE.
 #'
@@ -324,6 +333,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
 #'  LOLD <- LOLD[LOLD!=0]
 #'  LOLD[,LOLD := NULL]
+#'  #Here merge is used for filter data
 #'  dta$areas <- merge(dta$areas, LOLD, by =  idC)
 #'  ##End filter
 #'  

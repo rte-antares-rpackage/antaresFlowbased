@@ -24,10 +24,11 @@ Plot 2D for flowbased areas can combine more than one plot
 \examples{
 
 \dontrun{
-plotFB(1,1,"FR","NL")
-plotFB(1:2,1,"FR","NL")
-plotFB(1:2,1:2,"FR","NL")
-plotFB(1,1,c("FR", "DE"),c("NL", "FR"))
+ fb_opts = antaresFlowbased::fbOptions()
+ plotFB(dayType = 1, hour = 1, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+ plotFB(dayType = 1:2, hour = 1,country1 = "FR",country2 = "NL", fb_opts = fb_opts)
+ plotFB(dayType = 1:2, hour = 1:2, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+ plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), country2 = c("NL", "FR"), fb_opts = fb_opts)
 }
 
 

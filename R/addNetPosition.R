@@ -2,7 +2,9 @@
 #'
 #' @param data \code{antaresDataList} read with readAntares and with areas and links tables
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param inAreas \code{character} areas who will included in IPN compute
+#' @param inAreas \code{character} areas who will included in IPN compute. All links present in inAreas 
+#' (for 2 areas concerned by link) will be included. Others links are excluded. 
+#' Be careful if only one area in two is present, link is excluded.
 #' @param ADQ \code{boolan} apply straitemùent on ADQ columns
 #' @param newName \code{character} end of new columns name. Default "_CWE".
 #' 
@@ -11,7 +13,13 @@
 #' \dontrun{
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 #' data <- readAntares(area = "all", links = "all", mcYears = 1)
+#' 
+#' ##Add net position for CWE
 #' data <- addNetPosition(data, opts, ADQ = FALSE)
+#' 
+#' ##Add net position for CWE+AT
+#' data <- addNetPosition(data, opts, ADQ = FALSE,
+#'  inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
 #' 
 #' }
 #' 
@@ -84,8 +92,12 @@ addNetPosition <- function(data, opts = antaresRead::simOptions(), inAreas = c("
   }
   
   
-  setnames(links, "value", newColumnName)
+
   data$areas <- merge(data$areas, links, by = c("time", "mcYear", "area"), all.x = TRUE)
+  
+  data$areas$value[is.na(data$areas$value)] <- 0
+  setnames(data$areas, "value", newColumnName)
+  
   setorderv(data$areas, c("area", "mcYear", "timeId"))
   data
 }

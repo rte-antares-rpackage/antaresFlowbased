@@ -12,7 +12,9 @@ addNetPosition(data, opts = antaresRead::simOptions(), inAreas = c("be",
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{inAreas}{\code{character} areas who will included in IPN compute}
+\item{inAreas}{\code{character} areas who will included in IPN compute. All links present in inAreas 
+(for 2 areas concerned by link) will be included. Others links are excluded. 
+Be careful if only one area in two is present, link is excluded.}
 
 \item{ADQ}{\code{boolan} apply straitemùent on ADQ columns}
 
@@ -25,7 +27,13 @@ Add net position
 \dontrun{
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 data <- readAntares(area = "all", links = "all", mcYears = 1)
+
+##Add net position for CWE
 data <- addNetPosition(data, opts, ADQ = FALSE)
+
+##Add net position for CWE+AT
+data <- addNetPosition(data, opts, ADQ = FALSE,
+ inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
 
 }
 

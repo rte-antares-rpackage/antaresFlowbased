@@ -26,13 +26,14 @@
 #' ##Compute adq on H5 file
 #' adqH5(opts, fb_opts)
 #' 
-#' 
+#' ##Set alias for an easy read
 #' setAlias("adqPatch", "Alias for adqPatch", c("LOLD_ADQPatch",
 #'                                              "UNSP. ENRG_ADQPatch", "DTG MRG_ADQPatch",
 #'                                              "UNSP. ENRG_ADQPatch", "BALANCE_ADQPatch",
 #'                                              "FLOW LIN._ADQPatch",
 #'                                              "areas", "links"))
 #' 
+#' ##Read with alias
 #' readAntares(select = "adqPatch", opts = opts, mcYears = 1)
 #' 
 #' 
