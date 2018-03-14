@@ -579,10 +579,15 @@ plotNetPositionFB <- function( data, dayType,
    curvInThisLoopnoModel <- curvInThisLoop[3:length(curvInThisLoop)]
    
    CC <- CC + 1
+   
+   ##Compute title
    titleS <- substr(names(out)[X], nchar(names(out)[X])-5, nchar(names(out)[X]))
    titleS <- gsub( "_H", "H",titleS)
-   
    titleS <- gsub( "H", "0",titleS)
+   titleS <- strsplit(titleS, "_")[[1]]
+   titleS[1] <- ifelse(nchar(titleS[1] ) == 2, titleS[1], substr(titleS[1], 2,3))
+   titleS <- paste0(titleS[1], "_", titleS[2])
+   
    titleS <- paste0("Hour ", titleS)
    titleS <- gsub( "_D", " Day ",titleS)
    allGraph <- c(allGraph,
