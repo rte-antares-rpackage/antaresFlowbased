@@ -2,16 +2,18 @@
 #' @title Run the adequacy patch
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param mcYears \code{numeric} include mcYears. Default all (all mcYears are load)
 #' @param pre_filter \code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears
 #' @param strategic_reserve_be \code{character} area use to compute new margin for BE
 #' @param strategic_reserve_de \code{character} area use to compute new margin for DE
 #' @param select \code{character}, columns to select (columns need for adqPatch are automaticaly add)
+#' @param keepOldColumns \code{boolean}, keep columns before adqPatch was apply.
 #' 
 #' @examples
 #'
 #' \dontrun{
-#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
+#' antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 #' 
 #' #No strategic reserve
 #' res <- adqPatch()
@@ -22,6 +24,8 @@
 #' #Add a new column
 #' res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 #' 
+#' #Remove old columns
+#' res <- adqPatch(keepOldColumns = FALSE)
 #' }
 #' 
 #' @importFrom stats as.formula cutree dist hclust na.omit runif
@@ -33,7 +37,8 @@ adqPatch <- function(mcYears = "all",
                      strategic_reserve_be = NULL,
                      strategic_reserve_de = NULL,
                      opts = antaresRead::simOptions(),
-                     select = NULL)
+                     fb_opts = opts,
+                     select = NULL, keepOldColumns = TRUE)
 {
   
   
@@ -47,27 +52,6 @@ adqPatch <- function(mcYears = "all",
       stop("strategic_reserve_be and strategic_reserve_de must have different names")
     }
   }
-  
-  
-  if(pre_filter){
-    #Load useful data
-    dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
-                       select = c(select, "adqPatch"),
-                       timeStep = "annual")
-    mcYears <- unique(dta$areas[dta$areas$LOLD>0]$mcYear)
-    
-    if(length(mcYears) == 0){
-      stop("No loss of load in this selection of mcYears : the adequacy patch is not used")
-    }
-    
-    
-  }
-  
-  
-  #Load useful data
-  dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
-                     links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
-                     select = c(select, "adqPatch"))
   
   
   if(!all(strategic_reserve_be %in% getAreas())){
@@ -84,7 +68,32 @@ adqPatch <- function(mcYears = "all",
   }
   
   
-  .applyAdq(opts = opts, dta, strategic_reserve_be = strategic_reserve_be, strategic_reserve_de = strategic_reserve_de, mcYears = mcYears)
+  if(pre_filter){
+    #Load useful data
+    dta <- readAntares(areas = c("fr", "be", "de", "nl"), mcYears = mcYears,
+                       select = c(select, "adqPatch"),
+                       timeStep = "annual")
+    mcYears <- unique(dta$areas[dta$areas$LOLD>0]$mcYear)
+    if(length(mcYears) == 0){
+      stop("No loss of load in this selection of mcYears : the adequacy patch is not used")
+    }
+    
+    
+  }
+  
+  
+  #Load useful data
+  dta <- readAntares(areas = c("fr", "be", "de", "nl"), 
+                     links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = mcYears,
+                     select = c(select, "adqPatch"))
+  if(is.null(dta$areas$mcYear)){
+    stop("No data found for this selection")
+  }
+  
+  
+  .applyAdq(opts = opts, dta = dta,
+            fb_opts = fb_opts, strategic_reserve_be = strategic_reserve_be,
+            strategic_reserve_de = strategic_reserve_de, mcYears = mcYears, keepOldColumns = keepOldColumns)
   
 }
 
@@ -98,8 +107,8 @@ adqPatch <- function(mcYears = "all",
 #' @param ... use for test
 #' 
 #' @noRd
-.applyAdq <- function(opts, dta, strategic_reserve_be = NULL,
-                      strategic_reserve_de = NULL, mcYears = "all", ...){
+.applyAdq <- function(opts, dta, fb_opts, strategic_reserve_be = NULL,
+                      strategic_reserve_de = NULL, mcYears = "all", keepOldColumns = TRUE, ...){
   oldw <- getOption("warn")
   #  options(warn = -1)
   
@@ -109,7 +118,10 @@ adqPatch <- function(mcYears = "all",
   lole_fr <- lole_be <- lole_de <- lole_nl <- `UNSP. ENRG_fr` <- `UNSP. ENRG_be`<- `UNSP. ENRG_de`<- `UNSP. ENRG_nl` <- NULL
   Id_day <- Id_hour <- BALANCEN <- BALANCE <- PN <- area <- UNSPN <- strategicMargin <- LOLDN <- NULL
   `DTG MRGN` <- `FLOW LIN.` <- tocop <- stratReserve <- additionalSRN <- strategicMarginN <- LOLD <- additionalSR <- NULL
-  `be - nl` <- ipn <- NULL
+  `be - nl` <- ipn <- additionalSR_ADQPatch <- NULL
+  
+  BALANCE_ADQPatch <- `UNSP. ENRG_ADQPatch` <- LOLD_ADQPatch <- `DTG MRG_ADQPatch` <- NULL
+  
   
   #Compute Net position from links
   dta <- data.table::copy(dta)
@@ -134,12 +146,24 @@ adqPatch <- function(mcYears = "all",
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG")]
   out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG"))
   
-  #Load from study
-  secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
-  b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  foldPath <- .mergeFlowBasedPath(fb_opts)
   
+  secondM <- fread(paste0(foldPath, "second_member.txt"))
+  if(!file.exists(paste0(foldPath, "scenario.txt"))){
+    stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
+                use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
+  }
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+  b36p <-  fread(paste0(foldPath, "weight.txt"))
+  
+  
+  #Load from study
+  # secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
+  # scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
+  # ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  # b36p <-  fread(paste0(opts$studyPath, "/user/flowbased/weight.txt"))
+  # 
   if("Name"%in%names(b36p))data.table::setnames(b36p, "Name", "name")
   
   if("BE.FR" %in% names(b36p))data.table::setnames(b36p, "BE.FR", "be%fr")
@@ -180,7 +204,9 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(out) == 0){
     dta <- .preReterunData(dta)
-    cat("No loss of load in this simulation, the adequacy patch is not used")
+    .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    
+    message("No loss of load in this simulation, the adequacy patch is not used")
     return(dta)
   }
   
@@ -308,7 +334,9 @@ adqPatch <- function(mcYears = "all",
   
   if(nrow(new) == 0){
     dta <- .preReterunData(dta)
-    cat("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
+    .giveNewName(dta, keepOldColumns = keepOldColumns, strategic_reserve_be, strategic_reserve_de)
+    
+    message("No loss of load in several countries at the same time (and no transfer), the adequacy patch is not used")
     return(dta)
   }
   
@@ -420,17 +448,23 @@ adqPatch <- function(mcYears = "all",
                               ifelse((`DTG MRG` + value - PN - `UNSP. ENRG`)>0, `DTG MRG` + value - PN - `UNSP. ENRG`,0)
                               , 0)]
   
-  
+  options(warn = -1)
   ##Update links
   chang_link <- merge(dta$links, re_link, by = c("time" ,"mcYear", "link"))
   chang_link$`FLOW LIN.` <- chang_link$value
   chang_link$value <- NULL
   setkeyv(chang_link, c("link", "time", "mcYear"))
   setnames(chang_link, "FLOW LIN.", "tocop")
-  setkeyv(dta$links, c("link", "time", "mcYear"))
-  dta$links[chang_link, `FLOW LIN.` := as.integer(tocop)] 
+  setkeyv(dta$links, c(getIdCols(chang_link)))
   
   
+  toKeep <- c("link", "time", "mcYear", "tocop")
+  dta$links <- merge(dta$links, chang_link[, .SD, .SDcols = toKeep], all.x = TRUE)
+  
+  dta$links[is.na(tocop)]$tocop <- dta$links[is.na(tocop)]$`FLOW LIN.`
+  setnames( dta$links, "tocop", "FLOW LIN._ADQPatch")
+  
+
   ##Update areas
   setkeyv(chang, c("area", "time", "mcYear"))
   setkeyv(dta$areas, c("area", "time", "mcYear"))
@@ -438,14 +472,8 @@ adqPatch <- function(mcYears = "all",
   ## Add strategicMargin column
   if(nrow(strategicallData)>0)
   {
-    #   dta$areas <- merge(dta$areas, strategicallData, by = c("area", "mcYear", "timeId", "time", "day", "month", "hour"), all.x = TRUE)
-    #   
-    #   setkeyv(chang, c("area", "time", "mcYear"))
-    #   setkeyv(dta$areas, c("area", "time", "mcYear"))
-    #   dta$areas$strategicMargin[is.na(dta$areas$strategicMargin)] <- 0
     setnames(chang, "strategicMargin", "strategicMarginN")
-    #   dta$areas[chang, strategicMargin := as.integer(strategicMarginN)] 
-    #   
+ 
   }
   
   chang$additionalSRN <- 0
@@ -471,16 +499,46 @@ adqPatch <- function(mcYears = "all",
   setkeyv(dta$areas, getIdCols(dta$areas))
   setkeyv(chang, getIdCols(chang))
   
-  options(warn = -1)
-  dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
-  dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
-  dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
-  dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
-  if(nrow(strategicallData)>0)
-  {
-    dta$areas[,additionalSR:= 0]
-    dta$areas[chang, additionalSR := as.integer(additionalSRN)] 
+
+  
+  
+  
+  toKeep <- c(getIdCols(chang), "BALANCEN", "UNSPN", "LOLDN", "DTG MRGN")
+  
+  if(nrow(strategicallData)>0){
+    toKeep <- c(toKeep, "additionalSRN")
   }
+  
+  dta$areas <- merge(dta$areas, chang[, .SD, .SDcols = toKeep], all.x = TRUE)
+  setnames(dta$areas , "BALANCEN", "BALANCE_ADQPatch")
+  setnames(dta$areas , "UNSPN", "UNSP. ENRG_ADQPatch")
+  setnames(dta$areas , "LOLDN", "LOLD_ADQPatch")
+  setnames(dta$areas , "DTG MRGN", "DTG MRG_ADQPatch")
+  
+  dta$areas[is.na(BALANCE_ADQPatch)]$BALANCE_ADQPatch <- dta$areas[is.na(BALANCE_ADQPatch)]$BALANCE
+  dta$areas[is.na(`UNSP. ENRG_ADQPatch`)]$`UNSP. ENRG_ADQPatch` <- dta$areas[is.na(`UNSP. ENRG_ADQPatch`)]$`UNSP. ENRG`
+  dta$areas[is.na(LOLD_ADQPatch)]$LOLD_ADQPatch <- dta$areas[is.na(LOLD_ADQPatch)]$LOLD
+  dta$areas[is.na(`DTG MRG_ADQPatch`)]$`DTG MRG_ADQPatch` <- dta$areas[is.na(`DTG MRG_ADQPatch`)]$`DTG MRG`
+  
+  if(!keepOldColumns){
+    dta$areas$BALANCE <- NULL
+    dta$areas$`UNSP. ENRG` <- NULL
+    dta$areas$LOLD <- NULL
+    dta$areas$`DTG MRG` <- NULL
+    dta$links$`FLOW LIN.` <- NULL
+  }
+  
+  
+  # dta$areas[chang, `BALANCE` := as.integer(BALANCEN)] 
+  # dta$areas[chang, `UNSP. ENRG` := as.integer(UNSPN)] 
+  # dta$areas[chang, `LOLD` := as.integer(LOLDN)] 
+  # dta$areas[chang, `DTG MRG` := as.integer(`DTG MRGN`)] 
+   if(nrow(strategicallData)>0)
+   {
+     setnames(dta$areas , "additionalSRN", "additionalSR_ADQPatch")
+     dta$areas[is.na(additionalSR_ADQPatch)]$additionalSR_ADQPatch <- 0
+     
+   }
   options(warn = oldw)
   dta <- .preReterunData(dta)
   
@@ -507,8 +565,31 @@ adqPatch <- function(mcYears = "all",
 }
 
 
-
-
+.giveNewName <- function(dta, keepOldColumns = TRUE, strategic_reserve_be, strategic_reserve_de){
+  BALANCE_ADQPatch <- `UNSP. ENRG_ADQPatch` <- LOLD_ADQPatch <- `DTG MRG_ADQPatch` <- `LIN._ADQPatch` <- NULL
+  BALANCE <- `UNSP. ENRG` <- LOLD <- `DTG MRG` <- additionalSR_ADQPatch <- NULL
+  `FLOW LIN._ADQPatch` <- `FLOW LIN.` <- NULL
+  
+  dta$areas[, BALANCE_ADQPatch := BALANCE]
+  dta$areas[, `UNSP. ENRG_ADQPatch` := `UNSP. ENRG`]
+  dta$areas[, `LOLD_ADQPatch` := `LOLD`]
+  dta$areas[, `DTG MRG_ADQPatch` := `DTG MRG`]
+  dta$links[, `FLOW LIN._ADQPatch` := `FLOW LIN.`]
+  
+  if(!keepOldColumns){
+    dta$areas[,BALANCE := NULL]
+    dta$areas[,`UNSP. ENRG` := NULL]
+    dta$areas[,LOLD := NULL]
+    dta$areas[,`DTG MRG` := NULL]
+    dta$links[,`FLOW LIN.` := NULL]
+  }
+  
+  if((!is.null(strategic_reserve_be)) | (!is.null(strategic_reserve_de))){
+    dta$areas[,additionalSR_ADQPatch := 0]
+  }
+  
+  
+}
 
 
 

@@ -20,6 +20,7 @@ build_script:
   - travis-tool.sh install_bioc zlibbioc
   - travis-tool.sh install_bioc rhdf5
   - ./travis-tool.sh install_github rte-antares-rpackage/antaresEditObject
+  - ./travis-tool.sh install_github rte-antares-rpackage/antaresProcessing
   
 test_script:
   - travis-tool.sh run_tests

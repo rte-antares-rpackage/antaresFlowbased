@@ -101,10 +101,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' @examples
 #'
 #' \dontrun{
-#' plotFB(1,1,"FR","NL")
-#' plotFB(1:2,1,"FR","NL")
-#' plotFB(1:2,1:2,"FR","NL")
-#' plotFB(1,1,c("FR", "DE"),c("NL", "FR"))
+#'  fb_opts = antaresFlowbased::fbOptions()
+#'  plotFB(dayType = 1, hour = 1, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1:2, hour = 1,country1 = "FR",country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1:2, hour = 1:2, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
+#'  plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), country2 = c("NL", "FR"), fb_opts = fb_opts)
 #' }
 #'
 #'
@@ -165,7 +166,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #'
 #' \dontrun{
 #' allFB <- computeFB(dayType = 7)
-#' generateReportFb(allFB, dayType = 7)
+#' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
 #' }
 #' @export
 generateReportFb <- function(dayType, output_file = NULL,
@@ -196,10 +197,19 @@ generateReportFb <- function(dayType, output_file = NULL,
 
 #' Run shiny visualisation of error
 #'
+#' Click on raw of table to see graphs. You can also export reports for a typical day.
+#' 
 #' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
 #'
 #' @import shiny manipulateWidget
 #'
+#'
+#' @examples
+#'
+#' \dontrun{
+#'  fb_opts = antaresFlowbased::fbOptions()
+#'  runAppError(fb_opts)
+#' }
 #' @export
 runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 
@@ -217,7 +227,7 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' Run shiny visualisation of position
 #'
 #' @param dta \code{antaresDataList} load with \code{antaresRead}
-#' @param opts \code{simOptions} load with \code{setSimulationPath}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #'
 #' @examples
 #'
@@ -232,11 +242,14 @@ runAppError <- function(fb_opts = antaresFlowbased::fbOptions()){
 #' @import shiny manipulateWidget
 #'
 #' @export
-runAppPosition <- function(dta, opts = antaresRead::simOptions()){
+runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
   
-  .ctrlUserHour(opts)
-  countTryList <- toupper(unique(dta$areas$area))
-  dayTyList <- unique(readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))$dayType)
+  #.ctrlUserHour(opts)
+  
+  foldPath <- .mergeFlowBasedPath(fb_opts)
+  
+  countTryList <- toupper(c("fr", "be", "de", "nl"))
+  dayTyList <- unique(readRDS(paste0(foldPath,"domainesFB.RDS"))$dayType)
   rangeDate <- range(dta$areas$time)
   rangeDate <- round(rangeDate, "day")
   
@@ -245,7 +258,8 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
   assign("countTryList", countTryList, envir = G)
   assign("dayTyList", dayTyList, envir = G)
   assign("rangeDate", rangeDate, envir = G)
-  
+  assign("fb_opts", fb_opts, envir = G)
+
   shiny::runApp(system.file("shinyPosition", package = "antaresFlowbased"),
                 launch.browser = TRUE)
 }
@@ -255,8 +269,10 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 
 
 #' Graph function
-#' 
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#'
+#' @param fb_opts \code{list} of simulation parameters returned by the function
+#'   \link{setSimulationPath} or fb model localisation obtain with
+#'   \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' @param data \code{antaresDataList} import with \link{readAntares}
 #' @param dayType : day type, can be numeric or 'all'
 #' @param hour : hour, can be numeric or 'all' (format : 0:23)
@@ -264,66 +280,410 @@ runAppPosition <- function(dta, opts = antaresRead::simOptions()){
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
-#' 
+#' @param drawPositionsBeforeAdqP \code{boolean} boolean, draw net positions without/before adequacy patch, default TRUE.
+#' @param drawPositionsAdqP \code{boolean} boolean, draw net positions after adequacy patch, default TRUE.
+#' @param palette \code{character} palette for colors, default rainbow. Available : 
+#' "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"
+#'
 #'
 #' @examples
 #' \dontrun{
 #' study <- "D:/Users/titorobe/Desktop/antaresStudy"
-#' 
-#' opts <- antaresRead::setSimulationPath(study, -1)
-#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
+#'
+#' opts <- antaresRead::setSimulationPath(study, 2)
+#' dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
 #'                                 links = c("be - de","be - fr","be - nl",
 #'                                 "de - fr","de - nl"), mcYears = 1:10,
-#'                                 select = c("LOLD", "UNSP. ENRG", 
+#'                                 select = c("LOLD", "UNSP. ENRG",
 #'                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
 #'                                  opts = opts)
-#' 
-#' ## plot a domain and the matching output points 
-#' positionViz(opts = opts, 
+#'
+#' ## plot a domain and the matching output points
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = 1, hour = c(9, 19), 
+#'          dayType = 1, hour = c(0, 19),
 #'          country1 = "BE", country2 = "FR")
 #'          
+#' #Change color palette
+#' plotNetPositionFB(fb_opts = opts,
+#'                  data = dta,
+#'                  dayType = 1, hour = c(0, 19),
+#'                  country1 = "BE", country2 = "FR", palette = "topo.colors")
+#'
 #' dta$areas <- dta$areas[timeId == 1]
-#' ## plot a sigle idTime with all domains 
-#' positionViz(opts = opts, 
+#' ## plot a sigle idTime with all domains
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = "all", hour = 0, 
+#'          dayType = "all", hour = 0,
 #'          country1 = "BE", country2 = "FR")
-#'          
+#'
 #' ##Filtering empty domains
-#' 
-#' positionViz(opts = opts, 
+#'
+#' plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
-#'          dayType = "all", hour = 0, 
+#'          dayType = "all", hour = 0,
 #'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#'
+#'
+#'
+#' ##See adq position
+#'
+#'  dta <- adqPatch(fb_opts = opts)
+#'
+#'
+#'  ##If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0]
+#'  ##You must keep all areas for a given timestep. When you keep only raw with LOLD!=0, for a given timestep 
+#'  ##you can keep only somes areas. 
+#'  
+#'  ##An exemple of authorized filter :
+#'  idC <- c(antaresRead::getIdCols(dta$areas))
+#'  idC <- idC[idC!="area"]
+#'  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
+#'  LOLD <- LOLD[LOLD!=0]
+#'  LOLD[,LOLD := NULL]
+#'  #Here merge is used for filter data
+#'  dta$areas <- merge(dta$areas, LOLD, by =  idC)
+#'  ##End filter
+#'  
+#'  
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = "all", hour = 19,
+#'          country1 = "BE", country2 = "FR", , filteringEmptyDomains = TRUE)
+#'
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = 6, hour = 17,
+#'          country1 = "DE", country2 = "FR")
+#'
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = 6, hour = 17,
+#'          country1 = "BE", country2 = "FR", drawPositionsBeforeAdqP = FALSE)
+#'
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = 6, hour = 17,
+#'          country1 = "BE", country2 = "FR", drawPositionsAdqP = FALSE)
+#'
+#' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
+#'
+#'  plotNetPositionFB(fb_opts = opts,
+#'          data = dta,
+#'          dayType = 6, hour = 17,
+#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
+#'
 #' }
 #'
 #' @importFrom grDevices topo.colors
 #' @export
-positionViz <- function( data, dayType, hour, country1, country2, opts = antaresRead::simOptions() , filteringEmptyDomains = FALSE, nbMaxPt = 10000){
+plotNetPositionFB <- function( data, dayType,
+                         hour, country1, country2,
+                         fb_opts = antaresRead::simOptions(),
+                         filteringEmptyDomains = FALSE,
+                         nbMaxPt = 10000, drawPositionsBeforeAdqP = TRUE, drawPositionsAdqP = TRUE,
+                         palette = "rainbow"){
+  
+  
+  
+  if(!palette[1]%in%c("cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow")){
+    stop('Palette must be in : "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"')
+  }
+  
+  
+  if(!all(c("areas", "links") %in% names(data))){
+    stop("your data object must contain areas and links tables")
+  }
+  
+  if(!"antaresDataList"%in%class(data)){
+    warning("data object should be an antaresDataList, the best way to load data it's to use antaresRead. If straitment bug it's probably due to your data object")
+  }
+  
+  ##Controle on drawPositionsBeforeAdqP & drawPositionsAdqP
+  if((!drawPositionsBeforeAdqP) & ! (drawPositionsAdqP)){
+    stop("You have to select at least one type of positions to visualise")
+  }
+  
+  if(!country1%in%c("DE", "BE", "FR", "NL")){
+    stop("country1 must be DE, BE, FR or NL")
+  }
+  if(!country2%in%c("DE", "BE", "FR", "NL")){
+    stop("country2 must be DE, BE, FR or NL")
+  }
+  
+  
+  idS <- getIdCols(data$areas)
+  ##Test if no-adq are present
+  namesToTest <- names(data$areas)[!names(data$areas)%in%idS]
+  AdqData <- noAdqData <- FALSE
+  if(all(c("BALANCE_ADQPatch", "UNSP. ENRG_ADQPatch", "LOLD_ADQPatch", "DTG MRG_ADQPatch") %in%namesToTest)){
+    AdqData <- TRUE
+  }
+  
+  
+  if(all(c("BALANCE", "UNSP. ENRG", "LOLD", "DTG MRG") %in%namesToTest)){
+    noAdqData <- TRUE
+  }
+  
+  if(noAdqData & drawPositionsBeforeAdqP){
+    drawPositionsBeforeAdqP <- TRUE
+  }else{
+    drawPositionsBeforeAdqP <- FALSE
+    }
+  
+  if(AdqData & drawPositionsAdqP){
+    drawPositionsAdqP <- TRUE
+  }else{
+    drawPositionsAdqP <- FALSE
+  }
+  
   
   ctry1 = country1
   ctry2 = country2
-  .ctrlUserHour(opts)
+  #.ctrlUserHour(opts)
   
-  secondM <- fread(paste0(opts$studyPath, "/user/flowbased/second_member.txt"))
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
-  domaines <- readRDS(paste0(opts$studyPath, "/user/flowbased/domainesFB.RDS"))
+  foldPath <- .mergeFlowBasedPath(fb_opts)
+  secondM <- fread(paste0(foldPath, "second_member.txt"))
+  if(!file.exists(paste0(foldPath, "scenario.txt"))){
+    stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
+                use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
+  }
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+  domaines <- readRDS(paste0(foldPath, "domainesFB.RDS"))
   
   if(dayType[1] == "all")dayType <- unique(domaines$dayType)
   if(hour[1] == "all")hour <- 0:23
   
+  if(!all(hour%in%0:23)){
+    stop("All hour elements must be between 0 and 23 (included)")
+  }
+  
+  if(!all(dayType %in% unique(domaines$dayType))){
+    stop("Somes elements specify in dayType are not included in domainesFB.RDS file")
+  }
+  
   
   
   mcYears <- unique(data$areas$mcYear)
+  out <- out2 <- NULL
+  if(drawPositionsBeforeAdqP)
+  {
   ipn <- .giveIpn(data)
+  out <- .constructDataForGraph(hour = hour,
+                                dayType = dayType,
+                                mcYears = mcYears,
+                                ipn = ipn,
+                                ctry1 = ctry1,
+                                ctry2 = ctry2,
+                                ts = ts, 
+                                domaines = domaines)
+    
+  }
+  
+  if(drawPositionsAdqP)
+  {
+  ipnADQ <- .giveIpn(data, ADQ = TRUE)
+  out2 <- .constructDataForGraph(hour = hour,
+                                dayType = dayType,
+                                mcYears = mcYears,
+                                ipn = ipnADQ,
+                                ctry1 = ctry1,
+                                ctry2 = ctry2,
+                                ts = ts, 
+                                domaines = domaines)
+  
+  out2 <- lapply(out2, function(WW){
+    names(WW) <- gsub("Position", "Position_ADQ", names(WW))
+    
+    WW
+    
+  })
+  
+  }
+  
+  ##Remove domains on out
+ 
+  if((!is.null(out)) & (!is.null(out2)))
+  {
+  out <- sapply(1:length(out), function(inc){
+    cbind(out[[inc]], out2[[inc]][,3:4])
+  }, simplify = FALSE, USE.NAMES = FALSE)
+  }else{
+    if(is.null(out)){
+      out <- out2
+    }
+  }
+  
+ if(filteringEmptyDomains){
+   out <- lapply(out, function(X){
+     if(sum(is.na(X[,3]))==nrow(X)){
+       return(NULL)
+     }else{
+       return(X)
+     }
+   })
+ }
   
   
+  if(is.null(unlist(lapply(out, function(X){ncol(X)})))){
+    stop('This selection of typical days/hours does not appear in the simulation data. Try using dayType = "all" or/and hour = "all"')
+  }
+ nCurvByTyD <- max(unlist(lapply(out, function(X){ncol(X)})))
+ 
+ out <- Reduce(c, out)
+ 
+ nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
+ if(nbpt > nbMaxPt){
+   stop(paste0("You try to draw ", nbpt, " points but you can't draw more than ", nbMaxPt, " points. You can change this limit with nbMaxPt argument but be carefull, your graph can be impossible to draw if you have soo much points."))
+ }
+ 
+ 
+ Mlength <- max(unlist(lapply(out, length)))
+ out <- lapply(out, function(X){
+   if(length(X)<Mlength){
+     X <- c(X, rep(NA, Mlength-length(X)))
+   }
+   X
+ })
+ 
+ 
+ cleanNam <- gsub("_ADQ","", names(out))
+ cleanNam <- cleanNam[!grepl("mcYear", cleanNam)]
+ cleanNam <- cleanNam[!grepl("time", cleanNam)]
+ 
+ stayH <- sapply(cleanNam, function(X){
+   strsplit(X, "_")[[1]][3]
+ })
+ 
+ stayH <- unique(gsub("H", "", stayH))
+ 
+ stayD <- sapply(cleanNam, function(X){
+   strsplit(X, "_")[[1]][4]
+ })
+ 
+ stayD <- unique(gsub("D", "", stayD))
+ 
+ outF <- Reduce(cbind.data.frame, out)
+ outF <- data.frame(outF)
+ names(outF) <- names(out)
+ out <- outF
+ 
+ 
+ oneOnNbC <- which(1:ncol(out)%%nCurvByTyD==1)
+ allGraph <- list()
+ CC <- 0
+ colors <- substr(do.call(palette, args = list(n = length(oneOnNbC))), 1,7)
+ for(X in oneOnNbC){
+   curvInThisLoop <- X:(X+nCurvByTyD-1)
+   curvInThisLoopnoModel <- curvInThisLoop[3:length(curvInThisLoop)]
+   
+   CC <- CC + 1
+   titleS <- substr(names(out)[X], nchar(names(out)[X])-5, nchar(names(out)[X]))
+   titleS <- gsub( "_H", "H",titleS)
+   
+   titleS <- gsub( "H", "0",titleS)
+   titleS <- paste0("Hour ", titleS)
+   titleS <- gsub( "_D", " Day ",titleS)
+   allGraph <- c(allGraph,
+   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> : [[x]] <br><b>',ctry2, '</b> : [[y]]'),
+            bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
+            lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
+            lineThickness = 1, bulletAlpha = 0) )
+   
+   nameCurve <- names(out)[curvInThisLoopnoModel]
+   adqc <- curvInThisLoopnoModel[grep("Position_ADQ", nameCurve)]
+   noadqc <- curvInThisLoopnoModel[!curvInThisLoopnoModel%in%adqc]
+   
+   
+   witchTipe <- nameCurve[grep("time_", nameCurve)]
+   witchMc <- nameCurve[grep("mcYear_", nameCurve)]
+   
+   if(length(noadqc)>0)
+   {
+     
+    
+     
+   allGraph <- c(allGraph,
+   amGraph(balloonText =
+             paste0('<b>Position<br>', ctry1, '</b> : [[x]] <br><b>',ctry2, '</b> : [[y]]
+                                               <b>time : </b>[[', witchTipe, ']]
+                    <b>mcYear : </b>[[',witchMc, ']]
+                    '),
+           xField = names(out)[noadqc[1]],yField = names(out)[noadqc[2]],
+           lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
+           lineThickness = 1, visibleInLegend  = FALSE))
+   }
+   if(length(adqc)>0)
+   {
+   allGraph <- c(allGraph,
+                 amGraph(balloonText =
+                           paste0('<b>Position_ADQ<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]
+                                               <b>time : </b>[[', witchTipe, ']]
+                    <b>mcYear : </b>[[',witchMc, ']]
+                                  '),
+                         bullet = 'triangleDown', xField = names(out)[adqc[1]],yField = names(out)[adqc[2]],
+                         lineAlpha = 0, bulletSize = 4, lineColor = colors[CC],
+                         lineThickness = 1, visibleInLegend  = FALSE,
+                         bulletBorderColor = colors[CC], bulletAlpha = 0, bulletBorderAlpha = 1))
+   
+   }
+   
+   
+ }
+ 
+ 
+ g <- pipeR::pipeline(
+   amXYChart(dataProvider = out),
+   addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
+   setGraphs(allGraph),
+   setChartCursor(),
+   addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
+   addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
+   setExport(enabled = TRUE),
+   setLegend(enabled = TRUE, switchable = FALSE),
+   plot()
+ )
+ combineWidgets(list = list(g))
+}
 
+.giveIpn <- function(dta, ADQ = FALSE){
+  if(!ADQ){
+    fl <- "FLOW LIN."
+  }else{
+    fl <- "FLOW LIN._ADQPatch"
+  }
+  be <- de <- fr <- nl <- `be - de` <- `be - fr` <- `be - nl` <- `de - fr` <- `de - nl` <- lole <- value <-NULL
+  `UNSP. ENRG` <- `DTG MRG` <- NULL
   
- out <-  sapply(hour, function(HH){
+  links <- dcast(dta$links, time + mcYear~link, value.var = c(fl))
+  links[, be :=  `be - de` + `be - fr` + `be - nl`]
+  links[, de := - `be - de` + `de - fr` + `de - nl`]
+  links[, fr :=  -`be - fr` - `de - fr`]
+  links[, nl :=  -`be - nl` - `de - nl`]
+  links
+  links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
+  links <- melt(links, id = 1:2)
+  setnames(links, "variable", "area")
+  dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
+  if(!ADQ){
+  dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
+  }else{
+    dta$areas[, lole :=`UNSP. ENRG_ADQPatch` - `DTG MRG_ADQPatch` - value]
+  }
+  dta$areas[, ipn := value]
+  
+  ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
+  
+  
+  
+  
+  
+  ipn
+}
+
+.constructDataForGraph <- function(hour, dayType, mcYears, ipn, ctry1, ctry2, ts, domaines){
+  out <-  sapply(hour, function(HH){
     sapply(dayType, function(DD){
       ######
       
@@ -349,7 +709,17 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
       
       
       res2 <- data.frame("ctry11" = unlist(ipnO[, .SD, .SDcols = tolower(ctry1)]),
-                         "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]))
+                         "ctry22" = unlist(ipnO[, .SD, .SDcols = tolower(ctry2)]),
+                         "time" = c(ipnO[, .SD, .SDcols = "time"]),
+                         "mcYear" = c(ipnO[, .SD, .SDcols = "mcYear"]))
+      res2$time <- as.character(res2$time +1)
+      
+      ##Supress year :
+      res2$time <- substr(res2$time, 6,nchar(res2$time ) -3)
+      
+      # primaryKey <-  data.frame("time" = unlist(ipnO[, .SD, .SDcols = "time"]),
+      #                           "mcYear" = unlist(ipnO[, .SD, .SDcols = "mcYear"]))
+      
       
       res <- res[chull(res),]
       res <- rbind(res, res[1,])
@@ -362,121 +732,36 @@ positionViz <- function( data, dayType, hour, country1, country2, opts = antares
       }
       if(nrow(res2)<max_r){
         res2 <- rbind(res2, data.frame(ctry11 = rep(NA,max_r- nrow(res2)),
-                                       ctry22 = rep(NA, max_r-nrow(res2))))
+                                       ctry22 = rep(NA, max_r-nrow(res2)),
+                                       time = rep(NA, max_r-nrow(res2)),
+                                       mcYear = rep(NA, max_r-nrow(res2))))
       }
       
       out2 <- cbind(res, res2)
-      names(out2) <- paste0(c("Model", "Model", "Position", "Position"),"_", c(ctry1, ctry2), "_H", HH, "_D", DD)
+      names(out2) <- c(paste0(c("Model", "Model", "Position", "Position"),"_", c(ctry1, ctry2), "_H", HH, "_D", DD), paste0('time',  "_H", HH, "_D", DD), paste0('mcYear',  "_H", HH, "_D", DD))
       
       data.frame(out2)
       
     }, simplify = FALSE)
   }, simplify = FALSE)
   
-
- out <- unlist(out, recursive = FALSE)
- 
- if(filteringEmptyDomains){
-   out <- lapply(out, function(X){
-     if(sum(is.na(X[,3]))==nrow(X)){
-       return(NULL)
-     }else{
-       return(X)
-     }
-   })
- }
- out <- Reduce(c, out)
- 
- nbpt <- sum(unlist(lapply(out, function(X){length(X[!is.na(X)])})))
- if(nbpt > nbMaxPt){
-   stop(paste0("You try to draw ", nbpt, " points but you can't draw more than ", nbMaxPt, " points. You can change this limit with nbMaxPt argument but be carefull, your graph can be impossible to draw if you have soo much points."))
- }
- 
- 
- Mlength <- max(unlist(lapply(out, length)))
- out <- lapply(out, function(X){
-   if(length(X)<Mlength){
-     X <- c(X, rep(NA, Mlength-length(X)))
-   }
-   X
- })
- 
- 
- stayH <- sapply(names(out), function(X){
-   strsplit(X, "_")[[1]][3]
- })
- 
- stayH <- unique(gsub("H", "", stayH))
- 
- 
- stayD <- sapply(names(out), function(X){
-   strsplit(X, "_")[[1]][4]
- })
- 
- stayD <- unique(gsub("D", "", stayD))
- 
- 
- outF <- Reduce(cbind, out)
- outF <- data.frame(outF)
- names(outF) <- names(out)
- out <- outF
- oneOnFour <- which(1:ncol(out)%%4==1)
- allGraph <- list()
- CC <- 0
- colors <- substr(topo.colors(length(oneOnFour)), 1,7)
- for(X in oneOnFour){
-   CC <- CC + 1
-   titleS <- substr(names(out)[X], nchar(names(out)[X])-4, nchar(names(out)[X]))
-   titleS <- gsub( "H", "0",titleS)
-   titleS <- paste0("H", titleS)
-   allGraph <- c(allGraph,
-   amGraph(title = titleS, balloonText =paste0('<b>Model<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-            bullet = 'circle', xField = names(out)[X],yField = names(out)[X+1],
-            lineAlpha = 1, bulletSize = 0, lineColor = colors[CC],
-            lineThickness = 1, bulletAlpha = 0) )
-   
-   allGraph <- c(allGraph,
-   amGraph(balloonText =
-             paste0('<b>Position<br>', ctry1, '</b> :[[x]] <br><b>',ctry2, '</b> :[[y]]'),
-           bullet = 'circle', xField = names(out)[X+2],yField = names(out)[X+3],
-           lineAlpha = 0, bullet = "bubble", bulletSize = 4, lineColor = colors[CC],
-           lineThickness = 1, visibleInLegend  = FALSE))
-   
- }
-
   
-  
- 
- g <- pipeR::pipeline(
-   amXYChart(dataProvider = out),
-   addTitle(text = paste0("Flow-based ", ctry1, "/", ctry2, ', hour : ', paste0(stayH, collapse = ";"), ', typical day : ', paste0(stayD, collapse = ";"))),
-   setGraphs(allGraph),
-   setChartCursor(),
-   addValueAxes(title = paste(ctry1, "(MW)"), position = "bottom", minimum = -7000, maximum = 7000),
-   addValueAxes(title =  paste(ctry2, "(MW)"), minimum = -7000, maximum = 7000),
-   setExport(enabled = TRUE, switchable = FALSE),
-   setLegend(enabled = TRUE)
- )
- combineWidgets(list = list(g%>%plot()))
+  out <- unlist(out, recursive = FALSE)
+  out
 }
 
-.giveIpn <- function(dta){
-  be <- de <- fr <- nl <- `be - de` <- `be - fr` <- `be - nl` <- `de - fr` <- `de - nl` <- lole <- value <-NULL
-  `UNSP. ENRG` <- `DTG MRG` <- NULL
+.mergeFlowBasedPath <- function(fb_opts){
   
-  links <- dcast(dta$links, time + mcYear~link, value.var = c("FLOW LIN."))
-  links[, be :=  `be - de` + `be - fr` + `be - nl`]
-  links[, de := - `be - de` + `de - fr` + `de - nl`]
-  links[, fr :=  -`be - fr` - `de - fr`]
-  links[, nl :=  -`be - nl` - `de - nl`]
-  links
-  links <- links[, .SD, .SDcols = c("time", "mcYear","be","de" ,"fr","nl")]
-  links <- melt(links, id = 1:2)
-  setnames(links, "variable", "area")
-  dta$areas <- merge(dta$areas, links, by = c("time", "mcYear", "area"))
-  dta$areas[, lole :=`UNSP. ENRG` - `DTG MRG` - value]
-  dta$areas[, ipn := value]
+  if("simOptions" %in% class(fb_opts)){
+    foldPath <- paste0(fb_opts$studyPath, "/user/flowbased/")
+  }else if("flowBasedPath" %in% class(fb_opts)){
+    foldPath <- paste0(fb_opts$path, "/")
+  }else{
+    stop("fb_opts must be obtain with setSimulationPath or setFlowbasedPath function")
+  }
+  if(!file.exists(paste0(foldPath, "second_member.txt"))){
+    stop("Impossible to found second_member.txt file, you can specify fb_opts with setSimulationPath or setFlowbasedPath function")
+  }
   
-  ipn <- dcast(dta$areas, time + mcYear~area, value.var = c("ipn"))
-  ipn
+  foldPath
 }

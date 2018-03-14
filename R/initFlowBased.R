@@ -38,7 +38,7 @@
 #'
 #' \dontrun{
 #' 
-#'  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+#'  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",1)
 #'  initFlowBased()
 #'  }
 #'  
@@ -59,9 +59,13 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
     
     #.ctrlSolver()
 
+
   
   #test fbModel
   .controlFbMod(fb_opts)
+  
+  modelName <- strsplit(fb_opts, "/")
+  modelName <- modelName[[1]][length(modelName[[1]])]
   
   ###Load fbModel data
   #Load weight.txt
@@ -125,7 +129,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   daT <- substr(as.character(Sys.time()), 1, 16)
   
-  paramS <- list(general = list(date = daT))
+  paramS <- list(general = list(date = daT, model = modelName))
   
   ##Write param of user folder
   antaresEditObject::writeIni(paramS, paste0(userFolder, "/infos.ini"), overwrite = TRUE)

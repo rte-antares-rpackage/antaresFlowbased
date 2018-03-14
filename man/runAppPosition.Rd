@@ -4,12 +4,12 @@
 \alias{runAppPosition}
 \title{Run shiny visualisation of position}
 \usage{
-runAppPosition(dta, opts = antaresRead::simOptions())
+runAppPosition(dta, fb_opts = antaresRead::simOptions())
 }
 \arguments{
 \item{dta}{\code{antaresDataList} load with \code{antaresRead}}
 
-\item{opts}{\code{simOptions} load with \code{setSimulationPath}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 }
 \description{
 Run shiny visualisation of position

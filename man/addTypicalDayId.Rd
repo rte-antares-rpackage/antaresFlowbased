@@ -4,12 +4,12 @@
 \alias{addTypicalDayId}
 \title{Add typical day columns}
 \usage{
-addTypicalDayId(data, opts = antaresRead::simOptions())
+addTypicalDayId(data, fb_opts = antaresRead::simOptions())
 }
 \arguments{
 \item{data}{\code{antaresdata} data load by \link{readAntares}}
 
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 }
 \description{
 Add typical day columns

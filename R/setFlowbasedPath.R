@@ -66,6 +66,7 @@ setFlowbasedPath <- function(path, model) {
 
   res <- list(path = path)
   options(flowbased = res)
+  class(res) <- "flowBasedPath"
 
   res
 }

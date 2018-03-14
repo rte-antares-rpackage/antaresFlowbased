@@ -48,7 +48,7 @@ folder deigned by fb_opts contain files :
 
 \dontrun{
 
- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy")
+ antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",1)
  initFlowBased()
  }
  

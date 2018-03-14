@@ -10,5 +10,12 @@ runAppError(fb_opts = antaresFlowbased::fbOptions())
 \item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
 }
 \description{
-Run shiny visualisation of error
+Click on raw of table to see graphs. You can also export reports for a typical day.
+}
+\examples{
+
+\dontrun{
+ fb_opts = antaresFlowbased::fbOptions()
+ runAppError(fb_opts)
+}
 }

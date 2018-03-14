@@ -6,7 +6,7 @@
 \usage{
 adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
   strategic_reserve_de = NULL, opts = antaresRead::simOptions(),
-  select = NULL)
+  fb_opts = opts, select = NULL, keepOldColumns = TRUE)
 }
 \arguments{
 \item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}
@@ -19,7 +19,11 @@ adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
 
 \item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
 
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
+
 \item{select}{\code{character}, columns to select (columns need for adqPatch are automaticaly add)}
+
+\item{keepOldColumns}{\code{boolean}, keep columns before adqPatch was apply.}
 }
 \description{
 Compute adqPatch for antares study
@@ -27,7 +31,7 @@ Compute adqPatch for antares study
 \examples{
 
 \dontrun{
-antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/exemple_test_BP", 2)
+antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 
 #No strategic reserve
 res <- adqPatch()
@@ -38,6 +42,8 @@ res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be")
 #Add a new column
 res <- adqPatch(strategic_reserve_de = "lu_de", strategic_reserve_be = "lu_be", select = "COAL")
 
+#Remove old columns
+res <- adqPatch(keepOldColumns = FALSE)
 }
 
 }

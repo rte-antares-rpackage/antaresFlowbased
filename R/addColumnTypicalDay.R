@@ -2,7 +2,7 @@
 #' @title Add typical day columns
 #' 
 #' @param data \code{antaresdata} data load by \link{readAntares}
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
 #' 
 #' 
 #' @examples
@@ -20,13 +20,12 @@
 #' }
 #' 
 #' @export
-addTypicalDayId <- function(data, opts = antaresRead::simOptions()){
+addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
   
-  .ctrlUserHour(opts)
-  if(class(opts)!="simOptions")stop("opts must be a simOptions object")
+  # .ctrlUserHour(opts)
+
   
-  
-  
+  simulation <- Date <- time <- NULL
   if(!"antaresData" %in%class(data)){
     warning(paste0("Your data are not antaresData object, antaresData objetc are object load by readAntares. If you have 
                    write your data in a csv file and you reload them after this is break the sytem of antaresData class.
@@ -39,9 +38,14 @@ addTypicalDayId <- function(data, opts = antaresRead::simOptions()){
     stop("You can merge typical day with mcAll")
   }
   
-  
-  scenario <- fread(paste0(opts$studyPath, "/user/flowbased/scenario.txt"))
-  ts <- fread(paste0(opts$studyPath, "/user/flowbased/ts.txt"))
+  foldPath <- .mergeFlowBasedPath(fb_opts)
+  if(!file.exists(paste0(foldPath, "scenario.txt"))){
+    stop(paste0("The file scenario.txt is missing. Please either: add it to your flow-based model directory and use setFlowBasedPath(path = 'pathToDirectory') or
+                use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
+  }
+  scenario <- fread(paste0(foldPath, "scenario.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"))
+
   
   tsTransform <- rbindlist(sapply(2:ncol(ts), function(X){
     oo <- ts[, .SD, .SDcols = c(1, X)]

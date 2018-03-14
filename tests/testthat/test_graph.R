@@ -11,7 +11,7 @@ test_that("test graph", {
 })
 
 
-test_that("test positionViz", {
+test_that("test plotNetPositionFB", {
 
 
   dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"), 
@@ -19,10 +19,10 @@ test_that("test positionViz", {
                                             "de - fr","de - nl"), mcYears = 2,
                                   select = c("LOLD", "UNSP. ENRG", 
                                              "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
-                                  opts = testSt )
+                                  opts = testSt , showProgress = FALSE)
   
   ## plot a domain and the matching output points 
- res <- positionViz(opts = testSt, 
+ res <- plotNetPositionFB(fb_opts = testSt, 
               data = dta,
               dayType = 1, hour =19:20, 
               country1 = "BE", country2 = "FR")
