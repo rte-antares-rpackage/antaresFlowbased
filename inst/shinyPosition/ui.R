@@ -34,12 +34,13 @@ shinyUI(fluidPage(
     
     column(2,checkboxInput("nrm", "Net positions before adequacy patch",TRUE)),
     column(2,checkboxInput("adq", "Net positions after adequacy patch",TRUE)),
-    column(3,dateRangeInput("dateR", "Range dates", start = rangeDate[1], end = rangeDate[2],
+    column(2,dateRangeInput("dateR", "Range dates", start = rangeDate[1], end = rangeDate[2],
                    min = rangeDate[1], max = rangeDate[2])),
     column(2, 
            checkboxInput("filteringEmptyDomains", "filtering Empty Domains", FALSE)
-           )
-    
+           ),
+    column(2,
+           selectInput("col", "Color scale", choices = c("cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"), selected = "rainbow"))
     
 
    
