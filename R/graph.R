@@ -280,8 +280,8 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
-#' @param drawNoAdqPoints \code{boolean} draw no-adq points default TRUE.
-#' @param drawAdqPoints \code{boolean} draw adq points default TRUE.
+#' @param drawPositionsBeforeAdqP \code{boolean} draw no-adq points default TRUE.
+#' @param drawPositionsAdqP \code{boolean} draw adq points default TRUE.
 #' @param palette \code{character} palette for colors, default rainbow. Available : 
 #' "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"
 #'
@@ -359,12 +359,12 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
 #'          dayType = 6, hour = 17,
-#'          country1 = "BE", country2 = "FR", drawNoAdqPoints = FALSE)
+#'          country1 = "BE", country2 = "FR", drawPositionsBeforeAdqP = FALSE)
 #'
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
 #'          dayType = 6, hour = 17,
-#'          country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)
+#'          country1 = "BE", country2 = "FR", drawPositionsAdqP = FALSE)
 #'
 #' dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
 #'
@@ -381,7 +381,7 @@ plotNetPositionFB <- function( data, dayType,
                          hour, country1, country2,
                          fb_opts = antaresRead::simOptions(),
                          filteringEmptyDomains = FALSE,
-                         nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE,
+                         nbMaxPt = 10000, drawPositionsBeforeAdqP = TRUE, drawPositionsAdqP = TRUE,
                          palette = "rainbow"){
   
   
@@ -399,8 +399,8 @@ plotNetPositionFB <- function( data, dayType,
     warning("data object should be an antaresDataList, the best way to load data it's to use antaresRead. If straitment bug it's probably due to your data object")
   }
   
-  ##Controle on drawNoAdqPoints & drawAdqPoints
-  if((!drawNoAdqPoints) & ! (drawAdqPoints)){
+  ##Controle on drawPositionsBeforeAdqP & drawPositionsAdqP
+  if((!drawPositionsBeforeAdqP) & ! (drawPositionsAdqP)){
     stop("You have to select at least one type of positions to visualise")
   }
   
@@ -425,16 +425,16 @@ plotNetPositionFB <- function( data, dayType,
     noAdqData <- TRUE
   }
   
-  if(noAdqData & drawNoAdqPoints){
-    drawNoAdqPoints <- TRUE
+  if(noAdqData & drawPositionsBeforeAdqP){
+    drawPositionsBeforeAdqP <- TRUE
   }else{
-    drawNoAdqPoints <- FALSE
+    drawPositionsBeforeAdqP <- FALSE
     }
   
-  if(AdqData & drawAdqPoints){
-    drawAdqPoints <- TRUE
+  if(AdqData & drawPositionsAdqP){
+    drawPositionsAdqP <- TRUE
   }else{
-    drawAdqPoints <- FALSE
+    drawPositionsAdqP <- FALSE
   }
   
   
@@ -467,7 +467,7 @@ plotNetPositionFB <- function( data, dayType,
   
   mcYears <- unique(data$areas$mcYear)
   out <- out2 <- NULL
-  if(drawNoAdqPoints)
+  if(drawPositionsBeforeAdqP)
   {
   ipn <- .giveIpn(data)
   out <- .constructDataForGraph(hour = hour,
@@ -481,7 +481,7 @@ plotNetPositionFB <- function( data, dayType,
     
   }
   
-  if(drawAdqPoints)
+  if(drawPositionsAdqP)
   {
   ipnADQ <- .giveIpn(data, ADQ = TRUE)
   out2 <- .constructDataForGraph(hour = hour,

@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
     plotNetPositionFB(fb_opts = fb_opts,
               data = selectData(),
               dayType = convertD(), hour = convertH(),
-              country1 = input$ctry1G1, country2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains,drawNoAdqPoints = input$nrm,drawAdqPoints = input$adq, palette = input$col)
+              country1 = input$ctry1G1, country2 = input$ctry2G1, filteringEmptyDomains = input$filteringEmptyDomains,drawPositionsBeforeAdqP = input$nrm,drawPositionsAdqP = input$adq, palette = input$col)
     })
   })
   
@@ -75,7 +75,7 @@ shinyServer(function(input, output, session) {
     plotNetPositionFB(fb_opts = fb_opts,
                 data = selectData(),
                 dayType = convertD(), hour = convertH(),
-                country1 = input$ctry1G2, country2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains,drawNoAdqPoints = input$nrm,drawAdqPoints = input$adq, palette = input$col)
+                country1 = input$ctry1G2, country2 = input$ctry2G2, filteringEmptyDomains = input$filteringEmptyDomains,drawPositionsBeforeAdqP = input$nrm,drawPositionsAdqP = input$adq, palette = input$col)
     })
   })
 

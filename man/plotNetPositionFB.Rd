@@ -6,8 +6,8 @@
 \usage{
 plotNetPositionFB(data, dayType, hour, country1, country2,
   fb_opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
-  nbMaxPt = 10000, drawNoAdqPoints = TRUE, drawAdqPoints = TRUE,
-  palette = "rainbow")
+  nbMaxPt = 10000, drawPositionsBeforeAdqP = TRUE,
+  drawPositionsAdqP = TRUE, palette = "rainbow")
 }
 \arguments{
 \item{data}{\code{antaresDataList} import with \link{readAntares}}
@@ -28,9 +28,9 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 
 \item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default 10000.}
 
-\item{drawNoAdqPoints}{\code{boolean} draw no-adq points default TRUE.}
+\item{drawPositionsBeforeAdqP}{\code{boolean} draw no-adq points default TRUE.}
 
-\item{drawAdqPoints}{\code{boolean} draw adq points default TRUE.}
+\item{drawPositionsAdqP}{\code{boolean} draw adq points default TRUE.}
 
 \item{palette}{\code{character} palette for colors, default rainbow. Available : 
 "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"}
@@ -111,12 +111,12 @@ plotNetPositionFB(fb_opts = opts,
  plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = 6, hour = 17,
-         country1 = "BE", country2 = "FR", drawNoAdqPoints = FALSE)
+         country1 = "BE", country2 = "FR", drawPositionsBeforeAdqP = FALSE)
 
  plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = 6, hour = 17,
-         country1 = "BE", country2 = "FR", drawAdqPoints = FALSE)
+         country1 = "BE", country2 = "FR", drawPositionsAdqP = FALSE)
 
 dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
 
