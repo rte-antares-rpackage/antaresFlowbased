@@ -525,6 +525,10 @@ plotNetPositionFB <- function( data, dayType,
    })
  }
   
+  
+  if(is.null(unlist(lapply(out, function(X){ncol(X)})))){
+    stop('This selection of typical days/hours does not appear in the simulation data. Try using dayType = "all" or/and hour = "all"')
+  }
  nCurvByTyD <- max(unlist(lapply(out, function(X){ncol(X)})))
  
  out <- Reduce(c, out)
