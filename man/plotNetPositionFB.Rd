@@ -28,9 +28,9 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 
 \item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default 10000.}
 
-\item{drawPositionsBeforeAdqP}{\code{boolean} draw no-adq points default TRUE.}
+\item{drawPositionsBeforeAdqP}{\code{boolean} boolean, draw net positions without/before adequacy patch, default TRUE.}
 
-\item{drawPositionsAdqP}{\code{boolean} draw adq points default TRUE.}
+\item{drawPositionsAdqP}{\code{boolean} boolean, draw net positions after adequacy patch, default TRUE.}
 
 \item{palette}{\code{character} palette for colors, default rainbow. Available : 
 "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"}

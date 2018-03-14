@@ -280,8 +280,8 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #' @param country2 : second country
 #' @param filteringEmptyDomains \code{boolean} filtering empty domains
 #' @param nbMaxPt \code{numeric} number of point maximum on graph. Default 10000.
-#' @param drawPositionsBeforeAdqP \code{boolean} draw no-adq points default TRUE.
-#' @param drawPositionsAdqP \code{boolean} draw adq points default TRUE.
+#' @param drawPositionsBeforeAdqP \code{boolean} boolean, draw net positions without/before adequacy patch, default TRUE.
+#' @param drawPositionsAdqP \code{boolean} boolean, draw net positions after adequacy patch, default TRUE.
 #' @param palette \code{character} palette for colors, default rainbow. Available : 
 #' "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"
 #'
