@@ -21,6 +21,8 @@
 #' 
 #' ##Do a setSimulationPath on h5 file
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/Antares/antaresFlowbased",1)
+#' 
+#' ##Use for user folder, you cal also use setFlowbasedPath
 #' fb_opts = antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 #' 
 #' ##Compute adq on H5 file
