@@ -14,7 +14,7 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
 
 \item{dayType}{: day type, can be numeric or 'all'}
 
-\item{hour}{: hour, can be numeric or 'all'}
+\item{hour}{: hour, can be numeric or 'all' (format : 0:23)}
 
 \item{country1}{: first country}
 

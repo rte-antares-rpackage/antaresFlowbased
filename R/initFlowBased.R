@@ -8,23 +8,29 @@
 #' @param scenarios \code{numeric} scenarios use for write scenario.txt.
 #' 
 #' @note 
+#' 
 #' folder deigned by fb_opts contain files :
+#' 
 #' \itemize{
-#'   \item{domainesFB.RDS}{RDS file from \link{computeFB}}
-#'   \item{second_member.txt}{txt file of second member wich following columns :
+#'   \item{domainesFB.RDS RDS file from \link{computeFB}}
+#'   \item{second_member.txt txt file of second member wich following columns :
 #'   \itemize{
 #'     \item{Id_day : numeric from 1 to number of day id}
 #'     \item{Id_hour : numeric from 1 to number of hour}
 #'     \item{vect_b : numeric}
 #'     \item{Name : character, name of constaints}
-#'   }}
-#'   \item{ts.txt}{txt file of time series matrix wich
+#'    }
+#'   }
+#'   
+#'   \item{ts.txt txt file of time series matrix wich
 #'   \itemize{
-#'     \item{In row : dates, format : %YYYY-%MM-%DD
+#'     \item{In row : dates, format : YYYY-MM-DD}
 #'     \item{In column : vector of chronics}
 #'     \item{in cell, numeric (typival day ID)}
-#'   }}}
-#'   \item{weigth.txt}{weigth file  wich following columns :
+#'    }
+#'   }
+#'   
+#'   \item{weigth.txt weigth file  wich following columns :
 #'   \itemize{
 #'     \item{Name : character, name of contraint}
 #'     \item{BE.FR : numeric, between -1 and 1}
@@ -32,7 +38,16 @@
 #'     \item{DE.NL : numeric, between -1 and 1}
 #'     \item{BE.NL : numeric, between -1 and 1}
 #'     \item{BE.DE : numeric, between -1 and 1}
-#'   }}}
+#'    }
+#'   }
+#'   
+#'   \item{infos.ini Informations on model used.
+#'   \itemize{
+#'     \item{date : Date on initialisation}
+#'     \item{model : name of model use}
+#'     }
+#'   }
+#'  }
 #'  
 #' @examples
 #'
@@ -51,15 +66,15 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   suppressWarnings(opts <- setSimulationPath(opts$studyPath, "input"))
   #Control antaresSolver >=6.1
-    
-    
+  
+  
   #Ctrl study version
   if(opts$antaresVersion < 610)stop("Your studie must be in version 6.1 or more")
   
-    
-    #.ctrlSolver()
-
-
+  
+  #.ctrlSolver()
+  
+  
   
   #test fbModel
   .controlFbMod(fb_opts)
@@ -187,7 +202,7 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   splitRes <- strsplit(allRes, ",")
   fl <- lapply(splitRes, function(x){
     x[2]
-    })
+  })
   fl <- unlist(fl)
   toRm <- which(fl == "model_description_fb")
   if(length(toRm) > 0)allRes <- allRes[-toRm]
@@ -203,13 +218,13 @@ initFlowBased <- function(fb_opts = antaresFlowbased::fbOptions()$path,
   
   endFile <- paste(allValue$Var1, allValue$Var2, sep=",")
   endFile <- paste0(endFile, ",", clusterD$cluster, " = ", rep(scenarios,each = length(clusterD$area)) )
-
+  
   
   
   
   endFile <- c("[Default Ruleset]", allRes, endFile)
   write(endFile, pathsb)
-
+  
   
 }
 

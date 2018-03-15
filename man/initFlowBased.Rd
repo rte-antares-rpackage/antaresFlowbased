@@ -19,22 +19,27 @@ Generate environment for a flow-based study
 }
 \note{
 folder deigned by fb_opts contain files :
+
 \itemize{
-  \item{domainesFB.RDS}{RDS file from \link{computeFB}}
-  \item{second_member.txt}{txt file of second member wich following columns :
+  \item{domainesFB.RDS RDS file from \link{computeFB}}
+  \item{second_member.txt txt file of second member wich following columns :
   \itemize{
     \item{Id_day : numeric from 1 to number of day id}
     \item{Id_hour : numeric from 1 to number of hour}
     \item{vect_b : numeric}
     \item{Name : character, name of constaints}
-  }}
-  \item{ts.txt}{txt file of time series matrix wich
+   }
+  }
+  
+  \item{ts.txt txt file of time series matrix wich
   \itemize{
-    \item{In row : dates, format : %YYYY-%MM-%DD
+    \item{In row : dates, format : YYYY-MM-DD}
     \item{In column : vector of chronics}
     \item{in cell, numeric (typival day ID)}
-  }}}
-  \item{weigth.txt}{weigth file  wich following columns :
+   }
+  }
+  
+  \item{weigth.txt weigth file  wich following columns :
   \itemize{
     \item{Name : character, name of contraint}
     \item{BE.FR : numeric, between -1 and 1}
@@ -42,7 +47,16 @@ folder deigned by fb_opts contain files :
     \item{DE.NL : numeric, between -1 and 1}
     \item{BE.NL : numeric, between -1 and 1}
     \item{BE.DE : numeric, between -1 and 1}
-  }}}
+   }
+  }
+  
+  \item{infos.ini Informations on model used.
+  \itemize{
+    \item{date : Date on initialisation}
+    \item{model : name of model use}
+    }
+  }
+ }
 }
 \examples{
 
