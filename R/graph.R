@@ -423,7 +423,9 @@ plotNetPositionFB <- function( data, dayType,
       stop("This type of positions does not appear in the simulation data.")
     }
   }
-  
+  if(length(unique(data$areas[,length(area), by = idSNoAr]$V1)) != 1){
+    stop("All data by timeId-mcYear must have same length. If you have filtering your data, you must keep all areas by goup of timeId-mcYear")
+  }
   
   idS <- getIdCols(data$areas)
   ##Test if no-adq are present
