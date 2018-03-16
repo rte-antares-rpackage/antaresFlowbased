@@ -129,6 +129,33 @@ runAppPosition(dta)
 
 
 
+
+#Post treatments
+
+##addNetPosition
+```{r, eval=FALSE}
+opts <- antaresRead::setSimulationPath("MyStuDy", 2)
+data <- readAntares(area = "all", links = "all", mcYears = 1)
+
+##Add net position for CWE
+data <- addNetPosition(data, opts, adq = FALSE)
+
+##Add net position for CWE+AT
+data <- addNetPosition(data, opts, adq = FALSE,
+ inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
+```
+
+
+##addTypicalDayId
+```{r, eval=FALSE}
+
+ antaresRead::setSimulationPath("MyStuDy", 1)
+ data <- readAntares(areas = "all", links = "all", clusters = "all" ,mcYears = 1:10)
+ data <- addTypicalDayId(data)
+```
+
+
+
 #adqPatch in h5 file : adqH5
 ```{r, eval=FALSE}
 ##Opts defind on txt files
@@ -157,26 +184,4 @@ setAlias("adqPatch", "Alias for adqPatch", c("LOLD_ADQPatch",
 readAntares(select = "adqPatch", opts = opts, mcYears = 1)
 
 ##Plot/apps works like no-h5
-```
-
-#addNetPosition
-```{r, eval=FALSE}
-opts <- antaresRead::setSimulationPath("MyStuDy", 2)
-data <- readAntares(area = "all", links = "all", mcYears = 1)
-
-##Add net position for CWE
-data <- addNetPosition(data, opts, adq = FALSE)
-
-##Add net position for CWE+AT
-data <- addNetPosition(data, opts, adq = FALSE,
- inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
-```
-
-
-#addTypicalDayId
-```{r, eval=FALSE}
-
- antaresRead::setSimulationPath("MyStuDy", 1)
- data <- readAntares(areas = "all", links = "all", clusters = "all" ,mcYears = 1:10)
- data <- addTypicalDayId(data)
 ```
