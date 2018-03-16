@@ -412,9 +412,6 @@ plotNetPositionFB <- function( data, dayType,
   }
   
   
-  
-  
-  
   if( drawPositionsBeforeAdqP & !drawPositionsAdqP ){
     if(!all(c("BALANCE", "UNSP. ENRG", "LOLD", "DTG MRG")%in%names(dta$areas))){
       stop("This type of positions does not appear in the simulation data.")
