@@ -349,7 +349,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
 #'          dayType = "all", hour = 19,
-#'          country1 = "BE", country2 = "FR", , filteringEmptyDomains = TRUE)
+#'          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 #'
 #'  plotNetPositionFB(fb_opts = opts,
 #'          data = dta,
@@ -384,7 +384,7 @@ plotNetPositionFB <- function( data, dayType,
                          nbMaxPt = 10000, drawPositionsBeforeAdqP = TRUE, drawPositionsAdqP = TRUE,
                          palette = "rainbow"){
   
-  
+
   
   if(!palette[1]%in%c("cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow")){
     stop('Palette must be in : "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"')
@@ -409,6 +409,22 @@ plotNetPositionFB <- function( data, dayType,
   }
   if(!country2%in%c("DE", "BE", "FR", "NL")){
     stop("country2 must be DE, BE, FR or NL")
+  }
+  
+  
+  
+  
+  
+  if( drawPositionsBeforeAdqP & !drawPositionsAdqP ){
+    if(!all(c("BALANCE", "UNSP. ENRG", "LOLD", "DTG MRG")%in%names(dta$areas))){
+      stop("This type of positions does not appear in the simulation data.")
+    }
+  }
+  
+  if( !drawPositionsBeforeAdqP & drawPositionsAdqP ){
+    if(!all(c("BALANCE_ADQPatch", "UNSP. ENRG_ADQPatch", "LOLD_ADQPatch", "DTG MRG_ADQPatch")%in%names(dta$areas))){
+      stop("This type of positions does not appear in the simulation data.")
+    }
   }
   
   

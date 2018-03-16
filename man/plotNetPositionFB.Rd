@@ -101,7 +101,7 @@ plotNetPositionFB(fb_opts = opts,
  plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = "all", hour = 19,
-         country1 = "BE", country2 = "FR", , filteringEmptyDomains = TRUE)
+         country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 
  plotNetPositionFB(fb_opts = opts,
          data = dta,
