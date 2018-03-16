@@ -165,10 +165,10 @@ opts <- antaresRead::setSimulationPath("MyStuDy", 2)
 data <- readAntares(area = "all", links = "all", mcYears = 1)
 
 ##Add net position for CWE
-data <- addNetPosition(data, opts, ADQ = FALSE)
+data <- addNetPosition(data, opts, adq = FALSE)
 
 ##Add net position for CWE+AT
-data <- addNetPosition(data, opts, ADQ = FALSE,
+data <- addNetPosition(data, opts, adq = FALSE,
  inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
 ```
 

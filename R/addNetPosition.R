@@ -5,7 +5,7 @@
 #' @param inAreas \code{character} areas who will included in IPN compute. All links present in inAreas 
 #' (for 2 areas concerned by link) will be included. Others links are excluded. 
 #' Be careful if only one area in two is present, link is excluded.
-#' @param ADQ \code{boolan} apply straitemùent on ADQ columns
+#' @param adq \code{boolan} apply straitemùent on ADQ columns
 #' @param newName \code{character} end of new columns name. Default "_CWE".
 #' 
 #' 
@@ -15,16 +15,16 @@
 #' data <- readAntares(area = "all", links = "all", mcYears = 1)
 #' 
 #' ##Add net position for CWE
-#' data <- addNetPosition(data, opts, ADQ = FALSE)
+#' data <- addNetPosition(data, opts, adq = FALSE)
 #' 
 #' ##Add net position for CWE+AT
-#' data <- addNetPosition(data, opts, ADQ = FALSE,
+#' data <- addNetPosition(data, opts, adq = FALSE,
 #'  inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
 #' 
 #' }
 #' 
 #' @export
-addNetPosition <- function(data, opts = antaresRead::simOptions(), inAreas = c("be", "de", "fr", "nl"), ADQ = FALSE, newName = "_CWE"){
+addNetPosition <- function(data, opts = antaresRead::simOptions(), inAreas = c("be", "de", "fr", "nl"), adq = FALSE, newName = "_CWE"){
   allAreas <- getAreas(opts = opts)
   allLinks <- getLinks(opts = opts)
   allLinksSave <- allLinks
@@ -62,7 +62,7 @@ addNetPosition <- function(data, opts = antaresRead::simOptions(), inAreas = c("
     })), collapse = "")
   }, simplify = FALSE)
   class(areaLinkTable)
-  if(!ADQ){
+  if(!adq){
     fl <- "FLOW LIN."
   }else{
     fl <- "FLOW LIN._ADQPatch"
@@ -85,7 +85,7 @@ addNetPosition <- function(data, opts = antaresRead::simOptions(), inAreas = c("
   links <- links[,.SD, .SDcols = c("time", "mcYear", names(areaLinkTable)[names(areaLinkTable)%in%names(links)])]
   links <- melt(links, id = 1:2)
   setnames(links, "variable", "area")
-  if(!ADQ){
+  if(!adq){
     newColumnName <- paste0("Balance", newName)
   }else{
     newColumnName <- paste0("Balance_ADQPatch", newName)

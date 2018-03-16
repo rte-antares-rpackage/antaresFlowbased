@@ -5,7 +5,7 @@
 \title{Add net position}
 \usage{
 addNetPosition(data, opts = antaresRead::simOptions(), inAreas = c("be",
-  "de", "fr", "nl"), ADQ = FALSE, newName = "_CWE")
+  "de", "fr", "nl"), adq = FALSE, newName = "_CWE")
 }
 \arguments{
 \item{data}{\code{antaresDataList} read with readAntares and with areas and links tables}
@@ -16,7 +16,7 @@ addNetPosition(data, opts = antaresRead::simOptions(), inAreas = c("be",
 (for 2 areas concerned by link) will be included. Others links are excluded. 
 Be careful if only one area in two is present, link is excluded.}
 
-\item{ADQ}{\code{boolan} apply straitemùent on ADQ columns}
+\item{adq}{\code{boolan} apply straitemùent on ADQ columns}
 
 \item{newName}{\code{character} end of new columns name. Default "_CWE".}
 }
@@ -29,10 +29,10 @@ opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",
 data <- readAntares(area = "all", links = "all", mcYears = 1)
 
 ##Add net position for CWE
-data <- addNetPosition(data, opts, ADQ = FALSE)
+data <- addNetPosition(data, opts, adq = FALSE)
 
 ##Add net position for CWE+AT
-data <- addNetPosition(data, opts, ADQ = FALSE,
+data <- addNetPosition(data, opts, adq = FALSE,
  inAreas = c("be", "de", "fr", "nl", "at"), newName = "_CWEAt")
 
 }
