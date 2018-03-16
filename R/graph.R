@@ -386,7 +386,20 @@ plotNetPositionFB <- function( data, dayType,
   }
   
   
+  
+  
+  
+  
   idS <- getIdCols(data$areas)
+  
+  ##Control filtering
+  idSNoAr <- idS[idS != "area"]
+  
+  if(length(unique(data$areas[,length(area), by = idSNoAr]$V1)) != 1){
+    stop("All data by timeId-mcYear must have same length. If you have filtering your data, you must keep all areas by goup of timeId-mcYear")
+  }
+  
+  
   ##Test if no-adq are present
   namesToTest <- names(data$areas)[!names(data$areas)%in%idS]
   AdqData <- noAdqData <- FALSE
