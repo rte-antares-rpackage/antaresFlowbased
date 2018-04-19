@@ -1,6 +1,6 @@
 #' @title Run the adequacy patch and save the result in an h5 format file
 #' 
-#' @description This function runs the adequacy patch (adqPatch) on an Antares output and save the result in an h5 file.
+#' @description This function runs the adequacy patch (\link{adqPatch}) on an Antares output and save the result in an h5 file.
 #' 
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()},
 #'  it must refer to a h5 file.
