@@ -1,11 +1,13 @@
-
-#' Compute adqPatch on h5 file
-#' @title Run the adequacy patch and save result in h5
+#' @title Run the adequacy patch and save the result in an h5 format file
 #' 
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()} must refer to a h5 file.
-#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param strategic_reserve_be \code{character} area use to compute new margin for BE
-#' @param strategic_reserve_de \code{character} area use to compute new margin for DE
+#' @description This function runs the adequacy patch (adqPatch) on an Antares output and save the result in an h5 file.
+#' 
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()},
+#'  it must refer to a h5 file.
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or flow-based model path obtained 
+#' with the function \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param strategic_reserve_be \code{character} name of the virtual area representing the strategic reserve of Belgium
+#' @param strategic_reserve_de \code{character} name of the virtual area representing the strategic reserve of Germany
 #' 
 #' 
 #' @examples
