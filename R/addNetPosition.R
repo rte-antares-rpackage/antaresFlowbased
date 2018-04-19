@@ -1,4 +1,5 @@
-#' Add net position 
+#' This function calculates the Net Position (the balance) of the areas within a group of countries, based on the exchanged flows in the indicated area.
+#' By default, the function calculates the Net Position within the CWE area and creates a newcolumn called Balance_CWE. 
 #'
 #' @param data \code{antaresDataList} read with readAntares and with areas and links tables
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
