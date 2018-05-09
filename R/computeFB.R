@@ -1,4 +1,4 @@
-#' @title Projection of flow-based domains into a standardized shape (consistent with ANTARES studies)
+#' @title Conversion of flow-based domains into an ANtares model with fixed PTDF
 #' 
 #' @description 
 #' This function follows two steps: based on the list of flow-based domains given in input, it will calculate a standard shape

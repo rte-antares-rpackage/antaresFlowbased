@@ -1,20 +1,31 @@
-#' Create time series of typical days for antares
+#' @title Creation of time series of typical days for Antares studies
+#' 
+#' @description 
+#' This function defines for each studied day in an Antares study the most representative typical flow-based day, and finally
+#' creates daily time series.
+#' To establish this correlation, the inputs of the function must include a probability matrix (calculated for each set of 
+#' typical day with the package \code{flowBasedClustering}) and the path to the Antares study to convert. The probability matrix
+#' will be used to compute a weighted draw among the possible typical days.
 #'
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param probabilityMatrix \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
-#' Format used is : area_variable (Ex, fr_load, de_solar ...)
-#' @param multiplier \code{data.frame} contain 2 columns.
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Link to the Antares study.
+#'  Default to \code{antaresRead::simOptions()}
+#' @param probabilityMatrix \code{list}, correlation between climatic factors and flow-based typical days, such as returned by
+#'  \code{flowBasedClustering::getProbability}. The columns names must be renamed to match Antares' inputs, use the function
+#'  \link{setNamesProbabilityMatrix}. Initial format is : area_variable (Ex: fr_load, de_solar ...)
+#' @param multiplier \code{data.frame} enabling to convert load factors or normalised values into production/consumption in MW. 
+#' 2 columns:
 #' \itemize{
-#' \item variable : Name of variable
-#' \item coef : coefficient multiplier.
+#' \item variable : Name of variable (ex: \code{"fr@wind"})
+#' \item coef : mutiplier coefficient, for example the installed capacity.
 #' }
 #' @param interSeasonBegin \code{character or date}, date or vector of dates, YYYY-MM-DD, begin of interseason
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
-#' @param firstDay \code{numeric} indication of type of first day of study. If the first day of study is a
+#' @param firstDay \code{numeric} Type of the first day of the study (between 1 and 7). For example, if the first day is a
 #' wednesday, you must specify firstDay = 3.
-#' @param seed \code{numeric} fix random seed
-#' @param silent \code{boolean} progress bar.
-#' @param outputPath \code{character} folder where ts.txt will be write.
+#' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. 
+#' @param silent \code{boolean}, non display of a progress bar, default to FALSE.
+#' @param outputPath \code{character}, path to thefolder where the time series of typical flow-based output file (ts.txt) will 
+#' be written.
 #' 
 #' @examples
 #'
