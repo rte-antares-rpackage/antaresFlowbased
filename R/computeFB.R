@@ -1,21 +1,30 @@
-#' Compute flowbased approximation
+#' @title Projection of flow-based domains into a standardized shape (consistent with ANTARES studies)
+#' 
+#' @description 
+#' This function follows two steps: based on the list of flow-based domains given in input, it will calculate a standard shape
+#'  (selection of sides, k-medoid method) and will then project the real domains on this standard shape. The projection is 
+#' computed using an optimisation algorithm aiming at minimising the volumetric error between the real domain and its projection.
+#'  The function will then write in an output directory the standard shape (weights.txt), the projection result for each domain 
+#'  (second_member.txt) and an RDS object including the projected domains. Reports can be writen ploting the real and
+#' modelled domains and the volumetric error between them.
 #'
-#' @param PTDF \code{character}, path for PTDF file format : 
+#' @param PTDF \code{character}, path leading to the flow-based domains (PTDF description) list. This list be a csv file 
+#' containing the following columns (and column names): 
 #' \itemize{
-#'  \item Id_day : column of id day, numeric. In default exemple between 1 and 12. 
-#'  \item Period : column of period, numeric. In default exemple between 1 and 24.
-#'  \item BE : column of BE, numeric. 
-#'  \item DE : column of DE, numeric. 
-#'  \item FR : column of FR, numeric. 
-#'  \item FR : column of FR, numeric. 
-#'  \item RAM : column of RAM, numeric. 
+#'  \item Id_day : numeric, name of each day. Default in example id_day between 1 and 12. 
+#'  \item Period : numeric, hour of the day. Default in example period between 1 and 24 (1 is then between 00:00 and 01:00).
+#'  \item BE : numeric, PTDF coefficient of Belgium.
+#'  \item DE : numeric, PTDF coefficient of Germany. 
+#'  \item FR : numeric, PTDF coefficient of France. 
+#'  \item NL : numeric, PTDF coefficient of the Netherlands. 
+#'  \item RAM : numeric, remaining margin in the critical branch (MW). 
 #' }
-#' @param outputName \code{character}, name of output directory
-#' @param reports \code{boolean}, product html reports by typical day or not
-#' @param dayType \code{character / numeric} default All, can specify dayType to compute
-#' @param hour \code{character / numeric} default All, can specify hour to compute
-#' @param nbFaces \code{numeric} number of faces to keep, default 36.
-#' @param verbose \code{numeric} show log in console. Defaut to 0.
+#' @param outputName \code{character}, path/name of the output directory
+#' @param reports \code{boolean}, if TRUE, the function will write html reports (one per typical day). Default to TRUE.
+#' @param dayType \code{numeric}, default to All. (optionnal) Vector of id_days to compute.
+#' @param hour \code{numeric}, default to All. (optionnal) vector of hours/periods to compute.
+#' @param nbFaces \code{numeric}, standard shape parameters: number of sides to select, default to 36.
+#' @param verbose \code{numeric}, shows log in console. Default to 0.
 #' \itemize{
 #'  \item 0 : No log
 #'  \item 1 : Short log
