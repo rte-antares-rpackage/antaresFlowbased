@@ -173,10 +173,10 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #' @examples
 #'
 #' \dontrun{
-#' //Generate report for the typical day 7 of a model (already designatedby setFlowBasedPath)
+#' #Generate report for the typical day 7 of a model (already designatedby setFlowBasedPath)
 #' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
 #' 
-#' //Generate a report for the typical day 7 of a PTDF file
+#' #Generate a report for the typical day 7 of a PTDF file
 #' allFB <- computeFB(PTDF = "/path/PTDF_file.csv",reports = FALSE, dayType = 7)
 #' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions(), allFB = allFB)
 #' }
