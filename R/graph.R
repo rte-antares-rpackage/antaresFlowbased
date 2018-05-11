@@ -90,13 +90,17 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 
 }
 
-#' Plot 2D for flowbased areas can combine more than one plot
+#' @title Plot typical flow-based domains
+#' 
+#' @description 
+#' This function enables to plot one or several typical flow-based domains, in 2 dimensions (the axis being 2 countries).
 #'
-#' @param hour \code{numeric}, hour
-#' @param dayType \code{numeric}, dayType
-#' @param country1 \code{character}, country in X
-#' @param country2 \code{character}, country in Y
-#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @param hour \code{numeric}, hour(s) (can be from 0 to 23 or from 1 to 24 depending of the data of the flow-based model)
+#' @param dayType \code{numeric}, numarical id of the typical day(s)
+#' @param country1 \code{character}, name of the country in X
+#' @param country2 \code{character}, name of the country in Y
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath} : directory of flow-based
+#' model. By default, the value is indicated by \code{antaresFlowbased::fbOptions()}
 #'
 #' @examples
 #'
