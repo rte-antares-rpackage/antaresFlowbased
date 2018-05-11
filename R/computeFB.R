@@ -19,13 +19,14 @@
 #'  \item NL : numeric, PTDF coefficient of the Netherlands. 
 #'  \item RAM : numeric, remaining margin in the critical branch (MW). 
 #' }
-#' @param outputName \code{character}, path/name of the output directory. Default to a created directory named "antaresInput" in
-#' the current directory
-#' @param reports \code{boolean}, if TRUE, the function will write html reports (one per typical day). Default to TRUE.
-#' @param dayType \code{numeric}, default to All. (optionnal) Vector of id_days to compute.
-#' @param hour \code{numeric}, default to All. (optionnal) vector of hours/periods to compute.
-#' @param nbFaces \code{numeric}, standard shape parameters: number of sides to select, default to 36.
-#' @param verbose \code{numeric}, shows log in console. Default to 0.
+#' @param outputName \code{character}, path/name of the output directory. By default, the value is a created directory named 
+#' "antaresInput" in the current directory
+#' @param reports \code{boolean}, if TRUE, the function will write html reports (one per typical day). By default, the value is 
+#' TRUE.
+#' @param dayType \code{numeric}, by default, the value is All. (optionnal) Vector of id_days to compute.
+#' @param hour \code{numeric}, by default, the value is All. (optionnal) vector of hours/periods to compute.
+#' @param nbFaces \code{numeric}, standard shape parameters: number of sides to select. By default, the value is 36.
+#' @param verbose \code{numeric}, shows log in console. By default, the value is 0.
 #' \itemize{
 #'  \item 0 : No log
 #'  \item 1 : Short log

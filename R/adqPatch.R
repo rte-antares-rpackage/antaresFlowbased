@@ -7,10 +7,10 @@
 #' Defaut to \code{antaresRead::simOptions()}
 #' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or 
 #' flow-based model path obtained with the function \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param mcYears \code{numeric} vector of mcYears to process. Default to all (all mcYears are loaded).
+#' @param mcYears \code{numeric} vector of mcYears to process. By default, the value is all (all mcYears are loaded).
 #' @param pre_filter \code{boolean}: if TRUE, the function selects (by reading annual results) the mcYears during which 
 #' there is at least one hour of loss of load before applying the adequacy patch, the other years are not loaded and 
-#' will not appear in the results of the function. Default to FALSE.
+#' will not appear in the results of the function. By default, the value is FALSE.
 #' @param strategic_reserve_be \code{character} name of the virtual area representing the strategic reserve of Belgium. Default
 #' to NULL.
 #' @param strategic_reserve_de \code{character} name of the virtual area representing the strategic reserve of Germany. Default 
@@ -18,7 +18,7 @@
 #' @param select \code{character}, names of output columns (variables) to be displayed after the adequacy patch post-process.
 #' The columns modified by the adequacy patch are automatically displayed (BALANCE, LOLD, UNSP. ENRG, DTG MRG and FLOW LIN.) 
 #' @param keepOldColumns \code{boolean}: if TRUE, the initial columns modified by the adequacy patch are also displayed after
-#' the post-processing. Default to TRUE.
+#' the post-processing. By default, the value is TRUE.
 #' 
 #' @examples
 #'

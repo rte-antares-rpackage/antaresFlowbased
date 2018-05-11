@@ -8,7 +8,7 @@
 #' will be used to compute a weighted draw among the possible typical days.
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Link to the Antares study.
-#'  Default to \code{antaresRead::simOptions()}
+#'  By default, the value is \code{antaresRead::simOptions()}
 #' @param probabilityMatrix \code{list}, correlation between climatic factors and flow-based typical days, such as returned by
 #'  \code{flowBasedClustering::getProbability}. The columns names must be renamed to match Antares' inputs, use the function
 #'  \link{setNamesProbabilityMatrix}. Initial format is : area_variable (Ex: fr_load, de_solar ...)
@@ -22,10 +22,10 @@
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
 #' @param firstDay \code{numeric} Type of the first day of the study (between 1 and 7). For example, if the first day is a
 #' wednesday, you must specify firstDay = 3.
-#' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. 
-#' @param silent \code{boolean}, non display of a progress bar, default to FALSE.
+#' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. By default, the value is 04052017.
+#' @param silent \code{boolean}, non display of a progress bar, By default, the value is FALSE.
 #' @param outputPath \code{character}, path to thefolder where the time series of typical flow-based output file (ts.txt) will 
-#' be written.
+#' be written. The current directory is chosen by default.
 #' 
 #' @examples
 #'
