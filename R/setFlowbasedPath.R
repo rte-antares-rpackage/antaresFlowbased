@@ -26,9 +26,11 @@
 #' @param model (optional) 
 #' If "path" is missing. Name of the chosen existing model (Use \code{\link{getAvailableModel}} to get the complete list).
 #'
-#' @return 
+#' @return
+#' \itemize{ 
 #' \item {}{A vector of available models for \code{getAvailableModel}.}
-#' \item {path}{path of the current input repository ,for \code{setFlowbasedPath} and \code{fbOptions}}
+#' \item {\code{path}}{ path of the current input repository ,for \code{setFlowbasedPath} and \code{fbOptions}}
+#' }
 #'
 #'
 #' @examples
