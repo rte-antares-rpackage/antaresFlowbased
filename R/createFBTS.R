@@ -21,7 +21,7 @@
 #' @param interSeasonBegin \code{character or date}, date or vector of dates, YYYY-MM-DD, begin of interseason
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
 #' @param firstDay \code{numeric} Type of the first day of the study (between 1 and 7). For example, if the first day is a
-#' wednesday, you must specify firstDay = 3.
+#' wednesday, you must specify firstDay = 3. The first day can be directly calculated by the function \link{identifyFirstDay}.
 #' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. By default, the value is 04052017.
 #' @param silent \code{boolean}, non display of a progress bar, By default, the value is FALSE.
 #' @param outputPath \code{character}, path to thefolder where the time series of typical flow-based output file (ts.txt) will 
@@ -34,7 +34,7 @@
 #' library(flowBasedClustering)
 #' library(data.table)
 #'
-#' # load climate daily time serires
+#' # load climate daily time series
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #' 
 #' # load clustering results (or build them with clusteringTypicalDays function())
@@ -53,21 +53,22 @@
 #'  levelsProba = levelsProba, extrapolationNA = TRUE)
 #' 
 #' 
-#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
-#' 
-#' 
-#' 
+#' # Set the probabilityMatrix names and coefficients
 #' matProb <- setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
 #'                                    c("fr@load", "de@wind", "de@solar"))
 #' 
 #' multiplier <- data.frame(variable = c("fr@load", "de@wind", "de@solar"),
 #'                          coef = c(1, 352250, 246403))
-#'                          
-#' firstDay <- identifyFirstDay(opts)
+#' 
+#' # Set the path to Antares study inputs 
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+#' 
+#' # calendar
+#' firstDay <- identifyFirstDay(opts) # first day identified based on the input data of the Antares study designated by opts
 #' interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
 #' interSeasonEnd <- as.Date(c("2020-10-04", "2018-05-02"))
 #' 
-#' 
+#' # Generate flow-based time series
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
 #'                  interSeasonBegin = interSeasonBegin,
 #'                  interSeasonEnd = interSeasonEnd, firstDay = firstDay, outputPath = getwd())
