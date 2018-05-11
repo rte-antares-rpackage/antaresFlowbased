@@ -275,10 +275,10 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   tsend
 }
 
-#' @title Rename the probabilityMatrix variable names
+#' @title Rename the probabilityMatrix variables
 #' 
 #' @description 
-#' This function changes the name of variables in the probabilityMatrix, created by \code{flowBasedClustering::getProbability} and 
+#' This function changes the name of the variables in the probabilityMatrix, created by \code{flowBasedClustering::getProbability} and 
 #' used by \link{createFBTS}. Aim: rename the variables into a format consistent with Antares inputs ("area@variable").
 #' For example, go to \link{createFBTS}.
 #'
