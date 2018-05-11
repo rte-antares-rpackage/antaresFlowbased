@@ -29,7 +29,7 @@
 #' @return
 #' \itemize{ 
 #' \item {}{A vector of available models for \code{getAvailableModel}.}
-#' \item {\code{path}}{ path of the current input repository ,for \code{setFlowbasedPath} and \code{fbOptions}}
+#' \item {\code{path}}{ path of the current input repository, for \code{setFlowbasedPath} and \code{fbOptions}}
 #' }
 #'
 #'
