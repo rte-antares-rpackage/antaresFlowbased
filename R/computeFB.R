@@ -19,7 +19,8 @@
 #'  \item NL : numeric, PTDF coefficient of the Netherlands. 
 #'  \item RAM : numeric, remaining margin in the critical branch (MW). 
 #' }
-#' @param outputName \code{character}, path/name of the output directory
+#' @param outputName \code{character}, path/name of the output directory. Default to a created directory named "antaresInput" in
+#' the current directory
 #' @param reports \code{boolean}, if TRUE, the function will write html reports (one per typical day). Default to TRUE.
 #' @param dayType \code{numeric}, default to All. (optionnal) Vector of id_days to compute.
 #' @param hour \code{numeric}, default to All. (optionnal) vector of hours/periods to compute.
@@ -31,10 +32,14 @@
 #' }
 #' @import ROI
 #' @import ROI.plugin.clp
-#'
+#' @examples
+#' \dontrun{
+#' #Compute models for all days and hours of a PTDF file, with no reports automatically generated at the same time
+#' computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"), reports = FALSE)
+#' 
+#' }
 #' @export
-computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package
-                                         = "antaresFlowbased"),
+computeFB <- function(PTDF,
                       outputName =  paste0(getwd(), "/antaresInput"),
                       reports = TRUE,
                       dayType = "All", hour = "All", nbFaces = 36,
