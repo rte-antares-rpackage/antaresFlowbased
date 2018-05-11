@@ -153,20 +153,32 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 
 
 
-#' Generate html report
+#' @title Generate html report on a typical flow-based day
+#' 
+#' @description This function generate an html report on one or several typical days, comparing the real and modelled domains. 
+#' It hence can follow the use of the function \link{computeFB}. The report (one per day) is composed of several tabs: a 
+#' summary of the volumetric errors (called inf and sup, representing real points forgotten in the model and modelled points
+#' missing from the real domain) and plots for each hour of the real and modelled domains.
 #'
-#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
-#' @param output_file \code{character}, output directory
-#' @param dayType \code{numeric}, dayType
-#' @param allFB \code{data.table}, load FB directaly in package
+#' @param fb_opts \code{list} of flowbased parameters (directory of the flow-based input) returned by the function 
+#' \link{setFlowbasedPath}. Default to \code{antaresFlowbased::fbOptions()}
+#' @param output_file \code{character}, output directory of the html reports. Default to \code{NULL}, the reports will be
+#' written in the current directory.
+#' @param dayType \code{numeric}, numerical id of the chosen typical flow-based days
+#' @param allFB \code{data.table}, table of flow-based domains (real and modelled) returned by the function \link{computeFB}.
+#' Default to \code{NULL}: in this case, the flow-based data is directly read in the model designated by the parameter fb_opts.
 #'
 #' @import rmarkdown flexdashboard rAmCharts manipulateWidget
 #'
 #' @examples
 #'
 #' \dontrun{
-#' allFB <- computeFB(dayType = 7)
+#' //Generate report for the typical day 7 of a model (already designatedby setFlowBasedPath)
 #' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
+#' 
+#' //Generate a report for the typical day 7 of a PTDF file
+#' allFB <- computeFB(PTDF = "/path/PTDF_file.csv",reports = FALSE, dayType = 7)
+#' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions(), allFB = allFB)
 #' }
 #' @export
 generateReportFb <- function(dayType, output_file = NULL,
