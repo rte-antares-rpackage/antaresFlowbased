@@ -161,12 +161,12 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #' missing from the real domain) and plots for each hour of the real and modelled domains.
 #'
 #' @param fb_opts \code{list} of flowbased parameters (directory of the flow-based input) returned by the function 
-#' \link{setFlowbasedPath}. Default to \code{antaresFlowbased::fbOptions()}
-#' @param output_file \code{character}, output directory of the html reports. Default to \code{NULL}, the reports will be
-#' written in the current directory.
+#' \link{setFlowbasedPath}. By default, the value is indicated by \code{antaresFlowbased::fbOptions()}
+#' @param output_file \code{character}, output directory of the html reports. By default, the value is \code{NULL}, the reports 
+#' will be written in the current directory.
 #' @param dayType \code{numeric}, numerical id of the chosen typical flow-based days
 #' @param allFB \code{data.table}, table of flow-based domains (real and modelled) returned by the function \link{computeFB}.
-#' Default to \code{NULL}: in this case, the flow-based data is directly read in the model designated by the parameter fb_opts.
+#' By default, the value is \code{NULL}: in this case, the flow-based data is directly read in the model designated by the parameter fb_opts.
 #'
 #' @import rmarkdown flexdashboard rAmCharts manipulateWidget
 #'
@@ -207,11 +207,18 @@ generateReportFb <- function(dayType, output_file = NULL,
 }
 
 
-#' Run shiny visualisation of error
-#'
-#' Click on raw of table to see graphs. You can also export reports for a typical day.
+#' @title Run a shiny application to visualize the real and modelled flow-based domains
 #' 
-#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}
+#' @description 
+#' Run a shiny application displaying the results of the conversion of real domains into Antares models. It will display for
+#' each typical day and each hour the volumetric errors of conversion (inf_error: forgotten points in the 
+#' model, sup_error: modelled points missing in the real domain) and dynamic plots of the real and modelled domains. Html reports
+#' for each day can also be exported.
+#'
+#' 
+#' @param fb_opts \code{list} of flow-based parameters returned by the function \link{setFlowbasedPath}: directory of the flow-
+#' based model to study.
+#' By default, the value is indicated by \code{antaresFlowbased::fbOptions()}
 #'
 #' @import shiny manipulateWidget
 #'
