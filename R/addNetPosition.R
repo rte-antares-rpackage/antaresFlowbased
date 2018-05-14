@@ -5,8 +5,8 @@
 #' By default, the function calculates the Net Position within the CWE area and creates a new column called Balance_CWE. 
 #'
 #' @param data \code{antaresDataList} read with readAntares, containing both areas and links tables.
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}: this represents the directory
-#' of the flow-based inputs. The default path is indicated by \code{antaresRead::simOptions()}.
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}: this represents the 
+#' directory of the Antares study. The default path is indicated by \code{antaresRead::simOptions()}.
 #' @param inAreas \code{character} lists of areas belonging to the perimeter, whose exchanges are going to be taken into account in the balance
 #' calculation. All links connecting two areas in this list are taken into account, the links connected to only one area (or none) are ignored.
 #' By default, the list is c("be", "de", "fr", "nl").

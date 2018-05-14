@@ -1,4 +1,3 @@
-#' Add typical day columns
 #' @title Add typical day columns
 #' 
 #' @description Add to an Antares output table a column indicating the id of the used flow-based typical day for each timestep.
