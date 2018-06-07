@@ -70,14 +70,15 @@
 #'     \item{model : name of the used model}
 #'     }
 #'   }
-#'   }
 #'  }
+#'  
 #'  
 #' @examples
 #'
 #' \dontrun{
 #' 
 #'  antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy",1)
+#'  antaresFlowbased::setFlowbasedPath(model = "D:/Users/titorobe/Desktop/FBModel")
 #'  initFlowBased()
 #'  }
 #'  
