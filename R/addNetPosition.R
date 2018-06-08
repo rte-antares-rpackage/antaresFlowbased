@@ -1,6 +1,6 @@
 #' @title addNetPosition
 #' 
-#' @description This function calculates the Net Position (the balance) of the areas within a bigger group of areas, 
+#' @description This function calculates the Net Position (the balance) of areas within a bigger group of areas, 
 #' based on the exchanged flows in the indicated perimeter.
 #' By default, the function calculates the Net Position within the CWE area and creates a new column called Balance_CWE. 
 #'
@@ -10,7 +10,7 @@
 #' @param inAreas \code{character} lists of areas belonging to the perimeter, whose exchanges are going to be taken into account in the balance
 #' calculation. All links connecting two areas in this list are taken into account, the links connected to only one area (or none) are ignored.
 #' By default, the list is c("be", "de", "fr", "nl").
-#' @param adq \code{boolean} calculate the net positions of the areas based on post-adequacy patch results. By default, the value is FALSE.
+#' @param adq \code{boolean} calculates the net positions of the areas based on post-adequacy patch results. By default, the value is FALSE.
 #' @param newName \code{character} Added suffix to the calculated column's name. By default, the value is "_CWE".
 #' 
 #' 

@@ -5,10 +5,10 @@
 #'  (selection of sides, k-medoid method) and will then project the real domains on this standard shape. The projection is 
 #' computed using an optimisation algorithm aiming at minimising the volumetric error between the real domain and its projection.
 #'  The function will then write in an output directory the standard shape (weights.txt), the projection result for each domain 
-#'  (second_member.txt) and an RDS object including the projected domains. Reports can be writen ploting the real and
+#'  (second_member.txt) and an RDS object storing information on the projection and the errors. Reports can be written represening the real and
 #' modelled domains and the volumetric error between them.
 #'
-#' @param PTDF \code{character}, path leading to the flow-based domains (PTDF description) list. This list be a csv file 
+#' @param PTDF \code{character}, path leading to the flow-based domains (PTDF description) list. This must be a csv file 
 #' containing the following columns (and column names): 
 #' \itemize{
 #'  \item Id_day : numeric, name of each day. Default in example id_day between 1 and 12. 
@@ -17,16 +17,16 @@
 #'  \item DE : numeric, PTDF coefficient of Germany. 
 #'  \item FR : numeric, PTDF coefficient of France. 
 #'  \item NL : numeric, PTDF coefficient of the Netherlands. 
-#'  \item RAM : numeric, remaining margin in the critical branch (MW). 
+#'  \item RAM : numeric, remaining available capacity in the critical branch (MW). 
 #' }
 #' @param outputName \code{character}, path/name of the output directory. By default, the value is a created directory named 
 #' "antaresInput" in the current directory
 #' @param reports \code{boolean}, if TRUE, the function will write html reports (one per typical day). By default, the value is 
 #' TRUE.
-#' @param dayType \code{numeric}, by default, the value is All. (optionnal) Vector of id_days to compute.
-#' @param hour \code{numeric}, by default, the value is All. (optionnal) vector of hours/periods to compute.
+#' @param dayType \code{numeric}, by default, the value is All. (optional) Vector of id_days to compute.
+#' @param hour \code{numeric}, by default, the value is All. (optional) vector of hours/periods to compute.
 #' @param nbFaces \code{numeric}, standard shape parameters: number of sides to select. By default, the value is 36.
-#' @param verbose \code{numeric}, shows log in console. By default, the value is 0.
+#' @param verbose \code{numeric}, shows the logs in console. By default, the value is 0.
 #' \itemize{
 #'  \item 0 : No log
 #'  \item 1 : Short log

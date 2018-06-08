@@ -1,7 +1,7 @@
 #' @title Set the flow-based input folder
 #' 
 #' @description A flow-based "model" consists of the description of the typical domains (the weights, the second members and 
-#' an RDS object containing additional information such as the points coordinates and the errors) and the time series file 
+#' an RDS object containing additional information such as the vertices coordinates and the errors) and the time series file 
 #' establishing the chronology of typical days used in an Antares study. 
 #' These functions enable to choose the flow-based input folder: one can either use existing models stored in the package or 
 #' use his own. 
@@ -18,10 +18,10 @@
 #'   If the argument "model" is missing. Path to the flow-based input directory, it can be created by the user with the 
 #'   functions \link{computeFB} and \link{createFBTS}. The directory must be composed of:
 #'   \itemize{
-#'    \item{weight.txt}{the PTDF file of the Antares models}
-#'    \item{second_member.txt}{the RAM of the Antares model}
-#'    \item{ts.txt}{the flow-based time series}
-#'    \item{domainesFB.RDS}{information about the domains}
+#'    \item{weight.txt}{ the PTDF file of the Antares models}
+#'    \item{second_member.txt}{ the RAM of the Antares model}
+#'    \item{ts.txt}{ the flow-based time series}
+#'    \item{domainesFB.RDS}{ information about the domains}
 #'   }
 #' @param model (optional) 
 #' If "path" is missing. Name of the chosen existing model (Use \code{\link{getAvailableModel}} to get the complete list).
@@ -29,21 +29,21 @@
 #' @return
 #' \itemize{ 
 #' \item {}{A vector of available models for \code{getAvailableModel}.}
-#' \item {\code{path}}{ path of the current input repository, for \code{setFlowbasedPath} and \code{fbOptions}}
+#' \item {}{path of the current input repository, for \code{setFlowbasedPath} and \code{fbOptions}}
 #' }
 #'
 #'
 #' @examples
 #'
 #' \dontrun{
-#' # Defaut path set loading the package
+#' # Get the default path used when loading the package
 #' fbOptions()
 #'
-#' # Specify a available model
+#' # Specify an available model
 #' getAvailableModel()
 #' setFlowbasedPath(model = "model2017")
 #'
-#' # Select a repository
+#' # Specify a personnal model
 #' setFlowbasedPath(model = "C:/PATH/TO/INPUT")
 #' }
 #'

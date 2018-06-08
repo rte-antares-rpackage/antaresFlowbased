@@ -4,7 +4,7 @@
 #' This function defines for each studied day in an Antares study the most representative typical flow-based day, and finally
 #' creates daily time series.
 #' To establish this correlation, the inputs of the function must include a probability matrix (calculated for each set of 
-#' typical day with the package \code{flowBasedClustering}) and the path to the Antares study to convert. The probability matrix
+#' typical days with the package \code{flowBasedClustering}) and the path to the Antares study to provide flow-based domains with. The probability matrix
 #' will be used to compute a weighted draw among the possible typical days.
 #'
 #' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Link to the Antares study.
@@ -13,7 +13,7 @@
 #'  \code{flowBasedClustering::getProbability}. The columns names must be renamed to match Antares' inputs, use the function
 #'  \link{setNamesProbabilityMatrix}. Initial format is : area_variable (Ex: fr_load, de_solar ...)
 #' @param multiplier \code{data.frame} enabling to convert load factors or normalised values into production/consumption in MW. 
-#' 2 columns:
+#' Two columns:
 #' \itemize{
 #' \item variable : Name of variable (ex: \code{"fr@wind"})
 #' \item coef : mutiplier coefficient, for example the installed capacity.
@@ -21,10 +21,10 @@
 #' @param interSeasonBegin \code{character or date}, date or vector of dates, YYYY-MM-DD, begin of interseason
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
 #' @param firstDay \code{numeric} Type of the first day of the study (between 1 and 7). For example, if the first day is a
-#' wednesday, you must specify firstDay = 3. The first day can be directly calculated by the function \link{identifyFirstDay}.
+#' Wednesday, you must specify firstDay = 3. The first day can be directly calculated by the function \link{identifyFirstDay}.
 #' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. By default, the value is 04052017.
-#' @param silent \code{boolean}, non display of a progress bar, By default, the value is FALSE.
-#' @param outputPath \code{character}, path to thefolder where the time series of typical flow-based output file (ts.txt) will 
+#' @param silent \code{boolean}, non display of a progress bar. By default, the value is FALSE.
+#' @param outputPath \code{character}, path of the folder where the time series of typical flow-based output file (ts.txt) will 
 #' be written. The current directory is chosen by default.
 #' 
 #' @examples

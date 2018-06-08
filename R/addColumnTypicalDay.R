@@ -1,4 +1,4 @@
-#' @title Add typical day columns
+#' @title Add a flow-based typical day id column
 #' 
 #' @description Add to an Antares output table a column indicating the id of the used flow-based typical day for each timestep.
 #' This information is read in the "user" directory file of the Antares study: it must be made sure that the data of the study is still

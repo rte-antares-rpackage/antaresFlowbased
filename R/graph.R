@@ -95,11 +95,11 @@ graphFlowBased2D <- function(flowbased, ctry1, ctry2, hour = NULL, dayType = NUL
 #' @description 
 #' This function enables to plot one or several typical flow-based domains, in 2 dimensions (the axis being 2 countries).
 #'
-#' @param hour \code{numeric}, hour(s) (can be from 0 to 23 or from 1 to 24 depending of the data of the flow-based model)
-#' @param dayType \code{numeric}, numarical id of the typical day(s)
-#' @param country1 \code{character}, name of the country in X
-#' @param country2 \code{character}, name of the country in Y
-#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath} : directory of flow-based
+#' @param hour \code{numeric}, hour(s) (can be from 0 to 23 or from 1 to 24 depending on the data of the flow-based model)
+#' @param dayType \code{numeric}, numerical id of the typical day(s)
+#' @param country1 \code{character}, name of the country (axis X)
+#' @param country2 \code{character}, name of the country (axis Y)
+#' @param fb_opts \code{list} of flowbased parameters returned by the function \link{setFlowbasedPath} : directory of the flow-based
 #' model. By default, the value is indicated by \code{antaresFlowbased::fbOptions()}
 #'
 #' @examples
@@ -159,7 +159,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 
 #' @title Generate html report on a typical flow-based day
 #' 
-#' @description This function generate an html report on one or several typical days, comparing the real and modelled domains. 
+#' @description This function generates an html report on one or several typical days, comparing the real and modelled domains. 
 #' It hence can follow the use of the function \link{computeFB}. The report (one per day) is composed of several tabs: a 
 #' summary of the volumetric errors (called inf and sup, representing real points forgotten in the model and modelled points
 #' missing from the real domain) and plots for each hour of the real and modelled domains.
@@ -177,7 +177,7 @@ plotFB <- function(dayType, hour, country1, country2, fb_opts = antaresFlowbased
 #' @examples
 #'
 #' \dontrun{
-#' #Generate report for the typical day 7 of a model (already designatedby setFlowBasedPath)
+#' #Generate report for the typical day 7 of a model (already designated by setFlowBasedPath)
 #' generateReportFb(dayType = 7, fb_opts = antaresFlowbased::fbOptions())
 #' 
 #' #Generate a report for the typical day 7 of a PTDF file
@@ -357,7 +357,7 @@ runAppPosition <- function(dta, fb_opts = antaresRead::simOptions()){
 #'  the \code{data} must result of \link{adqPatch} with parameter \code{keepOldColumns} set at TRUE.
 #' By default the value is TRUE.
 #' @param drawPositionsAdqP \code{boolean} draw the Net Positions after the adequacy patch is applied. If TRUE, the data resulting
-#'  of the adequacy patch process must be included in \code{data}. It must then be calculated result of \link{adqPatch}.
+#'  of the adequacy patch process must be included in \code{data}. It must then be the calculated result of \link{adqPatch}.
 #'  By default, the value is TRUE.
 #' @param palette \code{character} color range, by default the palette is "rainbow". Are vailable : 
 #' "cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow".
