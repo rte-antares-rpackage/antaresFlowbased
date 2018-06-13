@@ -5,7 +5,9 @@
 #' consistent with the output.
 #' 
 #' @param data \code{antaresdata} output data load by \link{readAntares}
-#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model 
+#' localisation obtain with \link{setFlowbasedPath}. 
+#' The default value is indicated by \code{antaresRead::simOptions()}.
 #' 
 #' 
 #' @examples
