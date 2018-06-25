@@ -4,13 +4,15 @@
 \alias{computeFB}
 \title{Conversion of flow-based domains into an ANtares model with fixed PTDF}
 \usage{
-computeFB(PTDF, outputName = paste0(getwd(), "/antaresInput"),
+computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package =
+  "antaresFlowbased"), outputName = paste0(getwd(), "/antaresInput"),
   reports = TRUE, dayType = "All", hour = "All", nbFaces = 36,
   verbose = 0)
 }
 \arguments{
-\item{PTDF}{\code{character}, path leading to the flow-based domains (PTDF description) list. This must be a csv file 
-containing the following columns (and column names): 
+\item{PTDF}{\code{character}, path leading to the flow-based domains (PTDF description) list. 
+By default, this leads to an example file (\code{"PTDF.csv"}, saved in the package).
+ This must be a csv file containing the following columns (and column names): 
 \itemize{
  \item Id_day : numeric, name of each day. Default in example id_day between 1 and 12. 
  \item Period : numeric, hour of the day. Default in example period between 1 and 24 (1 is then between 00:00 and 01:00).

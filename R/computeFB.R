@@ -8,8 +8,9 @@
 #'  (second_member.txt) and an RDS object storing information on the projection and the errors. Reports can be written represening the real and
 #' modelled domains and the volumetric error between them.
 #'
-#' @param PTDF \code{character}, path leading to the flow-based domains (PTDF description) list. This must be a csv file 
-#' containing the following columns (and column names): 
+#' @param PTDF \code{character}, path leading to the flow-based domains (PTDF description) list. 
+#' By default, this leads to an example file (\code{"PTDF.csv"}, saved in the package).
+#'  This must be a csv file containing the following columns (and column names): 
 #' \itemize{
 #'  \item Id_day : numeric, name of each day. Default in example id_day between 1 and 12. 
 #'  \item Period : numeric, hour of the day. Default in example period between 1 and 24 (1 is then between 00:00 and 01:00).
@@ -40,7 +41,7 @@
 #' 
 #' }
 #' @export
-computeFB <- function(PTDF,
+computeFB <- function(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"),
                       outputName =  paste0(getwd(), "/antaresInput"),
                       reports = TRUE,
                       dayType = "All", hour = "All", nbFaces = 36,
