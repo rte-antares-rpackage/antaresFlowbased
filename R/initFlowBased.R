@@ -60,7 +60,7 @@
 #'   }
 #'   }
 #'   
-#'   These files will be written in the Antares study (directory user\flowbased\), as well as additional files:
+#'   These files will be written in the Antares study (directory user`\`flowbased`\`), as well as additional files:
 #'   \itemize{
 #'   \item{scenario.txt, flow-based scenario builder, including only one column entitled "scenarios". The row 2 will then match the MC year 1 in
 #'   the Antares scenario builder}
