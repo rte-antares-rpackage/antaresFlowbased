@@ -2,7 +2,7 @@
 title: "Use antaresFlowbased to prepare flow-based simulations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{English}
+  %\VignetteIndexEntry{antaresFlowbased Part 1}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
