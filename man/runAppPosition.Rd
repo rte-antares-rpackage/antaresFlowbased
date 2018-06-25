@@ -2,26 +2,52 @@
 % Please edit documentation in R/graph.R
 \name{runAppPosition}
 \alias{runAppPosition}
-\title{Run shiny visualisation of position}
+\title{Run a shiny application to visualise the flow-based typical domains and the Net Positions reached within 
+in an Antares simulation}
 \usage{
 runAppPosition(dta, fb_opts = antaresRead::simOptions())
 }
 \arguments{
-\item{dta}{\code{antaresDataList} load with \code{antaresRead}}
+\item{dta}{\code{antaresDataList} Antares output data, imported with \link{readAntares}. It can be filtered (see examples).}
 
-\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function
+\link{setSimulationPath} or flow-based model directory obtained with
+\link{setFlowbasedPath}. By default, the value will be indicated by \code{antaresRead::simOptions()}}
 }
 \description{
-Run shiny visualisation of position
+Run a shiny application displaying, after running an Antares simulation, how the domains have been used 
+by the optimizer to fix the exchanges in the CWE area. The user can in the application select a period of time on a 
+calendar, choose to only display some typical days and hours, plot before/after adequacy patch positions, change the 
+colors palette, filter unused domains... (all the parameters of the function \link{plotNetPositionFB}). 
+It is possible to filter the output data beforehand to only display situations with loss of load (see examples).
 }
 \examples{
 
 \dontrun{
+## Select a study and import the data
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", -1)
 dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
                                 links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
                                 select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+
+## Run the application
 runAppPosition(dta)
+
+## Filter the data on situations with unsupplied energy 
+ # If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0] otherwise some areas
+ # Otherwise some areas are forgotten: the data must be filtered to keep all areas at specific timesteps.
+ 
+ ## An exemple of authorized filter :
+ idC <- c(antaresRead::getIdCols(dta$areas))
+ idC <- idC[idC!="area"]
+ LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
+ LOLD <- LOLD[LOLD!=0]
+ LOLD[,LOLD := NULL]
+ # Merge to filter data
+ dta$areas <- merge(dta$areas, LOLD, by =  idC)
+ ## End filter
+
+ runAppPosition(dta)
 }
 
 }

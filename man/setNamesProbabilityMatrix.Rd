@@ -2,17 +2,19 @@
 % Please edit documentation in R/createFBTS.R
 \name{setNamesProbabilityMatrix}
 \alias{setNamesProbabilityMatrix}
-\title{Change name for probabilityMatrix}
+\title{Rename the probabilityMatrix variables}
 \usage{
 setNamesProbabilityMatrix(data, oldName, newName)
 }
 \arguments{
-\item{data}{\code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.}
+\item{data}{\code{list}, probabilityMatrix whose columns to rename, calculated with \code{flowBasedClustering::getProbability}.}
 
-\item{oldName}{\code{character} vector of old names}
+\item{oldName}{\code{character} vector of old variables names}
 
-\item{newName}{\code{character} vector of new names}
+\item{newName}{\code{character} vector of new variables names}
 }
 \description{
-Change name for probabilityMatrix
+This function changes the name of the variables in the probabilityMatrix, created by \code{flowBasedClustering::getProbability} and 
+used by \link{createFBTS}. Aim: rename the variables into a format consistent with Antares inputs ("area@variable").
+For example, go to \link{createFBTS}.
 }

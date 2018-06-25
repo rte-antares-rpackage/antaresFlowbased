@@ -2,29 +2,32 @@
 % Please edit documentation in R/firstDay.R
 \name{identifyFirstDay}
 \alias{identifyFirstDay}
-\title{Find first day of a study}
+\title{Identify the type of the first day of a study}
 \usage{
 identifyFirstDay(opts, firstArea = "fr", secondArea = c("fr", "de", "be",
   "nl"))
 }
 \arguments{
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} : path of the Antares study. 
+By default, the value is indicated by \code{antaresRead::simOptions()}.}
 
-\item{firstArea}{\code{character} first area(s) use to compute first day}
+\item{firstArea}{\code{character} name of the area(s) to use to calculate the type of first day. By default, 
+France (\code{"fr"}) is chosen.}
 
-\item{secondArea}{\code{character} second area(s) use to compute first day, it's a security when you want to
-be sure of first day compute. It can be NULL but your compute will be less sure.}
+\item{secondArea}{\code{character} name of additional area(s) to use to check the first day. By default, the value is 
+\code{c("fr", "de", "be", "nl")} (France, Germany, Belgium, the Netherlands). It can be \code{NULL} but the first day will be
+determined with less certainty.}
 }
 \description{
-This function give type of first day, 1 is monday, 2 is Thuesday, ..., 7 is Sunday
+This function identifies the nature of the first day of a study, by reading the input load data of the study designated by
+ \code{opts} (calculation of the mean profile of each day to identify the weekend). The type of first day is represented
+ by a number : 1 = Monday, 2 = Tuesday, ..., 7 = Sunday.
 }
 \examples{
-
 \dontrun{
-
-opts <- setSimulationPath("MyPath")
+# Identification of the first day of an Antares study where areas fr, be, de, nl exist
+opts <- setSimulationPath("pathToAntaresStudy")
 identifyFirstDay(opts)
-
 }
 
 }

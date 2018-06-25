@@ -5,7 +5,7 @@
 \alias{setFlowbasedPath}
 \alias{fbOptions}
 \alias{getAvailableModel}
-\title{Set of function to control the flowbased input repository}
+\title{Set the flow-based input folder}
 \usage{
 setFlowbasedPath(path, model)
 
@@ -15,39 +15,49 @@ getAvailableModel()
 }
 \arguments{
 \item{path}{(optional)
-If "model" is missing. Path to the input repertory. . Must have :
+If the argument "model" is missing. Path to the flow-based input directory, it can be created by the user with the 
+functions \link{computeFB} and \link{createFBTS}. The directory must be composed of:
 \itemize{
- \item{weight.txt}{}
- \item{second_member.txt}{}
- \item{ts.txt}{}
- \item{domainesFB.RDS}{}
+ \item{weight.txt}{ the PTDF file of the Antares models}
+ \item{second_member.txt}{ the RAM of the Antares model}
+ \item{ts.txt}{ the flow-based time series}
+ \item{domainesFB.RDS}{ information about the domains}
 }}
 
-\item{model}{(optional) If "path" is missing. The name of input available inside the package. Linked to \code{\link{getAvailableModel}}}
+\item{model}{(optional) 
+If "path" is missing. Name of the chosen existing model (Use \code{\link{getAvailableModel}} to get the complete list).}
 }
 \value{
-A vector of available model for \code{getAvailableModel}. For \code{setFlowbasedPath} and \code{fbOptions}, a list containing :
-  \item{path}{path of the current input repository}
+\itemize{ 
+\item {}{A vector of available models for \code{getAvailableModel}.}
+\item {}{path of the current input repository, for \code{setFlowbasedPath} and \code{fbOptions}}
+}
 }
 \description{
-Set of function to control the flowbased input repository
-}
-\details{
-The repertory choosen with \code{setFlowbasedPath} becomes the default
-parameters for all functions of the package. The package have some availabled model \code{getAvailableModel}.
-Current path can be retrieve using \code{fbOptions}
+A flow-based "model" consists of the description of the typical domains (the weights, the second members and 
+an RDS object containing additional information such as the vertices coordinates and the errors) and the time series file 
+establishing the chronology of typical days used in an Antares study. 
+These functions enable to choose the flow-based input folder: one can either use existing models stored in the package or 
+use his own. 
+  \itemize{
+   \item{The function \code{getAvailableModel} provides a list of the existing models.}
+   \item{The function \code{setFlowbasedPath} sets the flow-based input folder. It can either be one of the models listed by 
+   \code{getAvailableModel} or a path to a personal folder. This folder will then be used as default parameter for all
+    functions of the package}
+   \item{The function \code{fbOptions} indicates the current default path.}
+  }
 }
 \examples{
 
 \dontrun{
-# Defaut path set loading the package
+# Get the default path used when loading the package
 fbOptions()
 
-# Specify a available model
+# Specify an available model
 getAvailableModel()
 setFlowbasedPath(model = "model2017")
 
-# Select a repository
+# Specify a personnal model
 setFlowbasedPath(model = "C:/PATH/TO/INPUT")
 }
 

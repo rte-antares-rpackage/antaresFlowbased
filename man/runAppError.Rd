@@ -2,15 +2,20 @@
 % Please edit documentation in R/graph.R
 \name{runAppError}
 \alias{runAppError}
-\title{Run shiny visualisation of error}
+\title{Run a shiny application to visualize the real and modelled flow-based domains}
 \usage{
 runAppError(fb_opts = antaresFlowbased::fbOptions())
 }
 \arguments{
-\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
+\item{fb_opts}{\code{list} of flow-based parameters returned by the function \link{setFlowbasedPath}: directory of the flow-
+based model to study.
+By default, the value is indicated by \code{antaresFlowbased::fbOptions()}}
 }
 \description{
-Click on raw of table to see graphs. You can also export reports for a typical day.
+Run a shiny application displaying the results of the conversion of real domains into Antares models. It will display for
+each typical day and each hour the volumetric errors of conversion (inf_error: forgotten points in the 
+model, sup_error: modelled points missing in the real domain) and dynamic plots of the real and modelled domains. Html reports
+for each day can also be exported.
 }
 \examples{
 

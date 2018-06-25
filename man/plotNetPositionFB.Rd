@@ -2,7 +2,7 @@
 % Please edit documentation in R/graph.R
 \name{plotNetPositionFB}
 \alias{plotNetPositionFB}
-\title{Graph function}
+\title{Plot a flow-based typical domain and the Net Positions reached within in an Antares simulation}
 \usage{
 plotNetPositionFB(data, dayType, hour, country1, country2,
   fb_opts = antaresRead::simOptions(), filteringEmptyDomains = FALSE,
@@ -10,36 +10,57 @@ plotNetPositionFB(data, dayType, hour, country1, country2,
   drawPositionsAdqP = TRUE, palette = "rainbow")
 }
 \arguments{
-\item{data}{\code{antaresDataList} import with \link{readAntares}}
+\item{data}{\code{antaresDataList} Antares output data, imported with \link{readAntares}. It can be a filtered (time or loss
+of load) antaresDataList.}
 
-\item{dayType}{: day type, can be numeric or 'all'}
+\item{dayType}{\code{numeric}: typical day to plot. The value can also be 'all', for example if the \code{data} has been 
+filtered.}
 
-\item{hour}{: hour, can be numeric or 'all' (format : 0:23)}
+\item{hour}{\code{numeric} : hour to plot(format : 0:23, in accordance with Antares output). The value can also be 'all'.}
 
-\item{country1}{: first country}
+\item{country1}{\code{character} : first country, axis X}
 
-\item{country2}{: second country}
+\item{country2}{\code{character} : second country, axis Y}
 
 \item{fb_opts}{\code{list} of simulation parameters returned by the function
-\link{setSimulationPath} or fb model localisation obtain with
-\link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
+\link{setSimulationPath} or flow-based model directory obtained with
+\link{setFlowbasedPath}. By default, the value will be indicated by \code{antaresRead::simOptions()}}
 
-\item{filteringEmptyDomains}{\code{boolean} filtering empty domains}
+\item{filteringEmptyDomains}{\code{boolean}, if TRUE, the function will only plot the domains for which it can find values
+in \code{data} in accordance with \code{dayType} and \code{hour}. By default, it is FALSE.}
 
-\item{nbMaxPt}{\code{numeric} number of point maximum on graph. Default 10000.}
+\item{nbMaxPt}{\code{numeric} : maximum number of points plotted on the graph. It can be increased (which increases computation
+time). By default, the value is 10000.}
 
-\item{drawPositionsBeforeAdqP}{\code{boolean} boolean, draw net positions without/before adequacy patch, default TRUE.}
+\item{drawPositionsBeforeAdqP}{\code{boolean}, draw the Net Positions without adequacy patch being applied (or before). If 
+TRUE, the data without adequacy patch must be included in \code{data}. To visualize both without and with adequacy patch output
+ the \code{data} must result of \link{adqPatch} with parameter \code{keepOldColumns} set at TRUE.
+By default the value is TRUE.}
 
-\item{drawPositionsAdqP}{\code{boolean} boolean, draw net positions after adequacy patch, default TRUE.}
+\item{drawPositionsAdqP}{\code{boolean} draw the Net Positions after the adequacy patch is applied. If TRUE, the data resulting
+of the adequacy patch process must be included in \code{data}. It must then be the calculated result of \link{adqPatch}.
+By default, the value is TRUE.}
 
-\item{palette}{\code{character} palette for colors, default rainbow. Available : 
-"cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow"}
+\item{palette}{\code{character} color range, by default the palette is "rainbow". Are vailable : 
+"cm.colors", "topo.colors", "terrain.colors", "heat.colors", "rainbow".}
 }
 \description{
-Graph function
+This function is used after running an Antares simulation to visualize how the domains have been used by the optimizer to
+fix the exchanges in the CWE area. The user chooses one (or several) domain (typical day + hour) and the function will then
+filter the given Antares output data to only keep the times when this domain has been used and calculate the Net Position, 
+inside the CWE area, of the 2 countries chosen as axis. A plot gathers then the domain(s) and the points representing the 
+Net Positions in the same color. The user can choose whether to plot Net Positions before and/or after applying the adequacy 
+patch.
+}
+\details{
+The Antares output data must respect the \code{antaresDataList} format (imported with \link{readAntares}). But it can be
+filtered (see examples) to only keep days presenting unsupplied energy or a specific timeline.
+In that case, choose the value \code{'all'} for the parameters \code{dayType} and/or \code{hour} and set the parameter
+\code{filteringEmptyDomains} as TRUE. The function will then filter by itself the domains which are not used.
 }
 \examples{
 \dontrun{
+## Choose an ANtares study and import its output
 study <- "D:/Users/titorobe/Desktop/antaresStudy"
 
 opts <- antaresRead::setSimulationPath(study, 2)
@@ -50,26 +71,27 @@ dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
                                  opts = opts)
 
-## plot a domain and the matching output points
+## plot the typical domain 1 at 00:00 and 19:00 and the matching output points of the study on the axis France-Belgium
 plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = 1, hour = c(0, 19),
          country1 = "BE", country2 = "FR")
          
-#Change color palette
+# Change color palette
 plotNetPositionFB(fb_opts = opts,
                  data = dta,
                  dayType = 1, hour = c(0, 19),
                  country1 = "BE", country2 = "FR", palette = "topo.colors")
 
+## plot a single idTime : the data is filtered beforehand
+# in this case all domains are plotted, also all are empty except one
 dta$areas <- dta$areas[timeId == 1]
-## plot a sigle idTime with all domains
 plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = "all", hour = 0,
          country1 = "BE", country2 = "FR")
 
-##Filtering empty domains
+# Filtering empty domains : only the matching domain of timeid 1 will be drawn
 
 plotNetPositionFB(fb_opts = opts,
          data = dta,
@@ -77,51 +99,56 @@ plotNetPositionFB(fb_opts = opts,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 
 
+## Plot Net Positions with adequacy patch Net Positions
 
-##See adq position
+# Run adequacy patch on the output
+ dta_adq <- adqPatch(fb_opts = opts)
 
- dta <- adqPatch(fb_opts = opts)
-
-
- ##If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0]
- ##You must keep all areas for a given timestep. When you keep only raw with LOLD!=0, for a given timestep 
- ##you can keep only somes areas. 
+######
+ ### Filter on situations with unsupplied energy :
+ # If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0] otherwise some areas
+ # Otherwise some areas are forgotten: the data must be filtered to keep all areas at specific timesteps.
  
- ##An exemple of authorized filter :
+ ## An exemple of authorized filter :
  idC <- c(antaresRead::getIdCols(dta$areas))
  idC <- idC[idC!="area"]
  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
  LOLD <- LOLD[LOLD!=0]
  LOLD[,LOLD := NULL]
- #Here merge is used for filter data
+ # Merge to filter data
  dta$areas <- merge(dta$areas, LOLD, by =  idC)
- ##End filter
+ ## End filter
+###### 
  
- 
+ # Plot the positions, filtering empty domains. Only adequacy positions available.
  plotNetPositionFB(fb_opts = opts,
-         data = dta,
+         data = dta_adq,
          dayType = "all", hour = 19,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
-
+ 
+ # Plot the adequacy positions (only adequacy positions available), for domain typical day 6 and hour 17:00
  plotNetPositionFB(fb_opts = opts,
-         data = dta,
+         data = dta_adq,
          dayType = 6, hour = 17,
          country1 = "DE", country2 = "FR")
-
+         
+ # Plot the adequacy positions for domain typical day 6 and hour 17:00  
  plotNetPositionFB(fb_opts = opts,
-         data = dta,
+         data = dta_adq,
          dayType = 6, hour = 17,
          country1 = "BE", country2 = "FR", drawPositionsBeforeAdqP = FALSE)
-
+ 
+ # Plot the positions before adequacy patch for domain typical day 6 and hour 17:00 : impossible because no data
  plotNetPositionFB(fb_opts = opts,
-         data = dta,
+         data = dta_adq,
          dayType = 6, hour = 17,
          country1 = "BE", country2 = "FR", drawPositionsAdqP = FALSE)
 
-dta <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
+ # Calculate data containing both before and after adequacy patch
+ dta_complete <- adqPatch(fb_opts = opts, keepOldColumns = FALSE)
 
  plotNetPositionFB(fb_opts = opts,
-         data = dta,
+         data = dta_complete,
          dayType = 6, hour = 17,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 
