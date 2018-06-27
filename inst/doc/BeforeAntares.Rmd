@@ -214,6 +214,6 @@ initFlowBased(scenario = rep(1:200, times = 5))
 ```
 
 
-## 6 - Run simulations
+## 7 - Run simulations
 
 Once all these steps have been performed, the Antares study can be run as usual, for instance using the `run simulation` button of the software interface.
