@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #  runAppError()
 #  
 #  #Initialize the Antares study
-#  initFlowBased()
+#  initFlowBased(scenario = rep(1:200, times = 5))
 #  
 
 ## ---- eval=FALSE---------------------------------------------------------
