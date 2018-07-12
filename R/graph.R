@@ -561,7 +561,7 @@ plotNetPositionFB <- function( data, dayType,
                 use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
   }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
-  ts <- fread(paste0(foldPath, "ts.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"), header = TRUE)
   domaines <- readRDS(paste0(foldPath, "domainesFB.RDS"))
   
   if(dayType[1] == "all") dayType <- unique(domaines$dayType)

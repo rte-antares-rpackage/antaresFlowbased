@@ -49,7 +49,7 @@ addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
                 use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
   }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
-  ts <- fread(paste0(foldPath, "ts.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"), header = TRUE)
 
   
   tsTransform <- rbindlist(sapply(2:ncol(ts), function(X){

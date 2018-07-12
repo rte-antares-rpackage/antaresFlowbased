@@ -160,7 +160,7 @@ adqPatch <- function(mcYears = "all",
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG")]
   out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG"))
   
-  foldPath <- .mergeFlowBasedPath(fb_opts)
+  foldPath <- antaresFlowbased:::.mergeFlowBasedPath(fb_opts)
   
   secondM <- fread(paste0(foldPath, "second_member.txt"))
   if(!file.exists(paste0(foldPath, "scenario.txt"))){
@@ -168,7 +168,7 @@ adqPatch <- function(mcYears = "all",
                 use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
   }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
-  ts <- fread(paste0(foldPath, "ts.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"), header = TRUE)
   b36p <-  fread(paste0(foldPath, "weight.txt"))
   
   
@@ -181,28 +181,18 @@ adqPatch <- function(mcYears = "all",
   if("Name"%in%names(b36p))data.table::setnames(b36p, "Name", "name")
   
   if("BE.FR" %in% names(b36p))data.table::setnames(b36p, "BE.FR", "be%fr")
-  
-  
+
   if("DE.FR" %in% names(b36p))data.table::setnames(b36p, "DE.FR", "de%fr")
-  
   
   if("DE.NL" %in% names(b36p))data.table::setnames(b36p, "DE.NL", "de%nl")
   
-  
-  
   if("BE.NL" %in% names(b36p))data.table::setnames(b36p, "BE.NL", "be%nl")
   
-  
-  
   if("BE.DE" %in% names(b36p))data.table::setnames(b36p, "BE.DE", "be%de")
-  
-  
   
   contraintsExcludes <- setdiff(unique(secondM$Name),b36p$name)
   if(length(contraintsExcludes) > 0){
     message(paste0("Ignored constraint(s): ", paste(contraintsExcludes , collapse = ", "), "; They are not described in the two flow-based files second_member.txt and weight.txt."))
-
-    
     secondM <- secondM[!Name%in%contraintsExcludes]
     b36p <- b36p[!name%in%contraintsExcludes]
   }

@@ -27,14 +27,14 @@ test_that("make ts", {
   firstF <- secondF <-  NULL
   for(k in 1:10)
   {
-    ts <- createFBTS(opts = op5, probabilityMatrix = matProb, multiplier = multiplier,
+    ts <- suppressWarnings(createFBTS(opts = op5, probabilityMatrix = matProb, multiplier = multiplier,
                      interSeasonBegin = interSeasonBegin, interSeasonEnd = interSeasonEnd,
-                     firstDay = firstDay, seed = k, silent = TRUE, outputPath =  tempdir())
+                     firstDay = firstDay, seed = k, silent = TRUE, outputPath =  tempdir()))
     
     
-    frLoad <- readInputTS(load = "fr", timeStep = "daily", showProgress = FALSE)
-    windbe <- readInputTS(wind = c("be"), timeStep = "daily", showProgress = FALSE)
-    windde <- readInputTS(wind = c("de"), timeStep = "daily", showProgress = FALSE)
+    frLoad <- suppressWarnings(readInputTS(load = "fr", timeStep = "daily", showProgress = FALSE))
+    windbe <- suppressWarnings(readInputTS(wind = c("be"), timeStep = "daily", showProgress = FALSE))
+    windde <- suppressWarnings(readInputTS(wind = c("de"), timeStep = "daily", showProgress = FALSE))
     allDta <- data.table(frLoad, be = windbe[["wind"]],de = windde[["wind"]])
     allDta <- allDta[tsId == 1]
     
