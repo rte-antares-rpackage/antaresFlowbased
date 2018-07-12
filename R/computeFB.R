@@ -36,7 +36,9 @@
 #' @import ROI.plugin.clp
 #' @examples
 #' \dontrun{
-#' #Compute models for all days and hours of a PTDF file, with no reports automatically generated at the same time
+#' # Compute models for all days and hours of a PTDF file, with no reports 
+#' # automatically generated at the same time
+#' 
 #' computeFB(PTDF = system.file("/input/ptdf/PTDF.csv", package = "antaresFlowbased"), reports = FALSE)
 #' 
 #' }

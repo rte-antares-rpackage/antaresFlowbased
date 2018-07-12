@@ -64,7 +64,9 @@
 #' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
 #' 
 #' # calendar
-#' firstDay <- identifyFirstDay(opts) # first day identified based on the input data of the Antares study designated by opts
+#' # first day identified based on the input data of the 
+#' # Antares study designated by opts
+#' firstDay <- identifyFirstDay(opts) 
 #' interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
 #' interSeasonEnd <- as.Date(c("2020-10-04", "2018-05-02"))
 #' 

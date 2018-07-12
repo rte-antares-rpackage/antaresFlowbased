@@ -60,7 +60,7 @@ In that case, choose the value \code{'all'} for the parameters \code{dayType} an
 }
 \examples{
 \dontrun{
-## Choose an ANtares study and import its output
+# Choose an ANtares study and import its output
 study <- "D:/Users/titorobe/Desktop/antaresStudy"
 
 opts <- antaresRead::setSimulationPath(study, 2)
@@ -71,7 +71,8 @@ dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
                                 "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."),
                                  opts = opts)
 
-## plot the typical domain 1 at 00:00 and 19:00 and the matching output points of the study on the axis France-Belgium
+# plot the typical domain 1 at 00:00 and 19:00 and the matching output 
+# points of the study on the axis France-Belgium
 plotNetPositionFB(fb_opts = opts,
          data = dta,
          dayType = 1, hour = c(0, 19),
@@ -83,7 +84,7 @@ plotNetPositionFB(fb_opts = opts,
                  dayType = 1, hour = c(0, 19),
                  country1 = "BE", country2 = "FR", palette = "topo.colors")
 
-## plot a single idTime : the data is filtered beforehand
+# plot a single idTime : the data is filtered beforehand
 # in this case all domains are plotted, also all are empty except one
 dta$areas <- dta$areas[timeId == 1]
 plotNetPositionFB(fb_opts = opts,
@@ -99,15 +100,16 @@ plotNetPositionFB(fb_opts = opts,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
 
 
-## Plot Net Positions with adequacy patch Net Positions
+# Plot Net Positions with adequacy patch Net Positions
 
 # Run adequacy patch on the output
  dta_adq <- adqPatch(fb_opts = opts)
 
-######
- ### Filter on situations with unsupplied energy :
- # If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0] otherwise some areas
- # Otherwise some areas are forgotten: the data must be filtered to keep all areas at specific timesteps.
+###### Filter on situations with unsupplied energy :
+# If you want to keep only timeId with LOLD!=0 you can't use : 
+# dta$areas <- dta$areas[LOLD!=0] otherwise some areas
+# Otherwise some areas are forgotten: the data must be filtered to 
+# keep all areas at specific timesteps.
  
  ## An exemple of authorized filter :
  idC <- c(antaresRead::getIdCols(dta$areas))
@@ -126,7 +128,8 @@ plotNetPositionFB(fb_opts = opts,
          dayType = "all", hour = 19,
          country1 = "BE", country2 = "FR", filteringEmptyDomains = TRUE)
  
- # Plot the adequacy positions (only adequacy positions available), for domain typical day 6 and hour 17:00
+ # Plot the adequacy positions (only adequacy positions available), 
+ # for domain typical day 6 and hour 17:00
  plotNetPositionFB(fb_opts = opts,
          data = dta_adq,
          dayType = 6, hour = 17,
@@ -138,7 +141,8 @@ plotNetPositionFB(fb_opts = opts,
          dayType = 6, hour = 17,
          country1 = "BE", country2 = "FR", drawPositionsBeforeAdqP = FALSE)
  
- # Plot the positions before adequacy patch for domain typical day 6 and hour 17:00 : impossible because no data
+ # Plot the positions before adequacy patch for domain typical day 6 
+ # and hour 17:00 : impossible because no data
  plotNetPositionFB(fb_opts = opts,
          data = dta_adq,
          dayType = 6, hour = 17,

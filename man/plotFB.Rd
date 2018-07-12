@@ -29,7 +29,8 @@ This function enables to plot one or several typical flow-based domains, in 2 di
  plotFB(dayType = 1, hour = 1, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
  plotFB(dayType = 1:2, hour = 1,country1 = "FR",country2 = "NL", fb_opts = fb_opts)
  plotFB(dayType = 1:2, hour = 1:2, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
- plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), country2 = c("NL", "FR"), fb_opts = fb_opts)
+ plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), 
+     country2 = c("NL", "FR"), fb_opts = fb_opts)
 }
 
 

@@ -27,15 +27,18 @@ It is possible to filter the output data beforehand to only display situations w
 ## Select a study and import the data
 opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", -1)
 dta <- antaresRead::readAntares(areas = c("fr", "be", "de", "nl"),
-                                links = c("be - de","be - fr","be - nl","de - fr","de - nl"), mcYears = 1:10,
-                                select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), opts = opts)
+         links = c("be - de","be - fr","be - nl","de - fr","de - nl"), 
+         select = c("LOLD", "UNSP. ENRG", "DTG MRG", "UNSP. ENRG", "BALANCE", "FLOW LIN."), 
+         mcYears = 1:10, opts = opts)
 
 ## Run the application
 runAppPosition(dta)
 
 ## Filter the data on situations with unsupplied energy 
- # If you want to keep only timeId with LOLD!=0 you can't use : dta$areas <- dta$areas[LOLD!=0] otherwise some areas
- # Otherwise some areas are forgotten: the data must be filtered to keep all areas at specific timesteps.
+# If you want to keep only timeId with LOLD!=0 you can't use : 
+# dta$areas <- dta$areas[LOLD!=0] otherwise some areas
+# Otherwise some areas are forgotten: the data must be filtered to keep 
+# all areas at specific timesteps.
  
  ## An exemple of authorized filter :
  idC <- c(antaresRead::getIdCols(dta$areas))
@@ -43,6 +46,7 @@ runAppPosition(dta)
  LOLD <- dta$areas[,lapply(.SD, sum), by = idC, .SDcols = "LOLD"]
  LOLD <- LOLD[LOLD!=0]
  LOLD[,LOLD := NULL]
+ 
  # Merge to filter data
  dta$areas <- merge(dta$areas, LOLD, by =  idC)
  ## End filter
