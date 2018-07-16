@@ -160,7 +160,7 @@ adqPatch <- function(mcYears = "all",
   out <- dta$areas[, .SD, .SDcols = c("area", "mcYear", "time", "lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG")]
   out <- dcast(out, time + mcYear~area, value.var = c("lole", "LOLD", "DTG MRG", "ipn", "UNSP. ENRG"))
   
-  foldPath <- antaresFlowbased:::.mergeFlowBasedPath(fb_opts)
+  foldPath <- .mergeFlowBasedPath(fb_opts)
   
   secondM <- fread(paste0(foldPath, "second_member.txt"))
   if(!file.exists(paste0(foldPath, "scenario.txt"))){
