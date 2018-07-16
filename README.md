@@ -16,7 +16,7 @@ https://github.com/rte-antares-rpackage/antaresProcessing
 ```r
 # Install dependencies
 install.packages(c("antaresRead","pipeR","data.table","testthat",
- "plyr","ROI","ROI.plugin.clp","rmarkdown","flexdashboard","rAmCharts"",
+ "plyr","ROI","ROI.plugin.clp","rmarkdown","flexdashboard","rAmCharts",
   "manipulateWidget","DT","shiny","slam","antaresProcessing"))
   
 install_github("rte-antares-rpackage/antaresEditObject")  
