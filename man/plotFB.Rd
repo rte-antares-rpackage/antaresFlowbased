@@ -2,24 +2,25 @@
 % Please edit documentation in R/graph.R
 \name{plotFB}
 \alias{plotFB}
-\title{Plot 2D for flowbased areas can combine more than one plot}
+\title{Plot typical flow-based domains}
 \usage{
 plotFB(dayType, hour, country1, country2,
   fb_opts = antaresFlowbased::fbOptions())
 }
 \arguments{
-\item{dayType}{\code{numeric}, dayType}
+\item{dayType}{\code{numeric}, numerical id of the typical day(s)}
 
-\item{hour}{\code{numeric}, hour}
+\item{hour}{\code{numeric}, hour(s) (can be from 0 to 23 or from 1 to 24 depending on the data of the flow-based model)}
 
-\item{country1}{\code{character}, country in X}
+\item{country1}{\code{character}, name of the country (axis X)}
 
-\item{country2}{\code{character}, country in Y}
+\item{country2}{\code{character}, name of the country (axis Y)}
 
-\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath}. Defaut to \code{antaresFlowbased::fbOptions()}}
+\item{fb_opts}{\code{list} of flowbased parameters returned by the function \link{setFlowbasedPath} : directory of the flow-based
+model. By default, the value is indicated by \code{antaresFlowbased::fbOptions()}}
 }
 \description{
-Plot 2D for flowbased areas can combine more than one plot
+This function enables to plot one or several typical flow-based domains, in 2 dimensions (the axis being 2 countries).
 }
 \examples{
 
@@ -28,7 +29,8 @@ Plot 2D for flowbased areas can combine more than one plot
  plotFB(dayType = 1, hour = 1, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
  plotFB(dayType = 1:2, hour = 1,country1 = "FR",country2 = "NL", fb_opts = fb_opts)
  plotFB(dayType = 1:2, hour = 1:2, country1 = "FR", country2 = "NL", fb_opts = fb_opts)
- plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), country2 = c("NL", "FR"), fb_opts = fb_opts)
+ plotFB(dayType = 1, hour = 1, country1 = c("FR", "DE"), 
+     country2 = c("NL", "FR"), fb_opts = fb_opts)
 }
 
 

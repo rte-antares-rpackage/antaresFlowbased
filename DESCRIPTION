@@ -1,8 +1,7 @@
 Package: antaresFlowbased
 Type: Package
 Title: Run FlowBased Simulations on Antares
-Version: 0.10.0
-Date: 2017-04-04
+Version: 1.01.0
 Authors@R: c(
     person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
     person("Baptiste", "SEGUINOT", , "baptiste.seguinot@rte-france.com", role = "ctb"),
@@ -35,6 +34,6 @@ LazyData: true
 RoxygenNote: 6.0.1
 Suggests: knitr,
     covr,
-    rhdf5 (>= 2.20.0),
-    manipulateWidget
+    rhdf5 (>= 2.20.0)
 VignetteBuilder: knitr
+Remotes: rte-antares-rpackage/antaresEditObject

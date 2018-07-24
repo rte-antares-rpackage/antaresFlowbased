@@ -9,28 +9,42 @@ adqPatch(mcYears = "all", pre_filter = FALSE, strategic_reserve_be = NULL,
   fb_opts = opts, select = NULL, keepOldColumns = TRUE)
 }
 \arguments{
-\item{mcYears}{\code{numeric} include mcYears. Default all (all mcYears are load)}
+\item{mcYears}{\code{numeric} vector of mcYears to process. By default, the value is all (all mcYears are loaded).}
 
-\item{pre_filter}{\code{boolean} filter mcYears before adqPatch apply, load annual data and if LOLD>0 on annual data dont load this mcYears}
+\item{pre_filter}{\code{boolean}: if TRUE, the function selects (by reading annual results) the mcYears during which 
+there is at least one hour of loss of load before applying the adequacy patch, the other years are not loaded and 
+will not appear in the results of the function. By default, the value is FALSE.}
 
-\item{strategic_reserve_be}{\code{character} area use to compute new margin for BE}
+\item{strategic_reserve_be}{\code{character} name of the virtual area representing the strategic reserve of Belgium. Default
+to NULL.}
 
-\item{strategic_reserve_de}{\code{character} area use to compute new margin for DE}
+\item{strategic_reserve_de}{\code{character} name of the virtual area representing the strategic reserve of Germany. Default 
+to NULL.}
 
-\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath}. 
+Defaut to \code{antaresRead::simOptions()}}
 
-\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
+\item{fb_opts}{\code{list} of simulation parameters returned by the function \link{setSimulationPath} or 
+flow-based model path obtained with the function \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}}
 
-\item{select}{\code{character}, columns to select (columns need for adqPatch are automaticaly add)}
+\item{select}{\code{character}, names of output columns (variables) to be displayed after the adequacy patch post-process.
+The columns modified by the adequacy patch are automatically displayed (BALANCE, LOLD, UNSP. ENRG, DTG MRG and FLOW LIN.)}
 
-\item{keepOldColumns}{\code{boolean}, keep columns before adqPatch was apply.}
+\item{keepOldColumns}{\code{boolean}: if TRUE, the initial columns modified by the adequacy patch are also displayed after
+the post-processing. By default, the value is TRUE.}
 }
 \description{
-Compute adqPatch for antares study
+This function runs the adequacy patch on an ANTARES study output. It is a post-processing on the results which
+can affect the variables BALANCE, LOLD, UNSP. ENRG, DTG MRG of the areas be, de, fr and nl and the variable FLOW LIN. of the links
+between these areas. For more detailed explanation, please report to the example to open the vignette.
 }
 \examples{
 
 \dontrun{
+#Presentation of the adequacy patch
+browseVignettes()
+
+
 antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 2)
 
 #No strategic reserve

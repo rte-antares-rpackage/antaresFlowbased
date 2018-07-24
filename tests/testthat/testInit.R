@@ -9,7 +9,7 @@ context("Function initFlowBased")
 
 test_that("test initFlowBased", {
   opts2 <- antaresRead::setSimulationPath(testStudy2)
-  expect_true(identifyFirstDay(opts2) == 1)
+  expect_true(suppressWarnings(identifyFirstDay(opts2) == 1))
   expect_true(suppressWarnings(identifyFirstDay(opts2, secondArea = NULL) == 1))
   expect_warning(identifyFirstDay(opts2, secondArea = NULL))
   

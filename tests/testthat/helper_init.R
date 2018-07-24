@@ -17,14 +17,14 @@ restaureOldName <- function(data){
 testStudy2 <- system.file("testdata",package = "antaresFlowbased")
 if(testStudy2 == "")testStudy2 <- system.file("inst/testdata",package = "antaresFlowbased")
 
-# temp_dir <- tempdir()
+temp_dir <- tempdir()
 if (Sys.info()['sysname'] == "Windows") {
-  untar(file.path(testStudy2, "ex_test.tgz"), exdir = temp_dir, 
+  untar(file.path(testStudy2, "ex_test.tgz"), exdir = temp_dir,
         extras = "--force-local")
-  
-  untar(file.path(testStudy2, "exemple_test.tgz"), exdir = temp_dir, 
+
+  untar(file.path(testStudy2, "exemple_test.tgz"), exdir = temp_dir,
         extras = "--force-local")
-  
+
 } else {
   untar(file.path(testStudy2, "ex_test.tgz"), exdir = temp_dir)
   untar(file.path(testStudy2, "exemple_test.tgz"), exdir = temp_dir)
@@ -47,8 +47,8 @@ testSt <- antaresRead::setSimulationPath(testSt, 1)
 # tar(tarfile = "ex_test.tgz",files = "ex_test",
 #     compression = "gzip")
 
- # tar(tarfile = "exemple_test.tgz",files = "exemple_test",
- #     compression = "gzip")
+# tar(tarfile = "exemple_test.tgz",files = "exemple_test",
+#     compression = "gzip")
 
 
 ###Init adq
@@ -61,9 +61,16 @@ optsTMP <- opts3
 class(optsTMP) <- "simOptions"
 # launch adq patch
 rdP <- system.file("testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
-if(rdP == "")rdP <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
+if(rdP == "") rdP <- system.file("inst/testdata/adq/General/studyNoStrat_ini.RDS", package = "antaresFlowbased")
 dataNoStrat_ini <- readRDS(rdP)
 dataNoStrat_ini2 <- data.table::copy(dataNoStrat_ini)
+# opts = opts3
+# dta = dataNoStrat_ini2
+# fb_opts = optsTMP
+# keepOldColumns = FALSE
+# strategic_reserve_be = NULL
+# strategic_reserve_de = NULL
+# mcYears = "all"
 dataNoStrat_adq <- suppressWarnings(antaresFlowbased:::.applyAdq(opts = opts3, dataNoStrat_ini2, fb_opts = optsTMP, keepOldColumns = FALSE))
 dataNoStrat_adq <- restaureOldName(dataNoStrat_adq)
 
@@ -109,7 +116,7 @@ id_file <- system.file("testdata/adq/antaresStudy/user/flowbased/ts.txt", packag
 if(id_file == "")id_file <- system.file("inst/testdata/adq/antaresStudy/user/flowbased/ts.txt", package = "antaresFlowbased")
 
 
-id_file <- data.table::fread(id_file)
+id_file <- data.table::fread(id_file, header = TRUE)
 case <- data.table::data.table(unique(cbind(mcYear = area_exp_64b$mcYear, timeId = area_exp_64b$timeId)))
 
 

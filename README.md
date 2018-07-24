@@ -6,13 +6,20 @@ The `antaresFlowbased` package provides functions that for launch a flowBased st
 
 ## Installation
 
-You can install the package directly from **Github**. It depends on **antaresRead** R package :
+You can install the package directly from **Github**. It depends on **antaresRead**, **antaresEditObject** & **antaresProcessing** R package :
 
 https://github.com/rte-antares-rpackage/antaresRead
+https://github.com/rte-antares-rpackage/antaresEditObject
+https://github.com/rte-antares-rpackage/antaresProcessing
+
 
 ```r
 # Install dependencies
-install.packages(c("devtools", "data.table", "plyr", "pipeR", "digest"))
+install.packages(c("antaresRead","pipeR","data.table","testthat",
+ "plyr","ROI","ROI.plugin.clp","rmarkdown","flexdashboard","rAmCharts",
+  "manipulateWidget","DT","shiny","slam","antaresProcessing"))
+  
+install_github("rte-antares-rpackage/antaresEditObject")  
 install_github("rte-antares-rpackage/antaresFlowbased")
 ```
 
@@ -22,6 +29,10 @@ The simplest way is to look the vignette :
 
 ```r
 require(antaresFlowbased)
-vignette("English")
-vignette("FranCais")
+
+# available vignette
+vignette(package = "antaresFlowbased")
+
+vignette("BeforeAntares")
+vignette("AfterAntares")
 ```

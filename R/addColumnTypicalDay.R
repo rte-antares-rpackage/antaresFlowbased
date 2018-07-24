@@ -1,12 +1,13 @@
-#' Add typical day columns
-#' @title Add typical day columns
+#' @title Add a flow-based typical day id column
 #' 
 #' @description Add to an Antares output table a column indicating the id of the used flow-based typical day for each timestep.
 #' This information is read in the "user" directory file of the Antares study: it must be made sure that the data of the study is still
 #' consistent with the output.
 #' 
 #' @param data \code{antaresdata} output data load by \link{readAntares}
-#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model localisation obtain with \link{setFlowbasedPath}. Defaut to \code{antaresRead::simOptions()}
+#' @param fb_opts \code{list} of simulation parameters returned by the function \link{setSimulationPath} or fb model 
+#' localisation obtain with \link{setFlowbasedPath}. 
+#' The default value is indicated by \code{antaresRead::simOptions()}.
 #' 
 #' 
 #' @examples
@@ -48,7 +49,7 @@ addTypicalDayId <- function(data, fb_opts = antaresRead::simOptions()){
                 use setFlowBasedPath(path = 'pathToAntaresStudy/user/flowbased')"))
   }
   scenario <- fread(paste0(foldPath, "scenario.txt"))
-  ts <- fread(paste0(foldPath, "ts.txt"))
+  ts <- fread(paste0(foldPath, "ts.txt"), header = TRUE)
 
   
   tsTransform <- rbindlist(sapply(2:ncol(ts), function(X){

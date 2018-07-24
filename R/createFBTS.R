@@ -1,20 +1,31 @@
-#' Create time series of typical days for antares
+#' @title Creation of time series of typical days for Antares studies
+#' 
+#' @description 
+#' This function defines for each studied day in an Antares study the most representative typical flow-based day, and finally
+#' creates daily time series.
+#' To establish this correlation, the inputs of the function must include a probability matrix (calculated for each set of 
+#' typical days with the package \code{flowBasedClustering}) and the path to the Antares study to provide flow-based domains with. The probability matrix
+#' will be used to compute a weighted draw among the possible typical days.
 #'
-#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Defaut to \code{antaresRead::simOptions()}
-#' @param probabilityMatrix \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
-#' Format used is : area_variable (Ex, fr_load, de_solar ...)
-#' @param multiplier \code{data.frame} contain 2 columns.
+#' @param opts \code{list} of simulation parameters returned by the function \link{setSimulationPath}. Link to the Antares study.
+#'  By default, the value is \code{antaresRead::simOptions()}
+#' @param probabilityMatrix \code{list}, correlation between climatic factors and flow-based typical days, such as returned by
+#'  \code{flowBasedClustering::getProbability}. The columns names must be renamed to match Antares' inputs, use the function
+#'  \link{setNamesProbabilityMatrix}. Initial format is : area_variable (Ex: fr_load, de_solar ...)
+#' @param multiplier \code{data.frame} enabling to convert load factors or normalised values into production/consumption in MW. 
+#' Two columns:
 #' \itemize{
-#' \item variable : Name of variable
-#' \item coef : coefficient multiplier.
+#' \item variable : Name of variable (ex: \code{"fr@wind"})
+#' \item coef : mutiplier coefficient, for example the installed capacity.
 #' }
 #' @param interSeasonBegin \code{character or date}, date or vector of dates, YYYY-MM-DD, begin of interseason
 #' @param interSeasonEnd \code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason
-#' @param firstDay \code{numeric} indication of type of first day of study. If the first day of study is a
-#' wednesday, you must specify firstDay = 3.
-#' @param seed \code{numeric} fix random seed
-#' @param silent \code{boolean} progress bar.
-#' @param outputPath \code{character} folder where ts.txt will be write.
+#' @param firstDay \code{numeric} Type of the first day of the study (between 1 and 7). For example, if the first day is a
+#' Wednesday, you must specify firstDay = 3. The first day can be directly calculated by the function \link{identifyFirstDay}.
+#' @param seed \code{numeric} fixed random seed, used for the weighted draw of the typical days. By default, the value is 04052017.
+#' @param silent \code{boolean}, non display of a progress bar. By default, the value is FALSE.
+#' @param outputPath \code{character}, path of the folder where the time series of typical flow-based output file (ts.txt) will 
+#' be written. The current directory is chosen by default.
 #' 
 #' @examples
 #'
@@ -23,7 +34,7 @@
 #' library(flowBasedClustering)
 #' library(data.table)
 #'
-#' # load climate daily time serires
+#' # load climate daily time series
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #' 
 #' # load clustering results (or build them with clusteringTypicalDays function())
@@ -42,21 +53,24 @@
 #'  levelsProba = levelsProba, extrapolationNA = TRUE)
 #' 
 #' 
-#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
-#' 
-#' 
-#' 
+#' # Set the probabilityMatrix names and coefficients
 #' matProb <- setNamesProbabilityMatrix(matProb, c("FR_load", "DE_wind", "DE_solar"),
 #'                                    c("fr@load", "de@wind", "de@solar"))
 #' 
 #' multiplier <- data.frame(variable = c("fr@load", "de@wind", "de@solar"),
 #'                          coef = c(1, 352250, 246403))
-#'                          
-#' firstDay <- identifyFirstDay(opts)
+#' 
+#' # Set the path to Antares study inputs 
+#' opts <- antaresRead::setSimulationPath("D:/Users/titorobe/Desktop/antaresStudy", 1)
+#' 
+#' # calendar
+#' # first day identified based on the input data of the 
+#' # Antares study designated by opts
+#' firstDay <- identifyFirstDay(opts) 
 #' interSeasonBegin <- as.Date(c("2017-09-03", "2018-02-02"))
 #' interSeasonEnd <- as.Date(c("2020-10-04", "2018-05-02"))
 #' 
-#' 
+#' # Generate flow-based time series
 #' ts <- createFBTS(opts = opts, probabilityMatrix = matProb, multiplier = multiplier,
 #'                  interSeasonBegin = interSeasonBegin,
 #'                  interSeasonEnd = interSeasonEnd, firstDay = firstDay, outputPath = getwd())
@@ -264,11 +278,16 @@ createFBTS <- function(opts, probabilityMatrix, multiplier,
   tsend
 }
 
-#' Change name for probabilityMatrix
+#' @title Rename the probabilityMatrix variables
+#' 
+#' @description 
+#' This function changes the name of the variables in the probabilityMatrix, created by \code{flowBasedClustering::getProbability} and 
+#' used by \link{createFBTS}. Aim: rename the variables into a format consistent with Antares inputs ("area@variable").
+#' For example, go to \link{createFBTS}.
 #'
-#' @param data \code{list} from \code{flowBasedClustering::getProbability}. Columns must be rename to corespond to antares names.
-#' @param oldName \code{character} vector of old names
-#' @param newName \code{character} vector of new names
+#' @param data \code{list}, probabilityMatrix whose columns to rename, calculated with \code{flowBasedClustering::getProbability}.
+#' @param oldName \code{character} vector of old variables names
+#' @param newName \code{character} vector of new variables names
 #' 
 #' @export
 setNamesProbabilityMatrix <- function(data, oldName, newName){
