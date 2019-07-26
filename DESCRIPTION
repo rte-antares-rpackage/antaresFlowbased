@@ -36,4 +36,3 @@ Suggests: knitr,
     covr,
     rhdf5 (>= 2.20.0)
 VignetteBuilder: knitr
-Remotes: rte-antares-rpackage/antaresEditObject
