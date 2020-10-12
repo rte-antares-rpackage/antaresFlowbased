@@ -305,6 +305,9 @@ runSimulationFB <- function(simulationName = "FlowBased", mcAll = TRUE, mcInd = 
       dir.create(digets)
       write.table(areas, paste0(digets, "/digest.csv"), row.names = FALSE, sep = ";", quote = FALSE)
     }, silent = TRUE)
+    
+    
+    
   }
   
   if(filtering){
